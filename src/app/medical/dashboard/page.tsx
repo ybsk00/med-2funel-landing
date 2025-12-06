@@ -68,6 +68,19 @@ export default function DoctorDashboard() {
         },
     ]);
 
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+    const [showChatModal, setShowChatModal] = useState(false);
+    const [showReservationModal, setShowReservationModal] = useState(false);
+
+    const filters = ["전체", "대기", "완료"];
+
+    const handleStatusClick = (patient: Patient) => {
+        if (patient.status === "completed") {
+            setSelectedPatient(patient);
+            setShowReservationModal(true);
+        }
+    };
+
     // TODO: Fetch real patients data from Supabase
     // useEffect(() => {
     //     const fetchPatients = async () => {
