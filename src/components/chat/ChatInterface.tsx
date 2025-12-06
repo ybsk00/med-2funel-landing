@@ -126,7 +126,7 @@ export default function ChatInterface() {
 
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 pb-20">
                 {/* Hero Banner */}
-                <div className="relative rounded-3xl overflow-hidden mb-6 h-[400px] md:h-[600px] shadow-lg group">
+                <div className="relative rounded-3xl overflow-hidden mb-6 h-[300px] md:h-[450px] shadow-lg group">
                     <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
 
@@ -134,7 +134,7 @@ export default function ChatInterface() {
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-md">
                             AI 헬스케어로 알아보는 나의 건강
                         </h2>
-                        <p className="text-white/90 text-sm md:text-base font-medium mb-4">
+                        <p className="text-white/90 text-sm md:text-base font-medium mb-10">
                             전통의 지혜와 현대 기술의 만남
                         </p>
 
