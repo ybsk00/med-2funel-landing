@@ -10,7 +10,7 @@ export default function PatientHeader() {
                 <div className="w-6 h-6 bg-green-600 rounded-sm flex items-center justify-center">
                     <span className="text-white text-xs font-bold">L</span>
                 </div>
-                <span className="text-lg font-bold text-gray-900">죽전한의원 메디컬 케어</span>
+                <span className="text-lg font-bold text-gray-900">죽전한의원 AI</span>
             </div>
 
             <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">

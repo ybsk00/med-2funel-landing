@@ -11,7 +11,11 @@ type Message = {
     content: string;
 };
 
-export default function ChatInterface() {
+type ChatInterfaceProps = {
+    isEmbedded?: boolean;
+};
+
+export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
     const topic = searchParams.get("topic") || "resilience";
 
@@ -145,20 +149,22 @@ export default function ChatInterface() {
 
     return (
         <div className="min-h-screen bg-traditional-bg font-sans flex flex-col">
-            {/* Header */}
-            <header className="bg-traditional-bg px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-                <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <div className="w-6 h-6 bg-traditional-accent rounded-sm flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">L</span>
-                    </div>
-                    <span className="text-lg font-bold text-traditional-text">100년 한의학 AI 헬스케어</span>
-                </Link>
-                <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
-                    <Link href="/login" className="px-5 py-2 bg-traditional-accent text-white rounded-full hover:bg-opacity-90 transition-colors shadow-md">
-                        로그인
+            {/* Header - Hidden if embedded */}
+            {!props.isEmbedded && (
+                <header className="bg-traditional-bg px-6 py-4 flex items-center justify-between sticky top-0 z-20">
+                    <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                        <div className="w-6 h-6 bg-traditional-accent rounded-sm flex items-center justify-center">
+                            <span className="text-white text-xs font-bold">L</span>
+                        </div>
+                        <span className="text-lg font-bold text-traditional-text">100년 한의학 AI 헬스케어</span>
                     </Link>
-                </div>
-            </header>
+                    <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
+                        <Link href="/login" className="px-5 py-2 bg-traditional-accent text-white rounded-full hover:bg-opacity-90 transition-colors shadow-md">
+                            로그인
+                        </Link>
+                    </div>
+                </header>
+            )}
 
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 pb-20">
                 {/* Hero Banner */}

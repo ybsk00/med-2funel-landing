@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { Calendar, Clock, MoreHorizontal, Send } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
+import PatientHeader from "@/components/medical/PatientHeader";
 
 export default function PatientDashboard() {
     // Mock appointment data
@@ -14,8 +15,10 @@ export default function PatientDashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
-            <div className="max-w-4xl mx-auto space-y-6">
+        <div className="min-h-screen bg-gray-50 font-sans">
+            <PatientHeader />
+
+            <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-6">
 
                 {/* Header / Appointment Card */}
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -54,7 +57,7 @@ export default function PatientDashboard() {
 
                     <div className="flex-1 overflow-hidden">
                         <Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
-                            <ChatInterface />
+                            <ChatInterface isEmbedded={true} />
                         </Suspense>
                     </div>
                 </div>
