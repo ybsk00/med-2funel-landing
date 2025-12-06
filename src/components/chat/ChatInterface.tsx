@@ -78,32 +78,32 @@ export default function ChatInterface() {
         {
             id: "resilience",
             label: "회복력·면역",
-            desc: "만성 피로와 잦은 감기",
-            theme: "bg-orange-50 border-orange-100 text-orange-900 ring-orange-200"
+            desc: "만성 피로, 잦은 감기",
+            theme: "from-amber-500/20 to-orange-600/20"
         },
         {
             id: "women",
             label: "여성 밸런스",
-            desc: "생리 주기부터 갱년기까지",
-            theme: "bg-pink-50 border-pink-100 text-pink-900 ring-pink-200"
+            desc: "생리불순, 갱년기 케어",
+            theme: "from-rose-400/20 to-pink-600/20"
         },
         {
             id: "pain",
             label: "통증 패턴",
-            desc: "반복되는 두통, 어깨 결림",
-            theme: "bg-blue-50 border-blue-100 text-blue-900 ring-blue-200"
+            desc: "만성 두통, 어깨 통증",
+            theme: "from-blue-400/20 to-slate-600/20"
         },
         {
             id: "digestion",
             label: "소화·수면 리듬",
-            desc: "더부룩한 속과 깊은 잠",
-            theme: "bg-green-50 border-green-100 text-green-900 ring-green-200"
+            desc: "소화불량, 수면장애",
+            theme: "from-emerald-400/20 to-teal-600/20"
         },
         {
             id: "pregnancy",
             label: "임신 준비",
-            desc: "예비 부모를 위한 필수 체크",
-            theme: "bg-purple-50 border-purple-100 text-purple-900 ring-purple-200"
+            desc: "난임, 건강한 임신",
+            theme: "from-violet-400/20 to-purple-600/20"
         },
     ];
 
@@ -126,34 +126,39 @@ export default function ChatInterface() {
 
             <main className="flex-1 max-w-4xl mx-auto w-full px-4 pb-20">
                 {/* Hero Banner */}
-                <div className="relative rounded-3xl overflow-hidden mb-6 h-40 md:h-52 shadow-lg">
-                    <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center"></div>
-                    <div className="absolute inset-0 bg-black/50"></div>
+                <div className="relative rounded-3xl overflow-hidden mb-6 h-40 md:h-52 shadow-lg group">
+                    <div className="absolute inset-0 bg-[url('/images/herbal-bg.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"></div>
+
                     <div className="relative z-10 h-full flex flex-col justify-end p-6">
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-1 drop-shadow-md">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-md">
                             AI 헬스케어로 알아보는 나의 건강
                         </h2>
-                        <p className="text-white/80 text-sm md:text-base">
+                        <p className="text-white/90 text-sm md:text-base font-medium mb-4">
                             전통의 지혜와 현대 기술의 만남
                         </p>
-                    </div>
-                </div>
 
-                {/* Module List */}
-                <div className="grid grid-cols-5 gap-2 mb-6">
-                    {modules.map((mod) => (
-                        <Link
-                            key={mod.id}
-                            href={`/healthcare/chat?topic=${mod.id}`}
-                            className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all h-full text-center ${topic === mod.id
-                                ? `bg-white shadow-md ring-2 ${mod.theme.split(' ').pop()}`
-                                : `${mod.theme} hover:brightness-95 hover:shadow-sm`
-                                }`}
-                        >
-                            <h3 className="font-bold text-sm md:text-base leading-tight mb-1">{mod.label}</h3>
-                            <p className="text-xs opacity-80 leading-tight line-clamp-2">{mod.desc}</p>
-                        </Link>
-                    ))}
+                        {/* Module List (Overlay on Hero) */}
+                        <div className="grid grid-cols-5 gap-2">
+                            {modules.map((mod) => (
+                                <Link
+                                    key={mod.id}
+                                    href={`/healthcare/chat?topic=${mod.id}`}
+                                    className={`flex flex-col items-center justify-center p-2.5 rounded-xl border backdrop-blur-md transition-all h-full text-center ${topic === mod.id
+                                        ? "bg-white/95 border-white shadow-lg scale-105 z-10"
+                                        : "bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/40"
+                                        }`}
+                                >
+                                    <h3 className={`font-bold text-sm leading-tight mb-1 ${topic === mod.id ? "text-gray-900" : "text-white"}`}>
+                                        {mod.label}
+                                    </h3>
+                                    <p className={`text-xs leading-tight line-clamp-1 ${topic === mod.id ? "text-gray-600" : "text-white/80"}`}>
+                                        {mod.desc}
+                                    </p>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Chat Area */}
