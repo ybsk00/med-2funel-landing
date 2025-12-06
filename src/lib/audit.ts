@@ -7,7 +7,7 @@ export async function logAction(
     entityId?: string,
     metadata?: any
 ) {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     try {
         await supabase.from('audit_logs').insert({
