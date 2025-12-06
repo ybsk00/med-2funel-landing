@@ -20,6 +20,10 @@ export default function ChatInterface() {
     const [isLoading, setIsLoading] = useState(false);
     const [turnCount, setTurnCount] = useState(0);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [loginModalContent, setLoginModalContent] = useState({
+        title: "상세한 상담이 필요하신가요?",
+        desc: "더 정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+    });
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Welcome message based on topic
@@ -36,6 +40,14 @@ export default function ChatInterface() {
         scrollToBottom();
     }, [messages]);
 
+    const handleImageClick = () => {
+        setLoginModalContent({
+            title: "이미지 분석 기능",
+            desc: "이미지 분석을 통한 건강 상담은<br />로그인 후 이용 가능합니다."
+        });
+        setShowLoginModal(true);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
@@ -49,6 +61,10 @@ export default function ChatInterface() {
 
         // Check for login modal trigger (3, 5, 7, 10 turns)
         if ([3, 5, 7, 10].includes(newTurnCount)) {
+            setLoginModalContent({
+                title: "상세한 상담이 필요하신가요?",
+                desc: "더 정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+            });
             setShowLoginModal(true);
         }
 
@@ -72,6 +88,10 @@ export default function ChatInterface() {
 
             // Check for forced login trigger from AI response
             if (data.content.includes("로그인이 필요합니다")) {
+                setLoginModalContent({
+                    title: "상세한 상담이 필요하신가요?",
+                    desc: "더 정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+                });
                 setShowLoginModal(true);
             }
         } catch (error) {
@@ -234,7 +254,11 @@ export default function ChatInterface() {
                             placeholder="어떤 점이 궁금하신가요?"
                             className="flex-1 bg-transparent border-none focus:ring-0 text-traditional-text placeholder:text-traditional-subtext/50"
                         />
-                        <button type="button" className="p-2 text-traditional-subtext hover:text-traditional-text transition-colors">
+                        <button
+                            type="button"
+                            onClick={handleImageClick}
+                            className="p-2 text-traditional-subtext hover:text-traditional-text transition-colors"
+                        >
                             <Paperclip size={20} />
                         </button>
                         <button
@@ -249,38 +273,36 @@ export default function ChatInterface() {
             </div>
 
             {/* Login Modal */}
-            {
-                showLoginModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center transform transition-all scale-100">
-                            <div className="w-12 h-12 bg-traditional-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <User className="w-6 h-6 text-traditional-accent" />
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">
-                                상세한 상담이 필요하신가요?
-                            </h3>
-                            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-                                더 정확한 건강 분석과 맞춤형 조언을 위해<br />
-                                로그인이 필요합니다.
-                            </p>
-                            <div className="flex flex-col gap-3">
-                                <Link
-                                    href="/login"
-                                    className="w-full py-3 bg-traditional-accent text-white rounded-xl font-medium hover:bg-opacity-90 transition-colors"
-                                >
-                                    로그인하고 계속하기
-                                </Link>
-                                <button
-                                    onClick={() => setShowLoginModal(false)}
-                                    className="w-full py-3 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-colors"
-                                >
-                                    나중에 하기
-                                </button>
-                            </div>
+            {showLoginModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center transform transition-all scale-100">
+                        <div className="w-12 h-12 bg-traditional-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <User className="w-6 h-6 text-traditional-accent" />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">
+                            {loginModalContent.title}
+                        </h3>
+                        <p
+                            className="text-gray-600 text-sm mb-6 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: loginModalContent.desc }}
+                        />
+                        <div className="flex flex-col gap-3">
+                            <Link
+                                href="/login"
+                                className="w-full py-3 bg-traditional-accent text-white rounded-xl font-medium hover:bg-opacity-90 transition-colors"
+                            >
+                                로그인하고 계속하기
+                            </Link>
+                            <button
+                                onClick={() => setShowLoginModal(false)}
+                                className="w-full py-3 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-colors"
+                            >
+                                나중에 하기
+                            </button>
                         </div>
                     </div>
-                )
-            }
-        </div >
+                </div>
+            )}
+        </div>
     );
 }
