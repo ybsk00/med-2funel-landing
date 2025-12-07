@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -93,6 +93,48 @@ export default function LoginPage() {
         });
         if (error) alert(error.message);
     };
+
+    const [isInAppBrowser, setIsInAppBrowser] = useState(false);
+
+    useEffect(() => {
+        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+        const inAppRules = [
+            'KAKAOTALK', 'NAVER', 'Instagram', 'FBAN', 'FBAV', 'Line'
+        ];
+        const isInApp = inAppRules.some(rule => userAgent.includes(rule));
+        setIsInAppBrowser(isInApp);
+    }, []);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert("주소가 복사되었습니다. 브라우저 주소창에 붙여넣기 해주세요.");
+    };
+
+    if (isInAppBrowser) {
+        return (
+            <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center p-6 text-white text-center">
+                <div className="max-w-xs space-y-6">
+                    <div className="text-6xl mb-4">🌏</div>
+                    <h2 className="text-2xl font-bold">외부 브라우저에서<br />열어주세요</h2>
+                    <p className="text-white/80 leading-relaxed">
+                        카카오톡/네이버 등 인앱 브라우저에서는<br />
+                        구글 로그인이 제한될 수 있습니다.
+                    </p>
+                    <div className="bg-white/10 p-4 rounded-xl text-sm text-left space-y-2">
+                        <p>1. 우측 하단/상단 <span className="font-bold">메뉴(⋮)</span> 클릭</p>
+                        <p>2. <span className="font-bold">다른 브라우저로 열기</span> 선택</p>
+                        <p>3. Chrome/Safari/Samsung Internet 선택</p>
+                    </div>
+                    <button
+                        onClick={copyToClipboard}
+                        className="w-full py-3 bg-white text-black rounded-xl font-bold hover:bg-gray-100 transition-colors"
+                    >
+                        주소 복사하기
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-traditional-bg flex flex-col items-center justify-center p-6 font-sans">
