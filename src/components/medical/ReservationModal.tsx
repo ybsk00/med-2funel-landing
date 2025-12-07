@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, X, CheckCircle2, AlertCircle } from "lucide-react";
+import { Calendar, Clock, X, CheckCircle2, AlertCircle, User } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 type ReservationModalProps = {
     isOpen: boolean;
@@ -12,19 +13,70 @@ type ReservationModalProps = {
 export default function ReservationModal({ isOpen, onClose, initialTab = "book" }: ReservationModalProps) {
     const [activeTab, setActiveTab] = useState<"book" | "reschedule" | "cancel">(initialTab);
     const [step, setStep] = useState(1); // 1: Input, 2: Confirm, 3: Success
+    const [date, setDate] = useState("");
+    const [hour, setHour] = useState("09");
+    const [minute, setMinute] = useState("00");
+    const [name, setName] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const supabase = createClient();
 
     if (!isOpen) return null;
 
-    const handleConfirm = () => {
-        setStep(3);
-        // In a real app, you would make an API call here
+    const handleConfirm = async () => {
+        if (!date || !name) {
+            alert("날짜와 이름을 입력해주세요.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const timeString = `${date} ${hour}:${minute}`;
+
+            // Insert into Supabase
+            const { error } = await supabase
+                .from('patients')
+                .insert([
+                    {
+                        name: name,
+                        time: timeString,
+                        type: activeTab === 'book' ? '초진' : '재진', // Simple logic for now
+                        status: 'pending',
+                        complaint: activeTab === 'cancel' ? '예약 취소' : '일반 진료 예약',
+                        keywords: ['예약']
+                    }
+                ]);
+
+            if (error) {
+                console.error("Error saving reservation:", error);
+                alert("예약 처리 중 오류가 발생했습니다.");
+            } else {
+                setStep(3);
+            }
+        } catch (e) {
+            console.error("Exception:", e);
+            alert("예약 처리 중 오류가 발생했습니다.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const resetAndClose = () => {
         setStep(1);
         setActiveTab("book");
+        setDate("");
+        setHour("09");
+        setMinute("00");
+        setName("");
         onClose();
     };
+
+    // Generate hours (0-23)
+    const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+
+    // Generate minutes (0, 10, 20, 30, 40, 50)
+    const minutes = ["00", "10", "20", "30", "40", "50"];
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
@@ -94,20 +146,59 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                             <p className="font-bold mb-1">진료 예약</p>
                                             <p>원하시는 날짜와 시간을 선택해주세요.</p>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-3">
+
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-medium text-gray-500">예약자 성함</label>
+                                            <div className="relative">
+                                                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                                                <input
+                                                    type="text"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                    placeholder="성함을 입력해주세요"
+                                                    className="w-full pl-10 p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-3">
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-gray-500">날짜</label>
                                                 <input
                                                     type="date"
+                                                    value={date}
+                                                    onChange={(e) => setDate(e.target.value)}
                                                     className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
                                                 />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-gray-500">시간</label>
-                                                <input
-                                                    type="time"
-                                                    className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
-                                                />
+                                                <div className="flex gap-2">
+                                                    <div className="relative flex-1">
+                                                        <select
+                                                            value={hour}
+                                                            onChange={(e) => setHour(e.target.value)}
+                                                            className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
+                                                        >
+                                                            {hours.map(h => (
+                                                                <option key={h} value={h}>{h}시</option>
+                                                            ))}
+                                                        </select>
+                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                    </div>
+                                                    <div className="relative flex-1">
+                                                        <select
+                                                            value={minute}
+                                                            onChange={(e) => setMinute(e.target.value)}
+                                                            className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
+                                                        >
+                                                            {minutes.map(m => (
+                                                                <option key={m} value={m}>{m}분</option>
+                                                            ))}
+                                                        </select>
+                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -119,20 +210,55 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                             <p className="font-bold mb-1">예약 변경</p>
                                             <p>변경하실 날짜와 시간을 선택해주세요.</p>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-3">
+                                        {/* Reuse the same inputs for simplicity, or adapt as needed */}
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-medium text-gray-500">예약자 성함</label>
+                                            <input
+                                                type="text"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                placeholder="성함을 입력해주세요"
+                                                className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-1 gap-3">
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-gray-500">날짜</label>
                                                 <input
                                                     type="date"
+                                                    value={date}
+                                                    onChange={(e) => setDate(e.target.value)}
                                                     className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
                                                 />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-xs font-medium text-gray-500">시간</label>
-                                                <input
-                                                    type="time"
-                                                    className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all"
-                                                />
+                                                <div className="flex gap-2">
+                                                    <div className="relative flex-1">
+                                                        <select
+                                                            value={hour}
+                                                            onChange={(e) => setHour(e.target.value)}
+                                                            className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
+                                                        >
+                                                            {hours.map(h => (
+                                                                <option key={h} value={h}>{h}시</option>
+                                                            ))}
+                                                        </select>
+                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                    </div>
+                                                    <div className="relative flex-1">
+                                                        <select
+                                                            value={minute}
+                                                            onChange={(e) => setMinute(e.target.value)}
+                                                            className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
+                                                        >
+                                                            {minutes.map(m => (
+                                                                <option key={m} value={m}>{m}분</option>
+                                                            ))}
+                                                        </select>
+                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -161,11 +287,16 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
 
                                 <button
                                     onClick={handleConfirm}
-                                    className={`w-full py-3 rounded-xl font-medium text-white transition-colors mt-4 ${activeTab === "cancel" ? "bg-red-500 hover:bg-red-600" : "bg-traditional-accent hover:bg-opacity-90"}`}
+                                    disabled={isSubmitting}
+                                    className={`w-full py-3 rounded-xl font-medium text-white transition-colors mt-4 ${activeTab === "cancel" ? "bg-red-500 hover:bg-red-600" : "bg-traditional-accent hover:bg-opacity-90"} ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
                                 >
-                                    {activeTab === "book" && "예약 신청하기"}
-                                    {activeTab === "reschedule" && "변경 신청하기"}
-                                    {activeTab === "cancel" && "예약 취소하기"}
+                                    {isSubmitting ? "처리중..." : (
+                                        <>
+                                            {activeTab === "book" && "예약 신청하기"}
+                                            {activeTab === "reschedule" && "변경 신청하기"}
+                                            {activeTab === "cancel" && "예약 취소하기"}
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </>
@@ -173,5 +304,24 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 </div>
             </div>
         </div>
+    );
+}
+
+function ChevronDown({ className, size }: { className?: string, size?: number }) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={size || 24}
+            height={size || 24}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={className}
+        >
+            <path d="m6 9 6 6 6-6" />
+        </svg>
     );
 }

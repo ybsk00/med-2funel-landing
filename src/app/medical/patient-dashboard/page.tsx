@@ -1,21 +1,59 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { Calendar, Clock, MoreHorizontal, Send } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
+import { createClient } from "@/lib/supabase/client";
 
 export default function PatientDashboard() {
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-
-    // Mock appointment data
-    // Mock appointment data (Empty or Generic)
-    const appointment = {
+    const [appointment, setAppointment] = useState({
         date: "예약 없음",
         time: "",
         type: "예정된 진료가 없습니다.",
         doctor: ""
+    });
+
+    const supabase = createClient();
+
+    useEffect(() => {
+        fetchLatestAppointment();
+    }, [isReservationModalOpen]); // Refresh when modal closes (potentially after a new reservation)
+
+    const fetchLatestAppointment = async () => {
+        try {
+            // Fetch the most recent reservation
+            const { data, error } = await supabase
+                .from('patients')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .single();
+
+            if (data) {
+                // Parse the time string "YYYY-MM-DD HH:MM"
+                const timeStr = data.time;
+                let displayDate = "예약 없음";
+                let displayTime = "";
+
+                if (timeStr) {
+                    const [d, t] = timeStr.split(' ');
+                    displayDate = d;
+                    displayTime = t;
+                }
+
+                setAppointment({
+                    date: displayDate,
+                    time: displayTime,
+                    type: data.complaint || "일반 진료",
+                    doctor: "김한의 원장" // Placeholder or fetch from DB if available
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching appointment:", error);
+        }
     };
 
     return (
@@ -52,7 +90,10 @@ export default function PatientDashboard() {
 
                 <ReservationModal
                     isOpen={isReservationModalOpen}
-                    onClose={() => setIsReservationModalOpen(false)}
+                    onClose={() => {
+                        setIsReservationModalOpen(false);
+                        fetchLatestAppointment(); // Refresh on close
+                    }}
                 />
 
                 {/* Main Chat Interface Area */}
