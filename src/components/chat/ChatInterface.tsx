@@ -210,7 +210,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             </p>
 
                             {/* Module List (Overlay on Hero) */}
-                            <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar mask-linear-fade">
+                            <div className="flex gap-3 overflow-x-auto pb-4 p-1 no-scrollbar mask-linear-fade">
                                 {modules.map((mod) => (
                                     <Link
                                         key={mod.id}
