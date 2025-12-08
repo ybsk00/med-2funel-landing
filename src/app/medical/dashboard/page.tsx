@@ -18,7 +18,7 @@ export default function DoctorDashboard() {
         type: string;
         complaint: string;
         keywords: string[];
-        status: "completed" | "pending";
+        status: "completed" | "pending" | "cancelled";
     };
 
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -204,13 +204,20 @@ export default function DoctorDashboard() {
                                             onClick={() => handleStatusClick(patient)}
                                             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all shadow-sm ${patient.status === 'completed'
                                                 ? 'bg-traditional-primary/10 text-traditional-primary border border-traditional-primary/20 hover:bg-traditional-primary/20'
-                                                : 'bg-white border border-traditional-muted text-traditional-subtext hover:bg-traditional-bg'
+                                                : patient.status === 'cancelled'
+                                                    ? 'bg-red-50 text-red-600 border border-red-100 hover:bg-red-100'
+                                                    : 'bg-white border border-traditional-muted text-traditional-subtext hover:bg-traditional-bg'
                                                 }`}
                                         >
                                             {patient.status === 'completed' ? (
                                                 <>
                                                     <CheckCircle2 size={16} />
                                                     진료 완료
+                                                </>
+                                            ) : patient.status === 'cancelled' ? (
+                                                <>
+                                                    <X size={16} />
+                                                    예약 취소
                                                 </>
                                             ) : (
                                                 <>

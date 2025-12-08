@@ -24,11 +24,10 @@ export default function PatientDashboard() {
 
     const fetchLatestAppointment = async () => {
         try {
-            // Fetch the most recent pending reservation
+            // Fetch the most recent reservation (pending or cancelled)
             const { data, error } = await supabase
                 .from('patients')
                 .select('*')
-                .eq('status', 'pending')
                 .order('created_at', { ascending: false })
                 .limit(1)
                 .maybeSingle();
@@ -45,12 +44,28 @@ export default function PatientDashboard() {
                     displayTime = t;
                 }
 
-                setAppointment({
-                    date: displayDate,
-                    time: displayTime,
-                    type: data.complaint || "일반 진료",
-                    doctor: "김한의 원장" // Placeholder or fetch from DB if available
-                });
+                if (data.status === 'cancelled') {
+                    setAppointment({
+                        date: displayDate,
+                        time: displayTime,
+                        type: "예약이 취소되었습니다.",
+                        doctor: ""
+                    });
+                } else if (data.status === 'completed') {
+                    setAppointment({
+                        date: "예약 없음",
+                        time: "",
+                        type: "예정된 진료가 없습니다.",
+                        doctor: ""
+                    });
+                } else {
+                    setAppointment({
+                        date: displayDate,
+                        time: displayTime,
+                        type: data.complaint || "일반 진료",
+                        doctor: "김한의 원장"
+                    });
+                }
             } else {
                 setAppointment({
                     date: "예약 없음",
@@ -82,7 +97,7 @@ export default function PatientDashboard() {
                                 <span className={`text-xl font-bold font-serif ${appointment.date === "예약 없음" ? "text-traditional-subtext/60" : "text-traditional-text"}`}>{appointment.date}</span>
                                 {appointment.time && <span className="text-xl font-bold text-traditional-text font-serif">{appointment.time}</span>}
                             </div>
-                            <p className={`${appointment.date === "예약 없음" ? "text-traditional-subtext/60" : "text-traditional-primary"} text-sm font-medium mt-1`}>{appointment.type}</p>
+                            <p className={`${appointment.date === "예약 없음" ? "text-traditional-subtext/60" : appointment.type === "예약이 취소되었습니다." ? "text-red-500" : "text-traditional-primary"} text-sm font-medium mt-1`}>{appointment.type}</p>
                         </div>
                     </div>
 

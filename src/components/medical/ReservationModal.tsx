@@ -89,7 +89,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
 
                 const { error } = await supabase
                     .from('patients')
-                    .delete()
+                    .update({ status: 'cancelled' })
                     .eq('id', existingReservation.id);
 
                 if (error) throw error;
@@ -103,10 +103,20 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 }
 
                 // Prevent duplicate booking
-                if (activeTab === 'book' && existingReservation) {
-                    alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
-                    setIsSubmitting(false);
-                    return;
+                if (activeTab === 'book') {
+                    // Check if there is ALREADY a pending reservation (double check)
+                    const { data: dupCheck } = await supabase
+                        .from('patients')
+                        .select('id')
+                        .eq('user_id', userId)
+                        .eq('status', 'pending')
+                        .maybeSingle();
+
+                    if (dupCheck) {
+                        alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
+                        setIsSubmitting(false);
+                        return;
+                    }
                 }
 
                 const timeString = `${date} ${hour}:${minute}`;
