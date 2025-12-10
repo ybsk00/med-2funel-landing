@@ -29,7 +29,7 @@ export default function LandingPage() {
       <header className="relative px-6 pt-32 pb-20 md:pt-48 md:pb-32 text-center overflow-hidden min-h-[90vh] flex flex-col justify-center items-center">
         {/* Background Elements */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-traditional-bg via-transparent to-traditional-bg z-10"></div>
+          <div className="absolute inset-0 bg-black/50 z-10"></div>
           {/* Hero Video Background */}
           <div className="absolute inset-0 z-0">
             <video
@@ -47,19 +47,19 @@ export default function LandingPage() {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-in">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-traditional-primary text-sm font-semibold mb-4 shadow-sm animate-slide-up">
+          <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-semibold mb-4 shadow-sm animate-slide-up">
             AI 기반 맞춤형 한방 헬스케어
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-traditional-text drop-shadow-sm leading-tight font-serif">
-            <span className="block text-2xl md:text-3xl mb-6 font-sans font-light text-traditional-subtext tracking-widest uppercase">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-lg leading-tight font-serif">
+            <span className="block text-2xl md:text-3xl mb-6 font-sans font-light text-white/80 tracking-widest uppercase">
               Tradition Meets Intelligence
             </span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-traditional-primary via-traditional-secondary to-traditional-accent">
               100년의 지혜
             </span>와<br />
-            <span className="text-traditional-text">AI의 만남</span>
+            <span className="text-white">AI의 만남</span>
           </h1>
-          <p className="text-lg md:text-xl text-traditional-subtext max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed font-light drop-shadow-md">
             당신의 맥박, 체질, 생활 습관을 AI가 분석하여<br className="hidden md:block" />
             가장 현대적인 한방 솔루션을 제안합니다.
           </p>
