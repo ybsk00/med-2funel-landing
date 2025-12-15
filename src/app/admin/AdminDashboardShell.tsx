@@ -32,15 +32,20 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                 collapsed: { mobile: !opened },
             }}
             padding="md"
+            styles={{
+                main: {
+                    backgroundColor: 'var(--mantine-color-dark-8)',
+                },
+            }}
         >
-            <AppShell.Header>
+            <AppShell.Header bg="dark.9" style={{ borderBottom: '1px solid var(--mantine-color-dark-5)' }}>
                 <Group h="100%" px="md" justify="space-between">
                     <Group gap="xs">
-                        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-                        <ThemeIcon variant="gradient" gradient={{ from: 'teal', to: 'cyan' }} size="lg" radius="md">
+                        <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" color="white" />
+                        <ThemeIcon variant="gradient" gradient={{ from: 'orange', to: 'yellow' }} size="lg" radius="md">
                             <Stethoscope size={20} />
                         </ThemeIcon>
-                        <Text fw={700} size="xl">죽전한의원 관리</Text>
+                        <Text fw={700} size="xl" c="white">죽전한의원 관리</Text>
                     </Group>
                     <Badge variant="light" color="green" size="lg">
                         실시간 연동 중
@@ -48,7 +53,7 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                 </Group>
             </AppShell.Header>
 
-            <AppShell.Navbar p="md">
+            <AppShell.Navbar p="md" bg="dark.9" style={{ borderRight: '1px solid var(--mantine-color-dark-5)' }}>
                 <Stack gap="xs" style={{ flex: 1 }}>
                     {/* 진료 관리 섹션 */}
                     <Text size="xs" fw={500} c="dimmed" mt="sm">진료 관리</Text>
@@ -60,6 +65,12 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<Home size={16} />}
                             active={pathname === '/admin'}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: pathname === '/admin' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
                     <Link href="/admin/appointments" style={{ textDecoration: 'none' }}>
@@ -69,10 +80,16 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<Calendar size={16} />}
                             active={pathname === '/admin/appointments'}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: pathname === '/admin/appointments' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
 
-                    <Divider my="sm" />
+                    <Divider my="sm" color="dark.5" />
 
                     {/* CRM 관리 섹션 */}
                     <Text size="xs" fw={500} c="dimmed">CRM 관리</Text>
@@ -84,6 +101,12 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<UserPlus size={16} />}
                             active={pathname === '/admin/patients'}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: pathname === '/admin/patients' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
                     <Link href="/admin/messages" style={{ textDecoration: 'none' }}>
@@ -93,6 +116,12 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<Send size={16} />}
                             active={pathname === '/admin/messages' || pathname.startsWith('/admin/messages/')}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: (pathname === '/admin/messages' || pathname.startsWith('/admin/messages/')) ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
                     <Link href="/admin/settings" style={{ textDecoration: 'none' }}>
@@ -102,10 +131,16 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<Bell size={16} />}
                             active={pathname === '/admin/settings'}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: pathname === '/admin/settings' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
 
-                    <Divider my="sm" />
+                    <Divider my="sm" color="dark.5" />
 
                     {/* 시스템 설정 */}
                     <Text size="xs" fw={500} c="dimmed">시스템</Text>
@@ -117,6 +152,12 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             leftSection={<Settings size={16} />}
                             active={pathname === '/admin/system'}
                             variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: pathname === '/admin/system' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
                         />
                     </Link>
                 </Stack>
@@ -134,7 +175,7 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                 </form>
             </AppShell.Navbar>
 
-            <AppShell.Main bg="dark.8">
+            <AppShell.Main>
                 {children}
             </AppShell.Main>
         </AppShell>
