@@ -319,9 +319,16 @@ export default function PatientsPage() {
                     <Group grow>
                         <TextInput
                             label="생년월일"
-                            placeholder="YYYY-MM-DD"
+                            placeholder="YYYY-MM-DD 또는 YYYYMMDD"
                             value={formData.birthDate}
-                            onChange={(e) => setFormData(prev => ({ ...prev, birthDate: e.target.value }))}
+                            onChange={(e) => {
+                                let value = e.target.value.replace(/[^0-9-]/g, '');
+                                // Auto-format: 19991111 -> 1999-11-11
+                                if (value.length === 8 && !value.includes('-')) {
+                                    value = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+                                }
+                                setFormData(prev => ({ ...prev, birthDate: value }));
+                            }}
                         />
                         <Select
                             label="성별"
