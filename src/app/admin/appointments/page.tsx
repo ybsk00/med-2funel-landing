@@ -24,7 +24,7 @@ import {
     Select,
     Alert,
 } from '@mantine/core'
-import { DatePickerInput } from '@mantine/dates'
+import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
 import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle } from 'lucide-react'
 
@@ -71,7 +71,7 @@ export default function AppointmentsPage() {
     const [patients, setPatients] = useState<{ value: string; label: string }[]>([])
     const [newAppointment, setNewAppointment] = useState({
         patientId: '',
-        scheduledDate: null as Date | null,
+        scheduledDate: '',
         scheduledTime: '',
         department: '',
         memo: ''
@@ -213,7 +213,7 @@ export default function AppointmentsPage() {
             fetchAppointments()
             setTimeout(() => {
                 closeCreate()
-                setNewAppointment({ patientId: '', scheduledDate: null, scheduledTime: '', department: '', memo: '' })
+                setNewAppointment({ patientId: '', scheduledDate: '', scheduledTime: '', department: '', memo: '' })
                 setCreateSuccess(null)
             }, 1500)
         } catch (err: any) {
@@ -448,17 +448,13 @@ export default function AppointmentsPage() {
                         required
                     />
 
-                    <DatePickerInput
+                    <TextInput
                         label="예약 날짜"
-                        placeholder="날짜를 선택하세요"
+                        type="date"
                         value={newAppointment.scheduledDate}
-                        onChange={(date) => setNewAppointment(prev => ({ ...prev, scheduledDate: date as Date | null }))}
+                        onChange={(e) => setNewAppointment(prev => ({ ...prev, scheduledDate: e.target.value }))}
                         required
-                        minDate={new Date()}
-                        locale="ko"
-                        valueFormat="YYYY년 MM월 DD일"
-                        clearable
-                        popoverProps={{ withinPortal: true, zIndex: 1000 }}
+                        min={new Date().toISOString().split('T')[0]}
                     />
 
                     <Select
