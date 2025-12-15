@@ -85,9 +85,23 @@ AI한의사:
 `;
 
         // 3. Generate Response
-        const responseText = await generateText(systemPrompt, "medical");
+        let responseText = await generateText(systemPrompt, "medical");
 
-        // 4. Audit Log
+        // 4. Check if user confirmed reservation (네, 예, 예약 등)
+        const reservationConfirmWords = ["네", "예", "좋아요", "예약", "예약할게요", "부탁드립니다", "부탁해요"];
+        const isReservationConfirm = reservationConfirmWords.some(word => message.includes(word));
+
+        // Check if previous AI message asked about reservation
+        const lastAiMessage = history.filter((m: any) => m.role === 'ai').slice(-1)[0]?.content || '';
+        const askedForReservation = lastAiMessage.includes("예약을 도와드릴까요") ||
+            lastAiMessage.includes("방문해 보시는 건 어떠세요") ||
+            lastAiMessage.includes("한의원에 한번 방문");
+
+        if (isReservationConfirm && askedForReservation) {
+            responseText = "네, 예약을 도와드리겠습니다. 지금 바로 예약 창을 열어드릴게요. [RESERVATION_TRIGGER]";
+        }
+
+        // 5. Audit Log
         const supabase = await createClient();
         const { data: { user } } = await supabase.auth.getUser();
 
