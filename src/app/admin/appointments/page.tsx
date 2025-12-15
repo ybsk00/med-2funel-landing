@@ -26,7 +26,8 @@ import {
 } from '@mantine/core'
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
-import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle } from 'lucide-react'
+import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle, Edit, Plus, Trash2 } from 'lucide-react'
+import { Textarea } from '@mantine/core'
 
 type Appointment = {
     id: string
@@ -78,6 +79,24 @@ export default function AppointmentsPage() {
     })
     const [createError, setCreateError] = useState<string | null>(null)
     const [createSuccess, setCreateSuccess] = useState<string | null>(null)
+
+    // 예약 수정 모달
+    const [editOpened, { open: openEdit, close: closeEdit }] = useDisclosure(false)
+    const [editLoading, setEditLoading] = useState(false)
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+    const [editAppointment, setEditAppointment] = useState({
+        scheduledDate: '',
+        scheduledTime: '',
+        status: '',
+        department: '',
+        memo: ''
+    })
+    const [editError, setEditError] = useState<string | null>(null)
+    const [editSuccess, setEditSuccess] = useState<string | null>(null)
+
+    // 수기 문진 입력
+    const [manualNote, setManualNote] = useState('')
+    const [savingNote, setSavingNote] = useState(false)
 
     const supabase = createClient()
 
@@ -157,7 +176,137 @@ export default function AppointmentsPage() {
         close()
         setSelectedPatient(null)
         setChatSessions([])
+        setManualNote('')
     }
+
+    // 예약 수정 모달 열기
+    const handleEditAppointment = (appt: Appointment) => {
+        setSelectedAppointment(appt)
+        const scheduledDate = new Date(appt.scheduled_at)
+        setEditAppointment({
+            scheduledDate: scheduledDate.toISOString().split('T')[0],
+            scheduledTime: scheduledDate.toTimeString().slice(0, 5),
+            status: appt.status,
+            department: appt.slot?.department || '',
+            memo: ''
+        })
+        setEditError(null)
+        setEditSuccess(null)
+        openEdit()
+    }
+
+    // 예약 수정 저장
+    const handleSaveEdit = async () => {
+        if (!selectedAppointment) return
+
+        setEditLoading(true)
+        setEditError(null)
+
+        try {
+            // 날짜와 시간 결합
+            const [hours, minutes] = editAppointment.scheduledTime.split(':').map(Number)
+            const scheduledDate = new Date(editAppointment.scheduledDate)
+            scheduledDate.setHours(hours, minutes, 0, 0)
+
+            const { error } = await supabase
+                .from('appointments')
+                .update({
+                    scheduled_at: scheduledDate.toISOString(),
+                    status: editAppointment.status
+                })
+                .eq('id', selectedAppointment.id)
+
+            if (error) throw error
+
+            // slot의 department도 업데이트
+            if (selectedAppointment.slot && editAppointment.department) {
+                await supabase
+                    .from('appointment_slots')
+                    .update({ department: editAppointment.department })
+                    .eq('id', selectedAppointment.slot)
+            }
+
+            setEditSuccess('예약이 수정되었습니다.')
+            fetchAppointments()
+            setTimeout(() => {
+                closeEdit()
+                setEditSuccess(null)
+            }, 1500)
+        } catch (err: any) {
+            console.error('Error updating appointment:', err)
+            setEditError(err.message || '예약 수정 중 오류가 발생했습니다.')
+        } finally {
+            setEditLoading(false)
+        }
+    }
+
+    // 예약 삭제
+    const handleDeleteAppointment = async () => {
+        if (!selectedAppointment) return
+        if (!confirm('정말 이 예약을 삭제하시겠습니까?')) return
+
+        setEditLoading(true)
+        try {
+            const { error } = await supabase
+                .from('appointments')
+                .delete()
+                .eq('id', selectedAppointment.id)
+
+            if (error) throw error
+
+            fetchAppointments()
+            closeEdit()
+        } catch (err: any) {
+            console.error('Error deleting appointment:', err)
+            setEditError(err.message || '예약 삭제 중 오류가 발생했습니다.')
+        } finally {
+            setEditLoading(false)
+        }
+    }
+
+    // 수기 문진 저장
+    const handleSaveManualNote = async () => {
+        if (!selectedPatient || !manualNote.trim()) return
+
+        setSavingNote(true)
+        try {
+            // 새 세션 생성
+            const { data: session, error: sessionError } = await supabase
+                .from('intake_sessions')
+                .insert({
+                    patient_id: parseInt(selectedPatient.id),
+                    status: 'completed',
+                    turn_count: 1
+                })
+                .select()
+                .single()
+
+            if (sessionError) throw sessionError
+
+            // 메시지 추가 (관리자 메모)
+            const { error: messageError } = await supabase
+                .from('intake_messages')
+                .insert({
+                    session_id: session.id,
+                    role: 'system',
+                    content: `[관리자 메모] ${manualNote}`
+                })
+
+            if (messageError) throw messageError
+
+            // 세션 목록 새로고침
+            if (selectedPatient) {
+                await handleViewChat(selectedPatient.id, selectedPatient.name)
+            }
+            setManualNote('')
+        } catch (err: any) {
+            console.error('Error saving manual note:', err)
+            alert('메모 저장 중 오류가 발생했습니다.')
+        } finally {
+            setSavingNote(false)
+        }
+    }
+
 
     const handleCreateAppointment = async () => {
         if (!newAppointment.patientId || !newAppointment.scheduledDate || !newAppointment.scheduledTime) {
@@ -297,7 +446,12 @@ export default function AppointmentsPage() {
                                     )}
                                 </Table.Td>
                                 <Table.Td>
-                                    <Button variant="light" size="xs">
+                                    <Button
+                                        variant="light"
+                                        size="xs"
+                                        leftSection={<Edit size={14} />}
+                                        onClick={() => handleEditAppointment(appt)}
+                                    >
                                         관리
                                     </Button>
                                 </Table.Td>
@@ -410,6 +564,29 @@ export default function AppointmentsPage() {
                         ))}
                     </Stack>
                 )}
+
+                {/* 수기 문진 입력 */}
+                <Paper withBorder p="md" radius="md" bg="dark.6" mt="md">
+                    <Text size="sm" fw={500} mb="xs">수기 메모 추가</Text>
+                    <Textarea
+                        placeholder="관리자 메모를 입력하세요..."
+                        value={manualNote}
+                        onChange={(e) => setManualNote(e.target.value)}
+                        minRows={2}
+                        mb="sm"
+                    />
+                    <Group justify="flex-end">
+                        <Button
+                            size="xs"
+                            leftSection={<Plus size={14} />}
+                            onClick={handleSaveManualNote}
+                            loading={savingNote}
+                            disabled={!manualNote.trim()}
+                        >
+                            메모 저장
+                        </Button>
+                    </Group>
+                </Paper>
             </Modal>
 
 
@@ -548,6 +725,126 @@ export default function AppointmentsPage() {
                     <Group justify="flex-end" mt="md">
                         <Button variant="light" onClick={closeCreate}>취소</Button>
                         <Button onClick={handleCreateAppointment} loading={createLoading}>예약 생성</Button>
+                    </Group>
+                </Stack>
+            </Modal>
+
+            {/* 예약 수정 모달 */}
+            <Modal
+                opened={editOpened}
+                onClose={closeEdit}
+                title={
+                    <Group gap="xs">
+                        <Edit size={20} />
+                        <Text fw={600}>예약 수정</Text>
+                    </Group>
+                }
+                centered
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
+            >
+                <Stack gap="md">
+                    {editError && (
+                        <Alert color="red" icon={<AlertCircle size={16} />} withCloseButton onClose={() => setEditError(null)}>
+                            {editError}
+                        </Alert>
+                    )}
+                    {editSuccess && (
+                        <Alert color="green" icon={<CheckCircle size={16} />} withCloseButton onClose={() => setEditSuccess(null)}>
+                            {editSuccess}
+                        </Alert>
+                    )}
+
+                    <Paper withBorder p="sm" radius="md" bg="dark.6">
+                        <Text size="sm" c="dimmed" mb="xs">환자 정보</Text>
+                        <Text fw={500}>{selectedAppointment?.patient?.name || '-'}</Text>
+                        <Text size="sm" c="dimmed">{selectedAppointment?.patient?.phone || '-'}</Text>
+                    </Paper>
+
+                    <Select
+                        label="예약 상태"
+                        data={[
+                            { value: 'scheduled', label: '예약됨' },
+                            { value: 'confirmed', label: '확정' },
+                            { value: 'cancelled', label: '취소' },
+                            { value: 'completed', label: '완료' },
+                        ]}
+                        value={editAppointment.status}
+                        onChange={(val) => setEditAppointment(prev => ({ ...prev, status: val || '' }))}
+                    />
+
+                    <TextInput
+                        label="예약 날짜"
+                        type="date"
+                        value={editAppointment.scheduledDate}
+                        onChange={(e) => setEditAppointment(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                    />
+
+                    <Select
+                        label="예약 시간"
+                        placeholder="시간을 선택하세요"
+                        data={[
+                            { value: '09:00', label: '오전 09:00' },
+                            { value: '09:10', label: '오전 09:10' },
+                            { value: '09:20', label: '오전 09:20' },
+                            { value: '09:30', label: '오전 09:30' },
+                            { value: '09:40', label: '오전 09:40' },
+                            { value: '09:50', label: '오전 09:50' },
+                            { value: '10:00', label: '오전 10:00' },
+                            { value: '10:30', label: '오전 10:30' },
+                            { value: '11:00', label: '오전 11:00' },
+                            { value: '11:30', label: '오전 11:30' },
+                            { value: '12:00', label: '오후 12:00' },
+                            { value: '12:30', label: '오후 12:30' },
+                            { value: '13:00', label: '오후 01:00' },
+                            { value: '13:30', label: '오후 01:30' },
+                            { value: '14:00', label: '오후 02:00' },
+                            { value: '14:30', label: '오후 02:30' },
+                            { value: '15:00', label: '오후 03:00' },
+                            { value: '15:30', label: '오후 03:30' },
+                            { value: '16:00', label: '오후 04:00' },
+                            { value: '16:30', label: '오후 04:30' },
+                            { value: '17:00', label: '오후 05:00' },
+                            { value: '17:30', label: '오후 05:30' },
+                            { value: '18:00', label: '오후 06:00' },
+                        ]}
+                        value={editAppointment.scheduledTime}
+                        onChange={(val) => setEditAppointment(prev => ({ ...prev, scheduledTime: val || '' }))}
+                        searchable
+                    />
+
+                    <Select
+                        label="진료과"
+                        placeholder="진료과 선택"
+                        data={[
+                            { value: '일반진료', label: '일반진료' },
+                            { value: '침구과', label: '침구과' },
+                            { value: '한방내과', label: '한방내과' },
+                            { value: '재활의학과', label: '재활의학과' },
+                            { value: '여성클리닉', label: '여성클리닉' },
+                            { value: '성장클리닉', label: '성장클리닉' },
+                        ]}
+                        value={editAppointment.department}
+                        onChange={(val) => setEditAppointment(prev => ({ ...prev, department: val || '' }))}
+                    />
+
+                    <Group justify="space-between" mt="md">
+                        <Button
+                            variant="light"
+                            color="red"
+                            leftSection={<Trash2 size={14} />}
+                            onClick={handleDeleteAppointment}
+                            loading={editLoading}
+                        >
+                            삭제
+                        </Button>
+                        <Group>
+                            <Button variant="light" onClick={closeEdit}>취소</Button>
+                            <Button onClick={handleSaveEdit} loading={editLoading}>저장</Button>
+                        </Group>
                     </Group>
                 </Stack>
             </Modal>
