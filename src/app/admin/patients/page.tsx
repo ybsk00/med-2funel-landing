@@ -210,305 +210,307 @@ export default function PatientsPage() {
         } finally {
             setAddLoading(false);
         }
-        async function handleDeletePatient(id: string, name: string) {
-            if (!confirm(`${name} 환자를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
-                return;
-            }
+    }
 
-            try {
-                const { error } = await supabase
-                    .from('patients')
-                    .delete()
-                    .eq('id', id);
-
-                if (error) throw error;
-
-                setSuccess(`${name} 환자가 삭제되었습니다.`);
-                fetchPatients();
-            } catch (err) {
-                console.error('Error deleting patient:', err);
-                setError('환자 삭제 중 오류가 발생했습니다.');
-            }
+    async function handleDeletePatient(id: string, name: string) {
+        if (!confirm(`${name} 환자를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+            return;
         }
 
-        if (loading) {
-            return (
-                <Center h={300}>
-                    <Loader color="blue" />
-                </Center>
-            );
-        }
+        try {
+            const { error } = await supabase
+                .from('patients')
+                .delete()
+                .eq('id', id);
 
+            if (error) throw error;
+
+            setSuccess(`${name} 환자가 삭제되었습니다.`);
+            fetchPatients();
+        } catch (err) {
+            console.error('Error deleting patient:', err);
+            setError('환자 삭제 중 오류가 발생했습니다.');
+        }
+    }
+
+    if (loading) {
         return (
-            <Container size="lg" py="lg">
-                {success && (
-                    <Alert color="green" icon={<CheckCircle size={16} />} mb="md" withCloseButton onClose={() => setSuccess(null)}>
-                        {success}
-                    </Alert>
-                )}
-
-                <Group justify="space-between" mb="lg">
-                    <Title order={2} c="white">환자 관리</Title>
-                    <Button leftSection={<UserPlus size={16} />} onClick={openAddModal}>
-                        환자 등록
-                    </Button>
-                </Group>
-
-                <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
-                    <Table highlightOnHover highlightOnHoverColor="dark.6">
-                        <Table.Thead bg="dark.8">
-                            <Table.Tr>
-                                <Table.Th c="dimmed">이름</Table.Th>
-                                <Table.Th c="dimmed">연락처</Table.Th>
-                                <Table.Th c="dimmed">상태</Table.Th>
-                                <Table.Th c="dimmed">등록일</Table.Th>
-                                <Table.Th c="dimmed">관리</Table.Th>
-                            </Table.Tr>
-                        </Table.Thead>
-                        <Table.Tbody>
-                            {patients.map((patient) => (
-                                <Table.Tr key={patient.id}>
-                                    <Table.Td>
-                                        <Text size="sm" fw={500} c="white">{patient.name}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" c="gray.4">{patient.phone || '-'}</Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Badge color={lifecycleColors[patient.lifecycle_stage] || 'gray'}>
-                                            {lifecycleLabels[patient.lifecycle_stage] || patient.lifecycle_stage}
-                                        </Badge>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Text size="sm" c="gray.5">
-                                            {new Date(patient.created_at).toLocaleDateString('ko-KR')}
-                                        </Text>
-                                    </Table.Td>
-                                    <Table.Td>
-                                        <Button variant="light" size="xs" onClick={() => {
-                                            setSelectedPatient(patient);
-                                            openDetailModal();
-                                        }}>
-                                            상세보기
-                                        </Button>
-                                        <ActionIcon
-                                            variant="subtle"
-                                            color="red"
-                                            size="sm"
-                                            ml="xs"
-                                            onClick={() => handleDeletePatient(patient.id, patient.name)}
-                                        >
-                                            <Trash2 size={16} />
-                                        </ActionIcon>
-                                    </Table.Td>
-                                </Table.Tr>
-                            ))}
-                            {patients.length === 0 && (
-                                <Table.Tr>
-                                    <Table.Td colSpan={5}>
-                                        <Text ta="center" c="dimmed" py="lg">등록된 환자가 없습니다.</Text>
-                                    </Table.Td>
-                                </Table.Tr>
-                            )}
-                        </Table.Tbody>
-                    </Table>
-                </Paper>
-
-                {/* 환자 등록 모달 */}
-                <Modal
-                    opened={addModalOpened}
-                    onClose={() => {
-                        closeAddModal();
-                        resetForm();
-                    }}
-                    title="환자 등록"
-                    centered
-                    size="lg"
-                    styles={{
-                        header: { backgroundColor: 'var(--mantine-color-dark-7)' },
-                        content: { backgroundColor: 'var(--mantine-color-dark-7)' },
-                        title: { color: 'white' }
-                    }}
-                >
-                    <Stack gap="md">
-                        {error && (
-                            <Alert color="red" icon={<AlertCircle size={16} />} withCloseButton onClose={() => setError(null)}>
-                                {error}
-                            </Alert>
-                        )}
-
-                        {/* 기본 정보 섹션 */}
-                        <Text fw={500} c="white">기본 정보</Text>
-                        <Group grow>
-                            <TextInput
-                                label="이름"
-                                placeholder="환자 이름"
-                                required
-                                value={formData.name}
-                                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                            />
-                            <TextInput
-                                label="연락처"
-                                placeholder="010-0000-0000"
-                                value={formData.phone}
-                                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                            />
-                        </Group>
-                        <Group grow>
-                            <TextInput
-                                label="생년월일"
-                                placeholder="YYYY-MM-DD 또는 YYYYMMDD"
-                                value={formData.birthDate}
-                                onChange={(e) => {
-                                    let value = e.target.value.replace(/[^0-9-]/g, '');
-                                    // Auto-format: 19991111 -> 1999-11-11
-                                    if (value.length === 8 && !value.includes('-')) {
-                                        value = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
-                                    }
-                                    setFormData(prev => ({ ...prev, birthDate: value }));
-                                }}
-                            />
-                            <Select
-                                label="성별"
-                                placeholder="선택"
-                                data={[
-                                    { value: 'male', label: '남성' },
-                                    { value: 'female', label: '여성' },
-                                ]}
-                                value={formData.gender}
-                                onChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}
-                            />
-                        </Group>
-                        <Select
-                            label="환자 상태"
-                            data={[
-                                { value: 'lead', label: '리드' },
-                                { value: 'new', label: '신규' },
-                                { value: 'returning', label: '재방문' },
-                                { value: 'vip', label: 'VIP' },
-                            ]}
-                            value={formData.lifecycleStage}
-                            onChange={(value) => setFormData(prev => ({ ...prev, lifecycleStage: value }))}
-                        />
-
-                        <Divider my="sm" />
-
-                        {/* 메세지 규칙 섹션 */}
-                        <Text fw={500} c="white">메세지 규칙 설정</Text>
-                        <Text size="sm" c="gray.5">이 환자에게 적용할 자동 메세지 규칙을 선택하세요.</Text>
-
-                        <Card withBorder radius="md" p="md" bg="dark.8" style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
-                            <Stack gap="sm">
-                                {MESSAGE_TEMPLATES.map((template) => {
-                                    const rule = messageRules.find(r => r.type === template.type);
-                                    if (!rule) return null;
-
-                                    return (
-                                        <Group key={template.type} justify="space-between">
-                                            <Group gap="sm">
-                                                <ThemeIcon
-                                                    size="sm"
-                                                    radius="sm"
-                                                    variant="light"
-                                                    color={rule.enabled ? 'blue' : 'gray'}
-                                                >
-                                                    {getRuleIcon(template.type)}
-                                                </ThemeIcon>
-                                                <div>
-                                                    <Text size="sm" c="white">{template.name}</Text>
-                                                    <Text size="xs" c="gray.5">{template.description}</Text>
-                                                </div>
-                                            </Group>
-                                            <Checkbox
-                                                checked={rule.enabled}
-                                                onChange={() => toggleRule(template.type)}
-                                            />
-                                        </Group>
-                                    );
-                                })}
-                            </Stack>
-                        </Card>
-
-                        <Alert color="blue" mt="sm">
-                            <Text size="xs">
-                                메세지 발송은 API 연동 후 활성화됩니다. 규칙 설정은 저장됩니다.
-                            </Text>
-                        </Alert>
-
-                        <Group justify="flex-end" mt="md">
-                            <Button variant="light" onClick={() => {
-                                closeAddModal();
-                                resetForm();
-                            }}>
-                                취소
-                            </Button>
-                            <Button onClick={handleAddPatient} loading={addLoading}>
-                                환자 등록
-                            </Button>
-                        </Group>
-                    </Stack>
-                </Modal>
-
-                {/* 환자 상세보기 모달 */}
-                <Modal
-                    opened={detailModalOpened}
-                    onClose={closeDetailModal}
-                    title={`${selectedPatient?.name || ''} 환자 정보`}
-                    centered
-                    size="md"
-                    styles={{
-                        header: { backgroundColor: 'var(--mantine-color-dark-7)' },
-                        content: { backgroundColor: 'var(--mantine-color-dark-7)' },
-                        title: { color: 'white' }
-                    }}
-                >
-                    {selectedPatient && (
-                        <Stack gap="md">
-                            <Paper p="md" bg="dark.8" radius="md">
-                                <Stack gap="sm">
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">이름</Text>
-                                        <Text fw={500} c="white">{selectedPatient.name}</Text>
-                                    </Group>
-                                    <Divider />
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">연락처</Text>
-                                        <Text c="white">{selectedPatient.phone || '-'}</Text>
-                                    </Group>
-                                    <Divider />
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">생년월일</Text>
-                                        <Text c="white">{selectedPatient.birth_date || '-'}</Text>
-                                    </Group>
-                                    <Divider />
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">성별</Text>
-                                        <Text c="white">
-                                            {selectedPatient.gender === 'male' ? '남성' :
-                                                selectedPatient.gender === 'female' ? '여성' : '-'}
-                                        </Text>
-                                    </Group>
-                                    <Divider />
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">상태</Text>
-                                        <Badge color={lifecycleColors[selectedPatient.lifecycle_stage] || 'gray'}>
-                                            {lifecycleLabels[selectedPatient.lifecycle_stage] || selectedPatient.lifecycle_stage}
-                                        </Badge>
-                                    </Group>
-                                    <Divider />
-                                    <Group justify="space-between">
-                                        <Text size="sm" c="dimmed">등록일</Text>
-                                        <Text c="white">{new Date(selectedPatient.created_at).toLocaleDateString('ko-KR')}</Text>
-                                    </Group>
-                                </Stack>
-                            </Paper>
-                            <Group justify="flex-end">
-                                <Button variant="light" onClick={closeDetailModal}>닫기</Button>
-                            </Group>
-                        </Stack>
-                    )}
-                </Modal>
-            </Container >
+            <Center h={300}>
+                <Loader color="blue" />
+            </Center>
         );
     }
+
+    return (
+        <Container size="lg" py="lg">
+            {success && (
+                <Alert color="green" icon={<CheckCircle size={16} />} mb="md" withCloseButton onClose={() => setSuccess(null)}>
+                    {success}
+                </Alert>
+            )}
+
+            <Group justify="space-between" mb="lg">
+                <Title order={2} c="white">환자 관리</Title>
+                <Button leftSection={<UserPlus size={16} />} onClick={openAddModal}>
+                    환자 등록
+                </Button>
+            </Group>
+
+            <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
+                <Table highlightOnHover highlightOnHoverColor="dark.6">
+                    <Table.Thead bg="dark.8">
+                        <Table.Tr>
+                            <Table.Th c="dimmed">이름</Table.Th>
+                            <Table.Th c="dimmed">연락처</Table.Th>
+                            <Table.Th c="dimmed">상태</Table.Th>
+                            <Table.Th c="dimmed">등록일</Table.Th>
+                            <Table.Th c="dimmed">관리</Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {patients.map((patient) => (
+                            <Table.Tr key={patient.id}>
+                                <Table.Td>
+                                    <Text size="sm" fw={500} c="white">{patient.name}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text size="sm" c="gray.4">{patient.phone || '-'}</Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Badge color={lifecycleColors[patient.lifecycle_stage] || 'gray'}>
+                                        {lifecycleLabels[patient.lifecycle_stage] || patient.lifecycle_stage}
+                                    </Badge>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Text size="sm" c="gray.5">
+                                        {new Date(patient.created_at).toLocaleDateString('ko-KR')}
+                                    </Text>
+                                </Table.Td>
+                                <Table.Td>
+                                    <Button variant="light" size="xs" onClick={() => {
+                                        setSelectedPatient(patient);
+                                        openDetailModal();
+                                    }}>
+                                        상세보기
+                                    </Button>
+                                    <ActionIcon
+                                        variant="subtle"
+                                        color="red"
+                                        size="sm"
+                                        ml="xs"
+                                        onClick={() => handleDeletePatient(patient.id, patient.name)}
+                                    >
+                                        <Trash2 size={16} />
+                                    </ActionIcon>
+                                </Table.Td>
+                            </Table.Tr>
+                        ))}
+                        {patients.length === 0 && (
+                            <Table.Tr>
+                                <Table.Td colSpan={5}>
+                                    <Text ta="center" c="dimmed" py="lg">등록된 환자가 없습니다.</Text>
+                                </Table.Td>
+                            </Table.Tr>
+                        )}
+                    </Table.Tbody>
+                </Table>
+            </Paper>
+
+            {/* 환자 등록 모달 */}
+            <Modal
+                opened={addModalOpened}
+                onClose={() => {
+                    closeAddModal();
+                    resetForm();
+                }}
+                title="환자 등록"
+                centered
+                size="lg"
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
+            >
+                <Stack gap="md">
+                    {error && (
+                        <Alert color="red" icon={<AlertCircle size={16} />} withCloseButton onClose={() => setError(null)}>
+                            {error}
+                        </Alert>
+                    )}
+
+                    {/* 기본 정보 섹션 */}
+                    <Text fw={500} c="white">기본 정보</Text>
+                    <Group grow>
+                        <TextInput
+                            label="이름"
+                            placeholder="환자 이름"
+                            required
+                            value={formData.name}
+                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                        />
+                        <TextInput
+                            label="연락처"
+                            placeholder="010-0000-0000"
+                            value={formData.phone}
+                            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                        />
+                    </Group>
+                    <Group grow>
+                        <TextInput
+                            label="생년월일"
+                            placeholder="YYYY-MM-DD 또는 YYYYMMDD"
+                            value={formData.birthDate}
+                            onChange={(e) => {
+                                let value = e.target.value.replace(/[^0-9-]/g, '');
+                                // Auto-format: 19991111 -> 1999-11-11
+                                if (value.length === 8 && !value.includes('-')) {
+                                    value = `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
+                                }
+                                setFormData(prev => ({ ...prev, birthDate: value }));
+                            }}
+                        />
+                        <Select
+                            label="성별"
+                            placeholder="선택"
+                            data={[
+                                { value: 'male', label: '남성' },
+                                { value: 'female', label: '여성' },
+                            ]}
+                            value={formData.gender}
+                            onChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}
+                        />
+                    </Group>
+                    <Select
+                        label="환자 상태"
+                        data={[
+                            { value: 'lead', label: '리드' },
+                            { value: 'new', label: '신규' },
+                            { value: 'returning', label: '재방문' },
+                            { value: 'vip', label: 'VIP' },
+                        ]}
+                        value={formData.lifecycleStage}
+                        onChange={(value) => setFormData(prev => ({ ...prev, lifecycleStage: value }))}
+                    />
+
+                    <Divider my="sm" />
+
+                    {/* 메세지 규칙 섹션 */}
+                    <Text fw={500} c="white">메세지 규칙 설정</Text>
+                    <Text size="sm" c="gray.5">이 환자에게 적용할 자동 메세지 규칙을 선택하세요.</Text>
+
+                    <Card withBorder radius="md" p="md" bg="dark.8" style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
+                        <Stack gap="sm">
+                            {MESSAGE_TEMPLATES.map((template) => {
+                                const rule = messageRules.find(r => r.type === template.type);
+                                if (!rule) return null;
+
+                                return (
+                                    <Group key={template.type} justify="space-between">
+                                        <Group gap="sm">
+                                            <ThemeIcon
+                                                size="sm"
+                                                radius="sm"
+                                                variant="light"
+                                                color={rule.enabled ? 'blue' : 'gray'}
+                                            >
+                                                {getRuleIcon(template.type)}
+                                            </ThemeIcon>
+                                            <div>
+                                                <Text size="sm" c="white">{template.name}</Text>
+                                                <Text size="xs" c="gray.5">{template.description}</Text>
+                                            </div>
+                                        </Group>
+                                        <Checkbox
+                                            checked={rule.enabled}
+                                            onChange={() => toggleRule(template.type)}
+                                        />
+                                    </Group>
+                                );
+                            })}
+                        </Stack>
+                    </Card>
+
+                    <Alert color="blue" mt="sm">
+                        <Text size="xs">
+                            메세지 발송은 API 연동 후 활성화됩니다. 규칙 설정은 저장됩니다.
+                        </Text>
+                    </Alert>
+
+                    <Group justify="flex-end" mt="md">
+                        <Button variant="light" onClick={() => {
+                            closeAddModal();
+                            resetForm();
+                        }}>
+                            취소
+                        </Button>
+                        <Button onClick={handleAddPatient} loading={addLoading}>
+                            환자 등록
+                        </Button>
+                    </Group>
+                </Stack>
+            </Modal>
+
+            {/* 환자 상세보기 모달 */}
+            <Modal
+                opened={detailModalOpened}
+                onClose={closeDetailModal}
+                title={`${selectedPatient?.name || ''} 환자 정보`}
+                centered
+                size="md"
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
+            >
+                {selectedPatient && (
+                    <Stack gap="md">
+                        <Paper p="md" bg="dark.8" radius="md">
+                            <Stack gap="sm">
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">이름</Text>
+                                    <Text fw={500} c="white">{selectedPatient.name}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">연락처</Text>
+                                    <Text c="white">{selectedPatient.phone || '-'}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">생년월일</Text>
+                                    <Text c="white">{selectedPatient.birth_date || '-'}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">성별</Text>
+                                    <Text c="white">
+                                        {selectedPatient.gender === 'male' ? '남성' :
+                                            selectedPatient.gender === 'female' ? '여성' : '-'}
+                                    </Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">상태</Text>
+                                    <Badge color={lifecycleColors[selectedPatient.lifecycle_stage] || 'gray'}>
+                                        {lifecycleLabels[selectedPatient.lifecycle_stage] || selectedPatient.lifecycle_stage}
+                                    </Badge>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">등록일</Text>
+                                    <Text c="white">{new Date(selectedPatient.created_at).toLocaleDateString('ko-KR')}</Text>
+                                </Group>
+                            </Stack>
+                        </Paper>
+                        <Group justify="flex-end">
+                            <Button variant="light" onClick={closeDetailModal}>닫기</Button>
+                        </Group>
+                    </Stack>
+                )}
+            </Modal>
+        </Container >
+    );
+}
 
