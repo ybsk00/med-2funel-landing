@@ -247,7 +247,7 @@ export default function HealthcareChat({
                 <Stack gap="md" py="md">
                     <Text size="sm" c="dimmed">
                         지금까지의 헬스체크 결과를 저장하고,
-                        로그인하시면 <Text span fw={700} c="sage-green">AI 한의사와 더 자세한 상담</Text>을
+                        로그인하시면 <Text span fw={700} c="sage-green">더 자세한 맞춤형 건강 정보</Text>를
                         받으실 수 있습니다.
                     </Text>
                     <Stack gap="xs">
