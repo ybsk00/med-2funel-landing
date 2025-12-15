@@ -24,6 +24,7 @@ import {
     Select,
     Alert,
 } from '@mantine/core'
+import { DateTimePicker } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle } from 'lucide-react'
 
@@ -179,8 +180,8 @@ export default function AppointmentsPage() {
                     .from('appointment_slots')
                     .insert({
                         department: newAppointment.department,
-                        start_time: new Date(newAppointment.scheduledAt).toISOString(),
-                        end_time: new Date(new Date(newAppointment.scheduledAt).getTime() + 30 * 60000).toISOString() // 30 min duration
+                        starts_at: new Date(newAppointment.scheduledAt).toISOString(),
+                        ends_at: new Date(new Date(newAppointment.scheduledAt).getTime() + 30 * 60000).toISOString() // 30 min duration
                     })
                     .select()
                     .single()
@@ -439,14 +440,13 @@ export default function AppointmentsPage() {
                         required
                     />
 
-                    <TextInput
+                    <DateTimePicker
                         label="예약 일시"
-                        type="datetime-local"
-                        value={newAppointment.scheduledAt}
-                        onChange={(e) => setNewAppointment(prev => ({ ...prev, scheduledAt: e.target.value }))}
+                        placeholder="날짜와 시간을 선택하세요"
+                        value={newAppointment.scheduledAt ? new Date(newAppointment.scheduledAt) : null}
+                        onChange={(date) => setNewAppointment(prev => ({ ...prev, scheduledAt: date ? date.toISOString() : '' }))}
                         required
-                        step={1800}
-                        styles={{ input: { colorScheme: 'dark' } }}
+                        valueFormat="YYYY-MM-DD HH:mm"
                     />
 
                     <Select
