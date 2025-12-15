@@ -36,27 +36,27 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const serviceConfig: Record<string, { serviceType: string; initialMessage: string }> = {
         recovery: {
             serviceType: "recovery",
-            initialMessage: "안녕하세요, 건강 상담을 도와드릴 AI 한의사입니다. \n\n오늘 하루 피로감은 어떠셨나요? 가장 피곤했던 시간대를 알려주세요. (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n오늘 어떤 증상이 있으셔서 오셨나요? 편하게 말씀해 주세요."
         },
-        resilience: { // Handle legacy id if needed
+        resilience: {
             serviceType: "recovery",
-            initialMessage: "안녕하세요, 건강 상담을 도와드릴 AI 한의사입니다. \n\n오늘 하루 피로감은 어떠셨나요? 가장 피곤했던 시간대를 알려주세요. (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n오늘 어떤 증상이 있으셔서 오셨나요? 편하게 말씀해 주세요."
         },
         women: {
             serviceType: "women",
-            initialMessage: "안녕하세요, 여성 건강 상담을 도와드릴 AI 한의사입니다. \n\n평소 월경 주기는 어떠신가요? (대체로 규칙적/가끔 불규칙/자주 불규칙)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n어떤 증상으로 상담을 원하시나요? 편하게 말씀해 주세요."
         },
         pain: {
             serviceType: "pain",
-            initialMessage: "안녕하세요, 통증 상담을 도와드릴 AI 한의사입니다. \n\n현재 가장 불편하신 부위가 어디신가요? (목·어깨/허리/무릎·다리/그 외)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n어디가 불편하셔서 오셨나요? 증상을 말씀해 주세요."
         },
         digestion: {
             serviceType: "digestion",
-            initialMessage: "안녕하세요, 소화기 건강 상담을 도와드릴 AI 한의사입니다. \n\n평소 식사 속도는 어떠신가요? (천천히/보통/빠른 편)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n어떤 증상으로 상담을 원하시나요? 편하게 말씀해 주세요."
         },
         pregnancy: {
             serviceType: "pregnancy",
-            initialMessage: "안녕하세요, 임신 준비 상담을 도와드릴 AI 한의사입니다. \n\n하루 중 피로감은 어느 정도 느끼시나요? (대부분 괜찮음/오후에 피곤함/하루 종일 피곤함)"
+            initialMessage: "안녕하세요, AI 한의사입니다. \n\n임신 준비와 관련해서 어떤 부분이 궁금하시거나 걱정되시나요?"
         }
     };
 
