@@ -58,6 +58,8 @@ interface Patient {
     id: string;
     name: string;
     phone: string | null;
+    birth_date: string | null;
+    gender: string | null;
     lifecycle_stage: string;
     created_at: string;
 }
@@ -87,6 +89,10 @@ export default function PatientsPage() {
     const [addLoading, setAddLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+
+    // 환자 상세보기 모달
+    const [detailModalOpened, { open: openDetailModal, close: closeDetailModal }] = useDisclosure(false);
+    const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
     // 환자 등록 폼 데이터
     const [formData, setFormData] = useState({
@@ -259,7 +265,10 @@ export default function PatientsPage() {
                                     </Text>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Button variant="light" size="xs">
+                                    <Button variant="light" size="xs" onClick={() => {
+                                        setSelectedPatient(patient);
+                                        openDetailModal();
+                                    }}>
                                         상세보기
                                     </Button>
                                 </Table.Td>
@@ -409,6 +418,66 @@ export default function PatientsPage() {
                         </Button>
                     </Group>
                 </Stack>
+            </Modal>
+
+            {/* 환자 상세보기 모달 */}
+            <Modal
+                opened={detailModalOpened}
+                onClose={closeDetailModal}
+                title={`${selectedPatient?.name || ''} 환자 정보`}
+                centered
+                size="md"
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
+            >
+                {selectedPatient && (
+                    <Stack gap="md">
+                        <Paper p="md" bg="dark.8" radius="md">
+                            <Stack gap="sm">
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">이름</Text>
+                                    <Text fw={500} c="white">{selectedPatient.name}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">연락처</Text>
+                                    <Text c="white">{selectedPatient.phone || '-'}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">생년월일</Text>
+                                    <Text c="white">{selectedPatient.birth_date || '-'}</Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">성별</Text>
+                                    <Text c="white">
+                                        {selectedPatient.gender === 'male' ? '남성' :
+                                            selectedPatient.gender === 'female' ? '여성' : '-'}
+                                    </Text>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">상태</Text>
+                                    <Badge color={lifecycleColors[selectedPatient.lifecycle_stage] || 'gray'}>
+                                        {lifecycleLabels[selectedPatient.lifecycle_stage] || selectedPatient.lifecycle_stage}
+                                    </Badge>
+                                </Group>
+                                <Divider />
+                                <Group justify="space-between">
+                                    <Text size="sm" c="dimmed">등록일</Text>
+                                    <Text c="white">{new Date(selectedPatient.created_at).toLocaleDateString('ko-KR')}</Text>
+                                </Group>
+                            </Stack>
+                        </Paper>
+                        <Group justify="flex-end">
+                            <Button variant="light" onClick={closeDetailModal}>닫기</Button>
+                        </Group>
+                    </Stack>
+                )}
             </Modal>
         </Container >
     );

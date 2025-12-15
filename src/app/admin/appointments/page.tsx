@@ -20,9 +20,12 @@ import {
     Box,
     ScrollArea,
     ActionIcon,
+    TextInput,
+    Select,
+    Alert,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { X, MessageSquare, User, Bot, CalendarPlus } from 'lucide-react'
+import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle } from 'lucide-react'
 
 type Appointment = {
     id: string
@@ -61,11 +64,39 @@ export default function AppointmentsPage() {
     const [loadingChat, setLoadingChat] = useState(false)
     const [opened, { open, close }] = useDisclosure(false)
 
+    // 예약 생성 모달
+    const [createOpened, { open: openCreate, close: closeCreate }] = useDisclosure(false)
+    const [createLoading, setCreateLoading] = useState(false)
+    const [patients, setPatients] = useState<{ value: string; label: string }[]>([])
+    const [newAppointment, setNewAppointment] = useState({
+        patientId: '',
+        scheduledAt: '',
+        department: '',
+        memo: ''
+    })
+    const [createError, setCreateError] = useState<string | null>(null)
+    const [createSuccess, setCreateSuccess] = useState<string | null>(null)
+
     const supabase = createClient()
 
     useEffect(() => {
         fetchAppointments()
+        fetchPatients()
     }, [])
+
+    const fetchPatients = async () => {
+        const { data } = await supabase
+            .from('patients')
+            .select('id, name, phone')
+            .order('name')
+
+        if (data) {
+            setPatients(data.map(p => ({
+                value: p.id,
+                label: `${p.name} (${p.phone || '연락처 없음'})`
+            })))
+        }
+    }
 
     const fetchAppointments = async () => {
         const { data } = await supabase
@@ -126,6 +157,64 @@ export default function AppointmentsPage() {
         setChatSessions([])
     }
 
+    const handleCreateAppointment = async () => {
+        if (!newAppointment.patientId || !newAppointment.scheduledAt) {
+            setCreateError('환자와 예약 일시를 선택해주세요.')
+            return
+        }
+
+        setCreateLoading(true)
+        setCreateError(null)
+
+        try {
+            // 1. Create appointment slot if department is selected (optional logic, simplified for now)
+            // For now, we just insert into appointments directly. 
+            // If we need slots, we would create one or find one. 
+            // Let's assume we just store the department in a slot for now or just skip slot logic if not strictly needed by schema constraints.
+            // The schema has slot_id, but it's nullable. We can create a slot if we want to track department.
+
+            let slotId = null
+            if (newAppointment.department) {
+                const { data: slot, error: slotError } = await supabase
+                    .from('appointment_slots')
+                    .insert({
+                        department: newAppointment.department,
+                        start_time: new Date(newAppointment.scheduledAt).toISOString(),
+                        end_time: new Date(new Date(newAppointment.scheduledAt).getTime() + 30 * 60000).toISOString() // 30 min duration
+                    })
+                    .select()
+                    .single()
+
+                if (slotError) throw slotError
+                slotId = slot.id
+            }
+
+            const { error } = await supabase
+                .from('appointments')
+                .insert({
+                    patient_id: newAppointment.patientId,
+                    scheduled_at: new Date(newAppointment.scheduledAt).toISOString(),
+                    status: 'scheduled',
+                    slot_id: slotId
+                })
+
+            if (error) throw error
+
+            setCreateSuccess('예약이 생성되었습니다.')
+            fetchAppointments()
+            setTimeout(() => {
+                closeCreate()
+                setNewAppointment({ patientId: '', scheduledAt: '', department: '', memo: '' })
+                setCreateSuccess(null)
+            }, 1500)
+        } catch (err: any) {
+            console.error('Error creating appointment:', err)
+            setCreateError(err.message || '예약 생성 중 오류가 발생했습니다.')
+        } finally {
+            setCreateLoading(false)
+        }
+    }
+
     function getStatusBadge(status: string) {
         switch (status) {
             case 'confirmed':
@@ -151,7 +240,7 @@ export default function AppointmentsPage() {
         <Container size="lg" py="lg">
             <Group justify="space-between" mb="lg">
                 <Title order={2} c="white">예약 관리</Title>
-                <Button leftSection={<CalendarPlus size={16} />}>
+                <Button leftSection={<CalendarPlus size={16} />} onClick={openCreate}>
                     예약 생성
                 </Button>
             </Group>
@@ -313,6 +402,80 @@ export default function AppointmentsPage() {
                     </Stack>
                 )}
             </Modal>
-        </Container>
+
+
+            {/* 예약 생성 모달 */}
+            <Modal
+                opened={createOpened}
+                onClose={closeCreate}
+                title="새 예약 생성"
+                centered
+                styles={{
+                    header: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    content: { backgroundColor: 'var(--mantine-color-dark-7)' },
+                    title: { color: 'white' }
+                }}
+            >
+                <Stack gap="md">
+                    {createError && (
+                        <Alert color="red" icon={<AlertCircle size={16} />} withCloseButton onClose={() => setCreateError(null)}>
+                            {createError}
+                        </Alert>
+                    )}
+                    {createSuccess && (
+                        <Alert color="green" icon={<CheckCircle size={16} />} withCloseButton onClose={() => setCreateSuccess(null)}>
+                            {createSuccess}
+                        </Alert>
+                    )}
+
+                    <Select
+                        label="환자 선택"
+                        placeholder="환자를 선택하세요"
+                        data={patients}
+                        searchable
+                        nothingFoundMessage="환자를 찾을 수 없습니다"
+                        value={newAppointment.patientId}
+                        onChange={(val) => setNewAppointment(prev => ({ ...prev, patientId: val || '' }))}
+                        required
+                    />
+
+                    <TextInput
+                        label="예약 일시"
+                        type="datetime-local"
+                        value={newAppointment.scheduledAt}
+                        onChange={(e) => setNewAppointment(prev => ({ ...prev, scheduledAt: e.target.value }))}
+                        required
+                        styles={{ input: { colorScheme: 'dark' } }}
+                    />
+
+                    <Select
+                        label="진료과"
+                        placeholder="진료과 선택"
+                        data={[
+                            { value: '일반진료', label: '일반진료' },
+                            { value: '침구과', label: '침구과' },
+                            { value: '한방내과', label: '한방내과' },
+                            { value: '재활의학과', label: '재활의학과' },
+                            { value: '여성클리닉', label: '여성클리닉' },
+                            { value: '성장클리닉', label: '성장클리닉' },
+                        ]}
+                        value={newAppointment.department}
+                        onChange={(val) => setNewAppointment(prev => ({ ...prev, department: val || '' }))}
+                    />
+
+                    <TextInput
+                        label="메모"
+                        placeholder="예약 관련 메모"
+                        value={newAppointment.memo}
+                        onChange={(e) => setNewAppointment(prev => ({ ...prev, memo: e.target.value }))}
+                    />
+
+                    <Group justify="flex-end" mt="md">
+                        <Button variant="light" onClick={closeCreate}>취소</Button>
+                        <Button onClick={handleCreateAppointment} loading={createLoading}>예약 생성</Button>
+                    </Group>
+                </Stack>
+            </Modal>
+        </Container >
     )
 }
