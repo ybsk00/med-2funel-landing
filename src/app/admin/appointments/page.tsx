@@ -92,7 +92,7 @@ export default function AppointmentsPage() {
 
         if (data) {
             setPatients(data.map(p => ({
-                value: p.id,
+                value: String(p.id),
                 label: `${p.name} (${p.phone || '연락처 없음'})`
             })))
         }
