@@ -149,7 +149,7 @@ export default function PatientDashboard() {
 
                     <div className="flex-1 overflow-hidden">
                         <Suspense fallback={<div className="flex items-center justify-center h-full text-traditional-subtext">Loading...</div>}>
-                            <ChatInterface isEmbedded={true} isLoggedIn={true} />
+                            <ChatInterface isEmbedded={true} isLoggedIn={true} mode="medical" />
                         </Suspense>
                     </div>
                 </div>

@@ -15,6 +15,7 @@ type Message = {
 type ChatInterfaceProps = {
     isEmbedded?: boolean;
     isLoggedIn?: boolean;
+    mode?: 'healthcare' | 'medical';
 };
 
 export default function ChatInterface(props: ChatInterfaceProps) {
@@ -60,12 +61,20 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
-    // Welcome message based on topic
+    // Welcome message based on topic or mode
     useEffect(() => {
-        const config = serviceConfig[topic] || serviceConfig["recovery"];
-        setMessages([{ role: "ai", content: config.initialMessage }]);
+        // Medical mode uses different initial message
+        if (props.mode === 'medical') {
+            setMessages([{
+                role: "ai",
+                content: "어서 오시게. 나는 100년 전통 한의학과 현대 의학을 융합한 AI 한의사일세.\n\n자네가 지금 겪고 있는 불편한 증상을 말씀해 주시게. 언제부터 시작되었는지, 어디가 가장 불편한지 편하게 이야기해 보시게."
+            }]);
+        } else {
+            const config = serviceConfig[topic] || serviceConfig["recovery"];
+            setMessages([{ role: "ai", content: config.initialMessage }]);
+        }
         setTurnCount(0); // Reset turn count on topic change
-    }, [topic]);
+    }, [topic, props.mode]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
