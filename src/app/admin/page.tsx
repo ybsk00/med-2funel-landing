@@ -324,7 +324,7 @@ export default function AdminDashboard() {
                                     </Table.Td>
                                 </Table.Tr>
                             ))
-                        )}
+                        })()}
                     </Table.Tbody>
                 </Table>
             </Paper>
