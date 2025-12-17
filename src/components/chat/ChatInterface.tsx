@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import ConditionReport from "@/components/healthcare/ConditionReport";
 import ReservationModal from "@/components/medical/ReservationModal";
 import GatingModal from "@/components/chat/GatingModal";
-import { moduleScripts, type ModuleScript, gatingMessages } from "@/lib/chat/moduleScripts";
+import { moduleScripts, type ModuleScript } from "@/lib/chat/moduleScripts";
 
 type Message = {
     role: "user" | "ai";
@@ -194,13 +194,6 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         const nextIndex = questionIndex + 1;
         setQuestionIndex(nextIndex);
 
-        // Check if this was a gating point (4th question) and user is not logged in
-        if (currentQuestion.isGatingPoint && !props.isLoggedIn) {
-            setTimeout(() => {
-                setShowGatingModal(true);
-            }, 500);
-        }
-
         // Add feedback if available
         if (currentQuestion.feedback) {
             setTimeout(() => {
@@ -215,11 +208,22 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 setMessages(prev => [...prev, { role: "ai", content: nextQuestion.question }]);
             }, currentQuestion.feedback ? 1000 : 500);
         } else {
-            // All questions completed - show summary
+            // All questions completed - show summary and login modal
             setTimeout(() => {
-                const summaryMessage = `**📊 요약(참고용):**\n\n📈 ${currentModule.summary.signal}\n\n💡 **생활 팁:**\n${currentModule.summary.tips.map((tip, i) => `${i + 1}. ${tip}`).join('\n')}\n\n${currentModule.summary.loginPrompt}`;
+                const summaryMessage = `**📊 체크 완료! 🎉**\n\n📈 ${currentModule.summary.signal}\n\n💡 **생활 팁:**\n${currentModule.summary.tips.map((tip, i) => `${i + 1}. ${tip}`).join('\n')}\n\n${currentModule.summary.loginPrompt}`;
                 setMessages(prev => [...prev, { role: "ai", content: summaryMessage }]);
                 setShowSummary(true);
+
+                // Show login modal after summary (if not logged in)
+                if (!props.isLoggedIn) {
+                    setTimeout(() => {
+                        setLoginModalContent({
+                            title: "상세 리포트를 확인하세요! 🎉",
+                            desc: "패턴 분석이 완료되었습니다.<br />상세 리포트와 맞춤 루틴을 확인하시려면<br />로그인이 필요해요."
+                        });
+                        setShowLoginModal(true);
+                    }, 1500);
+                }
             }, 1000);
         }
     };

@@ -1,15 +1,13 @@
 /**
  * 헬스케어 모듈 스크립트 데이터
- * 각 모듈은 7문항으로 구성되며, 2문항마다 피드백/팁을 제공
- * 4문항 후 게이팅(로그인 유도) 트리거
+ * 각 모듈은 5문항으로 구성되며, 완료 후 로그인 유도
  */
 
 export type ModuleQuestion = {
     id: string;
     question: string;
     options: string[];
-    feedback?: string; // 2문항마다 표시되는 팁
-    isGatingPoint?: boolean; // 4문항 후 게이팅 포인트
+    feedback?: string; // 중간 피드백
 };
 
 export type ModuleSummary = {
@@ -30,7 +28,7 @@ export type ModuleScript = {
 export const digestionModule: ModuleScript = {
     id: "digestion",
     name: "소화 리듬 퀘스트",
-    startMessage: "오늘의 미션: '소화 리듬' 확인하기. 7문항만 답하면 끝이에요!",
+    startMessage: "오늘의 미션: '소화 리듬' 확인하기. 5문항이면 끝이에요! 🍽️",
     questions: [
         {
             id: "d1",
@@ -41,7 +39,7 @@ export const digestionModule: ModuleScript = {
             id: "d2",
             question: "배변 리듬은 어떠신가요?",
             options: ["규칙적", "변비 경향", "설사 경향", "왔다 갔다"],
-            feedback: "2/7 완료. 💡 팁: 식후 10분 가벼운 보행은 소화 리듬에 도움이 될 수 있어요(일반 정보)."
+            feedback: "2/5 완료. 💡 팁: 식후 10분 가벼운 보행은 소화 리듬에 도움이 될 수 있어요."
         },
         {
             id: "d3",
@@ -50,23 +48,12 @@ export const digestionModule: ModuleScript = {
         },
         {
             id: "d4",
-            question: "카페인(커피/에너지드링크)은 얼마나 드시나요?",
-            options: ["거의 없음", "하루 1잔", "하루 2잔+", "시간대 불규칙"],
-            isGatingPoint: true
+            question: "스트레스 받으면 소화가 더 흔들리나요?",
+            options: ["그렇다", "가끔", "아니다"],
+            feedback: "4/5 완료. 거의 다 왔어요! 💪"
         },
         {
             id: "d5",
-            question: "스트레스 받으면 소화가 더 흔들리나요?",
-            options: ["그렇다", "가끔", "아니다"]
-        },
-        {
-            id: "d6",
-            question: "식사 속도는 어떠신가요?",
-            options: ["천천히", "보통", "빨리 먹는 편"],
-            feedback: "6/7 완료. 거의 다 왔어요! 💪"
-        },
-        {
-            id: "d7",
             question: "불편감이 가장 심한 시간대는 언제인가요?",
             options: ["아침", "점심 후", "저녁 후", "밤"]
         }
@@ -82,43 +69,32 @@ export const digestionModule: ModuleScript = {
 export const cognitiveModule: ModuleScript = {
     id: "cognitive",
     name: "인지 건강 미니게임",
-    startMessage: "오늘의 미션: '인지 리듬' 2분 테스트. 게임처럼 진행돼요! 🧠",
+    startMessage: "오늘의 미션: '인지 리듬' 테스트. 게임처럼 진행돼요! 🧠",
     questions: [
         {
             id: "c1",
-            question: "지금 3개 단어를 보여드릴게요: **사과 · 우산 · 기차**\n\n5초 후 질문이 나옵니다. 방금 단어 중 '사과'와 함께 나온 단어는?",
+            question: "지금 3개 단어를 보여드릴게요: **사과 · 우산 · 기차**\n\n방금 단어 중 '사과'와 함께 나온 단어는?",
             options: ["우산", "나무", "연필", "바다"]
         },
         {
             id: "c2",
             question: "아래 중 'ㅅ'으로 시작하는 단어만 골라주세요.",
             options: ["사과", "기차", "수박", "바나나"],
-            feedback: "2/7 완료. 💡 팁: 일정한 수면/산책 루틴은 뇌 건강에 도움이 될 수 있어요(일반 정보)."
+            feedback: "2/5 완료. 💡 팁: 일정한 수면/산책 루틴은 뇌 건강에 도움이 될 수 있어요."
         },
         {
             id: "c3",
-            question: "'지금'이라는 단어가 나왔어요! 버튼을 눌러주세요.",
-            options: ["지금", "대기"]
+            question: "최근 1주간 수면은 어떠셨나요?",
+            options: ["충분", "보통", "부족", "매우 불규칙"]
         },
         {
             id: "c4",
-            question: "최근 1주간 수면은 어떠셨나요?",
-            options: ["충분", "보통", "부족", "매우 불규칙"],
-            isGatingPoint: true
+            question: "낮에 졸림이 잦나요?",
+            options: ["그렇다", "가끔", "아니다"],
+            feedback: "4/5 완료. 마지막 문항이에요! 🎯"
         },
         {
             id: "c5",
-            question: "낮에 졸림이 잦나요?",
-            options: ["그렇다", "가끔", "아니다"]
-        },
-        {
-            id: "c6",
-            question: "보호자/가족으로서 체크하시는 건가요?",
-            options: ["본인", "보호자/가족"],
-            feedback: "6/7 완료. 마지막 문항이에요! 🎯"
-        },
-        {
-            id: "c7",
             question: "불편이 시작된 시점은 언제부터인가요?",
             options: ["최근", "1~3개월", "6개월+", "잘 모르겠다"]
         }
@@ -126,7 +102,7 @@ export const cognitiveModule: ModuleScript = {
     summary: {
         signal: "인지 리듬 신호: 주의력/수면 요인이 핵심",
         tips: ["규칙적인 수면 시간 유지", "하루 20분 걷기 습관"],
-        loginPrompt: "상세 리포트: 주간 추세/보호자 체크리스트/훈련 루틴은 로그인 후 제공됩니다."
+        loginPrompt: "상세 리포트: 주간 추세/훈련 루틴은 로그인 후 제공됩니다."
     }
 };
 
@@ -134,7 +110,7 @@ export const cognitiveModule: ModuleScript = {
 export const stressSleepModule: ModuleScript = {
     id: "stress-sleep",
     name: "스트레스-수면 밸런스 체크",
-    startMessage: "오늘의 미션: '회복 리듬' 점검. 답변은 2분이면 끝나요! 😴",
+    startMessage: "오늘의 미션: '회복 리듬' 점검. 5문항이면 끝나요! 😴",
     questions: [
         {
             id: "ss1",
@@ -145,7 +121,7 @@ export const stressSleepModule: ModuleScript = {
             id: "ss2",
             question: "새벽에 깨는 편인가요?",
             options: ["거의 없음", "가끔", "자주", "매일"],
-            feedback: "2/7 완료. 💡 팁: 취침 2~3시간 전 과식/알코올은 수면의 질에 영향을 줄 수 있어요(일반 정보)."
+            feedback: "2/5 완료. 💡 팁: 취침 2~3시간 전 과식은 수면의 질에 영향을 줄 수 있어요."
         },
         {
             id: "ss3",
@@ -156,21 +132,10 @@ export const stressSleepModule: ModuleScript = {
             id: "ss4",
             question: "스트레스 체감은 어느 정도인가요?",
             options: ["낮음", "보통", "높음", "매우 높음"],
-            isGatingPoint: true
+            feedback: "4/5 완료. 마지막 문항이에요! 💪"
         },
         {
             id: "ss5",
-            question: "카페인은 주로 언제 드시나요?",
-            options: ["오전", "오후", "저녁", "불규칙"]
-        },
-        {
-            id: "ss6",
-            question: "주당 운동/걷기 빈도는 어떠신가요?",
-            options: ["0회", "1~2회", "3~4회", "5회+"],
-            feedback: "6/7 완료. 마지막 문항이에요! 💪"
-        },
-        {
-            id: "ss7",
             question: "피로가 가장 심한 시간대는 언제인가요?",
             options: ["오전", "오후", "저녁", "밤"]
         }
@@ -186,7 +151,7 @@ export const stressSleepModule: ModuleScript = {
 export const vascularModule: ModuleScript = {
     id: "vascular",
     name: "혈관·생활습관 리스크 체크",
-    startMessage: "오늘의 미션: '생활습관 리스크' 점검. 진단이 아니라 생활 패턴 체크예요(참고용). 🩺",
+    startMessage: "오늘의 미션: '생활습관 리스크' 점검. 생활 패턴 체크예요(참고용). 🩺",
     questions: [
         {
             id: "v1",
@@ -197,32 +162,21 @@ export const vascularModule: ModuleScript = {
             id: "v2",
             question: "식사에서 짠맛은 어느 정도인가요?",
             options: ["싱겁게", "보통", "짜게", "잘 모르겠음"],
-            feedback: "2/7 완료. 💡 팁: 규칙적인 걷기 습관은 건강 관리에 도움이 될 수 있어요(일반 정보)."
+            feedback: "2/5 완료. 💡 팁: 규칙적인 걷기 습관은 건강 관리에 도움이 될 수 있어요."
         },
         {
             id: "v3",
-            question: "야식/간식 빈도는 어떠신가요?",
-            options: ["거의 없음", "가끔", "자주", "불규칙"]
+            question: "수면 시간은 어느 정도인가요?",
+            options: ["7시간+", "6~7시간", "5~6시간", "5시간 미만"]
         },
         {
             id: "v4",
-            question: "수면 시간은 어느 정도인가요?",
-            options: ["7시간+", "6~7시간", "5~6시간", "5시간 미만"],
-            isGatingPoint: true
+            question: "스트레스는 어느 정도인가요?",
+            options: ["낮음", "보통", "높음", "매우 높음"],
+            feedback: "4/5 완료. 마지막 문항이에요! 🎯"
         },
         {
             id: "v5",
-            question: "스트레스는 어느 정도인가요?",
-            options: ["낮음", "보통", "높음", "매우 높음"]
-        },
-        {
-            id: "v6",
-            question: "흡연은 어떠신가요?",
-            options: ["비흡연", "과거", "현재(가끔)", "현재(매일)"],
-            feedback: "6/7 완료. 마지막 문항이에요! 🎯"
-        },
-        {
-            id: "v7",
             question: "생활 개선 의지는 어느 정도인가요?",
             options: ["가볍게 시작", "1달 루틴 도전", "상담도 고려", "모르겠다"]
         }
@@ -238,7 +192,7 @@ export const vascularModule: ModuleScript = {
 export const womenModule: ModuleScript = {
     id: "women",
     name: "여성 컨디션 리듬 체크",
-    startMessage: "오늘의 미션: '컨디션 리듬' 점검. 민감한 내용은 최소로만 묻고, 참고용으로만 정리해요. 🌸",
+    startMessage: "오늘의 미션: '컨디션 리듬' 점검. 참고용으로 정리해요. 🌸",
     questions: [
         {
             id: "w1",
@@ -249,7 +203,7 @@ export const womenModule: ModuleScript = {
             id: "w2",
             question: "불편감(통증/불편)은 어느 정도인가요?",
             options: ["낮음", "중간", "높음", "상황에 따라 다름"],
-            feedback: "2/7 완료. 💡 팁: 수면·운동·식사 리듬은 컨디션 관리에 영향을 줄 수 있어요(일반 정보)."
+            feedback: "2/5 완료. 💡 팁: 수면·운동·식사 리듬은 컨디션 관리에 영향을 줄 수 있어요."
         },
         {
             id: "w3",
@@ -260,21 +214,10 @@ export const womenModule: ModuleScript = {
             id: "w4",
             question: "스트레스 체감은 어느 정도인가요?",
             options: ["낮음", "보통", "높음", "매우 높음"],
-            isGatingPoint: true
+            feedback: "4/5 완료. 마지막 문항이에요! 💪"
         },
         {
             id: "w5",
-            question: "수면은 어떠신가요?",
-            options: ["충분", "보통", "부족", "매우 불규칙"]
-        },
-        {
-            id: "w6",
-            question: "소화/배변 불편이 함께 있나요?",
-            options: ["없음", "가끔", "자주"],
-            feedback: "6/7 완료. 마지막 문항이에요! 💪"
-        },
-        {
-            id: "w7",
             question: "원하는 도움은 무엇인가요?",
             options: ["생활관리", "상담 문의", "예약 희망", "기타"]
         }
@@ -293,19 +236,11 @@ export const moduleScripts: Record<string, ModuleScript> = {
     "stress-sleep": stressSleepModule,
     vascular: vascularModule,
     women: womenModule,
-    // 기존 topic 매핑
-    recovery: stressSleepModule, // 회복력·면역 → 스트레스-수면
-    pain: vascularModule, // 통증 패턴 → 혈관·생활습관
-    pregnancy: womenModule, // 임신 준비 → 여성 컨디션
 };
 
-// 게이팅 메시지
-export const gatingMessages = {
-    trigger: "여기까지 답변으로 **패턴이 거의 잡혔어요.**\n\n결과를 저장하고 **상세 리포트(맞춤 루틴/체크리스트 포함)** 를 보려면 로그인/간편가입이 필요해요.",
-    buttons: ["간편가입하고 상세 보기", "일단 요약만 보기"],
-    loginPrompts: [
-        "결과를 저장하고 **상세 리포트(맞춤 루틴/체크리스트)** 를 보려면 간편가입이 필요해요.",
-        "지금까지 답변으로 **패턴 분석이 거의 완료**됐어요. 로그인하면 '내 리듬 리포트'를 바로 드릴게요.",
-        "다음부터는 **이어하기/추세 보기**가 가능해요. 간편가입 후 기록을 저장해 둘까요?"
-    ]
+// 완료 후 안내 메시지
+export const completionMessage = {
+    title: "체크 완료! 🎉",
+    message: "지금까지 답변을 바탕으로 패턴 분석이 완료되었습니다.\n\n상세 리포트와 맞춤 루틴을 확인하시려면 로그인이 필요해요.",
+    buttons: ["간편가입하고 상세 보기", "다음에 하기"]
 };

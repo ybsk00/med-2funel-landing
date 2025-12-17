@@ -152,67 +152,67 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {/* Module 1: Resilience */}
-            <Link href="/healthcare/chat?topic=resilience" className="group">
-              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-orange-500/30 transition-all duration-300">
-                  <Sun className="w-7 h-7 text-orange-600 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">회복력·면역</h3>
-                <p className="text-xs text-white/70 leading-relaxed font-light">
-                  만성 피로와 잦은 감기,<br />면역력 저하 케어
-                </p>
-              </div>
-            </Link>
-
-            {/* Module 2: Women */}
-            <Link href="/healthcare/chat?topic=women" className="group">
-              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
-                <div className="w-14 h-14 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-pink-500/30 transition-all duration-300">
-                  <Moon className="w-7 h-7 text-pink-600 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">여성 밸런스</h3>
-                <p className="text-xs text-white/70 leading-relaxed font-light">
-                  월경 불순부터 갱년기까지<br />여성 생애주기 관리
-                </p>
-              </div>
-            </Link>
-
-            {/* Module 3: Pain */}
-            <Link href="/healthcare/chat?topic=pain" className="group">
-              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300">
-                  <Activity className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform" />
-                </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">통증 패턴</h3>
-                <p className="text-xs text-white/70 leading-relaxed font-light">
-                  반복되는 두통, 관절통,<br />근골격계 통증 분석
-                </p>
-              </div>
-            </Link>
-
-            {/* Module 4: Digestion */}
+            {/* Module 1: 소화 리듬 */}
             <Link href="/healthcare/chat?topic=digestion" className="group">
               <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
                 <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-green-500/30 transition-all duration-300">
                   <Heart className="w-7 h-7 text-green-600 group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">소화·수면</h3>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">소화 리듬</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  위장 장애와 불면증,<br />생활 리듬 회복
+                  소화불량, 배변 리듬<br />체크 (5문항)
                 </p>
               </div>
             </Link>
 
-            {/* Module 5: Pregnancy */}
-            <Link href="/healthcare/chat?topic=pregnancy" className="group">
+            {/* Module 2: 인지 건강 */}
+            <Link href="/healthcare/chat?topic=cognitive" className="group">
               <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
                 <div className="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-purple-500/30 transition-all duration-300">
-                  <Baby className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform" />
+                  <Activity className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">임신 준비</h3>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">인지 건강</h3>
                 <p className="text-xs text-white/70 leading-relaxed font-light">
-                  난임 극복과 건강한<br />임신을 위한 준비
+                  기억력, 주의력<br />미니게임 (5문항)
+                </p>
+              </div>
+            </Link>
+
+            {/* Module 3: 스트레스-수면 */}
+            <Link href="/healthcare/chat?topic=stress-sleep" className="group">
+              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300">
+                  <Moon className="w-7 h-7 text-blue-600 group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">스트레스·수면</h3>
+                <p className="text-xs text-white/70 leading-relaxed font-light">
+                  수면, 피로 패턴<br />체크 (5문항)
+                </p>
+              </div>
+            </Link>
+
+            {/* Module 4: 혈관·생활습관 */}
+            <Link href="/healthcare/chat?topic=vascular" className="group">
+              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-orange-500/30 transition-all duration-300">
+                  <Sun className="w-7 h-7 text-orange-600 group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">혈관·생활습관</h3>
+                <p className="text-xs text-white/70 leading-relaxed font-light">
+                  운동, 식습관<br />리스크 체크 (5문항)
+                </p>
+              </div>
+            </Link>
+
+            {/* Module 5: 여성 컨디션 */}
+            <Link href="/healthcare/chat?topic=women" className="group">
+              <div className="h-full bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex flex-col items-center text-center group-hover:backdrop-blur-lg">
+                <div className="w-14 h-14 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-pink-500/30 transition-all duration-300">
+                  <Baby className="w-7 h-7 text-pink-600 group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 tracking-wide">여성 컨디션</h3>
+                <p className="text-xs text-white/70 leading-relaxed font-light">
+                  주기, PMS<br />리듬 체크 (5문항)
                 </p>
               </div>
             </Link>
