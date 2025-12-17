@@ -32,9 +32,7 @@ export default function PatientHeader() {
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-20 transition-all duration-300">
             <Link href="/medical/dashboard" className="flex items-center gap-3 group">
-                <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
-                    <span className="text-white text-xs font-bold font-serif">JK</span>
-                </div>
+
                 <img src="/logo_header.png" alt="위담한방병원" className="h-12 w-auto object-contain" />
             </Link>
 

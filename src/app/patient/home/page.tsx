@@ -7,23 +7,25 @@ export default function PatientHomePage() {
     return (
         <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#0a0f1a' }}>
             {/* Header */}
-            <header className="px-4 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center"
-                        style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
-                    >
-                        <Building2 size={20} className="text-white" />
+            <header className="px-4 py-4">
+                <div className="w-full max-w-md mx-auto flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center"
+                            style={{ background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)' }}
+                        >
+                            <Building2 size={20} className="text-white" />
+                        </div>
+                        <span className="text-lg font-bold text-white">위담한방병원</span>
                     </div>
-                    <span className="text-lg font-bold text-white">AI한의원</span>
+                    <Link
+                        href="/patient/login"
+                        className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
+                        style={{ backgroundColor: '#3b82f6' }}
+                    >
+                        로그인
+                    </Link>
                 </div>
-                <Link
-                    href="/patient/login"
-                    className="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
-                    style={{ backgroundColor: '#3b82f6' }}
-                >
-                    로그인
-                </Link>
             </header>
 
             {/* Hero Section */}
@@ -36,11 +38,11 @@ export default function PatientHomePage() {
                 </div>
 
                 <h1 className="text-3xl font-bold text-white mb-3">
-                    AI한의원 환자 포탈
+                    위담한방병원 환자 포털
                 </h1>
                 <p className="text-gray-400 mb-8 max-w-sm leading-relaxed">
-                    AI 기반 건강 상담부터 진료 예약까지<br />
-                    한 곳에서 편리하게 관리하세요
+                    예약과 상담 준비, 복약 기록을<br />
+                    한 곳에서 관리하세요.
                 </p>
 
                 <Link
@@ -60,8 +62,8 @@ export default function PatientHomePage() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: '#1e3a5f' }}>
                             <MessageSquare size={20} className="text-blue-400" />
                         </div>
-                        <h3 className="text-sm font-bold text-white mb-1">AI 상담</h3>
-                        <p className="text-xs text-gray-400">증상 맞춤 AI 상담</p>
+                        <h3 className="text-sm font-bold text-white mb-1">상담 준비</h3>
+                        <p className="text-xs text-gray-400">불편한 점을 정리해 상담에 도움을 드립니다.</p>
                     </div>
 
                     <div
@@ -71,8 +73,8 @@ export default function PatientHomePage() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: '#1e3a5f' }}>
                             <Calendar size={20} className="text-blue-400" />
                         </div>
-                        <h3 className="text-sm font-bold text-white mb-1">간편 예약</h3>
-                        <p className="text-xs text-gray-400">원클릭 진료 예약</p>
+                        <h3 className="text-sm font-bold text-white mb-1">진료 예약</h3>
+                        <p className="text-xs text-gray-400">예약·변경·확인을 빠르게 진행하세요.</p>
                     </div>
 
                     <div
@@ -82,8 +84,8 @@ export default function PatientHomePage() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: '#1e3a5f' }}>
                             <Pill size={20} className="text-green-400" />
                         </div>
-                        <h3 className="text-sm font-bold text-white mb-1">복약 관리</h3>
-                        <p className="text-xs text-gray-400">처방약 일정 관리</p>
+                        <h3 className="text-sm font-bold text-white mb-1">복약 기록</h3>
+                        <p className="text-xs text-gray-400">복용 시간을 기록하고 알림을 설정할 수 있습니다.</p>
                     </div>
 
                     <div
@@ -93,8 +95,8 @@ export default function PatientHomePage() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-3" style={{ backgroundColor: '#1e3a5f' }}>
                             <Heart size={20} className="text-red-400" />
                         </div>
-                        <h3 className="text-sm font-bold text-white mb-1">건강 기록</h3>
-                        <p className="text-xs text-gray-400">나의 건강 히스토리</p>
+                        <h3 className="text-sm font-bold text-white mb-1">나의 기록</h3>
+                        <p className="text-xs text-gray-400">체크 결과와 방문 기록을 모아볼 수 있습니다.</p>
                     </div>
                 </div>
             </main>
