@@ -114,6 +114,14 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
+    const modules = [
+        { id: "digestion", label: "소화 리듬", desc: "소화불량, 배변 체크" },
+        { id: "cognitive", label: "인지 건강", desc: "기억력, 주의력 테스트" },
+        { id: "stress-sleep", label: "스트레스·수면", desc: "수면, 피로 패턴 체크" },
+        { id: "vascular", label: "혈관·생활습관", desc: "운동, 식습관 체크" },
+        { id: "women", label: "여성 컨디션", desc: "주기, PMS 체크" },
+    ];
+
     return (
         <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-traditional-bg font-sans flex flex-col selection:bg-traditional-accent selection:text-white`}>
             {/* Header */}
@@ -131,6 +139,42 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         </Link>
                     </div>
                 </header>
+            )}
+
+            {/* Hero Section */}
+            {!props.isEmbedded && (
+                <div className="relative bg-traditional-primary pb-12 pt-8 px-6 text-center overflow-hidden transition-all duration-500">
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 opacity-10">
+                        <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+                        <div className="absolute bottom-0 right-0 w-64 h-64 bg-traditional-accent rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+                    </div>
+
+                    <div className="relative z-10 max-w-4xl mx-auto">
+                        <h1 className="text-3xl font-bold text-white mb-2 font-serif tracking-wide animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            {modules.find(m => m.id === topic)?.label || "AI 건강 가이드"}
+                        </h1>
+                        <p className="text-white/80 text-sm mb-8 font-light animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+                            {modules.find(m => m.id === topic)?.desc || "오늘의 건강 고민을 이야기해주세요"}
+                        </p>
+
+                        {/* Module Menu */}
+                        <div className="flex flex-wrap justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                            {modules.map((m) => (
+                                <Link
+                                    key={m.id}
+                                    href={`/healthcare/chat?topic=${m.id}`}
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${topic === m.id
+                                        ? "bg-white text-traditional-primary shadow-lg scale-105 ring-2 ring-white/50"
+                                        : "bg-white/10 text-white hover:bg-white/20 hover:scale-105 backdrop-blur-sm"
+                                        }`}
+                                >
+                                    {m.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             )}
 
             <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-3xl px-4 pb-20 pt-6"}`}>
