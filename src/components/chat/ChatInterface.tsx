@@ -164,15 +164,34 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
 
-            // 로그인 필요 응답 확인 (API에서 requireLogin: true 반환 시 또는 5턴 도달 시)
-            if (!props.isLoggedIn && (data.requireLogin || newTurnCount >= 5)) {
-                setTimeout(() => {
-                    setLoginModalContent({
-                        title: "더 자세한 상담을 받아보세요! 🌿",
-                        desc: "정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
-                    });
-                    setShowLoginModal(true);
-                }, 1000);
+            // 로그인 필요 응답 확인
+            if (!props.isLoggedIn && data.requireLogin) {
+                // 1. 증상 감지 또는 5턴 종료 (Hard Stop)
+                if (data.isSymptomTrigger || data.isHardStop) {
+                    setTimeout(() => {
+                        setLoginModalContent({
+                            title: data.isSymptomTrigger ? "의료진 상담이 필요합니다 🏥" : "상담이 완료되었습니다 🎉",
+                            desc: data.isSymptomTrigger
+                                ? "말씀하신 증상은 전문적인 진단이 필요할 수 있습니다.<br />로그인 후 의료진에게 정확한 상담을 받아보세요."
+                                : "더 자세한 건강 분석과 맞춤 조언을 위해<br />로그인이 필요합니다."
+                        });
+                        setShowLoginModal(true);
+                        // 증상 트리거 시 턴 카운트를 강제로 5로 만들어 입력 막기 (선택 사항, 여기서는 모달만 띄움)
+                        if (data.isSymptomTrigger) {
+                            setTurnCount(5); // 입력을 막기 위해 턴 카운트 최대치로 설정
+                        }
+                    }, 500);
+                }
+                // 2. 3턴째 Soft Gate (계속 대화 가능)
+                else {
+                    setTimeout(() => {
+                        setLoginModalContent({
+                            title: "더 자세한 상담을 받아보세요! 🌿",
+                            desc: "정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+                        });
+                        setShowLoginModal(true);
+                    }, 1000);
+                }
             }
         } catch (error) {
             console.error("Error:", error);
