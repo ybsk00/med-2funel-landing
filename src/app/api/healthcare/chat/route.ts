@@ -18,7 +18,7 @@ const medicalKeywords = [
 
 export async function POST(req: NextRequest) {
     try {
-        const { message, history, turnCount } = await req.json();
+        const { message, history, turnCount, topic } = await req.json();
 
         // 1. 의료 키워드/증상 감지 - 즉시 로그인 유도 (AI 답변 생성 없이 즉시 리턴)
         const hasMedicalQuestion = medicalKeywords.some(keyword =>
@@ -34,11 +34,66 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // 2. 5턴 제한 (Hard Stop)
+        // 2. 5턴째 (마지막 턴) - 종합 분석 및 결과 제공
+        if (turnCount === 4) {
+            let topicPrompt = "";
+            switch (topic) {
+                case "digestion":
+                    topicPrompt = "사용자의 식사 습관, 소화 불량 패턴, 배변 활동 등을 분석하여 위장 건강 상태를 요약하고, 개선이 필요한 생활 습관(예: 야식, 과식, 급하게 먹기 등)을 지적해 주세요.";
+                    break;
+                case "cognitive":
+                    topicPrompt = "사용자의 기억력, 집중력, 수면 패턴 등을 분석하여 인지 건강 상태를 요약하고, 뇌 건강을 위한 생활 습관(예: 수면, 스트레스 관리 등)을 제안해 주세요.";
+                    break;
+                case "stress-sleep":
+                    topicPrompt = "사용자의 수면 질, 스트레스 수준, 피로도 등을 분석하여 회복 리듬 상태를 요약하고, 숙면과 스트레스 완화를 위한 조언을 해주세요.";
+                    break;
+                case "vascular":
+                    topicPrompt = "사용자의 운동 습관, 식단(짠 음식, 기름진 음식), 수면 등을 분석하여 혈관 건강 리스크를 요약하고, 생활 습관 개선 방향을 제시해 주세요.";
+                    break;
+                case "women":
+                    topicPrompt = "사용자의 월경 주기, PMS, 컨디션 변화 등을 분석하여 여성 건강 리듬을 요약하고, 컨디션 관리를 위한 조언을 해주세요.";
+                    break;
+                default:
+                    topicPrompt = "사용자의 전반적인 생활 습관(식사, 수면, 운동, 스트레스)을 분석하여 건강 리듬을 요약하고, 개선이 필요한 부분을 조언해 주세요.";
+            }
+
+            const finalAnalysisPrompt = `
+[역할]
+당신은 "위담 건강가이드 챗"의 AI 상담사입니다.
+지금까지의 5턴 대화를 바탕으로 사용자의 생활 리듬을 분석하고 결과를 전달해야 합니다.
+
+[분석 주제]
+${topicPrompt}
+
+[작성 규칙]
+1. **분석 결과**: 사용자의 답변을 근거로 구체적인 패턴을 지적하세요. (예: "잦은 야식과 불규칙한 식사로 인해 소화 리듬이 깨진 것으로 보입니다.")
+2. **리스크 경고**: 현재 습관이 지속될 경우 발생할 수 있는 가벼운 건강 리스크를 언급하세요. (예: "이런 습관이 지속되면 만성적인 소화불량이나 체중 증가로 이어질 수 있습니다.")
+3. **개선 제안**: 당장 실천할 수 있는 가벼운 팁 1가지를 제안하세요.
+4. **로그인 유도**: 더 정밀한 분석과 맞춤형 솔루션을 위해 로그인이 필요함을 자연스럽게 연결하세요.
+5. **길이**: 250-300자 내외로 작성하세요.
+6. **말투**: 정중하고 전문적이면서도 따뜻한 어조 (~입니다, ~합니다).
+7. **절대 금지**: 병명 확진("위염입니다"), 약 처방, 치료 권유. 오직 "생활 습관"과 "리듬"에 집중하세요.
+
+[대화 내역]
+${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : 'AI'}: ${msg.content}`).join("\n")}
+사용자: ${message}
+AI(분석 결과):
+`;
+            const analysisResult = await generateText(finalAnalysisPrompt, "healthcare");
+
+            return NextResponse.json({
+                role: "ai",
+                content: analysisResult.trim(),
+                requireLogin: true,
+                isHardStop: true // 5턴 종료 및 입력 차단
+            });
+        }
+
+        // 5턴 초과 방어 (이미 클라이언트에서 막히지만 안전장치)
         if (turnCount >= 5) {
             return NextResponse.json({
                 role: "ai",
-                content: "지금까지의 대화로 생활 패턴이 파악되었습니다! 🎉\n\n**더 자세한 건강 분석과 맞춤 조언**은 로그인이 필요합니다.\n\n로그인하시면:\n• 상세 건강 분석 리포트\n• 의심 증상 심층 상담\n• 맞춤 생활 가이드\n\n를 제공해 드립니다.",
+                content: "상담이 이미 종료되었습니다. 더 자세한 분석을 위해 로그인을 부탁드립니다.",
                 requireLogin: true,
                 isHardStop: true
             });

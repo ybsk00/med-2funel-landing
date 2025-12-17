@@ -37,14 +37,36 @@ export default function PatientDashboard() {
                 const timeStr = data.time;
                 let displayDate = "예약 없음";
                 let displayTime = "";
+                let shouldHide = false;
 
                 if (timeStr) {
                     const [d, t] = timeStr.split(' ');
                     displayDate = d;
                     displayTime = t;
+
+                    // Check if 24 hours have passed since the appointment
+                    try {
+                        const appointmentDate = new Date(timeStr.replace(' ', 'T'));
+                        const now = new Date();
+                        const diffInHours = (now.getTime() - appointmentDate.getTime()) / (1000 * 60 * 60);
+
+                        // If more than 24 hours passed since appointment time, and it's cancelled or completed
+                        if (diffInHours > 24 && (data.status === 'cancelled' || data.status === 'completed')) {
+                            shouldHide = true;
+                        }
+                    } catch (e) {
+                        console.error("Date parsing error", e);
+                    }
                 }
 
-                if (data.status === 'cancelled') {
+                if (shouldHide) {
+                    setAppointment({
+                        date: "예약 없음",
+                        time: "",
+                        type: "예정된 진료가 없습니다.",
+                        doctor: ""
+                    });
+                } else if (data.status === 'cancelled') {
                     setAppointment({
                         date: displayDate,
                         time: displayTime,
@@ -128,7 +150,7 @@ export default function PatientDashboard() {
                         playsInline
                         className="w-full h-48 md:h-64 object-cover"
                     >
-                        <source src="/1.mp4" type="video/mp4" />
+                        <source src="/5.mp4" type="video/mp4" />
                     </video>
                 </div>
 

@@ -148,6 +148,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     message: userMessage,
                     history: messages,
                     turnCount: turnCount, // 현재 턴 카운트 전달
+                    topic: topic, // 주제 전달 (5턴 분석용)
                 }),
             });
 
@@ -207,7 +208,11 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             {!props.isEmbedded && (
                 <header className="bg-white/80 backdrop-blur-md border-b border-traditional-muted/50 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group">
-                        <img src="/images/logo_weedahm.png" alt="위담 건강가이드 챗" className="h-10 w-auto object-contain" />
+                        <img
+                            src={props.isLoggedIn ? "/logo_medical.png" : "/images/logo_weedahm.png"}
+                            alt="위담 건강가이드 챗"
+                            className="h-10 w-auto object-contain"
+                        />
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
                         <Link href="/login" className="px-6 py-2 bg-traditional-primary text-white text-sm font-medium rounded-full hover:bg-traditional-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">

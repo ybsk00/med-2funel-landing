@@ -243,9 +243,9 @@ export default function LandingPage() {
               <span className="text-xl font-bold text-traditional-text font-serif">위담한방병원</span>
             </div>
             <div className="text-sm text-traditional-subtext space-y-2 font-light">
-              <p className="flex items-center gap-2"><span className="w-16 font-medium text-traditional-text/80">주소</span> 경기도 하남시 미사강변서로 22, 에코큐브지식산업센터 1005호</p>
-              <p className="flex items-center gap-2"><span className="w-16 font-medium text-traditional-text/80">연락처</span> 0507-1390-5121</p>
-              <p className="flex items-center gap-2"><span className="w-16 font-medium text-traditional-text/80">진료시간</span> 9시부터 18시까지 근무 (일요일 휴무)</p>
+              <p>위담한방병원 ㅣ 대표 최서형 ㅣ 사업자등록번호 106-93-45419</p>
+              <p>서울특별시 강남구 삼성로 402 (대치동 960-5)</p>
+              <p className="mt-2 text-xs text-traditional-subtext/60">0507-1390-5121 | 9시부터 18시까지 근무 (일요일 휴무)</p>
             </div>
           </div>
 

@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. System Prompt for AI 한의사 - Turn-based
-        const isFinalTurn = turnCount >= 5;
-        const isPostFinalTurn = turnCount > 5;
+        const isFinalTurn = turnCount === 4; // 5th turn (0-indexed)
+        const isPostFinalTurn = turnCount > 4; // After 5th turn
 
         const systemPrompt = `
 [역할]
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 - 모든 분석은 "가능성이 있습니다", "보입니다" 등으로 추측성으로 표현하세요.
 - 마지막에는 항상 "정확한 진단을 위해 내원하셔서 검사를 받아보시는 것이 좋습니다"라는 뉘앙스를 풍기세요.
 
-[현재 턴: ${turnCount}]
+[현재 턴: ${turnCount + 1}]
 
 ${isFinalTurn ? `
 [5턴째 - 질환 도출 턴]
@@ -61,11 +61,9 @@ ${isFinalTurn ? `
 [6턴 이후 - 내원 권유 강화]
 이번 응답에서는:
 
-1. 추가 질문에 대해 간단히 답변
-2. 내원 필요성 강조: "증상을 보니, 직접 맥진과 진찰이 필요해 보입니다."
-3. 근거 제시: 지금까지 수집된 증상 정보 기반
-4. 예약 강력 권유: "더 정확한 진단을 위해 위담한방병원에 방문해 주시면 좋겠습니다."
-5. 부드럽게: "더 궁금하신 점이 있으신가요?"
+1. 사용자의 추가 질문에 대해 친절하게 답변하세요.
+2. 답변 후에는 반드시 내원을 권유하는 멘트를 덧붙이세요.
+3. "더 정확한 진단을 위해 내원하셔서 검사를 받아보시는 것이 좋습니다."
 ` : `
 [1-4턴 - 증상 수집 턴]
 - 사용자의 증상에 공감하고 걱정을 표현하세요.
@@ -106,6 +104,9 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '위담한방병
 
         if (isReservationConfirm && askedForReservation) {
             responseText = "네, 예약을 도와드리겠습니다. 지금 바로 예약 창을 열어드릴게요. [RESERVATION_TRIGGER]";
+        } else if (isPostFinalTurn) {
+            // 5턴 이후에는 항상 예약 모달 트리거
+            responseText += " [RESERVATION_TRIGGER]";
         }
 
         // 5. Audit Log
