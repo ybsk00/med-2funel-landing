@@ -88,11 +88,11 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-traditional-bg to-white z-0"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto">
-          <div className="text-center mb-20 space-y-4">
-            <h2 className="text-3xl md:text-4xl font-bold text-traditional-text font-serif">
+          <div className="text-center mb-20 space-y-6">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 font-sans tracking-tight">
               AI 헬스케어 솔루션
             </h2>
-            <p className="text-traditional-subtext max-w-2xl mx-auto">
+            <p className="text-gray-700 max-w-2xl mx-auto text-lg font-medium leading-relaxed">
               전통 한의학의 정밀함과 인공지능의 분석력이 만나<br />
               당신만을 위한 최적의 건강 리듬을 찾아드립니다.
             </p>
@@ -125,8 +125,8 @@ export default function LandingPage() {
                   <div className={`w-16 h-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-inner`}>
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-traditional-text mb-4 font-serif">{feature.title}</h3>
-                  <p className="text-traditional-subtext text-sm leading-relaxed">{feature.desc}</p>
+                  <h3 className="text-2xl font-extrabold text-gray-900 mb-4 font-sans tracking-tight">{feature.title}</h3>
+                  <p className="text-gray-600 text-base font-medium leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
