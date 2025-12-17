@@ -22,10 +22,10 @@ export default function MedicalChatInterface() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Initial Medical Greeting - AI 한의사
+        // Initial Medical Greeting - 위담한방병원 AI 상담
         setMessages([{
             role: "ai",
-            content: "어서 오시게. 나는 100년 전통 한의학과 현대 의학을 융합한 AI 한의사일세.\n\n자네가 지금 겪고 있는 불편한 증상을 말씀해 주시게. 언제부터 시작되었는지, 어디가 가장 불편한지 편하게 이야기해 보시게."
+            content: "안녕하세요, 위담한방병원 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다. 정확한 상태 판단과 치료 여부는 **의료진 상담을 통해 확인**이 필요합니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
         }]);
     }, []);
 
@@ -130,10 +130,10 @@ export default function MedicalChatInterface() {
                         <ArrowLeft size={24} />
                     </Link>
                     <div className="ml-2">
-                        <h1 className="text-lg font-bold text-slate-800">AI 한의사 상담</h1>
+                        <h1 className="text-lg font-bold text-slate-800">위담한방병원 AI 상담</h1>
                         <p className="text-xs text-blue-600 flex items-center font-medium">
                             <span className="w-2 h-2 rounded-full bg-blue-600 mr-1"></span>
-                            100년 전통 한의학 + 현대 의학
+                            참고용 건강 점검 · 진단 대체 불가
                         </p>
                     </div>
                 </div>
@@ -167,9 +167,9 @@ export default function MedicalChatInterface() {
                                 : "bg-emerald-700 text-white rounded-tr-none"
                                 }`}
                         >
-                            {/* AI 한의사 Label */}
+                            {/* 위담한방병원 AI Label */}
                             {msg.role === "ai" && (
-                                <div className="text-xs text-emerald-700 font-semibold mb-1">AI 한의사</div>
+                                <div className="text-xs text-emerald-700 font-semibold mb-1">위담한방병원</div>
                             )}
                             {msg.imageUrl && (
                                 <img src={msg.imageUrl} alt="Uploaded" className="max-w-full rounded-lg mb-2 border border-white/20" />
@@ -250,8 +250,8 @@ export default function MedicalChatInterface() {
 
                         <p className="text-sm text-slate-600 mb-6">
                             {turnCount === 5
-                                ? "지금까지 수집된 증상 정보를 바탕으로 가능성 있는 원인을 분석했습니다. 정확한 진단과 치료를 위해 한의원 방문을 권장합니다."
-                                : "자네의 증상을 더 자세히 살펴보려면 직접 진료가 필요해 보이네. 한의원에서 맥진과 함께 정확한 진단을 받아보시게."
+                                ? "지금까지 수집된 정보를 바탕으로 가능성 있는 원인을 분석했습니다. 정확한 진단과 치료를 위해 병원 방문을 권장드립니다."
+                                : "증상을 더 자세히 살펴보려면 직접 진료가 필요해 보입니다. 병원에서 맥진과 함께 정확한 진단을 받아보세요."
                             }
                         </p>
 

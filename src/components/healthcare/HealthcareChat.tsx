@@ -135,7 +135,7 @@ export default function HealthcareChat({
                                 {serviceName}
                             </Text>
                             <Text size="xs" c="dimmed">
-                                AI 헬스체크
+                                위담 건강가이드
                             </Text>
                         </div>
                     </Group>

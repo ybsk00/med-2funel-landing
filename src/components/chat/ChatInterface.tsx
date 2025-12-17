@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ConditionReport from "@/components/healthcare/ConditionReport";
 import ReservationModal from "@/components/medical/ReservationModal";
+import GatingModal from "@/components/chat/GatingModal";
+import { moduleScripts, type ModuleScript, gatingMessages } from "@/lib/chat/moduleScripts";
 
 type Message = {
     role: "user" | "ai";
@@ -33,31 +35,38 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Map topic to serviceType and Initial Message (Healthcare style)
+    // Module Script State
+    const [currentModule, setCurrentModule] = useState<ModuleScript | null>(null);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [answers, setAnswers] = useState<string[]>([]);
+    const [showGatingModal, setShowGatingModal] = useState(false);
+    const [showSummary, setShowSummary] = useState(false);
+
+    // Map topic to serviceType and Initial Message (Healthcare style - 정중한 말투)
     const serviceConfig: Record<string, { serviceType: string; initialMessage: string }> = {
         recovery: {
             serviceType: "recovery",
-            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요! 회복력·면역 건강퀘스트를 시작하겠습니다. 이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n오늘 하루, 가장 피곤하셨던 시간은 언제인가요?\n\n[아침] [오후] [저녁] [하루 종일]"
         },
         resilience: {
             serviceType: "recovery",
-            initialMessage: "반갑네! 자네의 기력 배터리를 점검해줄 '기력 장인'일세. \n\n오늘 하루, 가장 피곤했던 시간은 언제였나? (아침/오후/저녁/하루 종일)"
+            initialMessage: "안녕하세요! 회복력·면역 건강퀘스트를 시작하겠습니다. 이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n오늘 하루, 가장 피곤하셨던 시간은 언제인가요?\n\n[아침] [오후] [저녁] [하루 종일]"
         },
         women: {
             serviceType: "women",
-            initialMessage: "안녕하세요, 당신의 '달의 리듬'을 함께 읽어볼게요. \n\n평소 월경 주기는 규칙적인 편인가요? (대체로 규칙적/가끔 달라짐/자주 들쭉날쭉)"
+            initialMessage: "안녕하세요! 여성 컨디션 리듬 체크를 시작하겠습니다. 이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n평소 주기 규칙성은 어떠신가요?\n\n[규칙적] [가끔 흔들림] [자주 불규칙] [모르겠음]"
         },
         pain: {
             serviceType: "pain",
-            initialMessage: "안녕하세요! 오늘 당신의 몸 날씨를 알려드릴게요. \n\n가장 자주 불편하거나 뻐근한 부위는 어디인가요? (목·어깨/허리/무릎·다리/그 외)"
+            initialMessage: "안녕하세요! 혈관·생활습관 리스크 체크를 시작하겠습니다. 진단이 아니라 생활 패턴 체크입니다(참고용).\n\n주당 운동은 어느 정도 하시나요?\n\n[0회] [1~2회] [3~4회] [5회+]"
         },
         digestion: {
             serviceType: "digestion",
-            initialMessage: "반갑습니다. 위장과 수면의 균형을 봐드릴게요. \n\n평소 식사 속도는 어떠신가요? (천천히/보통/빨리 먹는 편)"
+            initialMessage: "안녕하세요! 소화 리듬 퀘스트를 시작하겠습니다. 이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n식후 느낌은 어떤 쪽에 가까우신가요?\n\n[가볍다] [더부룩하다] [트림/가스가 잦다] [속쓰림이 있다]"
         },
         pregnancy: {
             serviceType: "pregnancy",
-            initialMessage: "안녕하세요, 건강한 임신 준비를 돕는 체력 코치입니다. \n\n하루 중 피로감은 어느 정도 느끼시나요? (대부분 괜찮음/오후에 피곤/하루 종일 피곤)"
+            initialMessage: "안녕하세요! 건강한 임신 준비를 위한 컨디션 체크를 시작하겠습니다. 이 대화는 **진단이 아닌 생활 리듬 점검(참고용)** 입니다.\n\n하루 중 피로감은 어느 정도 느끼시나요?\n\n[대부분 괜찮음] [오후에 피곤] [하루 종일 피곤]"
         }
     };
 
@@ -67,14 +76,25 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.mode === 'medical') {
             setMessages([{
                 role: "ai",
-                content: "어서 오시게. 나는 100년 전통 한의학과 현대 의학을 융합한 AI 한의사일세.\n\n자네가 지금 겪고 있는 불편한 증상을 말씀해 주시게. 언제부터 시작되었는지, 어디가 가장 불편한지 편하게 이야기해 보시게."
+                content: "안녕하세요, 위담한방병원 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다. 정확한 상태 판단과 치료 여부는 **의료진 상담을 통해 확인**이 필요합니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
             }]);
         } else {
             const config = serviceConfig[topic] || serviceConfig["recovery"];
             setMessages([{ role: "ai", content: config.initialMessage }]);
         }
         setTurnCount(0); // Reset turn count on topic change
-    }, [topic, props.mode]);
+
+        // Initialize module script if available
+        const moduleScript = moduleScripts[topic];
+        if (moduleScript && !props.isLoggedIn && props.mode !== 'medical') {
+            setCurrentModule(moduleScript);
+            setQuestionIndex(0);
+            setAnswers([]);
+            setShowSummary(false);
+        } else {
+            setCurrentModule(null);
+        }
+    }, [topic, props.mode, props.isLoggedIn]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -160,6 +180,60 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
+    // Handle button option click (structured question flow)
+    const handleOptionClick = (option: string) => {
+        if (!currentModule || isLoading) return;
+
+        const currentQuestion = currentModule.questions[questionIndex];
+        if (!currentQuestion) return;
+
+        // Add user's answer as message
+        setMessages(prev => [...prev, { role: "user", content: option }]);
+        setAnswers(prev => [...prev, option]);
+
+        const nextIndex = questionIndex + 1;
+        setQuestionIndex(nextIndex);
+
+        // Check if this was a gating point (4th question) and user is not logged in
+        if (currentQuestion.isGatingPoint && !props.isLoggedIn) {
+            setTimeout(() => {
+                setShowGatingModal(true);
+            }, 500);
+        }
+
+        // Add feedback if available
+        if (currentQuestion.feedback) {
+            setTimeout(() => {
+                setMessages(prev => [...prev, { role: "ai", content: currentQuestion.feedback! }]);
+            }, 300);
+        }
+
+        // Check if there are more questions
+        if (nextIndex < currentModule.questions.length) {
+            const nextQuestion = currentModule.questions[nextIndex];
+            setTimeout(() => {
+                setMessages(prev => [...prev, { role: "ai", content: nextQuestion.question }]);
+            }, currentQuestion.feedback ? 1000 : 500);
+        } else {
+            // All questions completed - show summary
+            setTimeout(() => {
+                const summaryMessage = `**📊 요약(참고용):**\n\n📈 ${currentModule.summary.signal}\n\n💡 **생활 팁:**\n${currentModule.summary.tips.map((tip, i) => `${i + 1}. ${tip}`).join('\n')}\n\n${currentModule.summary.loginPrompt}`;
+                setMessages(prev => [...prev, { role: "ai", content: summaryMessage }]);
+                setShowSummary(true);
+            }, 1000);
+        }
+    };
+
+    // Handle "View Summary" from gating modal
+    const handleViewSummary = () => {
+        setShowGatingModal(false);
+        // Continue with remaining questions or show partial summary
+        if (currentModule && questionIndex < currentModule.questions.length) {
+            const nextQuestion = currentModule.questions[questionIndex];
+            setMessages(prev => [...prev, { role: "ai", content: nextQuestion.question }]);
+        }
+    };
+
     // Report Logic (Simplified for design update, keeping functionality)
     const [showReport, setShowReport] = useState(false);
     const [reportData, setReportData] = useState<any>(null);
@@ -210,7 +284,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         <div className="w-8 h-8 bg-traditional-primary rounded-lg flex items-center justify-center shadow-sm group-hover:bg-traditional-accent transition-colors duration-300">
                             <span className="text-white text-xs font-bold font-serif">JK</span>
                         </div>
-                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">100년 한의학 AI 헬스케어</span>
+                        <span className="text-lg font-bold text-traditional-text tracking-tight group-hover:text-traditional-primary transition-colors">{props.isLoggedIn ? "위담한방병원" : "위담 건강가이드 챗"}</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-traditional-subtext">
                         <Link href="/login" className="px-6 py-2 bg-traditional-primary text-white text-sm font-medium rounded-full hover:bg-traditional-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -288,7 +362,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Bubble */}
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-traditional-subtext" : "text-left text-traditional-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "AI 한의사" : "AI 헬스체크") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "위담한방병원" : "위담 건강가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === "ai"
@@ -298,6 +372,22 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 >
                                     {msg.content}
                                 </div>
+
+                                {/* Render option buttons for the last AI message */}
+                                {msg.role === "ai" && idx === messages.length - 1 && currentModule && !showSummary && (
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {currentModule.questions[questionIndex]?.options.map((option, optIdx) => (
+                                            <button
+                                                key={optIdx}
+                                                onClick={() => handleOptionClick(option)}
+                                                disabled={isLoading}
+                                                className="px-4 py-2 text-sm bg-traditional-bg hover:bg-traditional-primary hover:text-white border border-traditional-muted rounded-full transition-all duration-200 disabled:opacity-50"
+                                            >
+                                                {option}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}
@@ -389,6 +479,15 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 isOpen={showReservationModal}
                 onClose={() => setShowReservationModal(false)}
                 initialTab="book"
+            />
+
+            {/* Gating Modal */}
+            <GatingModal
+                isOpen={showGatingModal}
+                onClose={() => setShowGatingModal(false)}
+                onViewSummary={handleViewSummary}
+                currentProgress={questionIndex}
+                totalQuestions={currentModule?.questions.length || 7}
             />
         </div >
     );
