@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { getServerSession } from 'next-auth'
 
 export async function POST(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) {
+    // NextAuth 세션 확인 (네이버 로그인용)
+    const nextAuthSession = await getServerSession()
+
+    // Supabase 또는 NextAuth 중 하나라도 있어야 함
+    if (!user && !nextAuthSession?.user) {
         return NextResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 })
     }
+
+    // 사용자 정보 결정 (Supabase 우선, 없으면 NextAuth)
+    const userId = user?.id || null
+    const naverUserId = nextAuthSession?.user?.id || null  // 네이버 사용자 ID
+    const userName = user?.user_metadata?.name || nextAuthSession?.user?.name || '환자'
+    const userEmail = user?.email || nextAuthSession?.user?.email || null
 
     try {
         const body = await request.json()
@@ -20,31 +31,37 @@ export async function POST(request: NextRequest) {
         // 1. 사용자가 이미 환자 테이블에 있는지 확인 (user_id 또는 email로)
         let existingPatient = null
 
-        // user_id로 먼저 확인
-        const { data: patientByUserId } = await supabase
-            .from('patients')
-            .select('id')
-            .eq('user_id', user.id)
-            .single()
+        // user_id로 먼저 확인 (Supabase Auth 사용자만)
+        if (userId) {
+            const { data: patientByUserId } = await supabase
+                .from('patients')
+                .select('id')
+                .eq('user_id', userId)
+                .single()
 
-        if (patientByUserId) {
-            existingPatient = patientByUserId
-        } else if (user.email) {
-            // email로 확인
+            if (patientByUserId) {
+                existingPatient = patientByUserId
+            }
+        }
+
+        // user_id로 없으면 email로 확인
+        if (!existingPatient && userEmail) {
             const { data: patientByEmail } = await supabase
                 .from('patients')
                 .select('id')
-                .eq('email', user.email)
+                .eq('email', userEmail)
                 .single()
 
             if (patientByEmail) {
                 existingPatient = patientByEmail
 
-                // 기존 환자에 user_id 연결 (없는 경우)
-                await supabase
-                    .from('patients')
-                    .update({ user_id: user.id })
-                    .eq('id', patientByEmail.id)
+                // 기존 환자에 user_id 연결 (Supabase Auth 사용자인 경우만)
+                if (userId) {
+                    await supabase
+                        .from('patients')
+                        .update({ user_id: userId })
+                        .eq('id', patientByEmail.id)
+                }
             }
         }
 
@@ -58,10 +75,10 @@ export async function POST(request: NextRequest) {
             const { data: newPatient, error: patientError } = await supabase
                 .from('patients')
                 .insert({
-                    user_id: user.id,
-                    name: user.user_metadata?.name || user.email?.split('@')[0] || '환자',
-                    email: user.email,
-                    phone: user.user_metadata?.phone || null,
+                    user_id: userId,  // null if NextAuth only
+                    name: userName,
+                    email: userEmail,
+                    phone: user?.user_metadata?.phone || null,
                     time: timeStr,
                     type: '신규 환자',
                     complaint: notes || 'AI한의원 진료 예약',
@@ -72,7 +89,7 @@ export async function POST(request: NextRequest) {
 
             if (patientError) {
                 console.error('Patient creation error:', patientError)
-                // 환자 생성 실패해도 예약은 진행 (user_id로만 연결)
+                // 환자 생성 실패해도 예약은 진행
             } else {
                 patientId = newPatient?.id
             }
@@ -80,10 +97,19 @@ export async function POST(request: NextRequest) {
 
         // 3. 예약 생성
         const appointmentData: any = {
-            user_id: user.id,
             scheduled_at,
             notes: notes || 'AI한의원 진료',
             status: 'scheduled',
+        }
+
+        // user_id가 있으면 추가 (Supabase Auth 사용자)
+        if (userId) {
+            appointmentData.user_id = userId
+        }
+
+        // naver_user_id 추가 (NextAuth 네이버 사용자 조회용)
+        if (naverUserId) {
+            appointmentData.naver_user_id = naverUserId
         }
 
         // patient_id가 있으면 연결

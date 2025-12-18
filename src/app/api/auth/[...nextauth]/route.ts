@@ -33,6 +33,7 @@ const handler = NextAuth({
         async jwt({ token, user, account, profile }) {
             // 최초 로그인 시 user 정보를 token에 저장
             if (user) {
+                token.id = user.id  // 네이버 사용자 ID
                 token.name = user.name
                 token.email = user.email
                 token.picture = user.image
@@ -40,6 +41,7 @@ const handler = NextAuth({
             // 네이버 프로필에서 직접 가져오기 (백업)
             if (profile && (profile as any).response) {
                 const naverProfile = (profile as any).response
+                token.id = naverProfile.id || token.id
                 token.name = naverProfile.name || token.name
                 token.email = naverProfile.email || token.email
                 token.picture = naverProfile.profile_image || token.picture
@@ -51,6 +53,7 @@ const handler = NextAuth({
             if (token) {
                 session.user = {
                     ...session.user,
+                    id: token.id as string,  // 네이버 사용자 ID 추가
                     name: token.name as string,
                     email: token.email as string,
                     image: token.picture as string,

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Calendar, Clock, X, CheckCircle2, AlertCircle, User } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { useSession } from "next-auth/react";
 
 type ReservationModalProps = {
     isOpen: boolean;
@@ -11,6 +12,7 @@ type ReservationModalProps = {
 };
 
 export default function ReservationModal({ isOpen, onClose, initialTab = "book" }: ReservationModalProps) {
+    const { data: nextAuthSession } = useSession();
     const [activeTab, setActiveTab] = useState<"book" | "reschedule" | "cancel">(initialTab);
     const [step, setStep] = useState(1); // 1: Input, 2: Confirm, 3: Success
     const [date, setDate] = useState("");
@@ -34,12 +36,12 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
         if (isOpen) {
             fetchUserAndReservation();
         }
-    }, [isOpen]);
+    }, [isOpen, nextAuthSession]);
 
     const fetchUserAndReservation = async () => {
         setIsLoading(true);
         try {
-            // 1. Get User
+            // 1. Get User from Supabase Auth
             const { data: { user } } = await supabase.auth.getUser();
 
             if (user) {
@@ -73,6 +75,12 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 } else {
                     setExistingReservation(null);
                 }
+            } else if (nextAuthSession?.user) {
+                // 2. Fallback to NextAuth session (for Naver login)
+                const nextAuthUser = nextAuthSession.user;
+                setUserId(nextAuthUser.email || null);
+                const userName = nextAuthUser.name || nextAuthUser.email?.split('@')[0] || "";
+                setName(userName);
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
