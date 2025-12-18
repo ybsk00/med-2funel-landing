@@ -220,7 +220,9 @@ export default async function PatientHome() {
                                     </span>
                                 </div>
                                 <h4 className="text-white font-bold mb-0.5">진료 예약</h4>
-                                <p className="text-sm text-gray-400">위담한방병원</p>
+                                <p className="text-sm text-gray-400">
+                                    {upcomingAppointment.notes || '위담한방병원'}
+                                </p>
                             </div>
                         </div>
                     ) : (
