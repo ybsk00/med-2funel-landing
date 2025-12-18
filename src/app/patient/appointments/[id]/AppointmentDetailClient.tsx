@@ -139,7 +139,7 @@ export function AppointmentDetailClient({ appointment }: AppointmentDetailProps)
                             </div>
                             <div>
                                 <p className="text-sm text-gray-400">진료 장소</p>
-                                <p className="text-white font-medium">죽전한의원</p>
+                                <p className="text-white font-medium">위담한방병원</p>
                             </div>
                         </div>
 
