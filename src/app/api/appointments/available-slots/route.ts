@@ -6,7 +6,7 @@ const OPERATING_HOURS = {
     start: 9,   // 09:00
     end: 18     // 18:00
 }
-const SLOT_INTERVAL = 10  // 10분 간격
+const SLOT_INTERVAL = 30  // 30분 간격
 
 export async function GET(request: NextRequest) {
     const supabase = await createClient()
