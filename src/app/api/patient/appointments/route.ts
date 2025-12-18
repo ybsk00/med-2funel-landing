@@ -23,10 +23,28 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json()
-        const { scheduled_at, notes } = body
+        const { scheduled_at, notes, doctor_name } = body
 
         if (!scheduled_at) {
             return NextResponse.json({ error: '예약 날짜/시간이 필요합니다.' }, { status: 400 })
+        }
+
+        // 중복 체크: 동일 의사 + 동일 시간에 예약이 있는지 확인
+        if (doctor_name && doctor_name !== '전체') {
+            const { data: existingAppointment } = await supabase
+                .from('appointments')
+                .select('id')
+                .eq('doctor_name', doctor_name)
+                .eq('scheduled_at', scheduled_at)
+                .neq('status', 'cancelled')
+                .single()
+
+            if (existingAppointment) {
+                return NextResponse.json({
+                    error: '이미 예약된 시간입니다. 다른 시간을 선택해주세요.',
+                    code: 'DUPLICATE_APPOINTMENT'
+                }, { status: 409 })
+            }
         }
 
         let patientId = null
@@ -101,6 +119,7 @@ export async function POST(request: NextRequest) {
             scheduled_at,
             notes: notes || 'AI한의원 진료',
             status: 'scheduled',
+            doctor_name: doctor_name || null,  // 의사 이름 저장
         }
 
         // user_id가 있으면 추가 (Supabase Auth 사용자)
