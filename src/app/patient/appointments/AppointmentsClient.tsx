@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
-import { Bell, CalendarCheck, Calendar, Sparkles, ArrowRight, Clock } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Bell, Sparkles, ArrowRight, Clock, Edit2, X } from 'lucide-react'
 
 type Appointment = {
     id: string
@@ -13,13 +15,17 @@ type Appointment = {
 }
 
 export function AppointmentsClientPage({ initialAppointments }: { initialAppointments: Appointment[] }) {
-    const appointments = initialAppointments
+    const router = useRouter()
+    const [appointments, setAppointments] = useState(initialAppointments)
+    const [showCancelModal, setShowCancelModal] = useState(false)
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null)
+    const [cancelReason, setCancelReason] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
-    // 미래 예약만 필터링
-    const upcomingAppointments = appointments.filter(a => new Date(a.scheduled_at) >= new Date())
-
-    // Next appointment for display
-    const nextAppointment = upcomingAppointments.length > 0 ? upcomingAppointments[0] : null
+    // 미래 예약만 필터링 (취소된 예약 제외)
+    const upcomingAppointments = appointments.filter(a =>
+        new Date(a.scheduled_at) >= new Date() && a.status !== 'cancelled'
+    )
 
     const getDaysUntil = (dateStr: string) => {
         const date = new Date(dateStr)
@@ -35,6 +41,40 @@ export function AppointmentsClientPage({ initialAppointments }: { initialAppoint
             day: date.getDate(),
             weekday: ['일', '월', '화', '수', '목', '금', '토'][date.getDay()],
             time: date.toLocaleTimeString('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true })
+        }
+    }
+
+    const handleCancelClick = (apt: Appointment) => {
+        setSelectedAppointment(apt)
+        setShowCancelModal(true)
+    }
+
+    const handleConfirmCancel = async () => {
+        if (!selectedAppointment) return
+
+        setIsLoading(true)
+        try {
+            const response = await fetch(`/api/patient/appointments/${selectedAppointment.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'cancelled', cancel_reason: cancelReason })
+            })
+
+            if (response.ok) {
+                // Update local state
+                setAppointments(prev =>
+                    prev.map(a => a.id === selectedAppointment.id ? { ...a, status: 'cancelled' } : a)
+                )
+                setShowCancelModal(false)
+                setSelectedAppointment(null)
+                setCancelReason('')
+            } else {
+                alert('예약 취소에 실패했습니다.')
+            }
+        } catch (error) {
+            alert('오류가 발생했습니다.')
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -138,6 +178,24 @@ export function AppointmentsClientPage({ initialAppointments }: { initialAppoint
                                                         {apt.notes}
                                                     </p>
                                                 )}
+
+                                                {/* Action Buttons */}
+                                                <div className="flex gap-2 mt-3">
+                                                    <Link
+                                                        href="/patient/appointments/new"
+                                                        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                                                    >
+                                                        <Edit2 size={12} />
+                                                        예약 변경
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => handleCancelClick(apt)}
+                                                        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-lg transition-colors"
+                                                    >
+                                                        <X size={12} />
+                                                        예약 취소
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -157,6 +215,52 @@ export function AppointmentsClientPage({ initialAppointments }: { initialAppoint
                     )}
                 </div>
             </div>
+
+            {/* Cancel Modal */}
+            {showCancelModal && selectedAppointment && (
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+                    <div className="w-full max-w-sm rounded-2xl p-6" style={{ backgroundColor: '#1a2332' }}>
+                        <h3 className="text-xl font-bold text-white mb-4">예약을 취소하시겠습니까?</h3>
+                        <p className="text-gray-400 mb-4">취소 후에는 다시 예약해야 합니다.</p>
+
+                        <div className="mb-4">
+                            <label className="block text-sm text-gray-400 mb-2">취소 사유 (선택)</label>
+                            <select
+                                value={cancelReason}
+                                onChange={(e) => setCancelReason(e.target.value)}
+                                className="w-full p-3 rounded-xl bg-gray-800 text-white border border-gray-700"
+                            >
+                                <option value="">선택해주세요</option>
+                                <option value="일정 변경">일정 변경</option>
+                                <option value="건강 상태 호전">건강 상태 호전</option>
+                                <option value="다른 병원 방문">다른 병원 방문</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowCancelModal(false)
+                                    setSelectedAppointment(null)
+                                    setCancelReason('')
+                                }}
+                                className="flex-1 py-3 rounded-xl text-white font-medium"
+                                style={{ backgroundColor: '#374151' }}
+                            >
+                                돌아가기
+                            </button>
+                            <button
+                                onClick={handleConfirmCancel}
+                                disabled={isLoading}
+                                className="flex-1 py-3 rounded-xl text-white font-medium bg-red-500 hover:bg-red-600 disabled:opacity-50"
+                            >
+                                {isLoading ? '처리중...' : '예약 취소'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
