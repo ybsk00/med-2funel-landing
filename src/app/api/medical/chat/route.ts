@@ -2,19 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
+import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, RESERVATION_CONFIRM_KEYWORDS } from "@/lib/ai/prompts";
 
 export async function POST(req: NextRequest) {
     try {
         const { message, history, turnCount = 0 } = await req.json();
 
         // 1. Red Flag Detection (Strict)
-        const redFlags = [
-            "가슴 통증", "흉통", "숨이 차", "호흡곤란", "마비", "실어증", "말이 안 나와",
-            "의식 저하", "기절", "실신", "피를 토해", "객혈", "하혈", "심한 두통", "번개",
-            "39도", "고열", "경련", "발작"
-        ];
-
-        const isRedFlag = redFlags.some(flag => message.includes(flag));
+        const isRedFlag = RED_FLAG_KEYWORDS.some(flag => message.includes(flag));
 
         if (isRedFlag) {
             return NextResponse.json({
@@ -23,65 +18,11 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // 2. System Prompt for AI 한의사 - Turn-based
-        const isFinalTurn = turnCount === 4; // 5th turn (0-indexed)
-        const isPostFinalTurn = turnCount > 4; // After 5th turn
+        // 2. System Prompt from centralized prompts.ts
+        const systemPrompt = getMedicalSystemPrompt(turnCount);
 
-        const systemPrompt = `
-[역할]
-당신은 "위담한방병원"의 AI 상담사입니다. 한의학과 현대 의학을 융합한 상담을 제공합니다.
-
-[말투 규칙 - 반드시 존댓말 사용]
-- 모든 문장은 "~습니다", "~세요", "~드려요", "~하시죠", "~까요?" 등 정중한 존댓말로 끝냅니다.
-- 예시: "걱정이 되시겠습니다.", "많이 힘드시겠어요.", "알려주시겠어요?", "어떠신가요?"
-- **[공감], [분석] 같은 명시적인 단어를 절대 사용하지 마세요.**
-- 반드시 공감과 걱정을 먼저 표현한 후, 자연스럽게 증상 분석과 질문으로 이어가세요.
-- 흐름: 공감/걱정 → 증상 분석 → 질문 (자연스러운 문단으로)
-
-[절대 금지 사항 - 의료법 위반 방지]
-- **"진단합니다", "처방합니다", "치료해야 합니다" 등의 단정적인 표현 절대 금지.**
-- 약물 이름을 구체적으로 추천하지 마세요.
-- 모든 분석은 "가능성이 있습니다", "보입니다" 등으로 추측성으로 표현하세요.
-- 마지막에는 항상 "정확한 진단을 위해 내원하셔서 검사를 받아보시는 것이 좋습니다"라는 뉘앙스를 풍기세요.
-
-[현재 턴: ${turnCount + 1}]
-
-${isFinalTurn ? `
-[5턴째 - 질환 도출 턴]
-이번 응답에서는 반드시 다음을 포함하세요:
-
-1. 공감/걱정 표현 (존댓말로)
-2. 지금까지 수집된 증상 요약
-3. 가능성 높은 질환 (한방 관점 + 양방 관점 모두 제시)
-   - 한방: 기허, 혈허, 습담, 어혈 등 한의학적 변증
-   - 양방: 관련 있는 현대의학적 질환명
-4. 면책 문구: "다만, 이는 참고용 정보이며 정확한 진단을 위해서는 위담한방병원 방문을 권장드립니다."
-5. 예약 권유: "위담한방병원에서 직접 진료를 받아보시는 건 어떠세요? 예약을 도와드릴까요?"
-` : isPostFinalTurn ? `
-[6턴 이후 - 내원 권유 강화]
-이번 응답에서는:
-
-1. 사용자의 추가 질문에 대해 친절하게 답변하세요.
-2. 답변 후에는 반드시 내원을 권유하는 멘트를 덧붙이세요.
-3. "더 정확한 진단을 위해 내원하셔서 검사를 받아보시는 것이 좋습니다."
-` : `
-[1-4턴 - 증상 수집 턴]
-- 사용자의 증상에 공감하고 걱정을 표현하세요.
-- 증상을 분석하고 다음 질문으로 이어가세요.
-- 질문은 한 번에 1-2개만 하세요.
-
-턴별 질문 방향:
-1턴: 주증상 구체화 (언제부터, 어디가, 얼마나)
-2턴: 증상 특성 (통증 양상, 악화/완화 요인)
-3턴: 동반 증상 (소화, 수면, 피로, 정서)
-4턴: 생활 패턴 (식사, 운동, 스트레스)
-`}
-
-[금지사항]
-- 확정 진단 금지: "OO병입니다" → "OO의 가능성이 있어 보입니다"
-- 약 처방 금지
-- "병원 안 가도 됩니다" 금지
-- 각 응답은 200자 내외로 간결하게
+        const fullPrompt = `
+${systemPrompt}
 
 [대화 내역]
 ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '위담한방병원'}: ${msg.content}`).join("\n")}
@@ -90,17 +31,18 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '위담한방병
 `;
 
         // 3. Generate Response
-        let responseText = await generateText(systemPrompt, "medical");
+        let responseText = await generateText(fullPrompt, "medical");
 
-        // 4. Check if user confirmed reservation (네, 예, 예약 등)
-        const reservationConfirmWords = ["네", "예", "좋아요", "예약", "예약할게요", "부탁드립니다", "부탁해요"];
-        const isReservationConfirm = reservationConfirmWords.some(word => message.includes(word));
+        // 4. Check if user confirmed reservation
+        const isReservationConfirm = RESERVATION_CONFIRM_KEYWORDS.some(word => message.includes(word));
 
         // Check if previous AI message asked about reservation
         const lastAiMessage = history.filter((m: any) => m.role === 'ai').slice(-1)[0]?.content || '';
         const askedForReservation = lastAiMessage.includes("예약을 도와드릴까요") ||
             lastAiMessage.includes("방문해 보시는 건 어떠세요") ||
             lastAiMessage.includes("한의원에 한번 방문");
+
+        const isPostFinalTurn = turnCount > 4;
 
         if (isReservationConfirm && askedForReservation) {
             responseText = "네, 예약을 도와드리겠습니다. 지금 바로 예약 창을 열어드릴게요. [RESERVATION_TRIGGER]";
