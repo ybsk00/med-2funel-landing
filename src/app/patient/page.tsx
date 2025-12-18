@@ -2,43 +2,57 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Bell, Mic, ChevronRight, Calendar, FileText, Pill, MessageSquare } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { getServerSession } from 'next-auth'
 
 export default async function PatientHome() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
+    // NextAuth 세션 확인 (네이버 로그인용)
+    const nextAuthSession = await getServerSession()
+
+    // Supabase 또는 NextAuth 중 하나라도 로그인되어 있으면 통과
+    const isAuthenticated = !!user || !!nextAuthSession?.user
+
     // Redirect to home (intro page) if not authenticated
-    if (!user) {
+    if (!isAuthenticated) {
         redirect('/patient/home')
     }
 
+    // 이름 결정: NextAuth 세션 우선, 그 다음 Supabase
     let patientName = '환자'
-    let upcomingAppointment = null
 
-    // Fetch patient profile using user_id (user is now guaranteed to exist)
-    // Fetch patient profile using user_id
-    const { data: profile } = await supabase
-        .from('patient_profiles')
-        .select('full_name')
-        .eq('user_id', user.id)
-        .single()
+    if (nextAuthSession?.user?.name) {
+        patientName = nextAuthSession.user.name
+    } else if (user) {
+        // Fetch patient profile using user_id
+        const { data: profile } = await supabase
+            .from('patient_profiles')
+            .select('full_name')
+            .eq('user_id', user.id)
+            .single()
 
-    if (profile) {
-        patientName = profile.full_name || '환자'
+        if (profile) {
+            patientName = profile.full_name || '환자'
+        }
     }
 
-    // Fetch upcoming appointment
-    const { data: appointment } = await supabase
-        .from('appointments')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('scheduled_at', new Date().toISOString())
-        .order('scheduled_at', { ascending: true })
-        .limit(1)
-        .single()
+    let upcomingAppointment = null
 
-    if (appointment) {
-        upcomingAppointment = appointment
+    // Supabase user가 있을 때만 예약 조회
+    if (user) {
+        const { data: appointment } = await supabase
+            .from('appointments')
+            .select('*')
+            .eq('user_id', user.id)
+            .gte('scheduled_at', new Date().toISOString())
+            .order('scheduled_at', { ascending: true })
+            .limit(1)
+            .single()
+
+        if (appointment) {
+            upcomingAppointment = appointment
+        }
     }
 
     return (
