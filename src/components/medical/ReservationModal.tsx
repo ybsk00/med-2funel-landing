@@ -18,9 +18,9 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [date, setDate] = useState("");
     const [hour, setHour] = useState("09");
     const [minute, setMinute] = useState("00");
-    const [doctor, setDoctor] = useState("전체");
+    const [doctor, setDoctor] = useState("");
 
-    const doctors = ['전체', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장'];
+    const doctors = ['', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장'];
 
     const [name, setName] = useState("");
 
@@ -168,7 +168,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 }
 
                 // 의사 선택 필수
-                if (doctor === '전체') {
+                if (!doctor || doctor === '전체') {
                     alert("담당 의료진을 선택해주세요.");
                     setIsSubmitting(false);
                     return;
@@ -408,7 +408,8 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                             onChange={(e) => setDoctor(e.target.value)}
                                                             className="w-full p-3 border rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-traditional-accent focus:border-transparent outline-none transition-all appearance-none"
                                                         >
-                                                            {doctors.map(d => (
+                                                            <option value="">-- 선택해주세요 --</option>
+                                                            {doctors.filter(d => d !== '').map(d => (
                                                                 <option key={d} value={d}>{d}</option>
                                                             ))}
                                                         </select>
