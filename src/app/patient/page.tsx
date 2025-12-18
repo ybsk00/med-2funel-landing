@@ -184,9 +184,6 @@ export default async function PatientHome() {
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-bold text-white">다가오는 예약</h3>
-                        <Link href="/patient/appointments" className="text-sm text-blue-400 hover:text-blue-300">
-                            전체보기
-                        </Link>
                     </div>
 
                     {upcomingAppointment ? (

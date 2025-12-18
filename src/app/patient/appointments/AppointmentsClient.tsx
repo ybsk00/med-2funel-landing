@@ -91,9 +91,6 @@ export function AppointmentsClientPage({ initialAppointments }: { initialAppoint
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-bold text-white">이후 일정</h2>
-                        <Link href="/patient/history" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                            전체보기
-                        </Link>
                     </div>
 
                     {upcomingAppointments.length > 0 ? (
