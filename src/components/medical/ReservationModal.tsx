@@ -167,52 +167,107 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
 
                 // Prevent duplicate booking
                 if (activeTab === 'book') {
-                    // Check if there is ALREADY a pending reservation (double check)
-                    const { data: dupCheck } = await supabase
-                        .from('patients')
-                        .select('id')
-                        .eq('user_id', userId)
-                        .eq('status', 'pending')
-                        .maybeSingle();
+                    // Check if there is ALREADY a pending reservation
+                    // For Supabase Auth users, check patients table
+                    // For NextAuth users, check appointments table
+                    const isNextAuthUser = !!nextAuthSession?.user?.id && !userId;
 
-                    if (dupCheck) {
-                        alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
-                        setIsSubmitting(false);
-                        return;
+                    if (isNextAuthUser) {
+                        const { data: dupCheck } = await supabase
+                            .from('appointments')
+                            .select('id')
+                            .eq('naver_user_id', nextAuthSession.user.id)
+                            .in('status', ['scheduled', 'pending'])
+                            .gte('scheduled_at', new Date().toISOString())
+                            .maybeSingle();
+
+                        if (dupCheck) {
+                            alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
+                            setIsSubmitting(false);
+                            return;
+                        }
+                    } else if (userId) {
+                        const { data: dupCheck } = await supabase
+                            .from('patients')
+                            .select('id')
+                            .eq('user_id', userId)
+                            .eq('status', 'pending')
+                            .maybeSingle();
+
+                        if (dupCheck) {
+                            alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
+                            setIsSubmitting(false);
+                            return;
+                        }
                     }
                 }
 
                 const timeString = `${date} ${hour}:${minute}`;
+                const isNextAuthUser = !!nextAuthSession?.user?.id && !userId;
 
                 if (activeTab === 'reschedule' && existingReservation) {
                     // Update existing
-                    const { error } = await supabase
-                        .from('patients')
-                        .update({
-                            time: timeString,
-                            name: name,
-                            type: '재진'
-                        })
-                        .eq('id', existingReservation.id);
+                    if (existingReservation.isAppointment) {
+                        // NextAuth user - update in appointments table
+                        const scheduledAt = new Date(`${date}T${hour}:${minute}:00`).toISOString();
+                        const { error } = await supabase
+                            .from('appointments')
+                            .update({
+                                scheduled_at: scheduledAt,
+                                notes: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`
+                            })
+                            .eq('id', existingReservation.id);
 
-                    if (error) throw error;
-                } else {
-                    // Create new
-                    const { error } = await supabase
-                        .from('patients')
-                        .insert([
-                            {
-                                user_id: userId, // Link to user
-                                name: name,
+                        if (error) throw error;
+                    } else {
+                        // Supabase Auth user - update in patients table
+                        const { error } = await supabase
+                            .from('patients')
+                            .update({
                                 time: timeString,
-                                type: '초진',
-                                status: 'pending',
-                                complaint: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`,
-                                keywords: ['예약']
-                            }
-                        ]);
+                                name: name,
+                                type: '재진'
+                            })
+                            .eq('id', existingReservation.id);
 
-                    if (error) throw error;
+                        if (error) throw error;
+                    }
+                } else {
+                    // Create new reservation
+                    if (isNextAuthUser) {
+                        // NextAuth user - use API to create appointment
+                        const scheduledAt = new Date(`${date}T${hour}:${minute}:00`).toISOString();
+                        const response = await fetch('/api/patient/appointments', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                scheduled_at: scheduledAt,
+                                notes: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.error || '예약 생성에 실패했습니다.');
+                        }
+                    } else {
+                        // Supabase Auth user - insert directly into patients table
+                        const { error } = await supabase
+                            .from('patients')
+                            .insert([
+                                {
+                                    user_id: userId,
+                                    name: name,
+                                    time: timeString,
+                                    type: '초진',
+                                    status: 'pending',
+                                    complaint: doctor === '전체' ? '위담한방병원 진료' : `위담한방병원 진료 (${doctor})`,
+                                    keywords: ['예약']
+                                }
+                            ]);
+
+                        if (error) throw error;
+                    }
                 }
             }
 
