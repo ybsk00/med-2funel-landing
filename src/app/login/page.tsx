@@ -96,7 +96,7 @@ export default function LoginPage() {
 
     const handleSocialLogin = async (provider: 'google' | 'kakao' | 'naver') => {
         if (provider === 'naver') {
-            await signIn('naver', { callbackUrl: '/patient' });
+            await signIn('naver', { callbackUrl: '/medical' });
             return;
         }
 
