@@ -78,9 +78,46 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
             } else if (nextAuthSession?.user) {
                 // 2. Fallback to NextAuth session (for Naver login)
                 const nextAuthUser = nextAuthSession.user;
-                setUserId(nextAuthUser.email || null);
+                setUserId(nextAuthUser.id || null);  // naver_user_id
                 const userName = nextAuthUser.name || nextAuthUser.email?.split('@')[0] || "";
                 setName(userName);
+
+                // Get Latest Reservation for NextAuth user from appointments table
+                if (nextAuthUser.id) {
+                    const { data: appointment } = await supabase
+                        .from('appointments')
+                        .select('*')
+                        .eq('naver_user_id', nextAuthUser.id)
+                        .in('status', ['scheduled', 'pending'])
+                        .gte('scheduled_at', new Date().toISOString())
+                        .order('scheduled_at', { ascending: true })
+                        .limit(1)
+                        .maybeSingle();
+
+                    if (appointment) {
+                        // Convert to reservation format for modal display
+                        const scheduledDate = new Date(appointment.scheduled_at);
+                        const dateStr = scheduledDate.toISOString().split('T')[0];
+                        const timeStr = scheduledDate.toTimeString().slice(0, 5);
+
+                        setExistingReservation({
+                            id: appointment.id,
+                            time: `${dateStr} ${timeStr}`,
+                            name: userName,
+                            status: 'pending',
+                            complaint: appointment.notes,
+                            isAppointment: true  // Flag to handle differently in cancel/update
+                        });
+
+                        // Pre-fill date/time if rescheduling
+                        setDate(dateStr);
+                        const [h, m] = timeStr.split(':');
+                        setHour(h);
+                        setMinute(m);
+                    } else {
+                        setExistingReservation(null);
+                    }
+                }
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -101,12 +138,24 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                     return;
                 }
 
-                const { error } = await supabase
-                    .from('patients')
-                    .update({ status: 'cancelled' })
-                    .eq('id', existingReservation.id);
+                // Check if it's from appointments table or patients table
+                if (existingReservation.isAppointment) {
+                    // NextAuth user - cancel from appointments table
+                    const { error } = await supabase
+                        .from('appointments')
+                        .update({ status: 'cancelled' })
+                        .eq('id', existingReservation.id);
 
-                if (error) throw error;
+                    if (error) throw error;
+                } else {
+                    // Supabase Auth user - cancel from patients table
+                    const { error } = await supabase
+                        .from('patients')
+                        .update({ status: 'cancelled' })
+                        .eq('id', existingReservation.id);
+
+                    if (error) throw error;
+                }
 
             } else {
                 // Booking / Reschedule Logic
