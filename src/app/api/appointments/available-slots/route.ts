@@ -47,18 +47,26 @@ export async function GET(request: NextRequest) {
 
         // 예약된 시간 슬롯 추출 (HH:MM 형식) - 선택된 의사와 매칭되는 예약만
         const bookedSlots = new Set<string>()
+
+        console.log('[Available Slots] Date:', date, 'Doctor:', doctorName)
+        console.log('[Available Slots] Found appointments:', bookedAppointments?.length, bookedAppointments)
+
         bookedAppointments?.forEach(apt => {
             // 선택된 의사와 매칭되는 경우만 예약된 시간으로 처리
             if (matchesDoctor(apt, doctorName || '')) {
+                // UTC 시간을 KST로 변환 (+9시간)
                 const aptDate = new Date(apt.scheduled_at)
-                const timeStr = aptDate.toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                })
+                const kstHours = aptDate.getUTCHours() + 9
+                const adjustedHours = kstHours >= 24 ? kstHours - 24 : kstHours
+                const minutes = aptDate.getUTCMinutes()
+                const timeStr = `${String(adjustedHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+
+                console.log('[Available Slots] Booking:', apt.scheduled_at, '-> KST:', timeStr, 'Doctor match:', apt.doctor_name, apt.notes)
                 bookedSlots.add(timeStr)
             }
         })
+
+        console.log('[Available Slots] Booked slots:', Array.from(bookedSlots))
 
         // 전체 시간 슬롯 생성
         const allSlots: string[] = []
