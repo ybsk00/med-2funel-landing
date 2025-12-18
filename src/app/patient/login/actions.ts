@@ -125,6 +125,7 @@ export async function signInWithKakao() {
 
 export async function signInWithNaver() {
     const supabase = await createClient()
+    await supabase.auth.signOut() // Force signout to prevent linking to existing session
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'naver' as any,
