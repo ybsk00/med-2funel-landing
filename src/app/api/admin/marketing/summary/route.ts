@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
         const f1Views = events.filter(e => e.event_name === 'f1_view');
         const f2Enters = events.filter(e => e.event_name === 'f2_enter');
         const reservations = events.filter(e => e.event_name === 'reservation_created');
+        const returningCustomerViews = events.filter(e => e.event_name === 'returning_customer_view');
 
         // Login source breakdown
         const directLogins = f2Enters.filter(e => e.login_source === 'direct').length;
@@ -45,6 +46,7 @@ export async function GET(request: NextRequest) {
 
         // Unique visitors
         const uniqueVisitors = new Set(f1Views.map(e => e.visitor_id)).size;
+        const uniqueReturningCustomers = new Set(returningCustomerViews.map(e => e.visitor_id)).size;
 
         // Calculate rates (avoid division by zero)
         const f1ToF2Rate = f1Views.length > 0 ? (f2Enters.length / f1Views.length * 100).toFixed(2) : '0.00';
@@ -52,6 +54,7 @@ export async function GET(request: NextRequest) {
         const f1ToReservationRate = f1Views.length > 0 ? (reservations.length / f1Views.length * 100).toFixed(2) : '0.00';
         const directLoginRate = ctaClicks > 0 ? (directLogins / ctaClicks * 100).toFixed(2) : '0.00';
         const chatLoginRate = chatLoginClicks > 0 ? (chatLogins / chatLoginClicks * 100).toFixed(2) : '0.00';
+        const returningCustomerReservationRate = returningCustomerViews.length > 0 ? (reservations.length / returningCustomerViews.length * 100).toFixed(2) : '0.00';
 
         // UTM breakdown (top 5)
         const { data: utmBreakdown } = await supabase
@@ -105,14 +108,17 @@ export async function GET(request: NextRequest) {
                 directLogins,
                 chatLogins,
                 ctaClicks,
-                chatLoginClicks
+                chatLoginClicks,
+                returningCustomerViews: returningCustomerViews.length,
+                uniqueReturningCustomers
             },
             rates: {
                 f1ToF2: parseFloat(f1ToF2Rate),
                 f2ToReservation: parseFloat(f2ToReservationRate),
                 f1ToReservation: parseFloat(f1ToReservationRate),
                 directLoginRate: parseFloat(directLoginRate),
-                chatLoginRate: parseFloat(chatLoginRate)
+                chatLoginRate: parseFloat(chatLoginRate),
+                returningCustomerReservation: parseFloat(returningCustomerReservationRate)
             },
             avgConversionTimeSeconds: avgConversionTime,
             topSources,

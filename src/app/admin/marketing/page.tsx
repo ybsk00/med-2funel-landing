@@ -48,6 +48,8 @@ interface SummaryData {
         reservations: number;
         directLogins: number;
         chatLogins: number;
+        returningCustomerViews?: number;
+        uniqueReturningCustomers?: number;
     };
     rates: {
         f1ToF2: number;
@@ -55,6 +57,7 @@ interface SummaryData {
         f1ToReservation: number;
         directLoginRate: number;
         chatLoginRate: number;
+        returningCustomerReservation?: number;
     };
     avgConversionTimeSeconds: number | null;
     topSources: { name: string; count: number }[];
@@ -230,14 +233,25 @@ export default function MarketingDashboard() {
                     ) : summaryData && (
                         <Stack gap="lg">
                             {/* Metric Cards */}
-                            <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="md">
+                            <SimpleGrid cols={{ base: 2, sm: 5 }} spacing="md">
                                 <Card radius="lg" p="lg" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
                                     <Group justify="space-between">
                                         <div>
-                                            <Text size="xs" c="dimmed" tt="uppercase">방문자</Text>
+                                            <Text size="xs" c="dimmed" tt="uppercase">신규 방문자</Text>
                                             <Title order={2} c="white">{summaryData.metrics.uniqueVisitors}</Title>
                                         </div>
                                         <ThemeIcon size={40} radius="md" variant="light" color="blue">
+                                            <Users size={20} />
+                                        </ThemeIcon>
+                                    </Group>
+                                </Card>
+                                <Card radius="lg" p="lg" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
+                                    <Group justify="space-between">
+                                        <div>
+                                            <Text size="xs" c="dimmed" tt="uppercase">기존 고객</Text>
+                                            <Title order={2} c="white">{summaryData.metrics.uniqueReturningCustomers || 0}</Title>
+                                        </div>
+                                        <ThemeIcon size={40} radius="md" variant="light" color="cyan">
                                             <Users size={20} />
                                         </ThemeIcon>
                                     </Group>
@@ -280,7 +294,7 @@ export default function MarketingDashboard() {
                             {/* Conversion Rates */}
                             <Paper p="lg" radius="lg" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
                                 <Text fw={600} c="white" mb="md">전환율</Text>
-                                <SimpleGrid cols={{ base: 2, sm: 5 }} spacing="md">
+                                <SimpleGrid cols={{ base: 2, sm: 6 }} spacing="md">
                                     <div>
                                         <Text size="xs" c="dimmed">F1 → F2</Text>
                                         <Text size="xl" fw={700} c="blue">{summaryData.rates.f1ToF2}%</Text>
@@ -292,6 +306,10 @@ export default function MarketingDashboard() {
                                     <div>
                                         <Text size="xs" c="dimmed">F1 → 예약</Text>
                                         <Text size="xl" fw={700} c="orange">{summaryData.rates.f1ToReservation}%</Text>
+                                    </div>
+                                    <div>
+                                        <Text size="xs" c="dimmed">기존고객 → 예약</Text>
+                                        <Text size="xl" fw={700} c="cyan">{summaryData.rates.returningCustomerReservation || 0}%</Text>
                                     </div>
                                     <div>
                                         <Text size="xs" c="dimmed">직접 로그인</Text>
