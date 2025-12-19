@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getModel } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
 
 export async function POST(req: NextRequest) {
     try {
@@ -13,8 +11,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No image provided" }, { status: 400 });
         }
 
-        // Use Gemini 1.5 Flash for multimodal analysis (fast & efficient)
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Use vision model from centralized client
+        const model = getModel("vision");
 
         const prompt = `
 [역할]
@@ -47,8 +45,6 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : 'AI'}: ${msg.
 
         const response = await result.response;
         const text = response.text();
-
-
 
         // Audit Log
         const supabase = await createClient();

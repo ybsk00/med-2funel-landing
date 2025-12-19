@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || "");
+import { getModel } from "@/lib/ai/client";
 
 export async function POST(req: NextRequest) {
     try {
@@ -11,8 +9,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "No image provided" }, { status: 400 });
         }
 
-        // Use Gemini 1.5 Flash for multimodal analysis
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // Use vision model from centralized client
+        const model = getModel("vision");
 
         const prompt = `
 [역할]
