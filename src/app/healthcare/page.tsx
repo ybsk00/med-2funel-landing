@@ -12,6 +12,7 @@ import {
     Badge,
     rem
 } from "@mantine/core";
+import { TrackF1View } from "@/components/marketing/MarketingTracker";
 
 const services = [
     {
@@ -58,67 +59,69 @@ const services = [
 
 export default function HealthcarePage() {
     return (
-        <Container size="sm" py="xl" pb={100}>
-            <Stack gap="lg" mb={40} align="center">
-                <Title order={1} c="sage-green.9" style={{ fontSize: '1.75rem' }}>
-                    AI 한방 헬스케어
-                </Title>
-                <Text c="dimmed" size="sm" ta="center" style={{ lineHeight: 1.6 }}>
-                    전통 한의학과 AI가 만나<br />
-                    당신의 매일매일 건강 리듬을 챙겨드립니다.
-                </Text>
-            </Stack>
+        <TrackF1View>
+            <Container size="sm" py="xl" pb={100}>
+                <Stack gap="lg" mb={40} align="center">
+                    <Title order={1} c="sage-green.9" style={{ fontSize: '1.75rem' }}>
+                        AI 한방 헬스케어
+                    </Title>
+                    <Text c="dimmed" size="sm" ta="center" style={{ lineHeight: 1.6 }}>
+                        전통 한의학과 AI가 만나<br />
+                        당신의 매일매일 건강 리듬을 챙겨드립니다.
+                    </Text>
+                </Stack>
 
-            <SimpleGrid cols={{ base: 1, sm: 1 }} spacing="md">
-                {services.map((service) => (
-                    <Link
-                        key={service.id}
-                        href={`/healthcare/${service.id}`}
-                        style={{ textDecoration: 'none' }}
-                    >
-                        <Card
-                            padding="lg"
-                            radius="md"
-                            withBorder
-                            style={{
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                                cursor: 'pointer'
-                            }}
-                            className="hover:shadow-md active:scale-[0.99]"
+                <SimpleGrid cols={{ base: 1, sm: 1 }} spacing="md">
+                    {services.map((service) => (
+                        <Link
+                            key={service.id}
+                            href={`/healthcare/${service.id}`}
+                            style={{ textDecoration: 'none' }}
                         >
-                            <Group align="flex-start" wrap="nowrap">
-                                <ThemeIcon
-                                    size={48}
-                                    radius="md"
-                                    variant="light"
-                                    color={service.color}
-                                >
-                                    <service.icon size={24} />
-                                </ThemeIcon>
+                            <Card
+                                padding="lg"
+                                radius="md"
+                                withBorder
+                                style={{
+                                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                                    cursor: 'pointer'
+                                }}
+                                className="hover:shadow-md active:scale-[0.99]"
+                            >
+                                <Group align="flex-start" wrap="nowrap">
+                                    <ThemeIcon
+                                        size={48}
+                                        radius="md"
+                                        variant="light"
+                                        color={service.color}
+                                    >
+                                        <service.icon size={24} />
+                                    </ThemeIcon>
 
-                                <Stack gap={4} style={{ flex: 1 }}>
-                                    <Group>
-                                        <Badge
-                                            variant="light"
-                                            color="sage-green"
-                                            size="sm"
-                                            radius="sm"
-                                        >
-                                            {service.title}
-                                        </Badge>
-                                    </Group>
-                                    <Title order={3} size="h4" c="dark.8" mt={4}>
-                                        {service.subtitle}
-                                    </Title>
-                                    <Text size="sm" c="dimmed" lh={1.5}>
-                                        {service.description}
-                                    </Text>
-                                </Stack>
-                            </Group>
-                        </Card>
-                    </Link>
-                ))}
-            </SimpleGrid>
-        </Container>
+                                    <Stack gap={4} style={{ flex: 1 }}>
+                                        <Group>
+                                            <Badge
+                                                variant="light"
+                                                color="sage-green"
+                                                size="sm"
+                                                radius="sm"
+                                            >
+                                                {service.title}
+                                            </Badge>
+                                        </Group>
+                                        <Title order={3} size="h4" c="dark.8" mt={4}>
+                                            {service.subtitle}
+                                        </Title>
+                                        <Text size="sm" c="dimmed" lh={1.5}>
+                                            {service.description}
+                                        </Text>
+                                    </Stack>
+                                </Group>
+                            </Card>
+                        </Link>
+                    ))}
+                </SimpleGrid>
+            </Container>
+        </TrackF1View>
     );
 }

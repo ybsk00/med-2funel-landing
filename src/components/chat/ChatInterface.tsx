@@ -5,6 +5,7 @@ import { User, ArrowUp, Paperclip } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ReservationModal from "@/components/medical/ReservationModal";
+import { useMarketingTracker } from "@/hooks/useMarketingTracker";
 
 type Message = {
     role: "user" | "ai";
@@ -20,6 +21,12 @@ type ChatInterfaceProps = {
 export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
     const topic = searchParams.get("topic") || "recovery";
+    const { track } = useMarketingTracker();
+
+    // Track chat start on mount
+    useEffect(() => {
+        track('f1_chat_start', { metadata: { topic, mode: props.mode || 'healthcare' } });
+    }, []);
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -391,6 +398,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         <div className="flex flex-col gap-3">
                             <Link
                                 href="/login"
+                                onClick={() => track('f1_chat_login_click')}
                                 className="w-full py-3.5 bg-traditional-primary text-white rounded-xl font-bold hover:bg-traditional-accent transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center"
                             >
                                 로그인하고 계속하기

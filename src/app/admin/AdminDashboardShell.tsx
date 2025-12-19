@@ -14,7 +14,8 @@ import {
     Building2,
     UserPlus,
     Bell,
-    Send
+    Send,
+    TrendingUp
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -135,6 +136,27 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                             styles={{
                                 root: { borderRadius: 8 },
                                 label: { color: pathname === '/admin/settings' ? 'white' : 'var(--mantine-color-gray-4)' },
+                                description: { color: 'var(--mantine-color-dimmed)' }
+                            }}
+                        />
+                    </Link>
+
+                    <Divider my="sm" color="dark.5" />
+
+                    {/* 마케팅 */}
+                    <Text size="xs" fw={500} c="dimmed">마케팅</Text>
+
+                    <Link href="/admin/marketing" style={{ textDecoration: 'none' }}>
+                        <NavLink
+                            label="마케팅 트래킹"
+                            description="UTM 생성 및 퍼널 분석"
+                            leftSection={<TrendingUp size={16} />}
+                            active={pathname === '/admin/marketing' || pathname.startsWith('/admin/marketing/')}
+                            variant="filled"
+                            color="orange"
+                            styles={{
+                                root: { borderRadius: 8 },
+                                label: { color: (pathname === '/admin/marketing' || pathname.startsWith('/admin/marketing/')) ? 'white' : 'var(--mantine-color-gray-4)' },
                                 description: { color: 'var(--mantine-color-dimmed)' }
                             }}
                         />

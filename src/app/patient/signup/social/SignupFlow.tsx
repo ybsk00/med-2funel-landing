@@ -1,15 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { completeSocialSignup } from '../../login/actions'
 import { User, Phone, Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { useMarketingTracker } from '@/hooks/useMarketingTracker'
 
 export default function SignupFlow({ email, name: initialName }: { email: string, name: string }) {
     const router = useRouter()
     const [step, setStep] = useState(1) // 1: Info Popup, 2: Form, 3: Welcome
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const { track, attach } = useMarketingTracker()
+
+    // Track f2_enter when signup completes
+    useEffect(() => {
+        if (step === 3) {
+            // Determine login_source from sessionStorage if set by chat
+            const loginSource = sessionStorage.getItem('login_source') as 'direct' | 'chat' || 'direct'
+            track('f2_enter', { login_source: loginSource })
+            // Attach user_id (we'll get it from the profile later, for now just mark as logged in)
+            attach('', true) // Will be updated once we have user_id
+        }
+    }, [step])
 
     const handleSubmit = async (formData: FormData) => {
         setIsLoading(true)

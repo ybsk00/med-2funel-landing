@@ -148,6 +148,26 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: '예약 생성에 실패했습니다.' }, { status: 500 })
         }
 
+        // Marketing conversion tracking (fire and forget - non-blocking)
+        try {
+            const conversionPayload = {
+                reservation_id: data.id,
+                visitor_id: request.headers.get('x-visitor-id') || null,
+                session_id: request.headers.get('x-session-id') || null,
+                user_id: userId || naverUserId || null,
+                page_url: request.headers.get('referer') || null
+            }
+
+            // Fire and forget - don't await
+            fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/marketing/conversion`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(conversionPayload)
+            }).catch(err => console.debug('Marketing conversion tracking failed:', err))
+        } catch (convErr) {
+            console.debug('Marketing conversion error:', convErr)
+        }
+
         return NextResponse.json({
             success: true,
             appointment: data,
