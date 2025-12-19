@@ -325,28 +325,26 @@ export default function AdminDashboard() {
                         />
                         {dateFilter === 'custom' && (
                             <>
-                                <DatePickerInput
-                                    value={customDateFrom}
-                                    onChange={(val: Date | null) => {
-                                        setCustomDateFrom(val);
+                                <input
+                                    type="date"
+                                    value={customDateFrom ? customDateFrom.toISOString().split('T')[0] : ''}
+                                    onChange={(e) => {
+                                        setCustomDateFrom(e.target.value ? new Date(e.target.value) : null);
                                         setCurrentPage(1);
                                     }}
-                                    locale="ko"
-                                    size="sm"
-                                    w={130}
-                                    styles={{ input: { backgroundColor: 'var(--mantine-color-dark-6)', color: 'white' } }}
+                                    className="px-3 py-2 rounded-md text-sm bg-[var(--mantine-color-dark-6)] text-white border border-[var(--mantine-color-dark-4)]"
+                                    style={{ width: 130 }}
                                 />
                                 <Text c="dimmed">~</Text>
-                                <DatePickerInput
-                                    value={customDateTo}
-                                    onChange={(val: Date | null) => {
-                                        setCustomDateTo(val);
+                                <input
+                                    type="date"
+                                    value={customDateTo ? customDateTo.toISOString().split('T')[0] : ''}
+                                    onChange={(e) => {
+                                        setCustomDateTo(e.target.value ? new Date(e.target.value) : null);
                                         setCurrentPage(1);
                                     }}
-                                    locale="ko"
-                                    size="sm"
-                                    w={130}
-                                    styles={{ input: { backgroundColor: 'var(--mantine-color-dark-6)', color: 'white' } }}
+                                    className="px-3 py-2 rounded-md text-sm bg-[var(--mantine-color-dark-6)] text-white border border-[var(--mantine-color-dark-4)]"
+                                    style={{ width: 130 }}
                                 />
                             </>
                         )}
