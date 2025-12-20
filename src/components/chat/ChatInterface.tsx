@@ -275,10 +275,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 if (data.isSymptomTrigger || data.isHardStop) {
                     setTimeout(() => {
                         setLoginModalContent({
-                            title: data.isSymptomTrigger ? "의료진 상담이 필요합니다 🏥" : "상담이 완료되었습니다 🎉",
-                            desc: data.isSymptomTrigger
-                                ? "말씀하신 증상은 전문적인 진단이 필요할 수 있습니다.<br />로그인 후 의료진에게 정확한 상담을 받아보세요."
-                                : "더 자세한 건강 분석과 맞춤 조언을 위해<br />로그인이 필요합니다."
+                            title: "현재는 일반 정보 안내 단계입니다",
+                            desc: "로그인하면 내용을 저장하고,<br />더 맞춤형으로 정리해 드립니다."
                         });
                         setShowLoginModal(true);
                         if (data.isSymptomTrigger) {
@@ -288,8 +286,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 } else {
                     setTimeout(() => {
                         setLoginModalContent({
-                            title: "더 자세한 상담을 받아보세요! 🌿",
-                            desc: "정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+                            title: "현재는 일반 정보 안내 단계입니다",
+                            desc: "로그인하면 내용을 저장하고,<br />더 맞춤형으로 정리해 드립니다."
                         });
                         setShowLoginModal(true);
                     }, 1000);
