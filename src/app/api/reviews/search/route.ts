@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // 네이버 검색 API 사용
-// 환경변수: NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+// 환경변수: NAVER_SEARCH_CLIENT_ID, NAVER_SEARCH_CLIENT_SECRET
 // 문서: https://developers.naver.com/docs/serviceapi/search/
 
 const NAVER_CLIENT_ID = process.env.NAVER_SEARCH_CLIENT_ID;
 const NAVER_CLIENT_SECRET = process.env.NAVER_SEARCH_CLIENT_SECRET;
 const HOSPITAL_NAME = process.env.HOSPITAL_REVIEW_QUERY_BASE || '위담한방병원';
+
+// 제외 키워드 (잡상인 필터링)
+const EXCLUDE_KEYWORDS = [
+    '대출', '아파트', '분양', '투자', '코인', '플랫폼', '솔루션',
+    '마케팅', '업체', '제휴', '쿠폰', '모집', '총판', '대행',
+    '전문성', '채널', '광고', '협찬', '체험단', '원고료'
+];
+
+// 후기성 키워드 (최소 1개 포함 필요)
+const REVIEW_KEYWORDS = [
+    '후기', '방문', '내원', '리뷰', '진료', '접수', '대기', '상담', '치료'
+];
 
 interface NaverSearchItem {
     title: string;
@@ -29,14 +41,13 @@ interface NaverSearchResponse {
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const source = searchParams.get('source') || 'blog'; // blog, cafearticle, webkr
+    const source = searchParams.get('source') || 'blog';
     const customQuery = searchParams.get('q');
     const start = parseInt(searchParams.get('start') || '1');
-    const display = parseInt(searchParams.get('display') || '10');
+    const display = parseInt(searchParams.get('display') || '20'); // 필터링 후 줄어들 수 있어서 20개 요청
 
     // API 키 확인
     if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
-        // 더미 데이터 반환 (개발용)
         return NextResponse.json({
             source,
             query: `${HOSPITAL_NAME} 후기`,
@@ -44,17 +55,18 @@ export async function GET(req: NextRequest) {
             meta: { total: 100, start: 1, display: 10 },
             cached: false,
             isDummy: true,
-            message: 'NAVER_CLIENT_ID/SECRET not configured. Using dummy data.'
+            message: 'NAVER_SEARCH_CLIENT_ID/SECRET not configured. Using dummy data.'
         });
     }
 
-    // 검색 쿼리 생성
-    const query = customQuery || `${HOSPITAL_NAME} 방문 후기`;
-    const encodedQuery = encodeURIComponent(query);
+    // 검색 쿼리 강화 (정확 일치 + 제외어)
+    const excludeString = EXCLUDE_KEYWORDS.map(k => `-${k}`).join(' ');
+    const baseQuery = customQuery || `"${HOSPITAL_NAME}" +후기 ${excludeString}`;
+    const encodedQuery = encodeURIComponent(baseQuery);
 
     // 네이버 API 엔드포인트
     const apiEndpoint = getApiEndpoint(source);
-    const url = `${apiEndpoint}?query=${encodedQuery}&display=${display}&start=${start}&sort=date`;
+    const url = `${apiEndpoint}?query=${encodedQuery}&display=${display}&start=${start}&sort=sim`; // 관련도순
 
     try {
         const response = await fetch(url, {
@@ -81,14 +93,44 @@ export async function GET(req: NextRequest) {
             origin: 'naver'
         }));
 
+        // 2차 필터링: 서버에서 잡상인 제거
+        const filteredItems = cleanedItems.filter(item => {
+            const text = `${item.title} ${item.description}`.toLowerCase();
+
+            // 1. 병원명 포함 여부 (필수)
+            if (!text.includes(HOSPITAL_NAME.toLowerCase())) {
+                return false;
+            }
+
+            // 2. 제외 키워드 포함 시 제거
+            for (const keyword of EXCLUDE_KEYWORDS) {
+                if (text.includes(keyword.toLowerCase())) {
+                    return false;
+                }
+            }
+
+            // 3. 후기성 키워드 최소 1개 포함 (권장)
+            const hasReviewKeyword = REVIEW_KEYWORDS.some(keyword =>
+                text.includes(keyword.toLowerCase())
+            );
+
+            // 후기성 키워드 없어도 병원명 있으면 일단 통과 (너무 엄격하면 결과 없음)
+            return true;
+        });
+
+        // 최대 10개만 반환
+        const finalItems = filteredItems.slice(0, 10);
+
         return NextResponse.json({
             source,
-            query,
-            items: cleanedItems,
+            query: baseQuery,
+            items: finalItems,
             meta: {
                 total: data.total,
                 start: data.start,
-                display: data.display
+                display: finalItems.length,
+                originalCount: data.items.length,
+                filteredCount: filteredItems.length
             },
             cached: false
         });
@@ -96,7 +138,6 @@ export async function GET(req: NextRequest) {
     } catch (error) {
         console.error('Review search error:', error);
 
-        // 에러 시 더미 데이터 반환
         return NextResponse.json({
             source,
             query: `${HOSPITAL_NAME} 후기`,
@@ -128,7 +169,6 @@ function stripHtml(str: string): string {
 
 function formatDate(dateStr?: string): string {
     if (!dateStr) return '';
-    // YYYYMMDD -> YYYY.MM.DD
     if (dateStr.length === 8) {
         return `${dateStr.slice(0, 4)}.${dateStr.slice(4, 6)}.${dateStr.slice(6, 8)}`;
     }
@@ -181,3 +221,4 @@ function getDummyItems(source: string) {
 
     return items;
 }
+
