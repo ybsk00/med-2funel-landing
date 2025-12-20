@@ -243,7 +243,7 @@ export default function PatientDashboardClient() {
                         playsInline
                         className="w-full h-56 md:h-72 object-cover"
                     >
-                        <source src="/5.mp4" type="video/mp4" />
+                        <source src="/4.mp4" type="video/mp4" />
                     </video>
 
                     {/* Light Gradient Overlay - More transparent */}

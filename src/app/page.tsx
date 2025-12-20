@@ -33,6 +33,20 @@ export default function LandingPage() {
 
         {/* Hero Section */}
         <header className="relative px-6 pt-32 pb-20 md:pt-48 md:pb-32 text-center overflow-hidden min-h-[90vh] flex flex-col justify-center items-center">
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover opacity-30"
+            >
+              <source src="/1.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-dental-bg/50 via-dental-bg/70 to-dental-bg"></div>
+          </div>
+
           <div className="relative z-10 max-w-5xl mx-auto space-y-8 animate-fade-in">
             <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-dental-subtext text-sm font-semibold mb-4 shadow-sm animate-slide-up">
               평촌이생각치과 구강건강 체크(참고용)
@@ -140,6 +154,20 @@ export default function LandingPage() {
 
         {/* Modules Grid - Dental Health Check Modules */}
         <section className="relative py-32 overflow-hidden z-10">
+          {/* Video Background */}
+          <div className="absolute inset-0 z-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover opacity-20"
+            >
+              <source src="/2.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-dental-bg via-dental-bg/90 to-dental-bg"></div>
+          </div>
+
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <span className="text-dental-accent font-bold tracking-widest uppercase text-sm mb-2 block">Oral Health Check</span>
