@@ -152,19 +152,19 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-traditional-bg flex flex-col items-center justify-center p-6 font-sans">
-            <div className="absolute inset-0 opacity-10 bg-[url('/texture-hanji.png')] pointer-events-none mix-blend-multiply"></div>
+        <div className="min-h-screen bg-dental-bg flex flex-col items-center justify-center p-6 font-sans">
+            <div className="absolute inset-0 bg-gradient-to-br from-dental-bg via-[#0f1a2e] to-dental-bg pointer-events-none"></div>
 
-            <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg border border-traditional-muted relative z-10 animate-fade-in">
-                <Link href="/" className="absolute top-6 left-6 text-traditional-subtext hover:text-traditional-text">
+            <div className="w-full max-w-md bg-[#1a2332] p-8 rounded-2xl shadow-lg border border-white/10 relative z-10 animate-fade-in">
+                <Link href="/" className="absolute top-6 left-6 text-dental-subtext hover:text-white">
                     <ArrowLeft size={24} />
                 </Link>
 
                 <div className="text-center mb-8 mt-4">
-                    <h1 className="text-2xl font-bold text-traditional-text mb-2">
+                    <h1 className="text-2xl font-bold text-white mb-2">
                         {isSignUp ? "회원가입" : "로그인"}
                     </h1>
-                    <p className="text-traditional-subtext text-sm">
+                    <p className="text-dental-subtext text-sm">
                         {isSignUp
                             ? "서비스 이용을 위해 정보를 입력해주세요."
                             : "더 정확한 진단과 처방을 위해\n의료진과 연결합니다."}
@@ -174,51 +174,51 @@ export default function LoginPage() {
                 <form onSubmit={isSignUp ? handleSignUp : handleLogin} className="space-y-4" autoComplete="off">
                     {isSignUp && (
                         <div>
-                            <label className="block text-sm font-medium text-traditional-text mb-1">성명</label>
+                            <label className="block text-sm font-medium text-white mb-1">성명</label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full px-4 py-2 border border-traditional-muted rounded-lg focus:outline-none focus:border-traditional-primary focus:ring-1 focus:ring-traditional-primary"
+                                className="w-full px-4 py-2 bg-[#0d1420] border border-white/10 rounded-lg text-white placeholder:text-dental-subtext/50 focus:outline-none focus:border-dental-primary focus:ring-1 focus:ring-dental-primary"
                                 placeholder="홍길동"
                                 required
                             />
                         </div>
                     )}
                     <div>
-                        <label className="block text-sm font-medium text-traditional-text mb-1">이메일</label>
+                        <label className="block text-sm font-medium text-white mb-1">이메일</label>
                         <input
                             type="email"
                             name="medical-email"
                             autoComplete="new-email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border border-traditional-muted rounded-lg focus:outline-none focus:border-traditional-primary focus:ring-1 focus:ring-traditional-primary"
+                            className="w-full px-4 py-2 bg-[#0d1420] border border-white/10 rounded-lg text-white placeholder:text-dental-subtext/50 focus:outline-none focus:border-dental-primary focus:ring-1 focus:ring-dental-primary"
                             placeholder="example@email.com"
                             required
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-traditional-text mb-1">비밀번호</label>
+                        <label className="block text-sm font-medium text-white mb-1">비밀번호</label>
                         <input
                             type="password"
                             name="medical-password"
                             autoComplete="new-password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-traditional-muted rounded-lg focus:outline-none focus:border-traditional-primary focus:ring-1 focus:ring-traditional-primary"
+                            className="w-full px-4 py-2 bg-[#0d1420] border border-white/10 rounded-lg text-white placeholder:text-dental-subtext/50 focus:outline-none focus:border-dental-primary focus:ring-1 focus:ring-dental-primary"
                             placeholder="••••••••"
                             required
                         />
                     </div>
                     {isSignUp && (
                         <div>
-                            <label className="block text-sm font-medium text-traditional-text mb-1">비밀번호 확인</label>
+                            <label className="block text-sm font-medium text-white mb-1">비밀번호 확인</label>
                             <input
                                 type="password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full px-4 py-2 border border-traditional-muted rounded-lg focus:outline-none focus:border-traditional-primary focus:ring-1 focus:ring-traditional-primary"
+                                className="w-full px-4 py-2 bg-[#0d1420] border border-white/10 rounded-lg text-white placeholder:text-dental-subtext/50 focus:outline-none focus:border-dental-primary focus:ring-1 focus:ring-dental-primary"
                                 placeholder="••••••••"
                                 required
                             />
@@ -227,7 +227,7 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3 bg-traditional-primary text-white rounded-lg font-medium hover:bg-traditional-primary/90 transition-colors disabled:opacity-50"
+                        className="w-full py-3 bg-dental-primary text-white rounded-lg font-medium hover:bg-dental-accent transition-colors disabled:opacity-50"
                     >
                         {loading
                             ? (isSignUp ? "가입 중..." : "로그인 중...")
@@ -239,7 +239,7 @@ export default function LoginPage() {
                     <div className="mt-4 text-center">
                         <button
                             onClick={() => setIsSignUp(true)}
-                            className="text-sm text-traditional-subtext hover:text-traditional-primary underline"
+                            className="text-sm text-dental-subtext hover:text-dental-primary underline"
                         >
                             계정이 없으신가요? 회원가입
                         </button>
@@ -250,7 +250,7 @@ export default function LoginPage() {
                     <div className="mt-4 text-center">
                         <button
                             onClick={() => setIsSignUp(false)}
-                            className="text-sm text-traditional-subtext hover:text-traditional-primary underline"
+                            className="text-sm text-dental-subtext hover:text-dental-primary underline"
                         >
                             이미 계정이 있으신가요? 로그인
                         </button>
@@ -260,17 +260,17 @@ export default function LoginPage() {
                 <div className="mt-6">
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-traditional-muted"></div>
+                            <div className="w-full border-t border-white/10"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-traditional-subtext">또는 소셜 로그인</span>
+                            <span className="px-2 bg-[#1a2332] text-dental-subtext">또는 소셜 로그인</span>
                         </div>
                     </div>
 
                     <div className="mt-6 flex flex-col gap-3">
                         <button
                             onClick={() => handleSocialLogin('kakao')}
-                            className="flex items-center justify-center w-full px-4 py-3 border border-traditional-muted rounded-lg hover:bg-yellow-50 transition-colors bg-[#FEE500] text-[#000000] font-medium"
+                            className="flex items-center justify-center w-full px-4 py-3 border border-white/10 rounded-lg hover:bg-yellow-500/10 transition-colors bg-[#FEE500] text-[#000000] font-medium"
                         >
                             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12 3C5.925 3 1 6.925 1 11.775C1 14.825 3.025 17.5 6.075 19.025C5.55 20.85 4.3 22.95 4.25 23.025C4.1 23.275 4.375 23.55 4.625 23.375C6.725 21.975 9.075 20.275 9.9 19.725C10.575 19.825 11.275 19.875 12 19.875C18.075 19.875 23 15.95 23 11.1C23 6.25 18.075 3 12 3Z" />
@@ -279,7 +279,7 @@ export default function LoginPage() {
                         </button>
                         <button
                             onClick={() => handleSocialLogin('naver')}
-                            className="flex items-center justify-center w-full px-4 py-3 border border-traditional-muted rounded-lg hover:bg-green-50 transition-colors bg-[#03C75A] text-white font-medium"
+                            className="flex items-center justify-center w-full px-4 py-3 border border-white/10 rounded-lg hover:bg-green-500/10 transition-colors bg-[#03C75A] text-white font-medium"
                         >
                             <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M16.2733 12.845L7.376 0H0V24H7.72695V11.1549L16.624 24H24V0H16.2733V12.845Z" />
@@ -288,7 +288,7 @@ export default function LoginPage() {
                         </button>
                         <button
                             onClick={() => handleSocialLogin('google')}
-                            className="flex items-center justify-center w-full px-4 py-3 border border-traditional-muted rounded-lg hover:bg-gray-50 transition-colors bg-white text-gray-700 font-medium"
+                            className="flex items-center justify-center w-full px-4 py-3 border border-white/10 rounded-lg hover:bg-white/10 transition-colors bg-white/5 text-white font-medium"
                         >
                             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M12.24 10.285V14.4H16.8172C16.6995 15.528 15.8325 17.415 12.24 17.415C9.0765 17.415 6.504 14.79 6.504 11.625C6.504 8.46 9.0765 5.835 12.24 5.835C14.037 5.835 15.2355 6.6045 15.9225 7.2645L18.9315 4.365C17.0055 2.565 14.8215 1.5 12.24 1.5C6.651 1.5 2.115 6.036 2.115 11.625C2.115 17.214 6.651 21.75 12.24 21.75C18.0855 21.75 21.945 17.6355 21.945 11.88C21.945 11.196 21.8865 10.701 21.7785 10.285H12.24Z" />
