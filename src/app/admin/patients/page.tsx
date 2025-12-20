@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
     Container,
     Title,
@@ -22,9 +22,10 @@ import {
     Alert,
     ThemeIcon,
     ActionIcon,
+    Pagination,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { UserPlus, Calendar, Pill, Stethoscope, ClipboardCheck, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
+import { useDisclosure, useDebouncedValue } from '@mantine/hooks';
+import { UserPlus, Calendar, Pill, Stethoscope, ClipboardCheck, CheckCircle, AlertCircle, Trash2, Search, Filter } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 
 // Message template types (inline for now, can be moved to shared lib later)
@@ -80,10 +81,21 @@ const lifecycleLabels: Record<string, string> = {
     vip: 'VIP',
 };
 
+// 페이지당 항목 수
+const ITEMS_PER_PAGE = 10;
+
 export default function PatientsPage() {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState(true);
     const supabase = createClient();
+
+    // 검색 및 필터 상태
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearch] = useDebouncedValue(searchQuery, 300);
+    const [statusFilter, setStatusFilter] = useState<string | null>(null);
+
+    // 페이지네이션 상태
+    const [currentPage, setCurrentPage] = useState(1);
 
     // 환자 등록 모달
     const [addModalOpened, { open: openAddModal, close: closeAddModal }] = useDisclosure(false);
@@ -111,6 +123,39 @@ export default function PatientsPage() {
         fetchPatients();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // 검색/필터 변경 시 첫 페이지로 이동
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [debouncedSearch, statusFilter]);
+
+    // 필터링된 환자 목록
+    const filteredPatients = useMemo(() => {
+        let result = patients;
+
+        // 검색어 필터
+        if (debouncedSearch.trim()) {
+            const query = debouncedSearch.toLowerCase().trim();
+            result = result.filter(patient =>
+                patient.name.toLowerCase().includes(query) ||
+                (patient.phone && patient.phone.includes(query))
+            );
+        }
+
+        // 상태 필터
+        if (statusFilter) {
+            result = result.filter(patient => patient.lifecycle_stage === statusFilter);
+        }
+
+        return result;
+    }, [patients, debouncedSearch, statusFilter]);
+
+    // 페이지네이션 계산
+    const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
+    const paginatedPatients = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        return filteredPatients.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    }, [filteredPatients, currentPage]);
 
     async function fetchPatients() {
         const { data } = await supabase
@@ -256,6 +301,36 @@ export default function PatientsPage() {
                 </Button>
             </Group>
 
+            {/* 검색 및 필터 영역 */}
+            <Paper shadow="sm" radius="md" p="md" mb="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)' }}>
+                <Group>
+                    <TextInput
+                        placeholder="이름 또는 연락처로 검색..."
+                        leftSection={<Search size={16} />}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.currentTarget.value)}
+                        style={{ flex: 1, maxWidth: 300 }}
+                    />
+                    <Select
+                        placeholder="상태 필터"
+                        leftSection={<Filter size={16} />}
+                        clearable
+                        data={[
+                            { value: 'lead', label: '리드' },
+                            { value: 'new', label: '신규' },
+                            { value: 'returning', label: '재방문' },
+                            { value: 'vip', label: 'VIP' },
+                        ]}
+                        value={statusFilter}
+                        onChange={setStatusFilter}
+                        style={{ width: 150 }}
+                    />
+                    <Text size="sm" c="dimmed">
+                        총 {filteredPatients.length}명
+                    </Text>
+                </Group>
+            </Paper>
+
             <Paper shadow="sm" radius="md" bg="dark.7" withBorder style={{ borderColor: 'var(--mantine-color-dark-5)', overflow: 'hidden' }}>
                 <Table highlightOnHover highlightOnHoverColor="dark.6">
                     <Table.Thead bg="dark.8">
@@ -268,7 +343,7 @@ export default function PatientsPage() {
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {patients.map((patient) => (
+                        {paginatedPatients.map((patient) => (
                             <Table.Tr key={patient.id}>
                                 <Table.Td>
                                     <Text size="sm" fw={500} c="white">{patient.name}</Text>
@@ -305,15 +380,29 @@ export default function PatientsPage() {
                                 </Table.Td>
                             </Table.Tr>
                         ))}
-                        {patients.length === 0 && (
+                        {paginatedPatients.length === 0 && (
                             <Table.Tr>
                                 <Table.Td colSpan={5}>
-                                    <Text ta="center" c="dimmed" py="lg">등록된 환자가 없습니다.</Text>
+                                    <Text ta="center" c="dimmed" py="lg">
+                                        {debouncedSearch || statusFilter ? '검색 결과가 없습니다.' : '등록된 환자가 없습니다.'}
+                                    </Text>
                                 </Table.Td>
                             </Table.Tr>
                         )}
                     </Table.Tbody>
                 </Table>
+
+                {/* 페이지네이션 */}
+                {totalPages > 1 && (
+                    <Group justify="center" py="md" bg="dark.8">
+                        <Pagination
+                            total={totalPages}
+                            value={currentPage}
+                            onChange={setCurrentPage}
+                            size="sm"
+                        />
+                    </Group>
+                )}
             </Paper>
 
             {/* 환자 등록 모달 */}
