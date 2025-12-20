@@ -104,32 +104,68 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
-                  icon: <BarChart2 className="w-8 h-8 text-traditional-accent" />,
-                  title: "생활 패턴 체크",
-                  desc: "식사·수면·활동 리듬을 간단히 점검해 현재 습관을 정리합니다. (참고용)",
-                  bg: "bg-orange-50/50"
+                  icon: <BarChart2 className="w-8 h-8" />,
+                  title: "패턴 1장 요약",
+                  desc: "식사·수면·스트레스 흐름을 5문답으로 정리합니다.",
+                  label: "약 2분",
+                  gradient: "from-emerald-500 to-teal-500",
+                  iconBg: "bg-gradient-to-br from-emerald-100 to-teal-100",
+                  iconColor: "text-emerald-600"
                 },
                 {
-                  icon: <Activity className="w-8 h-8 text-traditional-primary" />,
-                  title: "관리 팁 안내",
-                  desc: "답변을 바탕으로 일상에서 실천 가능한 관리 포인트를 안내합니다. (참고용)",
-                  bg: "bg-green-50/50"
+                  icon: <CheckCircle className="w-8 h-8" />,
+                  title: "오늘부터 할 1가지",
+                  desc: "현실적으로 가능한 '한 가지 조정'만 제안합니다.",
+                  label: "실천 중심",
+                  gradient: "from-amber-500 to-orange-500",
+                  iconBg: "bg-gradient-to-br from-amber-100 to-orange-100",
+                  iconColor: "text-amber-600"
                 },
                 {
-                  icon: <Calendar className="w-8 h-8 text-traditional-secondary" />,
-                  title: "요약 저장(로그인)",
-                  desc: "결과를 저장해 상담 시 참고 자료로 활용할 수 있습니다. (로그인 후)",
-                  bg: "bg-brown-50/50"
+                  icon: <Calendar className="w-8 h-8" />,
+                  title: "요약 저장 & 변화 비교",
+                  desc: "기록을 저장해 다음에 더 빠르게 이어서 확인합니다.",
+                  label: "로그인 후",
+                  gradient: "from-violet-500 to-purple-500",
+                  iconBg: "bg-gradient-to-br from-violet-100 to-purple-100",
+                  iconColor: "text-violet-600"
                 }
               ].map((feature, idx) => (
-                <div key={idx} className={`group relative p-8 rounded-3xl border border-white/60 bg-white/40 backdrop-blur-xl shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden`}>
-                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/80 to-transparent`}></div>
-                  <div className="relative z-10">
-                    <div className={`w-16 h-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-inner`}>
-                      {feature.icon}
+                <div
+                  key={idx}
+                  className="group relative"
+                >
+                  {/* Gradient Border Effect */}
+                  <div className={`absolute -inset-0.5 bg-gradient-to-r ${feature.gradient} rounded-3xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-500`}></div>
+
+                  {/* Card Content */}
+                  <div className="relative h-full p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col">
+                    {/* Hover Gradient Overlay */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/90 via-transparent to-transparent pointer-events-none"></div>
+
+                    <div className="relative z-10 flex-1">
+                      {/* Icon */}
+                      <div className={`w-16 h-16 ${feature.iconBg} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                        <div className={feature.iconColor}>{feature.icon}</div>
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-xl font-extrabold text-gray-900 mb-3 font-sans tracking-tight group-hover:text-gray-800 transition-colors">
+                        {feature.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-gray-600 text-sm font-medium leading-relaxed mb-6">
+                        {feature.desc}
+                      </p>
                     </div>
-                    <h3 className="text-2xl font-extrabold text-gray-900 mb-4 font-sans tracking-tight">{feature.title}</h3>
-                    <p className="text-gray-600 text-base font-medium leading-relaxed">{feature.desc}</p>
+
+                    {/* Bottom Label */}
+                    <div className="relative z-10 mt-auto">
+                      <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r ${feature.gradient} text-white shadow-md`}>
+                        {feature.label}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
