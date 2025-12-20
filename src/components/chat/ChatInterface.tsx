@@ -404,14 +404,14 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 )}
 
                 {/* Chat Area */}
-                <div className={`bg-white/60 backdrop-blur-xl border border-white/50 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none" : "min-h-[500px]"}`}>
+                <div className={`bg-[#1a2332] backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-dental-bg shadow-none" : "min-h-[500px]"}`}>
                     {/* Safety Badge (logged in only) */}
                     {props.isLoggedIn && <SafetyBadge />}
 
                     {/* Turn Counter (로그인 전만 표시) */}
                     {!props.isLoggedIn && (
                         <div className="flex justify-center">
-                            <span className="px-4 py-1.5 text-xs text-traditional-subtext bg-traditional-bg rounded-full">
+                            <span className="px-4 py-1.5 text-xs text-dental-subtext bg-[#0d1420] rounded-full border border-white/10">
                                 대화 {turnCount}/5 {turnCount >= 5 && "· 로그인하면 계속 상담 가능"}
                             </span>
                         </div>
@@ -481,28 +481,28 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             </main>
 
             {/* Input Area */}
-            <div className={`${props.isEmbedded ? "relative bg-white border-t border-gray-100" : "fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-traditional-muted/50"} p-4 z-40`}>
+            <div className={`${props.isEmbedded ? "relative bg-dental-bg border-t border-white/10" : "fixed bottom-0 left-0 right-0 bg-dental-bg/90 backdrop-blur-xl border-t border-white/10"} p-4 z-40`}>
                 <div className={`${props.isEmbedded ? "w-full" : "max-w-4xl mx-auto"} relative`}>
-                    <form onSubmit={handleSubmit} className="relative bg-white rounded-full shadow-xl border border-traditional-muted/50 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
+                    <form onSubmit={handleSubmit} className="relative bg-[#1a2332] rounded-full shadow-xl border border-white/10 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="증상이나 궁금한 점을 입력해주세요..."
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-traditional-text placeholder:text-traditional-subtext/50 text-base"
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-dental-subtext/50 text-base"
                             disabled={!props.isLoggedIn && turnCount >= 5}
                         />
                         <button
                             type="button"
                             onClick={handleImageClick}
-                            className="p-3 text-traditional-subtext hover:text-traditional-primary transition-colors hover:bg-traditional-bg rounded-full"
+                            className="p-3 text-dental-subtext hover:text-dental-primary transition-colors hover:bg-white/10 rounded-full"
                         >
                             <Paperclip size={20} />
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim() || (!props.isLoggedIn && turnCount >= 5)}
-                            className="p-3 bg-traditional-primary text-white rounded-full hover:bg-traditional-accent transition-all disabled:opacity-50 disabled:hover:bg-traditional-primary ml-2 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                            className="p-3 bg-dental-primary text-white rounded-full hover:bg-dental-accent transition-all disabled:opacity-50 disabled:hover:bg-dental-primary ml-2 shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         >
                             <ArrowUp size={20} />
                         </button>
@@ -511,7 +511,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         <div className="mt-2 text-center">
                             <button
                                 onClick={() => setShowLoginModal(true)}
-                                className="text-sm text-traditional-primary font-medium hover:underline"
+                                className="text-sm text-dental-primary font-medium hover:underline"
                             >
                                 상담을 계속하시려면 로그인이 필요합니다
                             </button>
