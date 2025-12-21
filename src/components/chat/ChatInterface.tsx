@@ -104,7 +104,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             // 로그인 후 - 메디컬 채팅
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 평촌이생각치과 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
+                content: "안녕하세요, 이생각 구강 케어 AI 상담입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n지금 겪고 계신 불편한 증상을 말씀해 주세요. 언제부터 시작되었는지, 어디가 가장 불편하신지 편하게 이야기해 주세요."
             }]);
         } else {
             // 로그인 전 - 헬스케어 채팅 (모듈별 인사말)
@@ -135,7 +135,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${moduleName}** 상담을 도와드릴 평촌이생각치과 가이드입니다. 🦷\n\n이 대화는 **진단이 아닌 일반 정보 안내(참고용)** 입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${moduleName}** 상담을 도와드릴 치과 건강가이드입니다. 🦷\n\n이 대화는 **진단이 아닌 일반 정보 안내(참고용)** 입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
@@ -310,7 +310,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         <div className="w-12 h-12 rounded-full bg-dental-primary/20 flex items-center justify-center">
                             <span className="text-2xl">🦷</span>
                         </div>
-                        <span className="text-xl font-bold text-white">평촌이생각치과</span>
+                        <span className="text-xl font-bold text-white">이생각 구강 케어</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-dental-subtext">
                         <Link href="/login" className="px-6 py-2 bg-dental-primary text-white text-sm font-medium rounded-full hover:bg-dental-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -453,7 +453,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Bubble */}
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-dental-subtext" : "text-left text-dental-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "평촌이생각치과" : "치과 건강가이드") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "이생각 구강 케어" : "치과 건강가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
