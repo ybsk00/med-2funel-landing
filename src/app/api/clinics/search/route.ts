@@ -31,18 +31,14 @@ function isNightClinic(closeTime: string): boolean {
     return hour >= 19;
 }
 
-// 쿼리스트링 생성
-function buildQueryString(params: Record<string, string>): string {
-    return new URLSearchParams(params).toString();
-}
-
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
 
     const q0 = searchParams.get("q0") ?? "경기도";
     const q1 = searchParams.get("q1") ?? "";
-    const qt = searchParams.get("qt") ?? "1"; // 1~7 (월~일), 8 (공휴일)
-    const keyword = searchParams.get("keyword") ?? "치과";
+    const qt = searchParams.get("qt"); // 1~7 (월~일), 8 (공휴일) - 옵션
+    const qn = searchParams.get("qn") ?? "치과"; // 기관명 키워드
+    const debug = searchParams.get("debug") === "true";
 
     const serviceKey = process.env.DATA_GO_KR_SERVICE_KEY;
     if (!serviceKey) {
@@ -53,43 +49,94 @@ export async function GET(req: Request) {
     }
 
     try {
-        const queryParams: Record<string, string> = {
-            ServiceKey: serviceKey,
-            Q0: q0,
-            QT: qt,
-            QN: keyword,
-            pageNo: "1",
-            numOfRows: "50",
-        };
+        // 기본 파라미터 (최소한으로 시작)
+        const params = new URLSearchParams();
 
-        // q1 (시군구)가 있으면 추가
+        // ServiceKey는 이미 인코딩되어 있을 수 있으므로 그대로 사용
+        params.append("ServiceKey", serviceKey);
+        params.append("pageNo", "1");
+        params.append("numOfRows", "100");
+
+        // 필수 파라미터
+        params.append("Q0", q0);
+
+        // 선택 파라미터
         if (q1) {
-            queryParams.Q1 = q1;
+            params.append("Q1", q1);
         }
 
-        const url = `${BASE_URL}?${buildQueryString(queryParams)}`;
+        // QT: 진료요일 (옵션 - 먼저 없이 테스트)
+        if (qt) {
+            params.append("QT", qt);
+        }
+
+        // QN: 기관명 키워드
+        if (qn) {
+            params.append("QN", qn);
+        }
+
+        const url = `${BASE_URL}?${params.toString()}`;
+
+        console.log("[Clinic Search API] Request URL:", url.replace(serviceKey, "***KEY***"));
 
         const response = await fetch(url, {
             cache: "no-store",
-            headers: {
-                Accept: "application/xml",
-            },
         });
 
         if (!response.ok) {
-            throw new Error(`API 호출 실패: ${response.status}`);
+            throw new Error(`API 호출 실패: ${response.status} ${response.statusText}`);
         }
 
         const xmlText = await response.text();
 
+        console.log("[Clinic Search API] Response length:", xmlText.length);
+        console.log("[Clinic Search API] Response preview:", xmlText.substring(0, 500));
+
         // XML 파싱
         const parsed = parser.parse(xmlText);
 
+        // 에러 코드 확인
+        const resultCode = parsed?.response?.header?.resultCode;
+        const resultMsg = parsed?.response?.header?.resultMsg;
+
+        console.log("[Clinic Search API] resultCode:", resultCode, "resultMsg:", resultMsg);
+
+        if (resultCode && resultCode !== "00") {
+            return NextResponse.json({
+                error: `API 오류: ${resultMsg}`,
+                resultCode,
+                resultMsg,
+                debug: debug ? { url: url.replace(serviceKey, "***KEY***"), xmlPreview: xmlText.substring(0, 1000) } : undefined
+            }, { status: 400 });
+        }
+
         // 응답 구조 확인
         const items = parsed?.response?.body?.items?.item;
+        const totalCount = parsed?.response?.body?.totalCount;
+
+        console.log("[Clinic Search API] totalCount:", totalCount, "items:", items ? (Array.isArray(items) ? items.length : 1) : 0);
+
+        // 디버그 모드면 원본 데이터 반환
+        if (debug) {
+            return NextResponse.json({
+                debug: true,
+                url: url.replace(serviceKey, "***KEY***"),
+                resultCode,
+                resultMsg,
+                totalCount,
+                itemCount: items ? (Array.isArray(items) ? items.length : 1) : 0,
+                rawItems: items ? (Array.isArray(items) ? items.slice(0, 5) : [items]) : [],
+                xmlPreview: xmlText.substring(0, 2000)
+            });
+        }
 
         if (!items) {
-            return NextResponse.json({ clinics: [], total: 0 });
+            return NextResponse.json({
+                clinics: [],
+                total: 0,
+                message: "검색 결과가 없습니다.",
+                searchParams: { q0, q1, qt, qn }
+            });
         }
 
         // 단일 항목일 경우 배열로 변환
@@ -104,13 +151,8 @@ export async function GET(req: Request) {
             })
             .map((item: Record<string, unknown>) => {
                 // 현재 요일에 맞는 종료 시간 추출
-                const qtNum = parseInt(qt, 10);
+                const qtNum = qt ? parseInt(qt, 10) : new Date().getDay() || 7; // 일요일 = 0 -> 7
                 let closeTimeKey = `dutyTime${qtNum}c`; // 종료 시간 키 (dutyTime1c ~ dutyTime8c)
-
-                // 공휴일인 경우 dutyTime8c
-                if (qtNum === 8) {
-                    closeTimeKey = "dutyTime8c";
-                }
 
                 const closeTime = String(item[closeTimeKey] || "");
 
@@ -130,10 +172,11 @@ export async function GET(req: Request) {
         return NextResponse.json({
             clinics,
             total: clinics.length,
-            searchParams: { q0, q1, qt, keyword },
+            totalFromApi: totalCount,
+            searchParams: { q0, q1, qt, qn },
         });
     } catch (error) {
-        console.error("Clinic search API error:", error);
+        console.error("[Clinic Search API] Error:", error);
         return NextResponse.json(
             {
                 error: "일시적으로 조회가 어렵습니다. 잠시 후 다시 시도해 주세요.",

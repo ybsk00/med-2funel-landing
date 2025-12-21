@@ -58,11 +58,12 @@ export default function ClinicSearchModule() {
                 qt = "8"; // 공휴일
             }
 
+            // 먼저 넓은 범위에서 검색 (경기도 전체, QT 없이)
             const params = new URLSearchParams({
                 q0: "경기도",
-                q1: "안양시 동안구",
-                qt,
-                keyword: "치과",
+                // q1 제거 - 경기도 전체로 검색
+                // qt 제거 - 요일 필터 없이 전체 검색
+                qn: "치과",
             });
 
             const res = await fetch(`/api/clinics/search?${params.toString()}`);
@@ -126,8 +127,8 @@ export default function ClinicSearchModule() {
             aria-pressed={active}
             aria-label={ariaLabel}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${active
-                    ? "bg-dental-primary text-white shadow-lg shadow-dental-primary/30"
-                    : "bg-white/10 text-dental-subtext hover:bg-white/20 border border-white/10"
+                ? "bg-dental-primary text-white shadow-lg shadow-dental-primary/30"
+                : "bg-white/10 text-dental-subtext hover:bg-white/20 border border-white/10"
                 }`}
         >
             {icon}
