@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { Bell, Mic, ChevronRight, Calendar, FileText, Pill, MessageSquare } from 'lucide-react'
+import { Bell, Mic, ChevronRight, Calendar, FileText, Pill, MessageSquare, Building2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -145,42 +145,51 @@ export default async function PatientHome() {
                     </div>
 
                     {/* Quick Menu */}
-                    <div className="grid grid-cols-4 gap-4 mb-8">
+                    <div className="grid grid-cols-5 gap-3 mb-8">
                         <Link href="/patient/appointments/new" className="flex flex-col items-center gap-2">
                             <div
-                                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                 style={{ backgroundColor: '#1f2937' }}
                             >
-                                <Calendar size={24} className="text-blue-400" />
+                                <Calendar size={22} className="text-blue-400" />
                             </div>
                             <span className="text-xs text-gray-400">진료예약</span>
                         </Link>
                         <Link href="/patient/history" className="flex flex-col items-center gap-2">
                             <div
-                                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                 style={{ backgroundColor: '#1f2937' }}
                             >
-                                <FileText size={24} className="text-blue-400" />
+                                <FileText size={22} className="text-blue-400" />
                             </div>
-                            <span className="text-xs text-gray-400">예약 기록</span>
+                            <span className="text-xs text-gray-400">예약기록</span>
                         </Link>
                         <Link href="/patient/medications" className="flex flex-col items-center gap-2">
                             <div
-                                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                 style={{ backgroundColor: '#1f2937' }}
                             >
-                                <Pill size={24} className="text-green-400" />
+                                <Pill size={22} className="text-green-400" />
                             </div>
-                            <span className="text-xs text-gray-400">복약 관리</span>
+                            <span className="text-xs text-gray-400">복약관리</span>
+                        </Link>
+                        <Link href="/patient/hospitals" className="flex flex-col items-center gap-2">
+                            <div
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                                style={{ backgroundColor: '#1f2937' }}
+                            >
+                                <Building2 size={22} className="text-purple-400" />
+                            </div>
+                            <span className="text-xs text-gray-400">병원조회</span>
                         </Link>
                         <Link href="/patient/chat" className="flex flex-col items-center gap-2">
                             <div
-                                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center"
                                 style={{ backgroundColor: '#1f2937' }}
                             >
-                                <MessageSquare size={24} className="text-blue-400" />
+                                <MessageSquare size={22} className="text-blue-400" />
                             </div>
-                            <span className="text-xs text-gray-400">1:1 상담</span>
+                            <span className="text-xs text-gray-400">1:1상담</span>
                         </Link>
                     </div>
 
