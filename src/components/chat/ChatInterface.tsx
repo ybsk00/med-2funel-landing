@@ -109,7 +109,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         } else {
             // 로그인 전 - 헬스케어 채팅 (모듈별 인사말)
             const currentModule = modules.find(m => m.id === topic);
-            const moduleName = currentModule ? currentModule.label : "치과 상담";
+            const moduleName = currentModule ? currentModule.label : "구강헬스케어 상담";
 
             // 모듈별 맞춤형 초기 질문 설정
             let initialQuestion = "";
@@ -130,12 +130,12 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     initialQuestion = "잇몸이 붓거나 피가 나는 증상이 있으신가요?";
                     break;
                 default:
-                    initialQuestion = "어떤 치과 상담이 필요하신가요?";
+                    initialQuestion = "어떤 구강헬스케어 상담이 필요하신가요?";
             }
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${moduleName}** 상담을 도와드릴 치과 건강가이드입니다. 🦷\n\n이 대화는 **진단이 아닌 일반 정보 안내(참고용)** 입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${moduleName}** 상담을 도와드릴 이생각 건강가이드입니다. 🦷\n\n이 대화는 **진단이 아닌 일반 정보 안내(참고용)** 입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
@@ -453,7 +453,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Bubble */}
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-dental-subtext" : "text-left text-dental-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "이생각 구강 케어" : "치과 건강가이드") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "이생각 구강 케어" : "이생각 건강가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
