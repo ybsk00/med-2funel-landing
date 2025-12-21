@@ -21,7 +21,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [minute, setMinute] = useState("00");
     const [doctor, setDoctor] = useState("");
 
-    const doctors = ['', '이생각 대표원장'];
+    const doctors = ['', '김기영 대표원장', '전민제 원장', '이해정 교정원장', '김유진 원장'];
 
     const [name, setName] = useState("");
 
