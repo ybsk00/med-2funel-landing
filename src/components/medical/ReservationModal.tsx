@@ -21,7 +21,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [minute, setMinute] = useState("00");
     const [doctor, setDoctor] = useState("");
 
-    const doctors = ['', '최서형 이사장', '노기환 원장', '나병조 원장', '최규호 원장'];
+    const doctors = ['', '이생각 대표원장'];
 
     const [name, setName] = useState("");
 

@@ -21,10 +21,7 @@ interface DoctorIntroModalProps {
 }
 
 const doctorImages: Record<string, string> = {
-    '최서형': '/images/doctors/choi-seohyung.jpg',
-    '노기환': '/images/doctors/noh-gihwan.jpg',
-    '나병조': '/images/doctors/na-byungjo.jpg',
-    '최규호': '/images/doctors/choi-gyuho.jpg',
+    '이생각': '/images/doctors/lee-saenggak.jpg',
 };
 
 export default function DoctorIntroModal({
