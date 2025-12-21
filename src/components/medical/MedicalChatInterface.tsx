@@ -11,6 +11,15 @@ type Message = {
     imageUrl?: string;
 };
 
+// 액션 토큰 파싱 함수
+function parseActionToken(content: string): { cleanContent: string; action: string | null } {
+    const actionRegex = /\[\[ACTION:([A-Z_]+)\]\]/g;
+    const match = actionRegex.exec(content);
+    const action = match ? match[1] : null;
+    const cleanContent = content.replace(actionRegex, '').trim();
+    return { cleanContent, action };
+}
+
 export default function MedicalChatInterface() {
     const router = useRouter();
     const [messages, setMessages] = useState<Message[]>([]);
@@ -62,12 +71,15 @@ export default function MedicalChatInterface() {
             if (!response.ok) throw new Error("Failed to send message");
 
             const data = await response.json();
-            setMessages(prev => [...prev, { role: "ai", content: data.content }]);
+
+            // 액션 토큰 처리
+            const { cleanContent, action } = parseActionToken(data.content);
+            setMessages(prev => [...prev, { role: "ai", content: cleanContent }]);
             setTurnCount(currentTurn);
 
-            // Show appointment modal at turn 5 and every turn after
-            if (currentTurn >= 5) {
-                setTimeout(() => setShowAppointmentModal(true), 1500);
+            // 액션에 따른 모달 트리거
+            if (action === 'RESERVATION_MODAL') {
+                setTimeout(() => setShowAppointmentModal(true), 500);
             }
         } catch (error) {
             console.error("Error:", error);
