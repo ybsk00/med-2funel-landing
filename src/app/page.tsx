@@ -18,7 +18,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between px-6 py-1 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
               <DentalLogo size={36} />
-              <span className="text-xl font-bold text-dental-text">평촌이생각치과</span>
+              <span className="text-xl font-bold text-dental-text">이생각 구강 케어</span>
             </Link>
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-dental-subtext">
               {/* Navigation links */}
