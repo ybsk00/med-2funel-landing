@@ -11,14 +11,25 @@ type Message = {
     imageUrl?: string;
 };
 
-// 액션 토큰 파싱 함수
+// 액션 토큰 파싱 함수 - 모든 시스템 토큰 제거
 function parseActionToken(content: string): { cleanContent: string; action: string | null } {
+    // [[ACTION:SOMETHING]] 패턴 감지
     const actionRegex = /\[\[ACTION:([A-Z_]+)\]\]/g;
     const match = actionRegex.exec(content);
     const action = match ? match[1] : null;
-    const cleanContent = content.replace(actionRegex, '').trim();
+
+    // 모든 시스템 토큰 제거: [[...]], [SOMETHING_TRIGGER], [SOMETHING_MODAL] 등
+    let cleanContent = content
+        .replace(/\[\[ACTION:[A-Z_]+\]\]/g, '')  // [[ACTION:...]]
+        .replace(/\[[A-Z_]+_TRIGGER\]/g, '')     // [SOMETHING_TRIGGER]
+        .replace(/\[[A-Z_]+_MODAL\]/g, '')       // [SOMETHING_MODAL]
+        .replace(/\[\[?[A-Z_:]+\]?\]/g, '')      // 기타 대괄호 토큰
+        .replace(/\s{2,}/g, ' ')                 // 중복 공백 정리
+        .trim();
+
     return { cleanContent, action };
 }
+
 
 export default function MedicalChatInterface() {
     const router = useRouter();
