@@ -23,6 +23,23 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
+            // 0. Admin bypass check
+            if (email.toLowerCase() === "admin@admin.com") {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+
+                if (error) {
+                    alert("관리자 로그인 실패: " + error.message);
+                    setLoading(false);
+                    return;
+                }
+
+                router.push("/admin");
+                return;
+            }
+
             // 1. Check if user exists
             const exists = await checkUserExists(email);
 
@@ -46,8 +63,8 @@ export default function LoginPage() {
                 // 사용자 역할 확인
                 const { data: { user } } = await supabase.auth.getUser();
 
-                // admin@admin.com은 무조건 /admin으로
-                if (user?.email === "admin@admin.com") {
+                // admin@admin.com은 무조건 /admin으로 (중복 체크지만 안전장치)
+                if (user?.email?.toLowerCase() === "admin@admin.com") {
                     router.push("/admin");
                     return;
                 }
