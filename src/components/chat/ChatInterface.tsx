@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, ArrowUp, Paperclip, Leaf, Brain, Moon, Heart, Sparkles } from "lucide-react";
+import { User, ArrowUp, Paperclip, Sparkles, Droplet, Shield, ArrowUpRight, Heart, ChevronDown, Info } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { useSearchParams, redirect } from "next/navigation";
 import ReservationModal from "@/components/medical/ReservationModal";
 import MedicalInfoPanel from "@/components/medical/MedicalInfoPanel";
 import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
@@ -11,6 +12,7 @@ import FileUploadModal from "@/components/medical/FileUploadModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import SafetyBadge from "@/components/medical/SafetyBadge";
 import { useMarketingTracker } from "@/hooks/useMarketingTracker";
+import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic, sanitizeTopic, DEFAULT_TOPIC } from "@/lib/constants/topics";
 
 type Message = {
     role: "user" | "ai";
@@ -25,117 +27,80 @@ type ChatInterfaceProps = {
     mode?: 'healthcare' | 'medical';
     externalMessage?: string;
     onExternalMessageSent?: () => void;
-    // 새로운 액션 콜백
     onAction?: (action: ActionType, data?: any) => void;
     onTabHighlight?: (tabs: ('review' | 'map')[]) => void;
 };
 
+// 모듈 아이콘/컬러 매핑
+const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string }> = {
+    'glow-booster': { icon: Sparkles, color: 'pink' },
+    'makeup-killer': { icon: Droplet, color: 'rose' },
+    'barrier-reset': { icon: Shield, color: 'teal' },
+    'lifting-check': { icon: ArrowUpRight, color: 'purple' },
+    'skin-concierge': { icon: Heart, color: 'fuchsia' },
+};
+
 export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
-    const topic = searchParams.get("topic") || "recovery";
+    const rawTopic = searchParams.get("topic");
+    const topic = sanitizeTopic(rawTopic);
     const { track } = useMarketingTracker();
+
+    // 잘못된 topic이면 리다이렉트
+    useEffect(() => {
+        if (rawTopic && !VALID_TOPICS.includes(rawTopic as Topic)) {
+            window.location.href = `/healthcare/chat?topic=${DEFAULT_TOPIC}`;
+        }
+    }, [rawTopic]);
 
     // Track chat start on mount
     useEffect(() => {
-        track('f1_chat_start', { metadata: { topic, mode: props.mode || 'healthcare' } });
-    }, []);
+        track('tab_click', { metadata: { topic, mode: props.mode || 'healthcare' } });
+    }, [topic]);
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [turnCount, setTurnCount] = useState(0);
-    const [askedQuestionCount, setAskedQuestionCount] = useState(0); // 질문 카운터
-    const [currentTrack, setCurrentTrack] = useState<string | null>(null); // 트랙 유지
+    const [askedQuestionCount, setAskedQuestionCount] = useState(0);
+    const [currentTrack, setCurrentTrack] = useState<string | null>(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [loginModalContent, setLoginModalContent] = useState({
         title: "상세한 상담이 필요하신가요?",
-        desc: "더 정확한 건강 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+        desc: "더 정확한 피부 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showReservationModal, setShowReservationModal] = useState(false);
+    const [showBadgeExpanded, setShowBadgeExpanded] = useState(false);
 
     // Modal states for quick actions
     const [showSymptomCheckModal, setShowSymptomCheckModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
-    // Modules Definition (인덱스 페이지와 동일)
-    const modules = [
-        {
-            id: "stain-csi",
-            label: "착색 CSI",
-            desc: "커피·담배 착색 패턴 점검",
-            icon: Sparkles,
-            color: "amber"
-        },
-        {
-            id: "sensitivity",
-            label: "시림 탐정",
-            desc: "찬물·단것 트리거 체크",
-            icon: Brain,
-            color: "cyan"
-        },
-        {
-            id: "gum-radar",
-            label: "잇몸 레이더",
-            desc: "출혈·붓기·구취 스캔",
-            icon: Leaf,
-            color: "rose"
-        },
-        {
-            id: "smile-balance",
-            label: "스마일 밸런스",
-            desc: "이갈이·입호흡 습관",
-            icon: Heart,
-            color: "violet"
-        },
-        {
-            id: "implant-ready",
-            label: "임플란트 준비도",
-            desc: "상실 이후 준비 체크",
-            icon: Moon,
-            color: "blue"
-        },
-    ];
+    // 초기 질문 맵
+    const initialQuestionMap: Record<Topic, string> = {
+        'glow-booster': '하루 수분 섭취량은 어느 정도인가요?',
+        'makeup-killer': '메이크업이 보통 몇 시간 정도 지속되나요?',
+        'barrier-reset': '하루 세안 횟수는 몇 번인가요?',
+        'lifting-check': '탄력이 가장 신경 쓰이는 부위는 어디인가요?',
+        'skin-concierge': '본인의 피부 타입은 어떻다고 생각하시나요?',
+    };
 
-    // 초기 메시지 설정 (자유 텍스트 입력용)
+    // 초기 메시지 설정
     useEffect(() => {
         if (props.mode === 'medical') {
-            // 로그인 후 - 메디컬 채팅 (평촌이생각치과 운영정보 포함)
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 평촌이생각치과 AI 상담입니다.\n\n**📍 평촌이생각치과**는 경기 안양시 동안구 시민대로 312, 201호에 위치하고 있으며, **365일 연중무휴**, 평일 **야간진료 9시까지** 운영하는 치과입니다.\n\n어떤 점이 궁금하실까요? 치아 건강에 대해서 궁금하신 점이 있으면 질문주세요."
+                content: "안녕하세요, 리원피부과 AI 상담입니다.\n\n**✨ 리원피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
             }]);
         } else {
-            // 로그인 전 - 헬스케어 채팅 (모듈별 인사말)
-            const currentModule = modules.find(m => m.id === topic);
-            const moduleName = currentModule ? currentModule.label : "구강헬스케어 상담";
-
-            // 모듈별 맞춤형 초기 질문 설정
-            let initialQuestion = "";
-            switch (topic) {
-                case "stain-csi":
-                    initialQuestion = "커피나 차는 하루에 몇 잔 정도 드시나요?";
-                    break;
-                case "sensitivity":
-                    initialQuestion = "찬 음식이나 음료에 시린 느낌이 있으신가요?";
-                    break;
-                case "gum-radar":
-                    initialQuestion = "양치할 때 잇몸에서 피가 나는 경우가 있으신가요?";
-                    break;
-                case "smile-balance":
-                    initialQuestion = "자면서 이갈이를 하신다고 들으셨나요?";
-                    break;
-                case "implant-ready":
-                    initialQuestion = "상실된 치아 부위는 어디인가요?";
-                    break;
-                default:
-                    initialQuestion = "구강 관리에서 가장 신경 쓰이는 부분이 있으신가요?";
-            }
+            const topicLabel = TOPIC_LABELS[topic];
+            const initialQuestion = initialQuestionMap[topic];
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${moduleName}** 상담을 도와드릴 이생각 건강가이드입니다. 🦷\n\n이 대화는 **진단이 아닌 일반 정보 안내(참고용)** 입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 리원 스킨케어 가이드입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
@@ -149,7 +114,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         scrollToBottom();
     }, [messages]);
 
-    // 외부 메시지 자동 발송 (증상정리 요약 등)
+    // 외부 메시지 자동 발송
     useEffect(() => {
         if (props.externalMessage && !isLoading) {
             sendExternalMessage(props.externalMessage);
@@ -157,7 +122,6 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     }, [props.externalMessage]);
 
     const sendExternalMessage = async (message: string) => {
-        // 사용자 메시지로 추가
         setMessages(prev => [...prev, { role: "user", content: message }]);
         setIsLoading(true);
 
@@ -197,7 +161,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.isLoggedIn) return;
         setLoginModalContent({
             title: "이미지 분석 기능",
-            desc: "이미지 분석을 통한 건강 상담은<br />로그인 후 이용 가능합니다."
+            desc: "이미지 분석을 통한 피부 상담은<br />로그인 후 이용 가능합니다."
         });
         setShowLoginModal(true);
     };
@@ -213,10 +177,12 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         setTurnCount(newTurnCount);
         setMessages(prev => [...prev, { role: "user", content: userMessage }]);
 
+        // 트래킹
+        track('question_answered', { metadata: { topic, turn: newTurnCount } });
+
         setIsLoading(true);
 
         try {
-            // 로그인 상태에 따라 다른 API 사용
             const apiEndpoint = props.isLoggedIn ? "/api/medical/chat" : "/api/healthcare/chat";
 
             const response = await fetch(apiEndpoint, {
@@ -227,8 +193,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     history: messages,
                     turnCount: turnCount,
                     topic: topic,
-                    track: currentTrack, // 트랙 유지
-                    askedQuestionCount: askedQuestionCount, // 질문 카운터 전달
+                    track: currentTrack,
+                    askedQuestionCount: askedQuestionCount,
                 }),
             });
 
@@ -237,21 +203,18 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             const data = await response.json();
             const aiContent = data.content;
 
-            // 상태 업데이트 (새 API 응답 구조)
             if (data.track) setCurrentTrack(data.track);
             if (typeof data.askedQuestionCount === 'number') {
                 setAskedQuestionCount(data.askedQuestionCount);
             }
 
-            // 메시지 추가
             setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
 
-            // 액션 처리 (모달 트리거)
             if (data.action) {
                 if (data.action === 'RESERVATION_MODAL') {
+                    track('reservation_modal_open');
                     setShowReservationModal(true);
                 } else {
-                    // DoctorIntroModal, EvidenceModal은 부모 컴포넌트로 전달
                     props.onAction?.(data.action, {
                         doctorsData: data.doctorsData,
                         evidenceData: data.evidenceData
@@ -259,23 +222,24 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 }
             }
 
-            // 탭 하이라이트 처리
             if (data.highlightTabs && data.highlightTabs.length > 0) {
                 props.onTabHighlight?.(data.highlightTabs);
             }
 
-            // 레드플래그 처리 (이미 API에서 응급 메시지로 대체됨)
             if (data.isRedFlag) {
-                // 추가 입력 차단
                 setTurnCount(10);
             }
 
-            // 로그인 필요 응답 확인 (헬스케어 모드)
+            // 5턴 완료 트래킹
+            if (newTurnCount >= 5) {
+                track('chat_completed', { metadata: { topic } });
+            }
+
             if (!props.isLoggedIn && data.requireLogin) {
                 if (data.isSymptomTrigger || data.isHardStop) {
                     setTimeout(() => {
                         setLoginModalContent({
-                            title: "현재는 일반 정보 안내 단계입니다",
+                            title: "현재는 참고용 안내 단계입니다",
                             desc: "로그인하면 내용을 저장하고,<br />더 맞춤형으로 정리해 드립니다."
                         });
                         setShowLoginModal(true);
@@ -286,7 +250,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 } else {
                     setTimeout(() => {
                         setLoginModalContent({
-                            title: "현재는 일반 정보 안내 단계입니다",
+                            title: "현재는 참고용 안내 단계입니다",
                             desc: "로그인하면 내용을 저장하고,<br />더 맞춤형으로 정리해 드립니다."
                         });
                         setShowLoginModal(true);
@@ -301,19 +265,25 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
+    const colorClasses: Record<string, { bg: string; text: string; ring: string }> = {
+        pink: { bg: 'bg-pink-500/20', text: 'text-pink-400', ring: 'ring-pink-400' },
+        rose: { bg: 'bg-rose-500/20', text: 'text-rose-400', ring: 'ring-rose-400' },
+        teal: { bg: 'bg-teal-500/20', text: 'text-teal-400', ring: 'ring-teal-400' },
+        purple: { bg: 'bg-purple-500/20', text: 'text-purple-400', ring: 'ring-purple-400' },
+        fuchsia: { bg: 'bg-fuchsia-500/20', text: 'text-fuchsia-400', ring: 'ring-fuchsia-400' },
+    };
+
     return (
-        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-dental-bg font-sans flex flex-col selection:bg-dental-accent selection:text-white`}>
-            {/* Header - Hidden if embedded */}
+        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-skin-bg font-sans flex flex-col selection:bg-skin-accent selection:text-white`}>
+            {/* Header */}
             {!props.isEmbedded && (
-                <header className="bg-dental-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
+                <header className="bg-skin-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-                        <div className="w-12 h-12 rounded-full bg-dental-primary/20 flex items-center justify-center">
-                            <span className="text-2xl">🦷</span>
-                        </div>
-                        <span className="text-xl font-bold text-white">이생각 구강 케어</span>
+                        <span className="text-2xl">✨</span>
+                        <span className="text-xl font-bold text-white">리원피부과</span>
                     </Link>
-                    <div className="hidden md:flex items-center gap-6 text-sm font-medium text-dental-subtext">
-                        <Link href="/login" className="px-6 py-2 bg-dental-primary text-white text-sm font-medium rounded-full hover:bg-dental-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                    <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
+                        <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                             로그인
                         </Link>
                     </div>
@@ -321,7 +291,31 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             )}
 
             <main className={`flex-1 w-full mx-auto ${props.isEmbedded ? "flex flex-col overflow-hidden p-0" : "max-w-5xl px-4 pb-20 pt-6"}`}>
-                {/* Logged In: Info Panel | Logged Out: Hero Banner */}
+                {/* Policy Badge */}
+                {!props.isLoggedIn && (
+                    <div className="mb-4">
+                        <button
+                            onClick={() => setShowBadgeExpanded(!showBadgeExpanded)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-skin-muted/50 rounded-full text-sm text-skin-subtext hover:bg-skin-muted transition-colors"
+                        >
+                            <Info size={14} />
+                            <span>참고용 안내 | 진단·처방 아님</span>
+                            <ChevronDown size={14} className={`transition-transform ${showBadgeExpanded ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showBadgeExpanded && (
+                            <div className="mt-2 px-4 py-3 bg-skin-surface rounded-xl text-sm text-skin-subtext">
+                                본 기능은 참고용 루틴/선택 기준 안내이며, 진단·처방을 대신하지 않습니다.
+                                {topic === 'lifting-check' && (
+                                    <p className="mt-2 text-skin-primary">
+                                        ⚠️ 개인 상태에 따라 달라질 수 있어, 상담 시 확인이 필요합니다.
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Logged In: Info Panel | Logged Out: Module Tabs */}
                 {!props.isEmbedded && (
                     props.isLoggedIn ? (
                         <MedicalInfoPanel
@@ -330,96 +324,60 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             onOpenFileUpload={() => setShowFileUploadModal(true)}
                         />
                     ) : (
-                        <div className="relative rounded-3xl overflow-hidden mb-8 h-[420px] md:h-[480px] shadow-2xl group">
-                            <video
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                className="absolute inset-0 w-full h-full object-cover opacity-90"
-                            >
-                                <source src="/3.mp4" type="video/mp4" />
-                            </video>
-                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"></div>
-                            <div className="absolute inset-0 bg-dental-primary/20 mix-blend-multiply"></div>
-
-                            <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
-                                <div className="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-medium mb-4 w-fit">
-                                    AI Dental Analysis
+                        <div className="mb-6">
+                            {/* Healthcare Banner Image */}
+                            <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
+                                <Image
+                                    src="/GALLERY MINIMAL.png"
+                                    alt="리원피부과 프리미엄 스킨케어"
+                                    fill
+                                    className="object-cover object-[center_25%]"
+                                    priority
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
+                                <div className="absolute bottom-4 left-4 right-4">
+                                    <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
+                                        리원 뷰티 스킨케어
+                                    </h2>
+                                    <p className="text-sm text-white/80 drop-shadow">프리미엄 피부 관리의 시작</p>
                                 </div>
-                                <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg font-serif leading-tight">
-                                    AI 헬스케어로<br />알아보는 나의 구강 건강
-                                </h2>
-                                <p className="text-white/90 text-sm md:text-base font-light mb-4 max-w-lg leading-relaxed">
-                                    최첨단 AI 기술로 구강 관리 패턴을 점검하고<br />당신만의 건강 요약을 제공합니다.
-                                </p>
+                            </div>
+                            {/* Module Tabs */}
+                            <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 scrollbar-hide">
+                                {VALID_TOPICS.map((t) => {
+                                    const config = MODULE_CONFIG[t];
+                                    const IconComponent = config.icon;
+                                    const colors = colorClasses[config.color];
+                                    const isActive = topic === t;
 
-                                {/* Module List - Glassmorphism Cards */}
-                                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-2">
-                                    {modules.map((mod) => {
-                                        const IconComponent = mod.icon;
-                                        const isActive = topic === mod.id;
-                                        const colorClasses: Record<string, { bg: string; ring: string; icon: string }> = {
-                                            amber: { bg: 'bg-amber-500/20', ring: 'ring-amber-400', icon: 'text-amber-400' },
-                                            cyan: { bg: 'bg-cyan-500/20', ring: 'ring-cyan-400', icon: 'text-cyan-400' },
-                                            rose: { bg: 'bg-rose-500/20', ring: 'ring-rose-400', icon: 'text-rose-400' },
-                                            violet: { bg: 'bg-violet-500/20', ring: 'ring-violet-400', icon: 'text-violet-400' },
-                                            blue: { bg: 'bg-blue-500/20', ring: 'ring-blue-400', icon: 'text-blue-400' },
-                                        };
-                                        const colors = colorClasses[mod.color] || colorClasses.amber;
-
-                                        return (
-                                            <Link
-                                                key={mod.id}
-                                                href={`/healthcare/chat?topic=${mod.id}`}
-                                                className={`group relative flex flex-col items-center justify-center p-4 md:p-5 rounded-2xl backdrop-blur-xl border transition-all duration-300 hover:scale-105 hover:-translate-y-1 ${isActive
-                                                    ? `bg-white/95 border-white shadow-2xl ring-2 ${colors.ring}`
-                                                    : 'bg-white/15 border-white/30 hover:bg-white/25 hover:border-white/50 hover:shadow-lg'
-                                                    }`}
-                                            >
-                                                {/* Icon Circle */}
-                                                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center mb-2 transition-all duration-300 ${isActive
-                                                    ? `${colors.bg} shadow-md`
-                                                    : 'bg-white/20 group-hover:bg-white/30'
-                                                    }`}>
-                                                    <IconComponent className={`w-6 h-6 md:w-7 md:h-7 transition-colors ${isActive ? colors.icon : 'text-white group-hover:text-white'
-                                                        }`} />
-                                                </div>
-
-                                                {/* Label */}
-                                                <span className={`text-sm md:text-base font-bold whitespace-nowrap mb-0.5 ${isActive ? 'text-gray-900' : 'text-white'
-                                                    }`}>
-                                                    {mod.label}
-                                                </span>
-
-                                                {/* Description */}
-                                                <span className={`text-[10px] md:text-xs whitespace-nowrap ${isActive ? 'text-gray-500' : 'text-white/70'
-                                                    }`}>
-                                                    {mod.desc}
-                                                </span>
-
-                                                {/* Active indicator */}
-                                                {isActive && (
-                                                    <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 rounded-full ${colors.bg.replace('/20', '')}`} />
-                                                )}
-                                            </Link>
-                                        );
-                                    })}
-                                </div>
+                                    return (
+                                        <Link
+                                            key={t}
+                                            href={`/healthcare/chat?topic=${t}`}
+                                            className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all ${isActive
+                                                ? `bg-skin-primary text-white shadow-lg`
+                                                : 'bg-white/10 text-skin-subtext hover:bg-white/20'
+                                                }`}
+                                        >
+                                            <IconComponent size={16} />
+                                            <span className="text-sm font-medium whitespace-nowrap">{TOPIC_LABELS[t]}</span>
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         </div>
                     )
                 )}
 
                 {/* Chat Area */}
-                <div className={`bg-[#1a2332] backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-dental-bg shadow-none" : "min-h-[500px]"}`}>
+                <div className={`bg-skin-surface backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-skin-bg shadow-none" : "min-h-[500px]"}`}>
                     {/* Safety Badge (logged in only) */}
                     {props.isLoggedIn && <SafetyBadge />}
 
                     {/* Turn Counter (로그인 전만 표시) */}
                     {!props.isLoggedIn && (
                         <div className="flex justify-center">
-                            <span className="px-4 py-1.5 text-xs text-dental-subtext bg-[#0d1420] rounded-full border border-white/10">
+                            <span className="px-4 py-1.5 text-xs text-skin-subtext bg-skin-bg rounded-full border border-white/10">
                                 대화 {turnCount}/5 {turnCount >= 5 && "· 로그인하면 계속 상담 가능"}
                             </span>
                         </div>
@@ -430,35 +388,29 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             key={idx}
                             className={`flex items-start gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                         >
-                            {/* Avatar */}
                             <div
                                 className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-md overflow-hidden border-2 ${msg.role === "ai"
-                                    ? "border-dental-primary bg-dental-bg"
-                                    : "border-dental-accent bg-dental-bg"
+                                    ? "border-skin-primary bg-skin-bg"
+                                    : "border-skin-accent bg-skin-bg"
                                     }`}
                             >
                                 {msg.role === "ai" ? (
-                                    <img
-                                        src="/doctor-avatar.jpg"
-                                        alt="Doctor"
-                                        className="w-full h-full object-cover"
-                                    />
+                                    <span className="text-2xl">✨</span>
                                 ) : (
-                                    <div className="w-full h-full bg-dental-accent flex items-center justify-center text-white">
+                                    <div className="w-full h-full bg-skin-accent flex items-center justify-center text-white">
                                         <User size={20} />
                                     </div>
                                 )}
                             </div>
 
-                            {/* Bubble */}
                             <div className="flex flex-col gap-1 max-w-[80%]">
-                                <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-dental-subtext" : "text-left text-dental-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "이생각 구강 케어" : "이생각 건강가이드") : "나"}
+                                <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "리원피부과 AI" : "리원 스킨케어 가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
-                                        ? "bg-[#1a2332] text-white border border-white/10 rounded-tl-none"
-                                        : "bg-dental-primary text-white rounded-tr-none shadow-md"
+                                        ? "bg-skin-surface text-white border border-white/10 rounded-tl-none"
+                                        : "bg-skin-primary text-white rounded-tr-none shadow-md"
                                         }`}
                                 >
                                     {msg.content}
@@ -468,18 +420,14 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     ))}
                     {isLoading && (
                         <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-full border-2 border-dental-primary bg-dental-bg flex items-center justify-center shadow-md overflow-hidden flex-shrink-0">
-                                <img
-                                    src="/doctor-avatar.jpg"
-                                    alt="Doctor"
-                                    className="w-full h-full object-cover"
-                                />
+                            <div className="w-12 h-12 rounded-full border-2 border-skin-primary bg-skin-bg flex items-center justify-center shadow-md">
+                                <span className="text-2xl">✨</span>
                             </div>
-                            <div className="bg-[#1a2332] px-6 py-4 rounded-2xl rounded-tl-none border border-white/10 shadow-sm">
+                            <div className="bg-skin-surface px-6 py-4 rounded-2xl rounded-tl-none border border-white/10 shadow-sm">
                                 <div className="flex gap-1.5">
-                                    <span className="w-2 h-2 bg-dental-primary/50 rounded-full animate-bounce"></span>
-                                    <span className="w-2 h-2 bg-dental-primary/50 rounded-full animate-bounce delay-100"></span>
-                                    <span className="w-2 h-2 bg-dental-primary/50 rounded-full animate-bounce delay-200"></span>
+                                    <span className="w-2 h-2 bg-skin-primary/50 rounded-full animate-bounce"></span>
+                                    <span className="w-2 h-2 bg-skin-primary/50 rounded-full animate-bounce delay-100"></span>
+                                    <span className="w-2 h-2 bg-skin-primary/50 rounded-full animate-bounce delay-200"></span>
                                 </div>
                             </div>
                         </div>
@@ -489,28 +437,28 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             </main>
 
             {/* Input Area */}
-            <div className={`${props.isEmbedded ? "relative bg-dental-bg border-t border-white/10" : "fixed bottom-0 left-0 right-0 bg-dental-bg/90 backdrop-blur-xl border-t border-white/10"} p-4 z-40`}>
+            <div className={`${props.isEmbedded ? "relative bg-skin-bg border-t border-white/10" : "fixed bottom-0 left-0 right-0 bg-skin-bg/90 backdrop-blur-xl border-t border-white/10"} p-4 z-40`}>
                 <div className={`${props.isEmbedded ? "w-full" : "max-w-4xl mx-auto"} relative`}>
-                    <form onSubmit={handleSubmit} className="relative bg-[#1a2332] rounded-full shadow-xl border border-white/10 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
+                    <form onSubmit={handleSubmit} className="relative bg-skin-surface rounded-full shadow-xl border border-white/10 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="증상이나 궁금한 점을 입력해주세요..."
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-dental-subtext/50 text-base"
+                            placeholder="피부 고민이나 궁금한 점을 입력해주세요..."
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-skin-subtext/50 text-base"
                             disabled={!props.isLoggedIn && turnCount >= 5}
                         />
                         <button
                             type="button"
                             onClick={handleImageClick}
-                            className="p-3 text-dental-subtext hover:text-dental-primary transition-colors hover:bg-white/10 rounded-full"
+                            className="p-3 text-skin-subtext hover:text-skin-primary transition-colors hover:bg-white/10 rounded-full"
                         >
                             <Paperclip size={20} />
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !input.trim() || (!props.isLoggedIn && turnCount >= 5)}
-                            className="p-3 bg-dental-primary text-white rounded-full hover:bg-dental-accent transition-all disabled:opacity-50 disabled:hover:bg-dental-primary ml-2 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                            className="p-3 bg-skin-primary text-white rounded-full hover:bg-skin-accent transition-all disabled:opacity-50 disabled:hover:bg-skin-primary ml-2 shadow-md hover:shadow-lg hover:-translate-y-0.5"
                         >
                             <ArrowUp size={20} />
                         </button>
@@ -518,8 +466,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     {!props.isLoggedIn && turnCount >= 5 && (
                         <div className="mt-2 text-center">
                             <button
-                                onClick={() => setShowLoginModal(true)}
-                                className="text-sm text-dental-primary font-medium hover:underline"
+                                onClick={() => { track('login_cta_click'); setShowLoginModal(true); }}
+                                className="text-sm text-skin-primary font-medium hover:underline"
                             >
                                 상담을 계속하시려면 로그인이 필요합니다
                             </button>
@@ -532,27 +480,27 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             {showLoginModal && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
                     <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-8 text-center transform transition-all scale-100 border border-white/20">
-                        <div className="w-16 h-16 bg-traditional-bg rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-                            <User className="w-8 h-8 text-traditional-primary" />
+                        <div className="w-16 h-16 bg-skin-bg rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                            <span className="text-3xl">✨</span>
                         </div>
-                        <h3 className="text-xl font-bold text-traditional-text mb-3 font-serif">
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 font-serif">
                             {loginModalContent.title}
                         </h3>
                         <p
-                            className="text-traditional-subtext text-sm mb-8 leading-relaxed"
+                            className="text-gray-600 text-sm mb-8 leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: loginModalContent.desc }}
                         />
                         <div className="flex flex-col gap-3">
                             <Link
                                 href="/login"
-                                onClick={() => track('f1_chat_login_click')}
-                                className="w-full py-3.5 bg-traditional-primary text-white rounded-xl font-bold hover:bg-traditional-accent transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center"
+                                onClick={() => track('login_cta_click')}
+                                className="w-full py-3.5 bg-skin-primary text-white rounded-xl font-bold hover:bg-skin-accent transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center"
                             >
                                 로그인하고 계속하기
                             </Link>
                             <button
                                 onClick={() => setShowLoginModal(false)}
-                                className="w-full py-3.5 bg-traditional-bg text-traditional-subtext rounded-xl font-medium hover:bg-traditional-muted transition-colors"
+                                className="w-full py-3.5 bg-gray-100 text-gray-600 rounded-xl font-medium hover:bg-gray-200 transition-colors"
                             >
                                 나중에 하기
                             </button>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Star, Clock, AlertCircle, RefreshCw, ArrowRight } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
 
@@ -19,7 +19,19 @@ interface Clinic {
 }
 
 // 검색 상태
-type SearchState = "idle" | "loading" | "success" | "error" | "empty";
+type SearchState = "idle" | "loading" | "success" | "error" | "empty" | "auto-expanded";
+
+// 서울 지역 목록
+const SEOUL_REGIONS = [
+    "강남구", "강동구", "강북구", "강서구", "관악구",
+    "광진구", "구로구", "금천구", "노원구", "도봉구",
+    "동대문구", "동작구", "마포구", "서대문구", "서초구",
+    "성동구", "성북구", "송파구", "양천구", "영등포구",
+    "용산구", "은평구", "종로구", "중구", "중랑구"
+];
+
+// 피부과 검색 키워드
+const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
 // 오늘 요일 계산 (1=월 ~ 7=일)
 function getTodayQt(): string {
@@ -27,13 +39,16 @@ function getTodayQt(): string {
     return day === 0 ? "7" : String(day);
 }
 
-// 공휴일 판별 (간단한 버전 - 추후 API로 대체 가능)
+// 공휴일 판별
 function isHoliday(): boolean {
-    // TODO: 한국 공휴일 API 연동 또는 정적 데이터 활용
     return false;
 }
 
 export default function ClinicSearchModule() {
+    // 지역 선택
+    const [selectedCity, setSelectedCity] = useState("서울");
+    const [selectedRegion, setSelectedRegion] = useState("강남구");
+
     // 토글 상태
     const [todayOpen, setTodayOpen] = useState(true);
     const [nightOpen, setNightOpen] = useState(false);
@@ -43,28 +58,30 @@ export default function ClinicSearchModule() {
     const [searchState, setSearchState] = useState<SearchState>("idle");
     const [clinics, setClinics] = useState<Clinic[]>([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [autoExpanded, setAutoExpanded] = useState(false);
 
     // 로그인 모달 상태
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     // 검색 실행
-    const handleSearch = useCallback(async () => {
+    const handleSearch = useCallback(async (expandToCity: boolean = false) => {
         setSearchState("loading");
         setErrorMessage("");
+        setAutoExpanded(false);
 
         try {
-            // 요일 결정
             let qt = getTodayQt();
             if (holidayOpen) {
-                qt = "8"; // 공휴일
+                qt = "8";
             }
 
-            // 먼저 넓은 범위에서 검색 (경기도 전체, QT 없이)
+            // 키워드 조합 (피부과 관련)
+            const qn = "피부과";
+
             const params = new URLSearchParams({
-                q0: "경기도",
-                // q1 제거 - 경기도 전체로 검색
-                // qt 제거 - 요일 필터 없이 전체 검색
-                qn: "치과",
+                q0: selectedCity,
+                ...(expandToCity ? {} : { q1: selectedRegion }),
+                qn,
             });
 
             const res = await fetch(`/api/clinics/search?${params.toString()}`);
@@ -81,15 +98,30 @@ export default function ClinicSearchModule() {
 
             let results: Clinic[] = data.clinics || [];
 
+            // 피부과 관련 키워드 필터
+            results = results.filter((c) =>
+                SKIN_KEYWORDS.some(kw => c.name.toLowerCase().includes(kw.toLowerCase()))
+            );
+
             // 야간 진료 필터
             if (nightOpen) {
                 results = results.filter((c) => c.night);
             }
 
             if (results.length === 0) {
+                if (!expandToCity && !autoExpanded) {
+                    // 자동으로 서울 전체 확장 재검색
+                    setAutoExpanded(true);
+                    handleSearch(true);
+                    return;
+                }
                 setSearchState("empty");
             } else {
-                setSearchState("success");
+                if (expandToCity) {
+                    setSearchState("auto-expanded");
+                } else {
+                    setSearchState("success");
+                }
             }
 
             setClinics(results);
@@ -102,7 +134,7 @@ export default function ClinicSearchModule() {
             );
             setSearchState("error");
         }
-    }, [holidayOpen, nightOpen]);
+    }, [holidayOpen, nightOpen, selectedCity, selectedRegion, autoExpanded]);
 
     // 상담 연결 클릭
     const handleConnect = () => {
@@ -128,8 +160,8 @@ export default function ClinicSearchModule() {
             aria-pressed={active}
             aria-label={ariaLabel}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${active
-                ? "bg-dental-primary text-white shadow-lg shadow-dental-primary/30"
-                : "bg-white/10 text-dental-subtext hover:bg-white/20 border border-white/10"
+                ? "bg-skin-primary text-white shadow-lg shadow-skin-primary/30"
+                : "bg-white/10 text-skin-subtext hover:bg-white/20 border border-white/10"
                 }`}
         >
             {icon}
@@ -141,6 +173,33 @@ export default function ClinicSearchModule() {
         <>
             {/* 조회 모듈 */}
             <div className="w-full max-w-2xl mx-auto space-y-6">
+                {/* 지역 선택 */}
+                <div className="flex justify-center gap-3">
+                    <div className="relative">
+                        <select
+                            value={selectedCity}
+                            onChange={(e) => setSelectedCity(e.target.value)}
+                            className="appearance-none bg-white/10 border border-white/20 rounded-full px-4 py-2.5 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                        >
+                            <option value="서울">서울</option>
+                            <option value="경기도">경기도</option>
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-subtext pointer-events-none" />
+                    </div>
+                    <div className="relative">
+                        <select
+                            value={selectedRegion}
+                            onChange={(e) => setSelectedRegion(e.target.value)}
+                            className="appearance-none bg-white/10 border border-white/20 rounded-full px-4 py-2.5 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                        >
+                            {SEOUL_REGIONS.map((region) => (
+                                <option key={region} value={region}>{region}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-subtext pointer-events-none" />
+                    </div>
+                </div>
+
                 {/* 토글 그룹 */}
                 <div className="flex flex-wrap justify-center gap-3">
                     <Toggle
@@ -168,9 +227,9 @@ export default function ClinicSearchModule() {
 
                 {/* 검색 버튼 */}
                 <button
-                    onClick={handleSearch}
+                    onClick={() => handleSearch(false)}
                     disabled={searchState === "loading"}
-                    className="group relative w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-dental-primary to-dental-accent text-white text-lg font-bold rounded-full overflow-hidden shadow-xl shadow-dental-primary/40 hover:shadow-2xl hover:shadow-dental-primary/50 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed mx-auto block"
+                    className="group relative w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-skin-primary to-skin-accent text-white text-lg font-bold rounded-full overflow-hidden shadow-xl shadow-skin-primary/40 hover:shadow-2xl hover:shadow-skin-primary/50 transition-all duration-300 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed mx-auto block"
                 >
                     <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                     <span className="relative flex items-center gap-2">
@@ -182,7 +241,7 @@ export default function ClinicSearchModule() {
                         ) : (
                             <>
                                 <Search className="w-5 h-5" />
-                                오늘 운영 치과 확인
+                                오늘 운영 피부과 확인
                             </>
                         )}
                     </span>
@@ -191,10 +250,8 @@ export default function ClinicSearchModule() {
                 {/* 검색 결과 영역 */}
                 <div
                     aria-live="polite"
-                    className={`transition-all duration-500 ${searchState !== "idle" ? "opacity-100" : "opacity-0"
-                        }`}
+                    className={`transition-all duration-500 ${searchState !== "idle" ? "opacity-100" : "opacity-0"}`}
                 >
-                    {/* 결과 컨테이너 */}
                     {searchState !== "idle" && (
                         <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-4 mt-4 max-h-[60vh] overflow-y-auto">
                             {/* 초기화 버튼 */}
@@ -204,15 +261,23 @@ export default function ClinicSearchModule() {
                                         setSearchState("idle");
                                         setClinics([]);
                                     }}
-                                    className="text-xs text-dental-subtext hover:text-white transition-colors flex items-center gap-1"
+                                    className="text-xs text-skin-subtext hover:text-white transition-colors flex items-center gap-1"
                                 >
                                     ✕ 닫기
                                 </button>
                             </div>
+
+                            {/* 자동 확장 안내 */}
+                            {searchState === "auto-expanded" && (
+                                <div className="mb-4 px-3 py-2 bg-skin-secondary/20 text-skin-secondary rounded-lg text-sm">
+                                    📍 {selectedRegion}에 결과가 없어 {selectedCity} 전체로 확장하여 검색했습니다.
+                                </div>
+                            )}
+
                             {/* 로딩 */}
                             {searchState === "loading" && (
                                 <div className="flex items-center justify-center py-12">
-                                    <Loader2 className="w-8 h-8 animate-spin text-dental-primary" />
+                                    <Loader2 className="w-8 h-8 animate-spin text-skin-primary" />
                                 </div>
                             )}
 
@@ -220,10 +285,10 @@ export default function ClinicSearchModule() {
                             {searchState === "error" && (
                                 <div className="text-center py-8 space-y-4">
                                     <AlertCircle className="w-12 h-12 text-red-400 mx-auto" />
-                                    <p className="text-dental-subtext">{errorMessage}</p>
+                                    <p className="text-skin-subtext">{errorMessage}</p>
                                     <button
-                                        onClick={handleSearch}
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-dental-primary text-white rounded-lg hover:bg-dental-accent transition-colors"
+                                        onClick={() => handleSearch(false)}
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-skin-primary text-white rounded-lg hover:bg-skin-accent transition-colors"
                                     >
                                         <RefreshCw size={16} />
                                         다시 시도
@@ -234,44 +299,40 @@ export default function ClinicSearchModule() {
                             {/* 빈 결과 */}
                             {searchState === "empty" && (
                                 <div className="text-center py-8">
-                                    <p className="text-dental-subtext">
+                                    <p className="text-skin-subtext">
                                         선택한 조건에 맞는 결과가 없습니다.
                                         <br />
-                                        조건을 바꿔 다시 조회해 주세요.
+                                        다른 지역을 선택해보세요.
                                     </p>
                                 </div>
                             )}
 
                             {/* 성공 - 결과 리스트 */}
-                            {searchState === "success" && clinics.length > 0 && (
+                            {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 평촌이생각치과 추천 카드 (상단 고정) */}
-                                    <div className="relative bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-xl p-4 border border-dental-primary/30">
-                                        {/* 조건 일치 라벨 */}
-                                        <span className="absolute -top-2 left-4 px-2 py-0.5 bg-dental-primary text-white text-xs font-bold rounded-full">
-                                            조건 일치
+                                    {/* 리원피부과 추천 카드 (상단 고정) */}
+                                    <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
+                                        <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
+                                            추천 피부과
                                         </span>
 
                                         <div className="pt-2">
                                             <div className="flex items-start justify-between gap-4">
                                                 <div className="flex-1">
                                                     <h3 className="text-lg font-bold text-white">
-                                                        평촌이생각치과
+                                                        리원피부과
                                                     </h3>
                                                     <div className="flex flex-wrap gap-2 mt-2">
-                                                        <span className="px-2 py-0.5 bg-dental-secondary/30 text-dental-secondary text-xs font-medium rounded-full">
-                                                            365일 진료
+                                                        <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
+                                                            프리미엄 케어
                                                         </span>
-                                                        <span className="px-2 py-0.5 bg-amber-500/30 text-amber-400 text-xs font-medium rounded-full">
-                                                            평일 매일 야간진료
+                                                        <span className="px-2 py-0.5 bg-skin-primary/30 text-skin-primary text-xs font-medium rounded-full">
+                                                            피부미용 전문
                                                         </span>
                                                     </div>
-                                                    <p className="text-dental-subtext/70 text-xs mt-1">
-                                                        선택한 조건과 위치 기준으로 정렬됩니다.
-                                                    </p>
-                                                    <p className="text-dental-subtext text-sm mt-2 flex items-center gap-1">
+                                                    <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
                                                         <MapPin size={14} />
-                                                        경기 안양시 동안구 시민대로 312
+                                                        서울 강남구 (상세주소 확인 필요)
                                                     </p>
                                                 </div>
                                             </div>
@@ -279,12 +340,12 @@ export default function ClinicSearchModule() {
                                             <div className="flex gap-2 mt-4">
                                                 <button
                                                     onClick={handleConnect}
-                                                    className="flex-1 py-2.5 bg-dental-primary text-white rounded-lg font-medium hover:bg-dental-accent transition-colors text-sm"
+                                                    className="flex-1 py-2.5 bg-skin-primary text-white rounded-lg font-medium hover:bg-skin-accent transition-colors text-sm"
                                                 >
-                                                    운영정보 보기
+                                                    상담 예약
                                                 </button>
                                                 <a
-                                                    href="tel:031-123-4567"
+                                                    href="tel:02-000-0000"
                                                     className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
                                                 >
                                                     <Phone size={16} />
@@ -295,13 +356,13 @@ export default function ClinicSearchModule() {
                                     </div>
 
                                     {/* 변동 고지 문구 */}
-                                    <p className="text-xs text-dental-subtext/70 text-center bg-white/5 rounded-lg py-2">
+                                    <p className="text-xs text-skin-subtext/70 text-center bg-white/5 rounded-lg py-2">
                                         ⚠️ 운영정보는 변동될 수 있어요. 방문 전 확인이 필요합니다.
                                     </p>
 
                                     {/* 검색 결과 목록 */}
                                     <div className="space-y-2">
-                                        <h4 className="text-sm font-medium text-dental-subtext px-1">
+                                        <h4 className="text-sm font-medium text-skin-subtext px-1">
                                             검색 결과 ({clinics.length}개)
                                         </h4>
                                         {clinics.slice(0, 10).map((clinic, idx) => (
@@ -321,12 +382,12 @@ export default function ClinicSearchModule() {
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <p className="text-dental-subtext text-xs mt-1 truncate flex items-center gap-1">
+                                                        <p className="text-skin-subtext text-xs mt-1 truncate flex items-center gap-1">
                                                             <MapPin size={12} />
                                                             {clinic.addr}
                                                         </p>
                                                         {clinic.closeTime && (
-                                                            <p className="text-dental-subtext/60 text-xs mt-1 flex items-center gap-1">
+                                                            <p className="text-skin-subtext/60 text-xs mt-1 flex items-center gap-1">
                                                                 <Clock size={12} />
                                                                 종료 {clinic.closeTime.substring(0, 2)}:{clinic.closeTime.substring(2, 4)}
                                                             </p>
@@ -338,7 +399,7 @@ export default function ClinicSearchModule() {
                                                             className="flex-shrink-0 p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
                                                             aria-label={`${clinic.name} 전화하기`}
                                                         >
-                                                            <Phone size={16} className="text-dental-subtext" />
+                                                            <Phone size={16} className="text-skin-subtext" />
                                                         </a>
                                                     )}
                                                 </div>
@@ -347,7 +408,7 @@ export default function ClinicSearchModule() {
                                     </div>
 
                                     {clinics.length > 10 && (
-                                        <p className="text-center text-dental-subtext text-sm">
+                                        <p className="text-center text-skin-subtext text-sm">
                                             외 {clinics.length - 10}개 결과가 더 있습니다
                                         </p>
                                     )}
@@ -357,17 +418,17 @@ export default function ClinicSearchModule() {
                     )}
                 </div>
 
-                {/* CSI 체크 CTA - 항상 하단에 표시 */}
+                {/* 스킨 체크 CTA */}
                 <div className="mt-6 pt-6 border-t border-white/10">
-                    <p className="text-dental-subtext text-sm mb-3 font-medium text-center">
-                        🦷 구강 습관이 궁금하다면?
+                    <p className="text-skin-subtext text-sm mb-3 font-medium text-center">
+                        ✨ 피부 습관이 궁금하다면?
                     </p>
                     <Link
-                        href="/healthcare/chat?topic=stain-csi"
-                        className="group relative w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-sm text-dental-text border border-white/20 text-base font-medium rounded-full hover:bg-dental-primary hover:text-white hover:border-dental-primary transition-all duration-300 mx-auto block"
+                        href="/healthcare/chat?topic=glow-booster"
+                        className="group relative w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-sm text-skin-text border border-white/20 text-base font-medium rounded-full hover:bg-skin-primary hover:text-white hover:border-skin-primary transition-all duration-300 mx-auto block"
                     >
                         <span className="relative flex items-center gap-2">
-                            착색 CSI 체크 시작 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            D-7 광채 부스터 시작 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </span>
                     </Link>
                 </div>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import PrivacyPolicyModal from "@/components/common/PrivacyPolicyModal";
-import DentalLogo from "@/components/common/DentalLogo";
 
 export default function Footer() {
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -16,28 +15,28 @@ export default function Footer() {
 
     return (
         <>
-            <footer className="py-16 bg-dental-bg border-t border-white/10 relative z-10">
+            <footer className="py-16 bg-skin-bg border-t border-white/10 relative z-10">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start gap-12">
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                            <DentalLogo size={32} />
-                            <span className="text-xl font-bold text-dental-text font-serif">평촌이생각치과</span>
+                            <span className="text-2xl">✨</span>
+                            <span className="text-xl font-bold text-skin-text font-serif">리원피부과</span>
                         </div>
-                        <div className="text-sm text-dental-subtext space-y-2 font-light">
-                            <p>평촌이생각치과 ㅣ 대표원장 김기영</p>
-                            <p>경기도 안양시 동안구 평촌동</p>
-                            <p className="mt-2 text-xs text-dental-subtext/60">031-XXX-XXXX | 9시부터 18시까지 근무 (일요일 휴무)</p>
+                        <div className="text-sm text-skin-subtext space-y-2 font-light">
+                            <p>리원피부과의원 ㅣ 서울 강남구 도산대로 327 SGF 청담타워 2층 3층</p>
+                            <p>Tel: 02.543.0210 ㅣ Fax: 02.545.0210</p>
+                            <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: 227-59-00170</p>
                         </div>
                     </div>
 
-                    <div className="flex gap-16 text-sm text-dental-subtext">
+                    <div className="flex gap-16 text-sm text-skin-subtext">
                         <div className="space-y-4">
-                            <h4 className="font-bold text-dental-text text-base">지원</h4>
+                            <h4 className="font-bold text-skin-text text-base">지원</h4>
                             <ul className="space-y-3">
                                 <li>
                                     <button
                                         onClick={() => openModal('terms')}
-                                        className="hover:text-dental-primary transition-colors"
+                                        className="hover:text-skin-primary transition-colors"
                                     >
                                         이용약관
                                     </button>
@@ -45,13 +44,13 @@ export default function Footer() {
                                 <li>
                                     <button
                                         onClick={() => openModal('privacy')}
-                                        className="hover:text-dental-primary transition-colors"
+                                        className="hover:text-skin-primary transition-colors"
                                     >
                                         개인정보처리방침
                                     </button>
                                 </li>
                                 <li>
-                                    <Link href="/healthcare/chat" className="hover:text-dental-primary transition-colors">
+                                    <Link href="/healthcare/chat?topic=skin-concierge" className="hover:text-skin-primary transition-colors">
                                         문의하기
                                     </Link>
                                 </li>
@@ -59,8 +58,8 @@ export default function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-xs text-dental-subtext/60 font-light">
-                    <p>© 2025 평촌이생각치과. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
+                <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-xs text-skin-subtext/60 font-light">
+                    <p>© 2025 리원피부과. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
                 </div>
             </footer>
 

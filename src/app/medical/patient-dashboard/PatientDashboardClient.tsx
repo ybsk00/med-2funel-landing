@@ -2,6 +2,7 @@
 
 import { useState, Suspense, useEffect } from "react";
 import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload, MessageSquare, MapPin, Users, FileText } from "lucide-react";
+import Image from "next/image";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
@@ -78,7 +79,7 @@ export default function PatientDashboardClient() {
                     data = {
                         time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
                         status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
-                        complaint: appointmentData.notes || '평촌이생각치과 진료'
+                        complaint: appointmentData.notes || '리원피부과의원 진료'
                     };
                 }
             }
@@ -153,7 +154,7 @@ export default function PatientDashboardClient() {
     };
 
     return (
-        <div className="min-h-screen bg-dental-bg font-sans selection:bg-dental-accent selection:text-white">
+        <div className="min-h-screen bg-skin-bg font-sans selection:bg-skin-accent selection:text-white">
             <PatientHeader />
 
             <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
@@ -236,15 +237,16 @@ export default function PatientDashboardClient() {
 
                 {/* Video Section with Glassmorphism Quick Actions */}
                 <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
-                    <video
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="w-full h-56 md:h-72 object-cover"
-                    >
-                        <source src="/4.mp4" type="video/mp4" />
-                    </video>
+                    {/* BLINDS SHADOW Image Banner */}
+                    <div className="relative w-full h-56 md:h-72">
+                        <Image
+                            src="/BLINDS SHADOW.png"
+                            alt="리원피부과 프리미엄 시술"
+                            fill
+                            className="object-cover object-[center_25%]"
+                            priority
+                        />
+                    </div>
 
                     {/* Light Gradient Overlay - More transparent */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />

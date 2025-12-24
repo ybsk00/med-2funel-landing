@@ -37,7 +37,6 @@ function detectTabHighlight(text: string): ('review' | 'map')[] {
 
 // 질문 카운트 함수 (AI 응답에서 질문 감지)
 function countQuestionInResponse(text: string): boolean {
-    // 질문 패턴: ~습니까?, ~하시겠습니까?, ~일까요?, ~인가요?
     const questionPatterns = [
         /[가-힣]+습니까\?/,
         /[가-힣]+시겠습니까\?/,
@@ -86,13 +85,13 @@ export async function POST(req: NextRequest) {
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '평촌이생각치과'}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '리원피부과'}: ${msg.content}`).join("\n")}
 환자: ${message}
-평촌이생각치과:
+리원피부과:
 `;
 
         // 4. Generate Response
-        let responseText = await generateText(fullPrompt, "medical");
+        const responseText = await generateText(fullPrompt, "medical");
 
         // 5. Parse action tokens
         const { cleanText, action } = parseActionToken(responseText);
@@ -141,4 +140,3 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '평촌이생각
         );
     }
 }
-

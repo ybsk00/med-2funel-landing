@@ -1,5 +1,8 @@
 "use client";
 
+// 리원피부과 로고 (피부과 테마)
+// 파일명 유지 (DentalLogo) - 기존 참조 호환성
+
 export default function DentalLogo({ className = "", size = 40 }: { className?: string; size?: number }) {
     return (
         <svg
@@ -10,40 +13,35 @@ export default function DentalLogo({ className = "", size = 40 }: { className?: 
             className={className}
         >
             <defs>
-                <linearGradient id="toothGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#3B82F6" />
-                    <stop offset="100%" stopColor="#06B6D4" />
+                <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#E91E8C" />
+                    <stop offset="100%" stopColor="#C026D3" />
                 </linearGradient>
-                <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0A1628" />
-                    <stop offset="100%" stopColor="#0F2040" />
+                <linearGradient id="bgGradSkin" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#0A1A2A" />
+                    <stop offset="100%" stopColor="#0F2535" />
                 </linearGradient>
             </defs>
 
             {/* Background Circle */}
-            <circle cx="50" cy="50" r="48" fill="url(#bgGrad)" stroke="#1E3A5F" strokeWidth="2" />
+            <circle cx="50" cy="50" r="48" fill="url(#bgGradSkin)" stroke="#1E3A5F" strokeWidth="2" />
 
-            {/* Stylized Tooth */}
+            {/* Sparkle Star (피부과 테마) */}
             <path
-                d="M50 18 
-           C38 18 30 28 30 40 
-           C30 52 35 58 37 70 
-           C38 78 42 82 45 82 
-           C48 82 49 78 50 72 
-           C51 78 52 82 55 82 
-           C58 82 62 78 63 70 
-           C65 58 70 52 70 40 
-           C70 28 62 18 50 18 Z"
-                fill="url(#toothGrad)"
+                d="M50 20 
+           L54 40 L74 44 L54 48 L50 68 
+           L46 48 L26 44 L46 40 Z"
+                fill="url(#skinGrad)"
                 opacity="0.95"
             />
 
-            {/* Highlight */}
-            <ellipse cx="42" cy="35" rx="6" ry="8" fill="white" opacity="0.3" />
+            {/* Inner sparkle */}
+            <circle cx="50" cy="44" r="8" fill="#E91E8C" opacity="0.6" />
 
-            {/* Sparkle accent */}
-            <circle cx="62" cy="28" r="3" fill="#60A5FA" opacity="0.8" />
-            <circle cx="68" cy="34" r="2" fill="#60A5FA" opacity="0.5" />
+            {/* Highlight accents */}
+            <circle cx="62" cy="32" r="3" fill="#14B8A6" opacity="0.8" />
+            <circle cx="38" cy="56" r="2" fill="#14B8A6" opacity="0.5" />
+            <circle cx="68" cy="50" r="2" fill="#C026D3" opacity="0.6" />
         </svg>
     );
 }

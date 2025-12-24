@@ -32,7 +32,7 @@ const config: Config = {
           accent: "#3B82F6", // Blue
           muted: "#F3F4F6",
         },
-        // Dental Theme (Deep Navy Dark Mode)
+        // Dental Theme (Deep Navy Dark Mode) - Legacy
         dental: {
           bg: "#0A1628",           // 딥네이비 배경
           bgSecondary: "#0F2040",  // 보조 배경
@@ -44,6 +44,20 @@ const config: Config = {
           accent: "#60A5FA",       // 밝은 블루
           glow: "#3B82F6",         // 글로우 효과
           muted: "#1E3A5F",        // 뮤트 컬러
+        },
+        // Skin Theme (Premium Dermatology Clinic)
+        skin: {
+          bg: "#0A1A2A",           // 다크 틸/네이비 배경
+          bgSecondary: "#0F2535",  // 보조 배경
+          surface: "#152A3D",      // 표면 색상
+          text: "#F8F9FA",         // 밝은 텍스트
+          subtext: "#94A3B8",      // 보조 텍스트
+          primary: "#E91E8C",      // 핫핑크/마젠타
+          secondary: "#14B8A6",    // 틸 악센트
+          accent: "#C026D3",       // 퍼플 악센트
+          glow: "#E91E8C",         // 핑크 글로우
+          muted: "#1E3A5F",        // 뮤트 컬러
+          tint: "rgba(20, 184, 166, 0.04)", // 컬러 틴트 (색감 일관성)
         },
       },
 

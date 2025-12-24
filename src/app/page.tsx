@@ -1,31 +1,70 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, Coffee, Thermometer, Activity, Smile, Sparkles, CheckCircle, BarChart2, Calendar } from "lucide-react";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
-import ThreeBackground from "@/components/common/ThreeBackground";
-import DentalLogo from "@/components/common/DentalLogo";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
+import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic } from "@/lib/constants/topics";
+
+// 히어로 롤링 이미지 (A→B→C→D→E 순서)
+const HERO_IMAGES = [
+  "/NEON RIM.png",        // A: 네온 림라이트
+  "/GLASS PRISM.png",     // B: 프리즘/라이트스트릭
+  "/WATER CAUSTICS.png",  // C: 워터 라이트
+  "/ROSE-GOLD BLOOM.png", // D: 로즈골드 블룸
+  "/SILHOUETTE RIM.png",  // E: 로우키 실루엣
+];
+
+// 모듈 아이콘/컬러 매핑
+const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradient: string }> = {
+  'glow-booster': { icon: Sparkles, color: 'pink', gradient: 'from-pink-500/20 to-pink-600/20' },
+  'makeup-killer': { icon: Droplet, color: 'rose', gradient: 'from-rose-500/20 to-rose-600/20' },
+  'barrier-reset': { icon: Shield, color: 'teal', gradient: 'from-teal-500/20 to-teal-600/20' },
+  'lifting-check': { icon: ArrowUpRight, color: 'purple', gradient: 'from-purple-500/20 to-purple-600/20' },
+  'skin-concierge': { icon: Heart, color: 'fuchsia', gradient: 'from-fuchsia-500/20 to-fuchsia-600/20' },
+};
 
 export default function LandingPage() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlay, setIsAutoPlay] = useState(false);
+
+  // 2초 후 자동 롤링 시작 (LCP 최적화)
+  useEffect(() => {
+    const startTimer = setTimeout(() => {
+      setIsAutoPlay(true);
+    }, 2000);
+    return () => clearTimeout(startTimer);
+  }, []);
+
+  // 자동 롤링
+  useEffect(() => {
+    if (!isAutoPlay) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isAutoPlay]);
+
   return (
     <TrackF1View>
-      <div className="min-h-screen bg-dental-bg text-dental-text font-sans selection:bg-dental-primary selection:text-white">
-        {/* 3D Background */}
-        <ThreeBackground className="pointer-events-none" />
+      <div className="min-h-screen bg-skin-bg text-skin-text font-sans selection:bg-skin-primary selection:text-white">
 
         {/* Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-dental-bg/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
-          <div className="flex items-center justify-between px-6 py-1 max-w-7xl mx-auto">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-skin-bg/80 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+          <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-              <DentalLogo size={36} />
-              <span className="text-xl font-bold text-dental-text">이생각 구강 케어</span>
+              <span className="text-2xl">✨</span>
+              <span className="text-xl font-bold text-skin-text">리원피부과</span>
             </Link>
-            <div className="hidden md:flex items-center gap-8 text-sm font-medium text-dental-subtext">
+            <div className="hidden md:flex items-center gap-8 text-sm font-medium text-skin-subtext">
               {/* Navigation links */}
             </div>
             <Link
               href="/login"
-              className="px-6 py-2.5 bg-dental-primary text-white text-sm font-medium rounded-full hover:bg-dental-accent hover:shadow-lg hover:shadow-dental-primary/30 hover:-translate-y-0.5 transition-all duration-300"
+              className="px-6 py-2.5 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:shadow-skin-primary/30 hover:-translate-y-0.5 transition-all duration-300"
             >
               로그인
             </Link>
@@ -33,51 +72,76 @@ export default function LandingPage() {
         </nav>
 
         {/* Hero Section */}
-        <header className="relative px-6 pt-32 pb-20 md:pt-48 md:pb-32 text-center overflow-hidden min-h-[90vh] flex flex-col justify-center items-center">
-          {/* Video Background */}
+        <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[90vh] flex flex-col justify-center">
+          {/* Rolling Images Background */}
           <div className="absolute inset-0 z-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover opacity-90"
-            >
-              <source src="/1.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-dental-bg/10 via-dental-bg/30 to-dental-bg/60"></div>
+            {HERO_IMAGES.map((src, idx) => (
+              <div
+                key={src}
+                className={`absolute inset-0 transition-opacity duration-500 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <Image
+                  src={src}
+                  alt={`Premium Skin Care ${idx + 1}`}
+                  fill
+                  className="object-cover"
+                  priority={idx === 0}
+                  sizes="100vw"
+                />
+              </div>
+            ))}
+            {/* Overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/50 via-transparent to-skin-bg/80" />
+            {/* Color Tint for consistency */}
+            <div className="absolute inset-0 bg-skin-secondary/5 mix-blend-overlay" />
           </div>
 
+          {/* Hero Content */}
           <div className="relative z-10 max-w-5xl mx-auto space-y-6 animate-fade-in">
-            {/* 새 타이틀 */}
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-dental-text drop-shadow-lg leading-tight">
-              지금 운영 중인 치과,<br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-dental-primary via-dental-secondary to-dental-accent">
-                바로 조회
-              </span>하세요
+            <p className="text-skin-secondary font-bold tracking-widest uppercase text-sm">
+              Premium Skin Care
+            </p>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight font-serif">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
+                리원피부과
+              </span>에서<br />
+              프리미엄 스킨케어를
             </h1>
 
-            <p className="text-base md:text-lg text-dental-subtext max-w-xl mx-auto leading-relaxed">
-              조회는 운영정보·위치 기반 안내이며,<br className="hidden md:block" />
-              체크 결과는 상담 준비용 참고 요약입니다. (진단/치료 아님)
+            <p className="text-base md:text-lg text-skin-subtext max-w-xl leading-relaxed">
+              지금 운영 중인 피부과를 조회하고,<br className="hidden md:block" />
+              나만의 피부 습관을 체크해보세요. (참고용)
             </p>
 
-            {/* 치과 조회 모듈 - 메인 CTA */}
+            {/* Clinic Search Module */}
             <div className="pt-6">
               <ClinicSearchModule />
             </div>
           </div>
+
+          {/* Slide Dots */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {HERO_IMAGES.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => { setCurrentSlide(idx); setIsAutoPlay(true); }}
+                className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? 'bg-skin-primary w-6' : 'bg-white/40 hover:bg-white/60'}`}
+                aria-label={`슬라이드 ${idx + 1}`}
+              />
+            ))}
+          </div>
         </header>
 
-        {/* Features Section - Dark Glassmorphism Cards */}
+        {/* Features Section */}
         <section className="relative py-20 px-6 overflow-hidden z-10">
           <div className="relative z-10 max-w-5xl mx-auto">
             <div className="text-center mb-12 space-y-3">
-              <h2 className="text-3xl md:text-4xl font-bold text-dental-text font-sans tracking-tight">
-                2분 구강 패턴 체크
+              <h2 className="text-3xl md:text-4xl font-bold text-skin-text font-sans tracking-tight">
+                2분 스킨 패턴 체크
               </h2>
-              <p className="text-dental-subtext max-w-lg mx-auto text-sm font-medium">
-                간단한 질문으로 구강 관리 습관을 점검하고, 요약을 받아보세요.
+              <p className="text-skin-subtext max-w-lg mx-auto text-sm font-medium">
+                간단한 질문으로 피부 관리 습관을 점검하고, 요약을 받아보세요.
               </p>
             </div>
 
@@ -86,45 +150,38 @@ export default function LandingPage() {
                 {
                   icon: <BarChart2 className="w-6 h-6" />,
                   title: "패턴 1장 요약",
-                  desc: "양치·식습관·구강 관리 흐름을 5문답으로 정리합니다.",
+                  desc: "스킨케어·수면·수분 습관을 5문답으로 정리합니다.",
                   label: "약 2분",
-                  labelColor: "bg-dental-muted"
+                  labelColor: "bg-skin-muted"
                 },
                 {
                   icon: <CheckCircle className="w-6 h-6" />,
                   title: "오늘부터 할 1가지",
                   desc: "현실적으로 가능한 '한 가지 조정'만 제안합니다.",
                   label: "실천 중심",
-                  labelColor: "bg-dental-primary"
+                  labelColor: "bg-skin-primary"
                 },
                 {
                   icon: <Calendar className="w-6 h-6" />,
-                  title: "요약 저장 & 변화 비교",
+                  title: "요약 저장 & 비교",
                   desc: "기록을 저장해 다음에 더 빠르게 이어서 확인합니다.",
                   label: "로그인 후",
-                  labelColor: "bg-dental-secondary"
+                  labelColor: "bg-skin-secondary"
                 }
               ].map((feature, idx) => (
                 <div
                   key={idx}
-                  className="group bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 hover:shadow-[0_0_30px_rgba(233,30,140,0.15)] transition-all duration-300 hover:-translate-y-1"
                 >
-                  {/* Icon */}
-                  <div className="w-10 h-10 bg-dental-surface rounded-xl flex items-center justify-center mb-4 border border-white/10">
-                    <div className="text-dental-accent">{feature.icon}</div>
+                  <div className="w-10 h-10 bg-skin-surface rounded-xl flex items-center justify-center mb-4 border border-white/10">
+                    <div className="text-skin-primary">{feature.icon}</div>
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-base font-bold text-dental-text mb-2">
+                  <h3 className="text-base font-bold text-skin-text mb-2">
                     {feature.title}
                   </h3>
-
-                  {/* Description */}
-                  <p className="text-dental-subtext text-sm leading-relaxed mb-4">
+                  <p className="text-skin-subtext text-sm leading-relaxed mb-4">
                     {feature.desc}
                   </p>
-
-                  {/* Bottom Label */}
                   <span className={`inline-flex items-center px-3 py-1 rounded-md text-[11px] font-semibold ${feature.labelColor} text-white`}>
                     {feature.label}
                   </span>
@@ -134,99 +191,49 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Modules Grid - Dental Health Check Modules */}
+        {/* Modules Grid */}
         <section className="relative py-32 overflow-hidden z-10">
-          {/* Video Background */}
-          <div className="absolute inset-0 z-0">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover opacity-80"
-            >
-              <source src="/2.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-dental-bg/20 via-dental-bg/40 to-dental-bg/60"></div>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-b from-skin-bg via-skin-bgSecondary to-skin-bg" />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <span className="text-dental-accent font-bold tracking-widest uppercase text-sm mb-2 block">Oral Health Check</span>
-              <h2 className="text-4xl md:text-5xl font-bold text-dental-text drop-shadow-lg font-serif">
-                내 구강 건강 체크(참고용)
+              <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">Skin Health Check</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-skin-text drop-shadow-lg font-serif">
+                내 피부 건강 체크<span className="text-skin-subtext text-2xl ml-2">(참고용)</span>
               </h2>
-              <p className="text-dental-subtext mt-4 max-w-2xl mx-auto">
+              <p className="text-skin-subtext mt-4 max-w-2xl mx-auto">
                 모듈을 선택해 2~3분 문답으로 패턴을 정리해보세요.<br />
                 결과는 요약으로 저장할 수 있습니다.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {/* Module 1: 착색 CSI */}
-              <Link href="/healthcare/chat?topic=stain-csi" className="group">
-                <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] flex flex-col items-center text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500/20 to-amber-600/20 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-amber-500/30 transition-all duration-300 border border-amber-500/30">
-                    <Coffee className="w-7 h-7 text-amber-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h3 className="text-lg font-bold text-dental-text mb-2 tracking-wide">착색 CSI</h3>
-                  <p className="text-xs text-dental-subtext leading-relaxed font-light">
-                    커피·담배 습관<br />착색 패턴 점검 (참고용)
-                  </p>
-                </div>
-              </Link>
+              {VALID_TOPICS.map((topic) => {
+                const config = MODULE_CONFIG[topic];
+                const IconComponent = config.icon;
+                const colorMap: Record<string, { border: string; shadow: string; text: string }> = {
+                  pink: { border: 'border-pink-500/30', shadow: 'group-hover:shadow-pink-500/30', text: 'text-pink-400' },
+                  rose: { border: 'border-rose-500/30', shadow: 'group-hover:shadow-rose-500/30', text: 'text-rose-400' },
+                  teal: { border: 'border-teal-500/30', shadow: 'group-hover:shadow-teal-500/30', text: 'text-teal-400' },
+                  purple: { border: 'border-purple-500/30', shadow: 'group-hover:shadow-purple-500/30', text: 'text-purple-400' },
+                  fuchsia: { border: 'border-fuchsia-500/30', shadow: 'group-hover:shadow-fuchsia-500/30', text: 'text-fuchsia-400' },
+                };
+                const colors = colorMap[config.color];
 
-              {/* Module 2: 시림 탐정 */}
-              <Link href="/healthcare/chat?topic=sensitivity" className="group">
-                <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] flex flex-col items-center text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-cyan-500/30 transition-all duration-300 border border-cyan-500/30">
-                    <Thermometer className="w-7 h-7 text-cyan-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h3 className="text-lg font-bold text-dental-text mb-2 tracking-wide">시림 탐정</h3>
-                  <p className="text-xs text-dental-subtext leading-relaxed font-light">
-                    찬물·단것 자극<br />트리거 패턴 체크 (참고용)
-                  </p>
-                </div>
-              </Link>
-
-              {/* Module 3: 잇몸 레이더 */}
-              <Link href="/healthcare/chat?topic=gum-radar" className="group">
-                <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] flex flex-col items-center text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-rose-500/20 to-rose-600/20 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-rose-500/30 transition-all duration-300 border border-rose-500/30">
-                    <Activity className="w-7 h-7 text-rose-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h3 className="text-lg font-bold text-dental-text mb-2 tracking-wide">잇몸 레이더</h3>
-                  <p className="text-xs text-dental-subtext leading-relaxed font-light">
-                    출혈·붓기·구취<br />위생 루틴 스캔 (참고용)
-                  </p>
-                </div>
-              </Link>
-
-              {/* Module 4: 스마일 밸런스 */}
-              <Link href="/healthcare/chat?topic=smile-balance" className="group">
-                <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] flex flex-col items-center text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-violet-500/20 to-violet-600/20 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-violet-500/30 transition-all duration-300 border border-violet-500/30">
-                    <Smile className="w-7 h-7 text-violet-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h3 className="text-lg font-bold text-dental-text mb-2 tracking-wide">스마일 밸런스</h3>
-                  <p className="text-xs text-dental-subtext leading-relaxed font-light">
-                    이갈이·입호흡<br />습관 게임 (참고용)
-                  </p>
-                </div>
-              </Link>
-
-              {/* Module 5: 임플란트 준비도 */}
-              <Link href="/healthcare/chat?topic=implant-ready" className="group">
-                <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-dental-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] flex flex-col items-center text-center">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-full flex items-center justify-center mb-6 shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300 border border-blue-500/30">
-                    <Sparkles className="w-7 h-7 text-blue-400 group-hover:scale-110 transition-transform" />
-                  </div>
-                  <h3 className="text-lg font-bold text-dental-text mb-2 tracking-wide">임플란트 준비도</h3>
-                  <p className="text-xs text-dental-subtext leading-relaxed font-light">
-                    상실 이후 루틴<br />준비 체크리스트 (참고용)
-                  </p>
-                </div>
-              </Link>
+                return (
+                  <Link key={topic} href={`/healthcare/chat?topic=${topic}`} className="group">
+                    <div className="h-full bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(233,30,140,0.2)] flex flex-col items-center text-center">
+                      <div className={`w-14 h-14 bg-gradient-to-br ${config.gradient} rounded-full flex items-center justify-center mb-6 shadow-lg ${colors.shadow} transition-all duration-300 ${colors.border}`}>
+                        <IconComponent className={`w-7 h-7 ${colors.text} group-hover:scale-110 transition-transform`} />
+                      </div>
+                      <h3 className="text-lg font-bold text-skin-text mb-2 tracking-wide">{TOPIC_LABELS[topic]}</h3>
+                      <p className="text-xs text-skin-subtext leading-relaxed font-light">
+                        {TOPIC_DESCRIPTIONS[topic]}<br />(참고용)
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -236,8 +243,8 @@ export default function LandingPage() {
 
         {/* Floating Chat Button */}
         <div className="fixed bottom-8 right-8 z-50 animate-bounce-slow">
-          <Link href="/healthcare/chat" className="w-16 h-16 bg-dental-primary rounded-full flex items-center justify-center text-white shadow-2xl shadow-dental-primary/40 hover:bg-dental-accent transition-all duration-300 hover:scale-110 border-2 border-white/20 backdrop-blur-sm">
-            <span className="text-3xl">💬</span>
+          <Link href="/healthcare/chat?topic=glow-booster" className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-2xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20 backdrop-blur-sm">
+            <span className="text-3xl">✨</span>
           </Link>
         </div>
       </div>
