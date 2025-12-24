@@ -51,9 +51,9 @@ export default function PatientHeader() {
         <header className="bg-dental-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-20 transition-all duration-300">
             <Link href="/medical/dashboard" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-dental-primary/20 flex items-center justify-center">
-                    <span className="text-xl">🦷</span>
+                    <span className="text-xl">✨</span>
                 </div>
-                <span className="text-xl font-bold text-white">평촌이생각치과</span>
+                <span className="text-xl font-bold text-white">리원피부과</span>
             </Link>
 
             <div className="flex items-center gap-4">

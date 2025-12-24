@@ -46,6 +46,12 @@ export default function LoginPage() {
                 // 사용자 역할 확인
                 const { data: { user } } = await supabase.auth.getUser();
 
+                // admin@admin.com은 무조건 /admin으로
+                if (user?.email === "admin@admin.com") {
+                    router.push("/admin");
+                    return;
+                }
+
                 // staff_users 테이블에서 역할 확인
                 const { data: staffUser } = await supabase
                     .from('staff_users')

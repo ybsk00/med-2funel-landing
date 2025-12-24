@@ -6,7 +6,7 @@ import Image from "next/image";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
-import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
+import AestheticCheckModal from "@/components/medical/AestheticCheckModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import FileUploadModal from "@/components/medical/FileUploadModal";
 import MapModal from "@/components/medical/MapModal";
@@ -20,7 +20,7 @@ import { DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
 export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-    const [showSymptomModal, setShowSymptomModal] = useState(false);
+    const [showAestheticModal, setShowAestheticModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [showMapModal, setShowMapModal] = useState(false);
@@ -193,13 +193,13 @@ export default function PatientDashboardClient() {
                     }}
                 />
 
-                {/* Symptom Check Modal */}
-                <SymptomCheckModal
-                    isOpen={showSymptomModal}
-                    onClose={() => setShowSymptomModal(false)}
+                {/* Aesthetic Check Modal */}
+                <AestheticCheckModal
+                    isOpen={showAestheticModal}
+                    onClose={() => setShowAestheticModal(false)}
                     onComplete={(summary) => {
                         setSymptomSummary(summary);
-                        setShowSymptomModal(false);
+                        setShowAestheticModal(false);
                     }}
                 />
 
@@ -265,13 +265,13 @@ export default function PatientDashboardClient() {
                                     <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">예약하기</span>
                                 </button>
                                 <button
-                                    onClick={() => setShowSymptomModal(true)}
+                                    onClick={() => setShowAestheticModal(true)}
                                     className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
                                     <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-emerald-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">증상정리</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">시술상담</span>
                                 </button>
                                 <button
                                     onClick={() => setShowMedicationModal(true)}

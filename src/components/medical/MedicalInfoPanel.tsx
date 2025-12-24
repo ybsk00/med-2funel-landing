@@ -62,7 +62,7 @@ export default function MedicalInfoPanel({
         },
         {
             id: 'symptom',
-            label: '증상정리',
+            label: '시술상담',
             icon: ClipboardList,
             color: 'bg-emerald-500',
             onClick: onOpenSymptomCheck

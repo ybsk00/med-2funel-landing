@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth"
 import NaverProvider from "next-auth/providers/naver"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -15,6 +16,26 @@ export const authOptions: NextAuthOptions = {
                     image: profile.response.profile_image,
                 }
             },
+        }),
+        // Admin 로그인용 Credentials Provider
+        CredentialsProvider({
+            name: "Admin",
+            credentials: {
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" }
+            },
+            async authorize(credentials) {
+                // admin@admin.com 계정 체크
+                if (credentials?.email === "admin@admin.com" && credentials?.password) {
+                    return {
+                        id: "admin",
+                        name: "Admin",
+                        email: "admin@admin.com",
+                        isAdmin: true,
+                    }
+                }
+                return null
+            }
         }),
     ],
     pages: {
@@ -37,6 +58,10 @@ export const authOptions: NextAuthOptions = {
                 token.name = user.name
                 token.email = user.email
                 token.picture = user.image
+                // Admin 체크
+                if (user.email === "admin@admin.com" || (user as any).isAdmin) {
+                    token.isAdmin = true
+                }
             }
             // 네이버 프로필에서 직접 가져오기 (백업)
             if (profile && (profile as any).response) {
@@ -57,6 +82,7 @@ export const authOptions: NextAuthOptions = {
                     name: token.name as string,
                     email: token.email as string,
                     image: token.picture as string,
+                    isAdmin: token.isAdmin as boolean,
                 }
             }
             return session
@@ -69,3 +95,4 @@ export const authOptions: NextAuthOptions = {
     debug: process.env.NODE_ENV === 'development',
     secret: process.env.NEXTAUTH_SECRET,
 }
+

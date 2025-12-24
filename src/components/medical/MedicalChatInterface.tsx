@@ -42,10 +42,10 @@ export default function MedicalChatInterface() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Initial Medical Greeting - 평촌이생각치과 AI 상담 + 운영정보
+        // Initial Medical Greeting - 리원피부과 AI 상담 + 운영정보
         setMessages([{
             role: "ai",
-            content: "안녕하세요, 평촌이생각치과 AI 상담입니다.\n\n**📍 평촌이생각치과**는 경기 안양시 동안구 시민대로 312, 201호에 위치하고 있으며, **365일 연중무휴**, 평일 **야간진료 9시까지** 운영하는 치과입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n어떤 점이 궁금하실까요? 치아 건강에 대해서 궁금하신 점이 있으면 질문주세요."
+            content: "안녕하세요, 리원피부과 AI 상담입니다.\n\n**📍 리원피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
         }]);
     }, []);
 
@@ -153,7 +153,7 @@ export default function MedicalChatInterface() {
                         <ArrowLeft size={24} />
                     </Link>
                     <div className="ml-2">
-                        <h1 className="text-lg font-bold text-white">평촌이생각치과 AI 상담</h1>
+                        <h1 className="text-lg font-bold text-white">리원피부과 AI 상담</h1>
                         <p className="text-xs text-dental-primary flex items-center font-medium">
                             <span className="w-2 h-2 rounded-full bg-dental-primary mr-1"></span>
                             참고용 건강 점검 · 진단 대체 불가
@@ -191,7 +191,7 @@ export default function MedicalChatInterface() {
                         <div className="flex flex-col gap-1 max-w-[85%]">
                             {/* AI Label */}
                             {msg.role === "ai" && (
-                                <div className="text-xs text-dental-primary font-semibold">평촌이생각치과</div>
+                                <div className="text-xs text-dental-primary font-semibold">리원피부과</div>
                             )}
                             <div
                                 className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "ai"

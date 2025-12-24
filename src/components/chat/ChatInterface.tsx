@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useSearchParams, redirect } from "next/navigation";
 import ReservationModal from "@/components/medical/ReservationModal";
 import MedicalInfoPanel from "@/components/medical/MedicalInfoPanel";
-import SymptomCheckModal from "@/components/medical/SymptomCheckModal";
+import AestheticCheckModal from "@/components/medical/AestheticCheckModal";
 import FileUploadModal from "@/components/medical/FileUploadModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import SafetyBadge from "@/components/medical/SafetyBadge";
@@ -74,7 +74,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const [showBadgeExpanded, setShowBadgeExpanded] = useState(false);
 
     // Modal states for quick actions
-    const [showSymptomCheckModal, setShowSymptomCheckModal] = useState(false);
+    const [showAestheticCheckModal, setShowAestheticCheckModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
@@ -319,7 +319,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 {!props.isEmbedded && (
                     props.isLoggedIn ? (
                         <MedicalInfoPanel
-                            onOpenSymptomCheck={() => setShowSymptomCheckModal(true)}
+                            onOpenSymptomCheck={() => setShowAestheticCheckModal(true)}
                             onOpenMedicationHelper={() => setShowMedicationModal(true)}
                             onOpenFileUpload={() => setShowFileUploadModal(true)}
                         />
@@ -516,10 +516,10 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 initialTab="book"
             />
 
-            {/* Symptom Check Modal */}
-            <SymptomCheckModal
-                isOpen={showSymptomCheckModal}
-                onClose={() => setShowSymptomCheckModal(false)}
+            {/* Aesthetic Check Modal */}
+            <AestheticCheckModal
+                isOpen={showAestheticCheckModal}
+                onClose={() => setShowAestheticCheckModal(false)}
             />
 
             {/* File Upload Modal */}
