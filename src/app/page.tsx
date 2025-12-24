@@ -245,7 +245,7 @@ export default function LandingPage() {
               <source src="/1.mp4" type="video/mp4" />
             </video>
             {/* Slight overlay to reduce brightness */}
-            <div className="absolute inset-0 bg-black/30" />
+            <div className="absolute inset-0 bg-black/45" />
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-6">
