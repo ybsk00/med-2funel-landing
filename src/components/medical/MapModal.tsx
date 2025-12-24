@@ -9,9 +9,9 @@ interface MapModalProps {
 }
 
 // 환경변수 또는 하드코딩 (추후 환경변수로 이동)
-const HOSPITAL_NAME = '리원피부과의원';
+const HOSPITAL_NAME = '리원피부과';
 const HOSPITAL_ADDRESS = '서울 강남구 도산대로 327 SGF 청담타워';
-const MAP_QUERY = encodeURIComponent(`${HOSPITAL_NAME} ${HOSPITAL_ADDRESS}`);
+const MAP_QUERY = encodeURIComponent(HOSPITAL_ADDRESS); // 검색 시 주소만 사용
 
 export default function MapModal({ isOpen, onClose }: MapModalProps) {
 
