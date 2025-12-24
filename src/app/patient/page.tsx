@@ -91,7 +91,7 @@ export default async function PatientHome() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-xl font-bold text-white">평촌이생각치과</span>
+                            <span className="text-xl font-bold text-white">리원피부과</span>
                             <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors">
                                 <Bell size={24} className="text-gray-400" />
                                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -101,7 +101,7 @@ export default async function PatientHome() {
 
                     {/* Condition Check */}
                     <div className="mb-8">
-                        <p className="text-gray-400 text-sm mb-1">치아 상태는</p>
+                        <p className="text-gray-400 text-sm mb-1">피부 고민이</p>
                         <h2 className="text-3xl font-bold text-white mb-6">어떠신가요?</h2>
 
                         {/* AI Intake Card */}
@@ -125,7 +125,7 @@ export default async function PatientHome() {
                                 <span className="inline-block px-3 py-1 text-xs font-medium text-blue-100 bg-white/20 rounded-full mb-4">
                                     AI 예진 상담 (참고용)
                                 </span>
-                                <h3 className="text-xl font-bold text-white mb-2">치아 불편 정리</h3>
+                                <h3 className="text-xl font-bold text-white mb-2">피부 고민 정리</h3>
                                 <p className="text-sm text-blue-100 mb-6 leading-relaxed">
                                     불편을 입력하면 AI가 상담 전<br />
                                     예진 정보를 정리해드립니다.
@@ -232,7 +232,7 @@ export default async function PatientHome() {
                                     </div>
                                     <h4 className="text-white font-bold mb-0.5">진료 예약</h4>
                                     <p className="text-sm text-gray-400">
-                                        {upcomingAppointment.notes || '평촌이생각치과'}
+                                        {upcomingAppointment.notes || '리원피부과'}
                                     </p>
                                 </div>
                             </div>
@@ -264,8 +264,8 @@ export default async function PatientHome() {
                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#fbbf24' }}></div>
                         </div>
                         <div className="flex-1">
-                            <h4 className="text-sm font-bold text-white">정기 스케일링 안내</h4>
-                            <p className="text-xs text-gray-400">6개월마다 스케일링으로 치아 건강을 지키세요.</p>
+                            <h4 className="text-sm font-bold text-white">피부 관리 안내</h4>
+                            <p className="text-xs text-gray-400">정기적인 피부 관리로 건강한 피부를 유지하세요.</p>
                         </div>
                         <button className="text-gray-500 hover:text-gray-300 p-1">
                             ×

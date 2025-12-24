@@ -22,7 +22,7 @@ export default function NewAppointmentPage() {
     const [bookedSlots, setBookedSlots] = useState<string[]>([])
     const [isLoadingSlots, setIsLoadingSlots] = useState(false)
 
-    const doctors = ['전체', '김기영 대표원장', '전민제 원장', '이혜정 교정원장', '김유진 원장']
+    const doctors = ['전체', '문정윤 대표원장', '김도영 원장', '이미혜 원장']
 
     // Generate week days
     const weekDays = Array.from({ length: 7 }, (_, i) => {
@@ -102,7 +102,7 @@ export default function NewAppointmentPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     scheduled_at: scheduledAt.toISOString(),
-                    notes: selectedDoctor === '전체' ? '평촌이생각치과 진료' : `평촌이생각치과 진료 (${selectedDoctor})`,
+                    notes: selectedDoctor === '전체' ? '리원피부과 진료' : `리원피부과 진료 (${selectedDoctor})`,
                     doctor_name: selectedDoctor  // 의사 이름 추가
                 })
             })

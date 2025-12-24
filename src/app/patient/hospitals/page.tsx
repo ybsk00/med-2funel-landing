@@ -27,9 +27,9 @@ interface ERStatus {
     hvmriayn: string;
 }
 
-// 평촌이생각치과 정보
+// 리원피부과 정보
 const RECOMMENDED_CLINIC = {
-    name: "평촌이생각치과",
+    name: "리원피부과",
     addr: "경기 안양시 동안구 시민대로 312",
     tel: "031-123-4567",
     closeTime: "21:00",
@@ -68,7 +68,7 @@ export default function HospitalSearchPage() {
         try {
             const params = new URLSearchParams({
                 q0: "경기도",
-                qn: "치과",
+                qn: "피부과",
             });
 
             // 공휴일 진료 필터
@@ -174,7 +174,7 @@ export default function HospitalSearchPage() {
                 </header>
 
                 <main className="p-4 space-y-4">
-                    {/* 평촌이생각치과 추천 카드 (항상 상단) */}
+                    {/* 리원피부과 추천 카드 (항상 상단) */}
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />
