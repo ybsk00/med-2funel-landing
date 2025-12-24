@@ -237,11 +237,11 @@ export default function LandingPage() {
               loop
               muted
               playsInline
-              className="w-full h-full object-cover opacity-60"
+              className="w-full h-full object-cover"
             >
               <source src="/1.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg via-skin-bg/80 to-skin-bg" />
+            {/* Video overlay removed for 100% visibility */}
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-6">
