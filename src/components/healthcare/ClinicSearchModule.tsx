@@ -309,50 +309,52 @@ export default function ClinicSearchModule() {
                             {/* 성공 - 결과 리스트 */}
                             {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 리원피부과 추천 카드 (상단 고정) */}
-                                    <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
-                                        <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
-                                            추천 피부과
-                                        </span>
+                                    {/* 리원피부과 추천 카드 (강남구에서만 표시 - 의료법 준수) */}
+                                    {selectedRegion === "강남구" && (
+                                        <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
+                                            <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
+                                                추천 피부과
+                                            </span>
 
-                                        <div className="pt-2">
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div className="flex-1">
-                                                    <h3 className="text-lg font-bold text-white">
-                                                        리원피부과
-                                                    </h3>
-                                                    <div className="flex flex-wrap gap-2 mt-2">
-                                                        <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
-                                                            프리미엄 케어
-                                                        </span>
-                                                        <span className="px-2 py-0.5 bg-skin-primary/30 text-skin-primary text-xs font-medium rounded-full">
-                                                            피부미용 전문
-                                                        </span>
+                                            <div className="pt-2">
+                                                <div className="flex items-start justify-between gap-4">
+                                                    <div className="flex-1">
+                                                        <h3 className="text-lg font-bold text-white">
+                                                            리원피부과
+                                                        </h3>
+                                                        <div className="flex flex-wrap gap-2 mt-2">
+                                                            <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
+                                                                프리미엄 케어
+                                                            </span>
+                                                            <span className="px-2 py-0.5 bg-skin-primary/30 text-skin-primary text-xs font-medium rounded-full">
+                                                                피부미용 전문
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
+                                                            <MapPin size={14} />
+                                                            서울 강남구 도산대로 327 SGF 청담타워
+                                                        </p>
                                                     </div>
-                                                    <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
-                                                        <MapPin size={14} />
-                                                        서울 강남구 (상세주소 확인 필요)
-                                                    </p>
+                                                </div>
+
+                                                <div className="flex gap-2 mt-4">
+                                                    <button
+                                                        onClick={handleConnect}
+                                                        className="flex-1 py-2.5 bg-skin-primary text-white rounded-lg font-medium hover:bg-skin-accent transition-colors text-sm"
+                                                    >
+                                                        상담 예약
+                                                    </button>
+                                                    <a
+                                                        href="tel:02-543-0210"
+                                                        className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
+                                                    >
+                                                        <Phone size={16} />
+                                                        전화
+                                                    </a>
                                                 </div>
                                             </div>
-
-                                            <div className="flex gap-2 mt-4">
-                                                <button
-                                                    onClick={handleConnect}
-                                                    className="flex-1 py-2.5 bg-skin-primary text-white rounded-lg font-medium hover:bg-skin-accent transition-colors text-sm"
-                                                >
-                                                    상담 예약
-                                                </button>
-                                                <a
-                                                    href="tel:02-000-0000"
-                                                    className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
-                                                >
-                                                    <Phone size={16} />
-                                                    전화
-                                                </a>
-                                            </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                     {/* 변동 고지 문구 */}
                                     <p className="text-xs text-skin-subtext/70 text-center bg-white/5 rounded-lg py-2">
