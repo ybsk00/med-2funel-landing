@@ -94,55 +94,56 @@ export default function LandingPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/70" />
           </div>
 
-          {/* Hero Content - 20% 좌측으로 이동 */}
-          <div className="relative z-10 max-w-4xl ml-6 mr-[20%] space-y-8 animate-fade-in text-left">
-            {/* Eyebrow - 작게, 간격 확보 */}
-            <p className="text-skin-secondary font-semibold tracking-[0.2em] uppercase text-xs">
-              Premium Skin Care
-            </p>
+          {/* Hero Content - clamp 기반 패딩으로 반응형 위치 안정화 */}
+          <div className="absolute inset-0 z-10 flex items-center">
+            <div className="w-full max-w-4xl pl-[clamp(24px,6vw,88px)] pr-[clamp(16px,10vw,220px)] space-y-8 animate-fade-in text-left">
+              {/* Eyebrow - 작게, 간격 확보 */}
+              <p className="text-skin-secondary font-semibold tracking-[0.2em] uppercase text-xs">
+                Premium Skin Care
+              </p>
 
-            {/* H1 - 2줄 이내 */}
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
-                리원피부과
-              </span>에서<br />
-              프리미엄 스킨케어를
-            </h1>
+              {/* H1 - 2줄 이내, 문자폭 제한 */}
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif max-w-[22ch]">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
+                  리원피부과
+                </span>에서<br />
+                프리미엄 스킨케어를
+              </h1>
 
-            {/* Body - 1~2줄, 부연 제거 */}
-            <p className="text-base md:text-lg text-skin-subtext max-w-lg leading-relaxed">
-              나만의 피부 습관을 체크하고, 맞춤 루틴을 설계해보세요.
-            </p>
+              {/* Body - 1~2줄, 부연 제거 */}
+              <p className="text-base md:text-lg text-skin-subtext max-w-lg leading-relaxed">
+                나만의 피부 습관을 체크하고, 맞춤 루틴을 설계해보세요.
+              </p>
 
-            {/* CTA Row - Primary 1개 + Secondary 링크 1개 */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
-              {/* Primary CTA - 핫핑크 + 글로우 허용 */}
-              <Link
-                href="/healthcare/chat?topic=glow-booster"
-                className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-              >
-                <Sparkles className="w-5 h-5" />
-                D-7 광채 부스터 시작
-              </Link>
+              {/* CTA Row - Primary 1개 + Secondary 링크 1개 */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+                {/* Primary CTA - 핫핑크 + 글로우 허용 */}
+                <Link
+                  href="/healthcare/chat?topic=glow-booster"
+                  className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  D-7 광채 부스터 시작
+                </Link>
 
-              {/* Secondary - 텍스트 링크 */}
-              <a
-                href="#clinic-search"
-                className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
-              >
-                지금 운영 피부과 찾기
-                <ChevronRight className="w-4 h-4" />
-              </a>
-            </div>
+                {/* Secondary - 텍스트 링크 */}
+                <a
+                  href="#clinic-search"
+                  className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
+                >
+                  지금 운영 피부과 찾기
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
 
-            {/* 참고용 배지 - 배지로 이동 */}
-            <div className="pt-2">
-              <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
-                ℹ️ 참고용 안내 · 진단·처방 아님
-              </span>
+              {/* 참고용 배지 - 배지로 이동 */}
+              <div className="pt-2">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
+                  ℹ️ 참고용 안내 · 진단·처방 아님
+                </span>
+              </div>
             </div>
           </div>
-
           {/* Slide Dots */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {HERO_IMAGES.map((_, idx) => (
@@ -159,8 +160,8 @@ export default function LandingPage() {
         {/* ============================================ */}
         {/* Clinic Search Section - 히어로 아래 별도 섹션 */}
         {/* ============================================ */}
-        <section id="clinic-search" className="relative py-16 px-6 bg-skin-bgSecondary">
-          <div className="max-w-4xl mx-auto">
+        <section id="clinic-search" className="relative py-16 bg-skin-bgSecondary">
+          <div className="w-full max-w-4xl pl-[clamp(24px,6vw,88px)] pr-[clamp(16px,10vw,220px)] mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-skin-text mb-2">
                 지금 운영 중인 피부과 찾기
