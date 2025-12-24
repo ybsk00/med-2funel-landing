@@ -96,27 +96,26 @@ export default function LandingPage() {
 
           {/* Hero Content - clamp 기반 패딩으로 반응형 위치 안정화 */}
           <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full max-w-4xl pl-[clamp(160px,25vw,400px)] pr-[clamp(16px,8vw,180px)] space-y-8 animate-fade-in text-left">
+            <div className="w-full pl-[clamp(160px,25vw,400px)] space-y-6 animate-fade-in text-left">
               {/* Eyebrow - 작게, 간격 확보 */}
               <p className="text-skin-secondary font-semibold tracking-[0.2em] uppercase text-xs">
                 Premium Skin Care
               </p>
 
-              {/* H1 - 2줄 이내, 문자폭 제한 */}
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif max-w-[22ch]">
+              {/* H1 - 줄바꿈 방지 */}
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif whitespace-nowrap">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
                   리원피부과
-                </span>에서<br />
-                프리미엄 스킨케어를
+                </span>에서 프리미엄 스킨케어를
               </h1>
 
-              {/* Body - 1~2줄, 부연 제거 */}
-              <p className="text-base md:text-lg text-skin-subtext max-w-lg leading-relaxed">
+              {/* Body */}
+              <p className="text-base md:text-lg text-skin-subtext leading-relaxed whitespace-nowrap">
                 나만의 피부 습관을 체크하고, 맞춤 루틴을 설계해보세요.
               </p>
 
-              {/* CTA Row - Primary 1개 + Secondary 링크 1개 */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+              {/* CTA Row */}
+              <div className="flex flex-row items-center gap-4 pt-2 whitespace-nowrap">
                 {/* Primary CTA - 핫핑크 + 글로우 허용 */}
                 <Link
                   href="/healthcare/chat?topic=glow-booster"
