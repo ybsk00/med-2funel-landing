@@ -22,7 +22,27 @@ export default function NewAppointmentPage() {
     const [bookedSlots, setBookedSlots] = useState<string[]>([])
     const [isLoadingSlots, setIsLoadingSlots] = useState(false)
 
-    const doctors = ['전체', '김민승 대표원장', '조병옥 원장']
+    // DB에서 의사 목록 가져오기
+    const [doctors, setDoctors] = useState<string[]>(['전체'])
+
+    // 의사 목록 API에서 가져오기
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const response = await fetch('/api/doctors')
+                const data = await response.json()
+                if (data.doctors) {
+                    const doctorNames = data.doctors.map((d: { display_name: string }) => d.display_name)
+                    setDoctors(['전체', ...doctorNames])
+                }
+            } catch (error) {
+                console.error('Error fetching doctors:', error)
+                // 폴백: 하드코딩된 목록 사용
+                setDoctors(['전체', '김민승 대표원장', '조병옥 원장'])
+            }
+        }
+        fetchDoctors()
+    }, [])
 
     // Generate week days
     const weekDays = Array.from({ length: 7 }, (_, i) => {

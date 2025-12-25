@@ -87,6 +87,26 @@ CREATE TABLE IF NOT EXISTS public.patients (
 CREATE INDEX IF NOT EXISTS idx_patients_user_id ON public.patients(user_id);
 CREATE INDEX IF NOT EXISTS idx_patients_naver_user_id ON public.patients(naver_user_id);
 
+-- 3.4 의사 테이블 (예약/소개 화면용)
+CREATE TABLE IF NOT EXISTS public.doctors (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,              -- 이름 (예: 김민승)
+  title TEXT NOT NULL,             -- 직책 (예: 대표원장)
+  display_name TEXT,               -- 표시명 (예: 김민승 대표원장)
+  education TEXT,                  -- 학력
+  specialty TEXT[],                -- 전문 분야
+  tracks TEXT[],                   -- 진료 트랙
+  image_url TEXT,                  -- 프로필 이미지 URL
+  is_active BOOLEAN DEFAULT TRUE,  -- 활성화 여부
+  sort_order INTEGER DEFAULT 0,    -- 정렬 순서
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 의사 인덱스
+CREATE INDEX IF NOT EXISTS idx_doctors_is_active ON public.doctors(is_active);
+CREATE INDEX IF NOT EXISTS idx_doctors_sort_order ON public.doctors(sort_order);
+
 -- =====================================================
 -- SECTION 4: APPOINTMENT SYSTEM
 -- =====================================================
@@ -445,6 +465,7 @@ ALTER TABLE public.push_tokens ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.marketing_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.marketing_conversions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.utm_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.doctors ENABLE ROW LEVEL SECURITY;
 
 -- =====================================================
 -- SECTION 12: RLS POLICIES
@@ -574,6 +595,12 @@ CREATE POLICY "Staff can select conversions" ON public.marketing_conversions
 
 -- 12.16 UTM Links
 CREATE POLICY "Staff can manage utm_links" ON public.utm_links 
+  FOR ALL USING (public.is_staff());
+
+-- 12.17 Doctors
+CREATE POLICY "Anyone can view doctors" ON public.doctors 
+  FOR SELECT USING (TRUE);
+CREATE POLICY "Staff can manage doctors" ON public.doctors 
   FOR ALL USING (public.is_staff());
 
 -- =====================================================

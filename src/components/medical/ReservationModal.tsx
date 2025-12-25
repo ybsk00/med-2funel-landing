@@ -21,7 +21,9 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [minute, setMinute] = useState("00");
     const [doctor, setDoctor] = useState("");
 
-    const doctors = ['', '김민승 대표원장', '조병옥 원장'];
+    // DB에서 의사 목록 가져오기
+    const [doctors, setDoctors] = useState<string[]>([]);
+    const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
 
     const [name, setName] = useState("");
 
@@ -35,6 +37,28 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [isLoadingSlots, setIsLoadingSlots] = useState(false);
 
     const supabase = createClient();
+
+    // 의사 목록 API에서 가져오기
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            setIsLoadingDoctors(true);
+            try {
+                const response = await fetch('/api/doctors');
+                const data = await response.json();
+                if (data.doctors) {
+                    const doctorNames = data.doctors.map((d: { display_name: string }) => d.display_name);
+                    setDoctors(doctorNames);
+                }
+            } catch (error) {
+                console.error('Error fetching doctors:', error);
+                // 폴백: 하드코딩된 목록 사용
+                setDoctors(['김민승 대표원장', '조병옥 원장']);
+            } finally {
+                setIsLoadingDoctors(false);
+            }
+        };
+        fetchDoctors();
+    }, []);
 
     useEffect(() => {
         if (isOpen) {
