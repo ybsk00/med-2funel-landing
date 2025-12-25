@@ -53,6 +53,33 @@ function LoginContent() {
         }
     }
 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setIsLoading(true)
+        setError(null)
+        setMessage(null)
+
+        const formData = new FormData(e.currentTarget)
+
+        if (activeTab === 'login') {
+            const result = await patientLogin(formData)
+            if (result?.error) {
+                setError(result.error)
+                setIsLoading(false)
+            }
+            // 성공 시 redirect가 actions.ts에서 호출됨
+        } else {
+            const result = await patientSignup(formData)
+            if (result?.error) {
+                setError(result.error)
+                setIsLoading(false)
+            } else if (result?.message) {
+                setMessage(result.message)
+                setIsLoading(false)
+            }
+        }
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center px-4" style={{ backgroundColor: '#0a0f1a' }}>
             <div className="w-full max-w-md">
@@ -123,7 +150,7 @@ function LoginContent() {
                     )}
 
                     {/* Form */}
-                    <form className="space-y-4" autoComplete="off">
+                    <form className="space-y-4" autoComplete="off" onSubmit={handleSubmit}>
                         {activeTab === 'signup' && (
                             <>
                                 <div>
@@ -193,11 +220,18 @@ function LoginContent() {
 
                         <button
                             type="submit"
-                            formAction={activeTab === 'login' ? patientLogin : patientSignup}
-                            className="w-full py-3 rounded-xl text-white font-bold transition-all hover:opacity-90"
+                            disabled={isLoading}
+                            className="w-full py-3 rounded-xl text-white font-bold transition-all hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
                             style={{ backgroundColor: '#3b82f6' }}
                         >
-                            {activeTab === 'login' ? '로그인' : '회원가입'}
+                            {isLoading ? (
+                                <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    처리 중...
+                                </>
+                            ) : (
+                                activeTab === 'login' ? '로그인' : '회원가입'
+                            )}
                         </button>
                     </form>
 
