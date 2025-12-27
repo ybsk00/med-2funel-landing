@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { TrackReturningCustomerView } from '@/components/marketing/MarketingTracker'
+import FaceSimulationCTA from '@/components/patient/FaceSimulationCTA'
 
 export default async function PatientHome() {
     const supabase = await createClient()
@@ -191,6 +192,11 @@ export default async function PatientHome() {
                             </div>
                             <span className="text-xs text-gray-400">1:1상담</span>
                         </Link>
+                    </div>
+
+                    {/* 가상 시각화 CTA */}
+                    <div className="mb-8">
+                        <FaceSimulationCTA />
                     </div>
 
                     {/* Upcoming Appointment */}

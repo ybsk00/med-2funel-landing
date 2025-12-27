@@ -13,10 +13,10 @@ const STYLE_VARIANTS = [
         image: "/base.png",
     },
     {
-        key: "makeup",
-        label: "메이크업 느낌",
-        description: "색감/채도 조정",
-        image: "/makeup.png",
+        key: "glow",
+        label: "생기 톤",
+        description: "혈색/생기 강조",
+        image: "/생기 톤.png",
     },
     {
         key: "bright",
@@ -37,7 +37,7 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 2;
 
 export default function HeroExperience({ className = "" }: HeroExperienceProps) {
-    const [selectedVariant, setSelectedVariant] = useState<VariantKey>("makeup");
+    const [selectedVariant, setSelectedVariant] = useState<VariantKey>("glow");
     const [isPainting, setIsPainting] = useState(false);
     const [hasPainted, setHasPainted] = useState(false);
     const [maskUrl, setMaskUrl] = useState<string | null>(null);
@@ -344,8 +344,8 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                     >
                         <div
                             className={`w-full h-full rounded-full border-2 transition-all duration-75 ${isPainting
-                                    ? "border-skin-primary bg-skin-primary/30 scale-95"
-                                    : "border-white/60 bg-white/10"
+                                ? "border-skin-primary bg-skin-primary/30 scale-95"
+                                : "border-white/60 bg-white/10"
                                 }`}
                             style={{
                                 boxShadow: isPainting
@@ -405,8 +405,8 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                             initCanvas();
                         }}
                         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${variant.key === selectedVariant
-                                ? "bg-skin-primary text-white shadow-lg shadow-skin-primary/30"
-                                : "bg-white/10 text-skin-subtext hover:bg-white/20 hover:text-white"
+                            ? "bg-skin-primary text-white shadow-lg shadow-skin-primary/30"
+                            : "bg-white/10 text-skin-subtext hover:bg-white/20 hover:text-white"
                             }`}
                     >
                         {variant.label}

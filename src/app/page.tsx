@@ -94,13 +94,18 @@ export default function LandingPage() {
                 </Link>
 
                 {/* Secondary CTA */}
-                <button
-                  onClick={() => setIsPhotoSlideOverOpen(true)}
-                  className="px-6 py-3 border-2 border-skin-primary/50 text-skin-primary bg-skin-bg/50 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-skin-primary/10 hover:border-skin-primary transition-all duration-300 flex items-center gap-2"
-                >
-                  <Camera className="w-4 h-4" />
-                  사진으로 스타일 보기
-                </button>
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={() => setIsPhotoSlideOverOpen(true)}
+                    className="px-6 py-3 border-2 border-skin-primary/50 text-skin-primary bg-skin-bg/50 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-skin-primary/10 hover:border-skin-primary transition-all duration-300 flex items-center gap-2"
+                  >
+                    <Camera className="w-4 h-4" />
+                    내 사진으로 확인하기
+                  </button>
+                  <p className="text-skin-muted text-xs mt-1">
+                    로그인 후 내 사진 업로드가 가능합니다
+                  </p>
+                </div>
               </div>
 
               {/* Tertiary Link */}
