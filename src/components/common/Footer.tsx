@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -20,10 +20,10 @@ export default function Footer() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text font-serif">아이니의원</span>
+                            <span className="text-xl font-bold text-skin-text font-serif">세인트의원</span>
                         </div>
                         <div className="text-sm text-skin-subtext space-y-2 font-light">
-                            <p>아이니의원 ㅣ 서울 강남구 압구정로 152, 3층 306호</p>
+                            <p>세인트의원 ㅣ 서울 강남구 압구정로 152, 3층 306호</p>
                             <p>Tel: 1899-1150 ㅣ Fax: 02-516-0514</p>
                             <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: 317-14-00846 ㅣ 대표: 김민승외 1명</p>
                         </div>
@@ -59,7 +59,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-xs text-skin-subtext/60 font-light">
-                    <p>© 2025 아이니의원. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
+                    <p>© 2025 세인트의원. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
                 </div>
             </footer>
 
@@ -71,3 +71,4 @@ export default function Footer() {
         </>
     );
 }
+

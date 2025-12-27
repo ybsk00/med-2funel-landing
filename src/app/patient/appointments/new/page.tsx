@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { ArrowLeft, Clock, Sun, Moon, ChevronLeft, ChevronRight, Sparkles, Loader2 } from 'lucide-react'
@@ -122,7 +122,7 @@ export default function NewAppointmentPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     scheduled_at: scheduledAt.toISOString(),
-                    notes: selectedDoctor === '전체' ? '아이니의원 진료' : `아이니의원 진료 (${selectedDoctor})`,
+                    notes: selectedDoctor === '전체' ? '세인트의원 진료' : `세인트의원 진료 (${selectedDoctor})`,
                     doctor_name: selectedDoctor  // 의사 이름 추가
                 })
             })
@@ -399,3 +399,4 @@ export default function NewAppointmentPage() {
         </div>
     )
 }
+

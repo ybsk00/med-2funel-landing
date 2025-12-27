@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-// 아이니의원 로고 (피부과 테마)
+// 세인트의원 로고 (피부과 테마)
 // 파일명 유지 (DentalLogo) - 기존 참조 호환성
 
 export default function DentalLogo({ className = "", size = 40 }: { className?: string; size?: number }) {
@@ -45,3 +45,4 @@ export default function DentalLogo({ className = "", size = 40 }: { className?: 
         </svg>
     );
 }
+

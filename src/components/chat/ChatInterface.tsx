@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { User, ArrowUp, Paperclip, Sparkles, Droplet, Shield, ArrowUpRight, Heart, ChevronDown, Info } from "lucide-react";
@@ -92,7 +92,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.mode === 'medical') {
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 아이니의원 AI 상담입니다.\n\n**✨ 아이니의원**은 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
+                content: "안녕하세요, 세인트의원 AI 상담입니다.\n\n**✨ 세인트의원**은 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
             }]);
         } else {
             const topicLabel = TOPIC_LABELS[topic];
@@ -280,7 +280,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 <header className="bg-skin-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                         <span className="text-2xl">✨</span>
-                        <span className="text-xl font-bold text-white tracking-wide">아이니 아틀리에</span>
+                        <span className="text-xl font-bold text-white tracking-wide">세인트 아틀리에</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
                         <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -329,7 +329,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
                                 <Image
                                     src="/GALLERY MINIMAL.png"
-                                    alt="아이니의원 프리미엄 스킨케어"
+                                    alt="세인트의원 프리미엄 스킨케어"
                                     fill
                                     className="object-cover object-[center_25%]"
                                     priority
@@ -405,7 +405,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "아이니의원 AI" : "아이니 스킨케어 가이드") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "세인트의원 AI" : "세인트 스킨케어 가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
@@ -536,3 +536,4 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         </div>
     );
 }
+

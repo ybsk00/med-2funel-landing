@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -27,9 +27,9 @@ interface ERStatus {
     hvmriayn: string;
 }
 
-// 아이니의원 정보
+// 세인트의원 정보
 const RECOMMENDED_CLINIC = {
-    name: "아이니의원",
+    name: "세인트의원",
     addr: "서울 강남구 압구정로 152, 3층 306호",
     tel: "1899-1150",
     closeTime: "21:00",
@@ -190,7 +190,7 @@ export default function HospitalSearchPage() {
                 </header>
 
                 <main className="p-4 space-y-4">
-                    {/* 아이니의원 추천 카드 (항상 상단) */}
+                    {/* 세인트의원 추천 카드 (항상 상단) */}
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />
@@ -459,3 +459,4 @@ export default function HospitalSearchPage() {
         </div>
     );
 }
+

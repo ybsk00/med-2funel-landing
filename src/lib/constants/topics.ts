@@ -1,4 +1,4 @@
-// 아이니의원 헬스케어 토픽 상수 (단일 소스)
+﻿// 세인트의원 헬스케어 토픽 상수 (단일 소스)
 // 모든 topic 관련 검증은 이 파일을 참조
 
 export const VALID_TOPICS = [
@@ -43,3 +43,4 @@ export function sanitizeTopic(topic: string | null | undefined): Topic {
     }
     return DEFAULT_TOPIC;
 }
+

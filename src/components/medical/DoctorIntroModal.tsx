@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -73,7 +73,7 @@ export default function DoctorIntroModal({
                         <div className="w-8 h-8 bg-pink-500/20 rounded-full flex items-center justify-center">
                             <User className="w-4 h-4 text-pink-400" />
                         </div>
-                        <h3 className="font-bold text-white">아이니의원 의료진</h3>
+                        <h3 className="font-bold text-white">세인트의원 의료진</h3>
                     </div>
                     <button
                         onClick={onClose}
@@ -190,3 +190,4 @@ export default function DoctorIntroModal({
         </div>
     );
 }
+

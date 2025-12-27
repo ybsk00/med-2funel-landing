@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Bell, Mic, ChevronRight, Calendar, FileText, Pill, MessageSquare, Building2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
@@ -92,7 +92,7 @@ export default async function PatientHome() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-xl font-bold text-white">아이니의원</span>
+                            <span className="text-xl font-bold text-white">세인트의원</span>
                             <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors">
                                 <Bell size={24} className="text-gray-400" />
                                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -238,7 +238,7 @@ export default async function PatientHome() {
                                     </div>
                                     <h4 className="text-white font-bold mb-0.5">진료 예약</h4>
                                     <p className="text-sm text-gray-400">
-                                        {upcomingAppointment.notes || '아이니의원'}
+                                        {upcomingAppointment.notes || '세인트의원'}
                                     </p>
                                 </div>
                             </div>
@@ -282,3 +282,4 @@ export default async function PatientHome() {
         </TrackReturningCustomerView>
     )
 }
+

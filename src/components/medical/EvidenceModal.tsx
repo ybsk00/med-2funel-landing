@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { FileText, ExternalLink, Users, Calendar, X } from 'lucide-react';
@@ -76,7 +76,7 @@ export default function EvidenceModal({
                     {/* 고지 문구 */}
                     <div className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-sm text-blue-300">
                         <p className="text-xs">
-                            아래 논문은 아이니의원 연구진이 참여한 SCI 국제학술지 게재 논문입니다.
+                            아래 논문은 세인트의원 연구진이 참여한 SCI 국제학술지 게재 논문입니다.
                             치료 효과를 보장하거나 우월성을 주장하는 자료가 아님을 안내드립니다.
                         </p>
                     </div>
@@ -139,3 +139,4 @@ export default function EvidenceModal({
         </div>
     );
 }
+

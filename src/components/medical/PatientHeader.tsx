@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { User } from "lucide-react";
@@ -60,7 +60,7 @@ export default function PatientHeader() {
                 <div className="w-10 h-10 rounded-full bg-dental-primary/20 flex items-center justify-center">
                     <span className="text-xl">✨</span>
                 </div>
-                <span className="text-xl font-bold text-white">아이니의원</span>
+                <span className="text-xl font-bold text-white">세인트의원</span>
             </Link>
 
             <div className="flex items-center gap-4">
@@ -81,4 +81,5 @@ export default function PatientHeader() {
         </header>
     );
 }
+
 

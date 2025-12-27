@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, Suspense, useEffect } from "react";
 import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload, MessageSquare, MapPin, Users, FileText, Sparkles } from "lucide-react";
@@ -81,7 +81,7 @@ export default function PatientDashboardClient() {
                     data = {
                         time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
                         status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
-                        complaint: appointmentData.notes || '아이니의원 진료'
+                        complaint: appointmentData.notes || '세인트의원 진료'
                     };
                 }
             }
@@ -243,7 +243,7 @@ export default function PatientDashboardClient() {
                     <div className="relative w-full h-96 md:h-[500px]">
                         <Image
                             src="/BLINDS SHADOW.png"
-                            alt="아이니의원 프리미엄 시술"
+                            alt="세인트의원 프리미엄 시술"
                             fill
                             className="object-cover object-[center_25%]"
                             priority
@@ -405,4 +405,5 @@ export default function PatientDashboardClient() {
         </div>
     );
 }
+
 

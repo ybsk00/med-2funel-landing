@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
@@ -20,17 +20,17 @@ const notoSerifKr = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
-  title: "아이니의원",
-  description: "아이니의원에 오신 것을 환영합니다. 프리미엄 피부 관리와 미용 시술을 경험해보세요.",
+  title: "세인트의원",
+  description: "세인트의원에 오신 것을 환영합니다. 프리미엄 피부 관리와 미용 시술을 경험해보세요.",
   openGraph: {
-    title: "아이니의원",
-    description: "아이니의원에 오신 것을 환영합니다.",
+    title: "세인트의원",
+    description: "세인트의원에 오신 것을 환영합니다.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "아이니의원",
-    description: "아이니의원에 오신 것을 환영합니다.",
+    title: "세인트의원",
+    description: "세인트의원에 오신 것을 환영합니다.",
   },
 };
 
@@ -57,3 +57,4 @@ export default function RootLayout({
     </html>
   );
 }
+

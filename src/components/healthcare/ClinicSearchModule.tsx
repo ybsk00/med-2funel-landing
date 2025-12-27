@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback } from "react";
 import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown } from "lucide-react";
@@ -30,6 +30,15 @@ const SEOUL_REGIONS = [
     "용산구", "은평구", "종로구", "중구", "중랑구"
 ];
 
+// 경기도 지역 목록 (주요 지역)
+const GYEONGGI_REGIONS = [
+    "의정부시", "양주시", "포천시", "고양시", "구리시", "남양주시",
+    "동두천시", "성남시", "수원시", "안양시", "용인시", "파주시"
+];
+
+// 추천 병원 노출 대상 지역
+const TARGET_REGIONS = ["의정부시", "양주시", "포천시", "도봉구", "노원구"];
+
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
@@ -46,8 +55,8 @@ function isHoliday(): boolean {
 
 export default function ClinicSearchModule() {
     // 지역 선택
-    const [selectedCity, setSelectedCity] = useState("서울");
-    const [selectedRegion, setSelectedRegion] = useState("강남구");
+    const [selectedCity, setSelectedCity] = useState("경기도");
+    const [selectedRegion, setSelectedRegion] = useState("의정부시");
 
     // 토글 상태
     const [todayOpen, setTodayOpen] = useState(true);
@@ -178,7 +187,13 @@ export default function ClinicSearchModule() {
                     <div className="relative">
                         <select
                             value={selectedCity}
-                            onChange={(e) => setSelectedCity(e.target.value)}
+                            onChange={(e) => {
+                                const city = e.target.value;
+                                setSelectedCity(city);
+                                // 도시 변경 시 기본 지역 설정
+                                if (city === "서울") setSelectedRegion("강남구");
+                                else if (city === "경기도") setSelectedRegion("의정부시");
+                            }}
                             className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
                         >
                             <option value="서울">서울</option>
@@ -192,7 +207,7 @@ export default function ClinicSearchModule() {
                             onChange={(e) => setSelectedRegion(e.target.value)}
                             className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
                         >
-                            {SEOUL_REGIONS.map((region) => (
+                            {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
                                 <option key={region} value={region}>{region}</option>
                             ))}
                         </select>
@@ -309,8 +324,8 @@ export default function ClinicSearchModule() {
                             {/* 성공 - 결과 리스트 */}
                             {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 아이니의원 추천 카드 (강남구에서만 표시 - 의료법 준수) */}
-                                    {selectedRegion === "강남구" && (
+                                    {/* 세인트의원 추천 카드 (타겟 지역에서만 표시) */}
+                                    {TARGET_REGIONS.includes(selectedRegion) && (
                                         <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
                                             <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
                                                 추천 피부과
@@ -320,7 +335,7 @@ export default function ClinicSearchModule() {
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex-1">
                                                         <h3 className="text-lg font-bold text-white">
-                                                            아이니의원
+                                                            세인트의원
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
@@ -444,3 +459,4 @@ export default function ClinicSearchModule() {
         </>
     );
 }
+

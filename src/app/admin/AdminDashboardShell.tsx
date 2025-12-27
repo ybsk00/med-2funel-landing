@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { AppShell, Burger, Group, NavLink, Text, Button, Stack, ThemeIcon, Badge, Divider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -46,7 +46,7 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                         <ThemeIcon variant="gradient" gradient={{ from: 'orange', to: 'yellow' }} size="lg" radius="md">
                             <Stethoscope size={20} />
                         </ThemeIcon>
-                        <Text fw={700} size="xl" c="white">아이니의원 CRM</Text>
+                        <Text fw={700} size="xl" c="white">세인트의원 CRM</Text>
                     </Group>
                     <Badge variant="light" color="green" size="lg">
                         실시간 연동 중
@@ -203,3 +203,4 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
         </AppShell>
     );
 }
+

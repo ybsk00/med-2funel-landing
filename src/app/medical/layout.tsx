@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "아이니의원 진료 시스템",
+    title: "세인트의원 진료 시스템",
     description: "의료진 전용 대시보드",
 };
 
@@ -16,3 +16,4 @@ export default function MedicalLayout({
         </div>
     );
 }
+

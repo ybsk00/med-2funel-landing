@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { MapPin, Navigation, ExternalLink, X } from 'lucide-react';
@@ -8,7 +8,7 @@ interface MapModalProps {
     onClose: () => void;
 }
 
-const HOSPITAL_NAME = '아이니의원';
+const HOSPITAL_NAME = '세인트의원';
 const HOSPITAL_ADDRESS = '서울 강남구 압구정로 152 극동타워 A동 3층';
 const MAP_QUERY = encodeURIComponent(HOSPITAL_ADDRESS);
 
@@ -140,3 +140,4 @@ export default function MapModal({ isOpen, onClose }: MapModalProps) {
  *     </Modal>
  * );
  */
+

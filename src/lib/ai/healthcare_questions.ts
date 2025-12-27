@@ -1,4 +1,4 @@
-// 아이니의원 헬스케어 질문 풀
+﻿// 세인트의원 헬스케어 질문 풀
 // 질문 ID 포함 (분석/트래킹용)
 
 import { Topic } from '@/lib/constants/topics';
@@ -54,3 +54,4 @@ export const HEALTHCARE_QUESTIONS: Record<Topic, HealthcareQuestion[]> = {
 export function getInitialQuestion(topic: Topic): HealthcareQuestion {
     return HEALTHCARE_QUESTIONS[topic][0];
 }
+

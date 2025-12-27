@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
@@ -85,9 +85,9 @@ export async function POST(req: NextRequest) {
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '아이니의원'}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '세인트의원'}: ${msg.content}`).join("\n")}
 환자: ${message}
-아이니의원:
+세인트의원:
 `;
 
         // 4. Generate Response
@@ -140,3 +140,4 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '아이니의원
         );
     }
 }
+
