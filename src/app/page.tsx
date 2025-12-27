@@ -1,24 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight, Camera } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
-import HeroExperience from "@/components/landing/HeroExperience";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic } from "@/lib/constants/topics";
-
-// 히어로 롤링 이미지 (A→B→C→D→E 순서)
-const HERO_IMAGES = [
-  "/NEON RIM.png",
-  "/GLASS PRISM.png",
-  "/WATER CAUSTICS.png",
-  "/ROSE-GOLD BLOOM.png",
-  "/SILHOUETTE RIM.png",
-];
 
 // 모듈 아이콘/컬러 매핑
 const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradient: string }> = {
@@ -30,23 +20,7 @@ const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradi
 };
 
 export default function LandingPage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isAutoPlay, setIsAutoPlay] = useState(false);
-
-  useEffect(() => {
-    const startTimer = setTimeout(() => {
-      setIsAutoPlay(true);
-    }, 2000);
-    return () => clearTimeout(startTimer);
-  }, []);
-
-  useEffect(() => {
-    if (!isAutoPlay) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isAutoPlay]);
+  const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
   return (
     <TrackF1View>
@@ -68,103 +42,93 @@ export default function LandingPage() {
           </div>
         </nav>
 
-        {/* Hero Section - 체험형 */}
+        {/* Hero Section - 영상 배경 + 깔끔한 CTA */}
         <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
-          {/* Rolling Images Background */}
+          {/* 영상 배경 */}
           <div className="absolute inset-0 z-0">
-            {HERO_IMAGES.map((src, idx) => {
-              const isNeonRim = src.includes("NEON RIM");
-              return (
-                <div
-                  key={src}
-                  className={`absolute inset-0 transition-opacity duration-500 ${idx === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                >
-                  <Image
-                    src={src}
-                    alt={`Routine Reset ${idx + 1}`}
-                    fill
-                    className={`object-cover object-[70%_center] md:object-center ${isNeonRim ? "scale-125 -translate-y-[15%]" : ""}`}
-                    priority={idx === 0}
-                    sizes="100vw"
-                  />
-                </div>
-              );
-            })}
-            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/95 via-skin-bg/80 to-skin-bg/60 md:from-skin-bg/95 md:via-skin-bg/70 md:to-skin-bg/50" />
-            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/70" />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="/NEON RIM.png"
+            >
+              <source src="/2.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/95 via-skin-bg/80 to-skin-bg/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/80" />
           </div>
 
-          {/* Hero Content - 2컬럼 레이아웃 */}
-          <div className="relative z-10 max-w-7xl mx-auto w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-              {/* 좌측: 카피 + CTA */}
-              <div className="space-y-6 animate-fade-in text-center md:text-left order-2 md:order-1">
-                {/* Eyebrow */}
-                <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
-                  ROUTINE · BASE · GLOW · RESET
-                </p>
+          {/* Hero Content - 1컬럼 중앙 정렬 */}
+          <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
+            <div className="space-y-6 animate-fade-in">
+              {/* Eyebrow */}
+              <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
+                ROUTINE · BASE · GLOW · RESET
+              </p>
 
-                {/* H1 */}
-                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
-                    베이스가 달라지는
-                  </span><br />
-                  광채 루틴 리셋
-                </h1>
+              {/* H1 */}
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
+                  베이스가 달라지는
+                </span><br />
+                광채 루틴 리셋
+              </h1>
 
-                {/* Body */}
-                <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-md mx-auto md:mx-0">
-                  지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
-                </p>
+              {/* Body */}
+              <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-lg mx-auto">
+                지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
+              </p>
 
-                {/* CTA Row */}
-                <div className="flex flex-col md:flex-row items-center gap-4 pt-2">
-                  {/* Primary CTA */}
-                  <Link
-                    href="/healthcare/chat?topic=glow-booster"
-                    className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    30초 체크 시작
-                  </Link>
+              {/* CTA 3종 */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                {/* Primary CTA */}
+                <Link
+                  href="/healthcare/chat?topic=glow-booster"
+                  className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  30초 체크 시작
+                </Link>
 
-                  {/* Secondary CTA */}
-                  <Link
-                    href="/login?redirect=/healthcare/face-style"
-                    className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
-                  >
-                    사진으로 스타일 보기
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-
-                {/* 참고용 배지 */}
-                <div className="pt-2">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
-                    ℹ️ 참고용 안내 · 진단·처방 아님
-                  </span>
-                </div>
+                {/* Secondary CTA */}
+                <button
+                  onClick={() => setIsPhotoSlideOverOpen(true)}
+                  className="px-6 py-3 border-2 border-skin-primary/50 text-skin-primary bg-skin-bg/50 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-skin-primary/10 hover:border-skin-primary transition-all duration-300 flex items-center gap-2"
+                >
+                  <Camera className="w-4 h-4" />
+                  사진으로 스타일 보기
+                </button>
               </div>
 
-              {/* 우측: 체험형 샘플 전환 뷰어 */}
-              <div className="order-1 md:order-2">
-                <HeroExperience className="animate-fade-in [animation-delay:200ms]" />
+              {/* Tertiary Link */}
+              <div className="pt-2">
+                <a
+                  href="#clinic-search"
+                  className="text-skin-subtext hover:text-skin-primary text-sm font-medium inline-flex items-center gap-1 transition-colors"
+                >
+                  운영 중인 피부과 찾기
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
+
+              {/* 참고용 배지 */}
+              <div className="pt-2">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium backdrop-blur-sm">
+                  ℹ️ 참고용 안내 · 진단·처방 아님
+                </span>
               </div>
             </div>
           </div>
-
-          {/* Slide Dots */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-            {HERO_IMAGES.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => { setCurrentSlide(idx); setIsAutoPlay(true); }}
-                className={`w-2 h-2 rounded-full transition-all ${idx === currentSlide ? 'bg-skin-primary w-6' : 'bg-white/40 hover:bg-white/60'}`}
-                aria-label={`슬라이드 ${idx + 1}`}
-              />
-            ))}
-          </div>
         </header>
+
+        {/* Photo SlideOver */}
+        <PhotoSlideOver
+          isOpen={isPhotoSlideOverOpen}
+          onClose={() => setIsPhotoSlideOverOpen(false)}
+        />
 
         {/* How It Works - 3단 카드 */}
         <HowItWorksCards className="bg-skin-bg" />
@@ -320,6 +284,6 @@ export default function LandingPage() {
           </Link>
         </div>
       </div>
-    </TrackF1View>
+    </TrackF1View >
   );
 }
