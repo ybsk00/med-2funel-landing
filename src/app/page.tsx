@@ -7,6 +7,8 @@ import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2,
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
+import HeroExperience from "@/components/landing/HeroExperience";
+import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic } from "@/lib/constants/topics";
 
 // 히어로 롤링 이미지 (A→B→C→D→E 순서)
@@ -66,7 +68,7 @@ export default function LandingPage() {
           </div>
         </nav>
 
-        {/* Hero Section */}
+        {/* Hero Section - 체험형 */}
         <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
           {/* Rolling Images Background */}
           <div className="absolute inset-0 z-0">
@@ -88,57 +90,65 @@ export default function LandingPage() {
                 </div>
               );
             })}
-            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/95 via-skin-bg/70 to-transparent md:from-skin-bg/90 md:via-skin-bg/50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/95 via-skin-bg/80 to-skin-bg/60 md:from-skin-bg/95 md:via-skin-bg/70 md:to-skin-bg/50" />
             <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/70" />
           </div>
 
-          {/* Hero Content */}
-          <div className="absolute inset-0 z-10 flex items-center">
-            <div className="w-full px-6 md:px-0 md:pl-[clamp(180px,27vw,440px)] space-y-6 animate-fade-in text-center md:text-left">
-              {/* Eyebrow */}
-              <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
-                ROUTINE · BASE · GLOW · RESET
-              </p>
+          {/* Hero Content - 2컬럼 레이아웃 */}
+          <div className="relative z-10 max-w-7xl mx-auto w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+              {/* 좌측: 카피 + CTA */}
+              <div className="space-y-6 animate-fade-in text-center md:text-left order-2 md:order-1">
+                {/* Eyebrow */}
+                <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
+                  ROUTINE · BASE · GLOW · RESET
+                </p>
 
-              {/* H1 */}
-              <h1 className="text-3xl md:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
-                  베이스가 달라지는
-                </span><br />
-                광채 루틴 리셋
-              </h1>
+                {/* H1 */}
+                <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
+                    베이스가 달라지는
+                  </span><br />
+                  광채 루틴 리셋
+                </h1>
 
-              {/* Body */}
-              <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-sm mx-auto md:mx-0">
-                지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
-              </p>
+                {/* Body */}
+                <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-md mx-auto md:mx-0">
+                  지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
+                </p>
 
-              {/* CTA Row */}
-              <div className="flex flex-col md:flex-row items-center gap-4 pt-2">
-                {/* Primary CTA */}
-                <Link
-                  href="/healthcare/chat?topic=glow-booster"
-                  className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                >
-                  <Sparkles className="w-5 h-5" />
-                  7일 루틴 리셋 시작
-                </Link>
+                {/* CTA Row */}
+                <div className="flex flex-col md:flex-row items-center gap-4 pt-2">
+                  {/* Primary CTA */}
+                  <Link
+                    href="/healthcare/chat?topic=glow-booster"
+                    className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    30초 체크 시작
+                  </Link>
 
-                {/* Secondary */}
-                <a
-                  href="#clinic-search"
-                  className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
-                >
-                  지금 운영 피부과 찾기
-                  <ChevronRight className="w-4 h-4" />
-                </a>
+                  {/* Secondary CTA */}
+                  <Link
+                    href="/login?redirect=/healthcare/face-style"
+                    className="text-skin-subtext hover:text-skin-primary text-sm font-medium flex items-center gap-1 transition-colors"
+                  >
+                    사진으로 스타일 보기
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                {/* 참고용 배지 */}
+                <div className="pt-2">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
+                    ℹ️ 참고용 안내 · 진단·처방 아님
+                  </span>
+                </div>
               </div>
 
-              {/* 참고용 배지 */}
-              <div className="pt-2">
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-skin-muted/50 text-skin-subtext text-xs font-medium">
-                  ℹ️ 참고용 안내 · 진단·처방 아님
-                </span>
+              {/* 우측: 체험형 샘플 전환 뷰어 */}
+              <div className="order-1 md:order-2">
+                <HeroExperience className="animate-fade-in [animation-delay:200ms]" />
               </div>
             </div>
           </div>
@@ -155,6 +165,9 @@ export default function LandingPage() {
             ))}
           </div>
         </header>
+
+        {/* How It Works - 3단 카드 */}
+        <HowItWorksCards className="bg-skin-bg" />
 
         {/* Clinic Search Section */}
         <section id="clinic-search" className="relative py-16 bg-skin-bgSecondary">
