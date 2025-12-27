@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { RefreshCw, AlertCircle } from "lucide-react";
+import { RefreshCw, AlertCircle, GripVertical } from "lucide-react";
 
 interface Variant {
     key: string;
@@ -12,16 +12,14 @@ interface Variant {
 
 interface FaceSwapViewerProps {
     sessionId: string;
-    selectedVariant?: string; // 선택된 단일 variant
+    selectedVariant?: string;
 }
 
-// 4종 시술 설정
 const VARIANT_CONFIG: Record<string, { label: string; description: string }> = {
     laser: { label: "결·톤 정돈", description: "레이저 느낌" },
     botox: { label: "표정주름 완화", description: "보톡스 느낌" },
     filler: { label: "볼륨감 변화", description: "필러 느낌" },
     booster: { label: "광채/물광", description: "스킨부스터 느낌" },
-    // 기존 variant (호환성)
     natural: { label: "내추럴", description: "피부결/톤 정리" },
     makeup: { label: "메이크업 느낌", description: "색감/채도 조정" },
     bright: { label: "밝은 톤", description: "밝기/화이트밸런스" },
@@ -29,8 +27,12 @@ const VARIANT_CONFIG: Record<string, { label: string; description: string }> = {
 
 export default function FaceSwapViewer({ sessionId, selectedVariant }: FaceSwapViewerProps) {
     const [variants, setVariants] = useState<Variant[]>([]);
+    const [originalUrl, setOriginalUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [sliderPosition, setSliderPosition] = useState(50);
+    const [isDragging, setIsDragging] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const fetchSession = async () => {
         try {
@@ -43,6 +45,7 @@ export default function FaceSwapViewer({ sessionId, selectedVariant }: FaceSwapV
 
             const data = await res.json();
             setVariants(data.variants || []);
+            setOriginalUrl(data.originalUrl || null);
             setError(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : "오류가 발생했습니다.");
@@ -53,12 +56,40 @@ export default function FaceSwapViewer({ sessionId, selectedVariant }: FaceSwapV
 
     useEffect(() => {
         fetchSession();
-        // URL 갱신을 위해 4분마다 재조회 (5분 만료 전)
         const interval = setInterval(fetchSession, 240000);
         return () => clearInterval(interval);
     }, [sessionId]);
 
-    // 선택된 variant의 정보
+    // 슬라이더 드래그 핸들러
+    const handleDrag = (clientX: number) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        setSliderPosition(percentage);
+    };
+
+    const handleMouseDown = () => setIsDragging(true);
+    const handleMouseUp = () => setIsDragging(false);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (isDragging) handleDrag(e.clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (isDragging) handleDrag(e.touches[0].clientX);
+    };
+
+    useEffect(() => {
+        const handleGlobalMouseUp = () => setIsDragging(false);
+        window.addEventListener("mouseup", handleGlobalMouseUp);
+        window.addEventListener("touchend", handleGlobalMouseUp);
+        return () => {
+            window.removeEventListener("mouseup", handleGlobalMouseUp);
+            window.removeEventListener("touchend", handleGlobalMouseUp);
+        };
+    }, []);
+
     const activeVariant = selectedVariant || variants[0]?.key || "laser";
     const activeConfig = VARIANT_CONFIG[activeVariant] || { label: activeVariant, description: "" };
     const activeUrl = variants.find(v => v.key === activeVariant)?.url;
@@ -66,7 +97,7 @@ export default function FaceSwapViewer({ sessionId, selectedVariant }: FaceSwapV
     if (isLoading) {
         return (
             <div className="flex items-center justify-center py-16">
-                <RefreshCw className="w-8 h-8 text-skin-primary animate-spin" />
+                <RefreshCw className="w-8 h-8 text-pink-500 animate-spin" />
             </div>
         );
     }
@@ -91,40 +122,77 @@ export default function FaceSwapViewer({ sessionId, selectedVariant }: FaceSwapV
 
     return (
         <div className="max-w-lg mx-auto">
-            {/* 이미지 뷰어 */}
-            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl shadow-skin-primary/20 border border-white/10 mb-6">
-                {activeUrl ? (
-                    <>
+            {/* 전후비교 슬라이더 */}
+            <div
+                ref={containerRef}
+                className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border border-gray-700 mb-4 cursor-ew-resize select-none"
+                onMouseMove={handleMouseMove}
+                onTouchMove={handleTouchMove}
+            >
+                {/* Before 이미지 (원본) */}
+                {originalUrl && (
+                    <div className="absolute inset-0">
+                        <Image
+                            src={originalUrl}
+                            alt="원본"
+                            fill
+                            className="object-cover object-top"
+                            unoptimized
+                            draggable={false}
+                        />
+                        {/* Before 라벨 */}
+                        <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 rounded text-xs text-white font-medium">
+                            Before
+                        </div>
+                    </div>
+                )}
+
+                {/* After 이미지 (변환) - 클리핑 */}
+                {activeUrl && (
+                    <div
+                        className="absolute inset-0 overflow-hidden"
+                        style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
+                    >
                         <Image
                             src={activeUrl}
                             alt={activeConfig.label}
                             fill
                             className="object-cover object-top"
-                            unoptimized // Signed URL이므로 최적화 비활성화
+                            unoptimized
+                            draggable={false}
                         />
-
-                        {/* 오버레이 */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
-
-                        {/* 하단 라벨 */}
-                        <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-                            <p className="text-lg font-bold text-white drop-shadow-lg">
-                                {activeConfig.label}
-                            </p>
-                            <p className="text-sm text-white/80 drop-shadow">
-                                {activeConfig.description}
-                            </p>
+                        {/* After 라벨 */}
+                        <div className="absolute top-3 right-3 px-2 py-1 bg-pink-500/80 rounded text-xs text-white font-medium">
+                            After
                         </div>
-                    </>
-                ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-skin-surface">
-                        <p className="text-skin-muted">이미지를 불러올 수 없습니다.</p>
                     </div>
                 )}
+
+                {/* 슬라이더 핸들 */}
+                <div
+                    className="absolute top-0 bottom-0 w-1 bg-white shadow-lg cursor-ew-resize z-10"
+                    style={{ left: `${sliderPosition}%`, transform: "translateX(-50%)" }}
+                    onMouseDown={handleMouseDown}
+                    onTouchStart={handleMouseDown}
+                >
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
+                        <GripVertical className="w-4 h-4 text-gray-600" />
+                    </div>
+                </div>
+
+                {/* 하단 라벨 */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                    <p className="text-center text-white font-bold text-lg drop-shadow-lg">
+                        {activeConfig.label}
+                    </p>
+                    <p className="text-center text-white/80 text-sm">
+                        {activeConfig.description}
+                    </p>
+                </div>
             </div>
 
             {/* 안내 */}
-            <p className="text-xs text-skin-muted text-center">
+            <p className="text-xs text-gray-500 text-center">
                 ⚠️ 참고용 시각화이며, 실제 시술 결과와 다를 수 있습니다.
             </p>
         </div>

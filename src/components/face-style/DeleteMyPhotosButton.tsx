@@ -25,15 +25,15 @@ export default function DeleteMyPhotosButton({
         setResult(null);
 
         try {
-            // TODO: 삭제 API 구현 후 연동
-            // const res = await fetch(`/api/face-style/session/delete`, {
-            //   method: "DELETE",
-            //   headers: { "Content-Type": "application/json" },
-            //   body: JSON.stringify({ sessionId }),
-            // });
+            const res = await fetch(`/api/face-style/session/delete`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionId }),
+            });
 
-            // 임시: 성공 시뮬레이션
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            if (!res.ok) {
+                throw new Error("삭제 실패");
+            }
 
             setResult("success");
             setShowConfirm(false);
