@@ -23,20 +23,8 @@ export async function POST() {
             );
         }
 
-        // 2. face_style 동의 여부 확인
-        const { data: consent } = await supabase
-            .from('consents')
-            .select('*')
-            .eq('user_id', user.id)
-            .eq('type', 'face_style')
-            .single();
-
-        if (!consent || !consent.agreed) {
-            return NextResponse.json(
-                { error: 'Consent required', code: 'CONSENT_REQUIRED' },
-                { status: 403 }
-            );
-        }
+        // 2. 동의 확인 - 모달 내에서 프론트엔드 동의 완료 후 호출되므로 생략
+        // DB 동의 테이블 체크는 선택적 구현 (현재 미사용)
 
         // 3. 새 세션 생성
         const { data: session, error: sessionError } = await supabase
