@@ -10,11 +10,14 @@ function getAdminClient() {
     );
 }
 
+// 4종 시술 variant 키
+type VariantKey = 'laser' | 'botox' | 'filler' | 'booster' | 'natural' | 'makeup' | 'bright';
+
 export async function POST(request: NextRequest) {
     try {
         const supabase = await createClient();
         const body = await request.json();
-        const { sessionId } = body;
+        const { sessionId, variant } = body;
 
         if (!sessionId) {
             return NextResponse.json(
@@ -72,29 +75,29 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // 4. variants 3개 생성 (service_role 사용 - RLS 우회)
+        // 4. 선택된 단일 variant만 생성 (service_role 사용 - RLS 우회)
         const adminClient = getAdminClient();
-        const variantKeys = ['natural', 'makeup', 'bright'] as const;
-
-        const variantsToInsert = variantKeys.map(key => ({
-            session_id: sessionId,
-            variant_key: key,
-            status: 'queued',
-        }));
+        const targetVariant: VariantKey = variant || 'laser';
 
         const { error: variantError } = await adminClient
             .from('face_style_variants')
-            .insert(variantsToInsert);
+            .upsert({
+                session_id: sessionId,
+                variant_key: targetVariant,
+                status: 'queued',
+            }, {
+                onConflict: 'session_id,variant_key'
+            });
 
         if (variantError) {
-            console.error('Variants creation error:', variantError);
+            console.error('Variant creation error:', variantError);
             // 롤백: 세션 상태 복구
             await supabase
                 .from('face_style_sessions')
                 .update({ status: 'created' })
                 .eq('id', sessionId);
             return NextResponse.json(
-                { error: 'Failed to create variants' },
+                { error: 'Failed to create variant' },
                 { status: 500 }
             );
         }
@@ -103,7 +106,7 @@ export async function POST(request: NextRequest) {
             success: true,
             sessionId: sessionId,
             status: 'uploaded',
-            variants: variantKeys,
+            variant: targetVariant,
         });
 
     } catch (error) {

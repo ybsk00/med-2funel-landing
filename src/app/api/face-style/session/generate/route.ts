@@ -10,13 +10,16 @@ function getAdminClient() {
     );
 }
 
+// 4종 시술 variant 키
+type VariantKey = 'laser' | 'botox' | 'filler' | 'booster' | 'natural' | 'makeup' | 'bright';
+
 // 간단한 이미지 처리 (Sharp 없이 원본 복사)
 // 실제 프로덕션에서는 Sharp 또는 외부 API 사용 권장
 async function processVariant(
     adminClient: ReturnType<typeof getAdminClient>,
     userId: string,
     sessionId: string,
-    variantKey: 'natural' | 'makeup' | 'bright'
+    variantKey: VariantKey
 ): Promise<{ success: boolean; imagePath?: string; error?: string }> {
     try {
         // 원본 이미지 다운로드
@@ -55,7 +58,7 @@ export async function POST(request: NextRequest) {
     try {
         const supabase = await createClient();
         const body = await request.json();
-        const { sessionId } = body;
+        const { sessionId, variant } = body;
 
         if (!sessionId) {
             return NextResponse.json(
@@ -102,31 +105,30 @@ export async function POST(request: NextRequest) {
             .eq('id', sessionId);
 
         const adminClient = getAdminClient();
-        const variantKeys = ['natural', 'makeup', 'bright'] as const;
+
+        // 4. 선택된 단일 variant 또는 기본값
+        const targetVariant: VariantKey = variant || 'laser';
         const results: Record<string, { success: boolean; error?: string }> = {};
 
-        // 4. 각 variant 처리
-        for (const variantKey of variantKeys) {
-            const result = await processVariant(adminClient, user.id, sessionId, variantKey);
-            results[variantKey] = { success: result.success, error: result.error };
+        // 단일 variant만 처리
+        const result = await processVariant(adminClient, user.id, sessionId, targetVariant);
+        results[targetVariant] = { success: result.success, error: result.error };
 
-            // variant 상태 업데이트
-            await adminClient
-                .from('face_style_variants')
-                .update({
-                    status: result.success ? 'done' : 'failed',
-                    image_path: result.imagePath || null,
-                })
-                .eq('session_id', sessionId)
-                .eq('variant_key', variantKey);
-        }
+        // variant 레코드 생성/업데이트 (upsert)
+        await adminClient
+            .from('face_style_variants')
+            .upsert({
+                session_id: sessionId,
+                variant_key: targetVariant,
+                status: result.success ? 'done' : 'failed',
+                image_path: result.imagePath || null,
+            }, {
+                onConflict: 'session_id,variant_key'
+            });
 
         // 5. 최종 세션 상태 결정
-        const successCount = Object.values(results).filter(r => r.success).length;
-        const finalStatus = successCount >= 2 ? 'ready' : 'failed';
-        const errorMessage = successCount < 3
-            ? `${3 - successCount} variant(s) failed`
-            : null;
+        const finalStatus = result.success ? 'ready' : 'failed';
+        const errorMessage = result.success ? null : result.error;
 
         await supabase
             .from('face_style_sessions')
@@ -137,9 +139,10 @@ export async function POST(request: NextRequest) {
             .eq('id', sessionId);
 
         return NextResponse.json({
-            success: finalStatus === 'ready',
+            success: result.success,
             sessionId: sessionId,
             status: finalStatus,
+            variant: targetVariant,
             results: results,
         });
 
