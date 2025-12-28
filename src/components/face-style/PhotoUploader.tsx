@@ -8,22 +8,27 @@ interface PhotoUploaderProps {
     onUploadComplete: (sessionId: string) => void;
     isLoading?: boolean;
     selectedVariant?: string; // 선택된 시술 타입
+    forceMobile?: boolean; // 강제로 모바일 UI 표시 (환자 포털용)
 }
 
 const MAX_FILE_SIZE = 8 * 1024 * 1024; // 8MB
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export default function PhotoUploader({ onUploadComplete, isLoading = false, selectedVariant }: PhotoUploaderProps) {
+export default function PhotoUploader({ onUploadComplete, isLoading = false, selectedVariant, forceMobile = false }: PhotoUploaderProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+    const [isMobile, setIsMobile] = useState(forceMobile);
     const cameraInputRef = useRef<HTMLInputElement>(null);
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
     // 모바일 감지
     useEffect(() => {
+        if (forceMobile) {
+            setIsMobile(true);
+            return;
+        }
         const checkMobile = () => {
             const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
             const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
@@ -32,7 +37,7 @@ export default function PhotoUploader({ onUploadComplete, isLoading = false, sel
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
-    }, []);
+    }, [forceMobile]);
 
     const handleFileSelect = (file: File) => {
         setError(null);

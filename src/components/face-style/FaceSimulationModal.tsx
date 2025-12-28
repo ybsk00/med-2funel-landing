@@ -291,6 +291,7 @@ export default function FaceSimulationModal({ isOpen, onClose, isMobile = false 
                         <PhotoUploader
                             onUploadComplete={handleUploadComplete}
                             selectedVariant={selectedVariant || undefined}
+                            forceMobile={isMobile}
                         />
                     )}
 
