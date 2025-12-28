@@ -30,7 +30,7 @@ interface ERStatus {
 // 세인트의원 정보
 const RECOMMENDED_CLINIC = {
     name: "세인트의원",
-    addr: "서울 강남구 압구정로 152, 3층 306호",
+    addr: "경기 의정부시 평화로 540 태평양타워 6층",
     tel: "1899-1150",
     closeTime: "21:00",
     openToday: true,

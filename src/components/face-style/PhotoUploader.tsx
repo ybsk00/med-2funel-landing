@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Upload, Camera, X, AlertCircle } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Upload, Camera, X, AlertCircle, ImageIcon } from "lucide-react";
 import Image from "next/image";
 
 interface PhotoUploaderProps {
@@ -18,7 +18,21 @@ export default function PhotoUploader({ onUploadComplete, isLoading = false, sel
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+    const cameraInputRef = useRef<HTMLInputElement>(null);
+    const galleryInputRef = useRef<HTMLInputElement>(null);
+
+    // 모바일 감지
+    useEffect(() => {
+        const checkMobile = () => {
+            const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+            const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+            setIsMobile(mobileRegex.test(userAgent) || window.innerWidth <= 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const handleFileSelect = (file: File) => {
         setError(null);
@@ -58,8 +72,11 @@ export default function PhotoUploader({ onUploadComplete, isLoading = false, sel
         setSelectedFile(null);
         setPreviewUrl(null);
         setError(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+        if (cameraInputRef.current) {
+            cameraInputRef.current.value = "";
+        }
+        if (galleryInputRef.current) {
+            galleryInputRef.current.value = "";
         }
     };
 
@@ -123,37 +140,89 @@ export default function PhotoUploader({ onUploadComplete, isLoading = false, sel
 
     return (
         <div className="max-w-md mx-auto">
+            {/* Hidden inputs for camera and gallery */}
+            <input
+                ref={cameraInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                onChange={handleInputChange}
+                className="hidden"
+            />
+            <input
+                ref={galleryInputRef}
+                type="file"
+                accept={ACCEPTED_TYPES.join(",")}
+                onChange={handleInputChange}
+                className="hidden"
+            />
+
             {/* 파일 선택 영역 */}
             {!previewUrl ? (
-                <div
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center cursor-pointer hover:border-skin-primary/50 hover:bg-white/5 transition-all"
-                >
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept={ACCEPTED_TYPES.join(",")}
-                        onChange={handleInputChange}
-                        className="hidden"
-                    />
-                    <div className="w-16 h-16 bg-skin-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Camera className="w-8 h-8 text-skin-primary" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-skin-text mb-2">
-                        사진 업로드
-                    </h3>
-                    <p className="text-sm text-skin-subtext mb-4">
-                        클릭하거나 드래그하여 사진을 업로드하세요
-                    </p>
-                    <div className="flex items-center justify-center gap-2">
-                        <Upload className="w-4 h-4 text-skin-muted" />
-                        <span className="text-xs text-skin-muted">
+                isMobile ? (
+                    /* 모바일: 카메라/갤러리 버튼 분리 */
+                    <div className="space-y-4">
+                        <div className="text-center mb-4">
+                            <div className="w-16 h-16 bg-skin-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Camera className="w-8 h-8 text-skin-primary" />
+                            </div>
+                            <h3 className="text-lg font-semibold text-skin-text mb-2">
+                                사진 업로드
+                            </h3>
+                            <p className="text-sm text-skin-subtext">
+                                사진을 촬영하거나 갤러리에서 선택하세요
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                            {/* 카메라 촬영 버튼 */}
+                            <button
+                                onClick={() => cameraInputRef.current?.click()}
+                                className="flex flex-col items-center gap-2 p-5 bg-skin-primary/10 border-2 border-skin-primary/30 rounded-xl hover:bg-skin-primary/20 hover:border-skin-primary/50 transition-all"
+                            >
+                                <Camera className="w-8 h-8 text-skin-primary" />
+                                <span className="text-sm font-medium text-skin-text">사진 촬영</span>
+                            </button>
+
+                            {/* 갤러리 선택 버튼 */}
+                            <button
+                                onClick={() => galleryInputRef.current?.click()}
+                                className="flex flex-col items-center gap-2 p-5 bg-white/5 border-2 border-white/20 rounded-xl hover:bg-white/10 hover:border-white/30 transition-all"
+                            >
+                                <ImageIcon className="w-8 h-8 text-skin-subtext" />
+                                <span className="text-sm font-medium text-skin-text">갤러리</span>
+                            </button>
+                        </div>
+
+                        <p className="text-xs text-skin-muted text-center">
                             JPG, PNG, WebP · 최대 8MB
-                        </span>
+                        </p>
                     </div>
-                </div>
+                ) : (
+                    /* 데스크톱: 드래그 앤 드롭 */
+                    <div
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onClick={() => galleryInputRef.current?.click()}
+                        className="border-2 border-dashed border-white/20 rounded-2xl p-8 text-center cursor-pointer hover:border-skin-primary/50 hover:bg-white/5 transition-all"
+                    >
+                        <div className="w-16 h-16 bg-skin-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Camera className="w-8 h-8 text-skin-primary" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-skin-text mb-2">
+                            사진 업로드
+                        </h3>
+                        <p className="text-sm text-skin-subtext mb-4">
+                            클릭하거나 드래그하여 사진을 업로드하세요
+                        </p>
+                        <div className="flex items-center justify-center gap-2">
+                            <Upload className="w-4 h-4 text-skin-muted" />
+                            <span className="text-xs text-skin-muted">
+                                JPG, PNG, WebP · 최대 8MB
+                            </span>
+                        </div>
+                    </div>
+                )
             ) : (
                 /* 미리보기 */
                 <div className="relative">
@@ -214,3 +283,4 @@ export default function PhotoUploader({ onUploadComplete, isLoading = false, sel
         </div>
     );
 }
+

@@ -37,7 +37,7 @@ const GYEONGGI_REGIONS = [
 ];
 
 // 추천 병원 노출 대상 지역
-const TARGET_REGIONS = ["의정부시", "양주시", "포천시", "도봉구", "노원구"];
+const TARGET_REGIONS = ["의정부시", "양주시", "포천시", "고양시", "도봉구", "노원구"];
 
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
@@ -347,7 +347,7 @@ export default function ClinicSearchModule() {
                                                         </div>
                                                         <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
                                                             <MapPin size={14} />
-                                                            서울 강남구 압구정로 152 극동타워 A동 3층
+                                                            경기 의정부시 평화로 540 태평양타워 6층
                                                         </p>
                                                     </div>
                                                 </div>
