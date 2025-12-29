@@ -340,7 +340,7 @@ export default function MessagesPage() {
                             />
                             {alimtalkTemplate && (
                                 <>
-                                    <Text size="sm" fw={500}>템플릿 변수</Text>
+                                    <Text size="sm" fw={500} c="white">템플릿 변수</Text>
                                     {Object.keys(alimtalkVariables).map((key) => (
                                         <TextInput
                                             key={key}

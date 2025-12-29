@@ -532,16 +532,16 @@ export default function AppointmentsPage() {
                         {appointments.map((appt) => (
                             <Table.Tr key={appt.id}>
                                 <Table.Td>
-                                    <Text size="sm">
+                                    <Text size="sm" c="white">
                                         {format(new Date(appt.scheduled_at), 'PPP p', { locale: ko })}
                                     </Text>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Text size="sm" fw={500}>{appt.patient?.name}</Text>
+                                    <Text size="sm" c="white" fw={500}>{appt.patient?.name}</Text>
                                     <Text size="xs" c="dimmed">{appt.patient?.phone}</Text>
                                 </Table.Td>
                                 <Table.Td>
-                                    <Text size="sm">{appt.slot?.department || '-'}</Text>
+                                    <Text size="sm" c="white">{appt.slot?.department || '-'}</Text>
                                 </Table.Td>
                                 <Table.Td>
                                     {getStatusBadge(appt.status)}
@@ -600,7 +600,7 @@ export default function AppointmentsPage() {
                 title={
                     <Group gap="xs">
                         <MessageSquare size={20} />
-                        <Text fw={600}>{selectedPatient?.name} 환자 문진 기록</Text>
+                        <Text fw={600} c="white">{selectedPatient?.name} 환자 문진 기록</Text>
                     </Group>
                 }
                 size="lg"
@@ -622,7 +622,7 @@ export default function AppointmentsPage() {
                         {chatSessions.map((session, idx) => (
                             <Paper key={session.id} withBorder p="md" radius="md" bg="dark.7">
                                 <Group justify="space-between" mb="sm">
-                                    <Text size="sm" fw={500}>문진 #{chatSessions.length - idx}</Text>
+                                    <Text size="sm" fw={500} c="white">문진 #{chatSessions.length - idx}</Text>
                                     <Text size="xs" c="dimmed">
                                         {format(new Date(session.created_at), 'yyyy-MM-dd HH:mm')}
                                     </Text>
@@ -692,7 +692,7 @@ export default function AppointmentsPage() {
 
                 {/* 수기 문진 입력 */}
                 <Paper withBorder p="md" radius="md" bg="dark.6" mt="md">
-                    <Text size="sm" fw={500} mb="xs">수기 메모 추가</Text>
+                    <Text size="sm" fw={500} mb="xs" c="white">수기 메모 추가</Text>
                     <Textarea
                         placeholder="관리자 메모를 입력하세요..."
                         value={manualNote}
@@ -861,7 +861,7 @@ export default function AppointmentsPage() {
                 title={
                     <Group gap="xs">
                         <Edit size={20} />
-                        <Text fw={600}>예약 수정</Text>
+                        <Text fw={600} c="white">예약 수정</Text>
                     </Group>
                 }
                 centered
@@ -885,7 +885,7 @@ export default function AppointmentsPage() {
 
                     <Paper withBorder p="sm" radius="md" bg="dark.6">
                         <Text size="sm" c="dimmed" mb="xs">환자 정보</Text>
-                        <Text fw={500}>{selectedAppointment?.patient?.name || '-'}</Text>
+                        <Text fw={500} c="white">{selectedAppointment?.patient?.name || '-'}</Text>
                         <Text size="sm" c="dimmed">{selectedAppointment?.patient?.phone || '-'}</Text>
                     </Paper>
 

@@ -581,7 +581,7 @@ export default function SettingsPage() {
                             <div>
                                 <Group gap="xs" mb="sm">
                                     <Bell size={16} />
-                                    <Text fw={500}>앱 푸시</Text>
+                                    <Text fw={500} c="white">앱 푸시</Text>
                                     <Badge size="sm" color="gray">짧은 형식</Badge>
                                 </Group>
                                 <Card withBorder radius="md" p="md" bg="gray.9">
@@ -596,7 +596,7 @@ export default function SettingsPage() {
                             <div>
                                 <Group gap="xs" mb="sm">
                                     <Send size={16} />
-                                    <Text fw={500}>카카오 알림톡</Text>
+                                    <Text fw={500} c="white">카카오 알림톡</Text>
                                     <Badge size="sm" color="yellow">긴 형식</Badge>
                                 </Group>
                                 <Card withBorder radius="md" p="md" style={{ backgroundColor: '#FEE500', color: '#000' }}>
