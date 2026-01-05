@@ -37,7 +37,7 @@ const GYEONGGI_REGIONS = [
 ];
 
 // 추천 병원 노출 대상 지역
-const TARGET_REGIONS = ["의정부시", "양주시", "포천시", "고양시", "도봉구", "노원구"];
+const TARGET_REGIONS = ["강남구", "서초구", "송파구", "용산구", "성동구", "강동구"];
 
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
@@ -55,8 +55,8 @@ function isHoliday(): boolean {
 
 export default function ClinicSearchModule() {
     // 지역 선택
-    const [selectedCity, setSelectedCity] = useState("경기도");
-    const [selectedRegion, setSelectedRegion] = useState("의정부시");
+    const [selectedCity, setSelectedCity] = useState("서울");
+    const [selectedRegion, setSelectedRegion] = useState("강남구");
 
     // 토글 상태
     const [todayOpen, setTodayOpen] = useState(true);
@@ -324,7 +324,7 @@ export default function ClinicSearchModule() {
                             {/* 성공 - 결과 리스트 */}
                             {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 세인트의원 추천 카드 (타겟 지역에서만 표시) */}
+                                    {/* 리원피부과 추천 카드 (타겟 지역에서만 표시) */}
                                     {TARGET_REGIONS.includes(selectedRegion) && (
                                         <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
                                             <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
@@ -335,7 +335,7 @@ export default function ClinicSearchModule() {
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex-1">
                                                         <h3 className="text-lg font-bold text-white">
-                                                            세인트의원
+                                                            리원피부과
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
@@ -347,7 +347,7 @@ export default function ClinicSearchModule() {
                                                         </div>
                                                         <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
                                                             <MapPin size={14} />
-                                                            경기 의정부시 평화로 540 태평양타워 6층
+                                                            서울 강남구 도산대로 327 SGF 청담타워
                                                         </p>
                                                     </div>
                                                 </div>

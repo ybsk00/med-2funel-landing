@@ -42,7 +42,7 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '평촌이생각
         const lastAiMessage = history.filter((m: any) => m.role === 'ai').slice(-1)[0]?.content || '';
         const askedForReservation = lastAiMessage.includes("예약을 도와드릴까요") ||
             lastAiMessage.includes("방문해 보시는 건 어떠세요") ||
-            lastAiMessage.includes("한의원에 한번 방문");
+            lastAiMessage.includes("피부과에 한번 방문");
 
         const isPostFinalTurn = turnCount > 4;
 

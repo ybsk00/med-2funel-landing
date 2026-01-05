@@ -27,10 +27,10 @@ interface ERStatus {
     hvmriayn: string;
 }
 
-// 세인트의원 정보
+// 리원피부과 정보
 const RECOMMENDED_CLINIC = {
-    name: "세인트의원",
-    addr: "경기 의정부시 평화로 540 태평양타워 6층",
+    name: "리원피부과",
+    addr: "서울 강남구 도산대로 327 SGF 청담타워",
     tel: "1899-1150",
     closeTime: "21:00",
     openToday: true,
@@ -190,7 +190,7 @@ export default function HospitalSearchPage() {
                 </header>
 
                 <main className="p-4 space-y-4">
-                    {/* 세인트의원 추천 카드 (항상 상단) */}
+                    {/* 리원피부과 추천 카드 (항상 상단) */}
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />

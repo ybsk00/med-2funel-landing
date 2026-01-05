@@ -1,4 +1,4 @@
-﻿// 세인트의원 헬스케어 질문 풀
+﻿// 리원피부과 헬스케어 질문 풀
 // 질문 ID 포함 (분석/트래킹용)
 
 import { Topic } from '@/lib/constants/topics';

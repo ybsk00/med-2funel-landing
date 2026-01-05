@@ -122,7 +122,7 @@ export default function NewAppointmentPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     scheduled_at: scheduledAt.toISOString(),
-                    notes: selectedDoctor === '전체' ? '세인트의원 진료' : `세인트의원 진료 (${selectedDoctor})`,
+                    notes: selectedDoctor === '전체' ? '리원피부과 진료' : `리원피부과 진료 (${selectedDoctor})`,
                     doctor_name: selectedDoctor  // 의사 이름 추가
                 })
             })

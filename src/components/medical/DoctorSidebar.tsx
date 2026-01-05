@@ -24,7 +24,7 @@ export default function DoctorSidebar() {
                         <ThemeIcon size="lg" radius="xl" color="sage-green" variant="filled">
                             <Text fw={700} size="sm">J</Text>
                         </ThemeIcon>
-                        <Text fw={700} size="lg" c="dark.9">한의원</Text>
+                        <Text fw={700} size="lg" c="dark.9">피부과</Text>
                     </Group>
                     <Text size="xs" c="sage-green.7" fw={500} pl={42}>Doctor Dashboard</Text>
                 </Box>

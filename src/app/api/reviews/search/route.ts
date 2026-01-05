@@ -6,7 +6,7 @@
 
 const NAVER_CLIENT_ID = process.env.NAVER_SEARCH_CLIENT_ID;
 const NAVER_CLIENT_SECRET = process.env.NAVER_SEARCH_CLIENT_SECRET;
-const HOSPITAL_NAME = process.env.HOSPITAL_REVIEW_QUERY_BASE || '세인트의원';
+const HOSPITAL_NAME = process.env.HOSPITAL_REVIEW_QUERY_BASE || '리원피부과';
 
 // 제외 키워드 (잡상인 필터링)
 const EXCLUDE_KEYWORDS = [
@@ -98,9 +98,9 @@ export async function GET(req: NextRequest) {
             const text = `${item.title} ${item.description}`.toLowerCase();
 
             // 1. 병원명 포함 여부 (필수)
-            // "의정부"가 반드시 포함되어야 하며, "세인트의원" 또는 "세인트 의원"이 포함되어야 함
-            const hasLocation = text.includes('의정부');
-            const hasName = text.includes('세인트의원') || text.includes('세인트 의원');
+            // "강남"이 반드시 포함되어야 하며, "리원피부과" 또는 "리원 피부과"가 포함되어야 함
+            const hasLocation = text.includes('강남');
+            const hasName = text.includes('리원피부과') || text.includes('리원 피부과');
 
             if (!hasLocation || !hasName) {
                 return false;
@@ -182,7 +182,7 @@ function formatDate(dateStr?: string): string {
 function getDummyItems(source: string) {
     const items = [
         {
-            title: '강남 세인트의원 방문 후기 - 친절한 진료',
+            title: '강남 리원피부과 방문 후기 - 친절한 진료',
             link: 'https://blog.naver.com/example1',
             description: '지인 추천으로 방문했는데 정말 만족스러웠습니다...',
             author: '건강맘',
@@ -190,7 +190,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '삼성역 피부과 추천 - 세인트의원',
+            title: '청담 피부과 추천 - 리원피부과',
             link: 'https://blog.naver.com/example2',
             description: '소화가 안되서 방문했는데 꼼꼼하게 봐주셨어요...',
             author: '강남직장인',
@@ -198,7 +198,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '세인트의원 진료 경험 공유',
+            title: '리원피부과 진료 경험 공유',
             link: 'https://blog.naver.com/example3',
             description: '다이어트 한약 처방받고 효과 좋았습니다...',
             author: '다이어터',
@@ -214,7 +214,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '세인트의원 첫 방문기',
+            title: '리원피부과 첫 방문기',
             link: 'https://blog.naver.com/example5',
             description: '처음 피부과 가봤는데 생각보다 좋았어요...',
             author: '피부과초보',

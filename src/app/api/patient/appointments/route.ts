@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
         // 3. 예약 생성
         const appointmentData: any = {
             scheduled_at,
-            notes: notes || 'AI한의원 진료',
+            notes: notes || '리원피부과 진료',
             status: 'scheduled',
             doctor_name: doctor_name || null,  // 의사 이름 저장
         }

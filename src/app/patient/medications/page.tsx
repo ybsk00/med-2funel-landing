@@ -511,7 +511,7 @@ export default function MedicationsPage() {
                             </div>
 
                             <p className="text-sm text-gray-300 mb-6 leading-relaxed">
-                                복약에 대한 더 자세한 상담이 필요하시면 한의원을 방문하시는 것을 권장합니다.
+                                복약에 대한 더 자세한 상담이 필요하시면 피부과를 방문하시는 것을 권장합니다.
                                 전문 한의사가 직접 상담해드립니다.
                             </p>
 
