@@ -8,7 +8,7 @@ interface MapModalProps {
     onClose: () => void;
 }
 
-const HOSPITAL_NAME = '리원피부과';
+const HOSPITAL_NAME = '에버피부과';
 const HOSPITAL_ADDRESS = '서울 강남구 도산대로 327 SGF 청담타워';
 const MAP_QUERY = encodeURIComponent(HOSPITAL_ADDRESS);
 

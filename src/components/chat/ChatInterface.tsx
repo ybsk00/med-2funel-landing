@@ -92,7 +92,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.mode === 'medical') {
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 리원피부과 AI 상담입니다.\n\n**✨ 리원피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
+                content: "안녕하세요, 에버피부과 AI 상담입니다.\n\n**✨ 에버피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
             }]);
         } else {
             const topicLabel = TOPIC_LABELS[topic];
@@ -100,7 +100,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 리원 스킨케어 가이드입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 에버 스킨케어 가이드입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
@@ -329,7 +329,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
                                 <Image
                                     src="/GALLERY MINIMAL.png"
-                                    alt="리원피부과 프리미엄 스킨케어"
+                                    alt="에버피부과 프리미엄 스킨케어"
                                     fill
                                     className="object-cover object-[center_25%]"
                                     priority
@@ -337,7 +337,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
                                 <div className="absolute bottom-4 left-4 right-4">
                                     <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
-                                        리원 뷰티 스킨케어
+                                        에버 뷰티 스킨케어
                                     </h2>
                                     <p className="text-sm text-white/80 drop-shadow">프리미엄 피부 관리의 시작</p>
                                 </div>
@@ -405,7 +405,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "리원피부과 AI" : "리원 스킨케어 가이드") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? "에버피부과 AI" : "에버 스킨케어 가이드") : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"

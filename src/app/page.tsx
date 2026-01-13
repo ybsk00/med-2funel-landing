@@ -31,7 +31,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
               <span className="text-2xl">✨</span>
-              <span className="text-xl font-bold text-skin-text tracking-wide">LEEONE ATELIER</span>
+              <span className="text-xl font-bold text-skin-text tracking-wide">EVER ATELIER</span>
             </Link>
             <Link
               href="/login"
@@ -108,7 +108,7 @@ export default function LandingPage() {
                   href="#clinic-search"
                   className="text-skin-subtext hover:text-skin-primary text-sm font-medium inline-flex items-center gap-1 transition-colors"
                 >
-                  운영 중인 피부과 찾기
+                  강남 유명한 피부과 찾기
                   <ChevronRight className="w-4 h-4" />
                 </a>
               </div>
@@ -137,10 +137,10 @@ export default function LandingPage() {
           <div className="w-full max-w-4xl px-6 md:px-0 md:pl-[clamp(48px,10vw,160px)] md:pr-[clamp(16px,8vw,180px)] mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-2xl md:text-3xl font-bold text-skin-text mb-2">
-                지금 운영 중인 피부과 찾기
+                강남 유명한 피부과 찾기
               </h2>
               <p className="text-skin-subtext text-sm">
-                지역과 운영 시간을 선택해 가까운 피부과를 검색하세요.
+                강남구 압구정로 222 에버피부과
               </p>
             </div>
             <div className="bg-skin-surface rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl">

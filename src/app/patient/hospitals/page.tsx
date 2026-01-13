@@ -27,9 +27,9 @@ interface ERStatus {
     hvmriayn: string;
 }
 
-// 리원피부과 정보
+// 에버피부과 정보
 const RECOMMENDED_CLINIC = {
-    name: "리원피부과",
+    name: "에버피부과",
     addr: "서울 강남구 도산대로 327 SGF 청담타워",
     tel: "1899-1150",
     closeTime: "21:00",
@@ -190,7 +190,7 @@ export default function HospitalSearchPage() {
                 </header>
 
                 <main className="p-4 space-y-4">
-                    {/* 리원피부과 추천 카드 (항상 상단) */}
+                    {/* 에버피부과 추천 카드 (항상 상단) */}
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />

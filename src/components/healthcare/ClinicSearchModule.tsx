@@ -324,7 +324,7 @@ export default function ClinicSearchModule() {
                             {/* 성공 - 결과 리스트 */}
                             {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 리원피부과 추천 카드 (타겟 지역에서만 표시) */}
+                                    {/* 에버피부과 추천 카드 (타겟 지역에서만 표시) */}
                                     {TARGET_REGIONS.includes(selectedRegion) && (
                                         <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
                                             <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
@@ -335,7 +335,7 @@ export default function ClinicSearchModule() {
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex-1">
                                                         <h3 className="text-lg font-bold text-white">
-                                                            리원피부과
+                                                            에버피부과
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">

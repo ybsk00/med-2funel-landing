@@ -73,7 +73,7 @@ export default function DoctorIntroModal({
                         <div className="w-8 h-8 bg-pink-500/20 rounded-full flex items-center justify-center">
                             <User className="w-4 h-4 text-pink-400" />
                         </div>
-                        <h3 className="font-bold text-white">리원피부과 의료진</h3>
+                        <h3 className="font-bold text-white">에버피부과 의료진</h3>
                     </div>
                     <button
                         onClick={onClose}

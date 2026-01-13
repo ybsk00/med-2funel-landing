@@ -59,8 +59,8 @@ export default function ReviewModal({ isOpen, onClose }: ReviewModalProps) {
     const fetchReviews = async (source: string) => {
         setLoading(true);
         try {
-            // "리원피부과"로 명시적 검색
-            const query = encodeURIComponent("리원피부과");
+            // "에버피부과"로 명시적 검색
+            const query = encodeURIComponent("에버피부과");
             const response = await fetch(`/api/reviews/search?source=${source}&q=${query}`);
             const data: ReviewResponse = await response.json();
             setReviews(data.items || []);

@@ -17,7 +17,7 @@ export async function generateSummary(history: any[], topic: Topic): Promise<Sum
 
     const systemPrompt = `
 [역할]
-당신은 "리원피부과 AI 헬스케어 분석가"입니다.
+당신은 "에버피부과 AI 헬스케어 분석가"입니다.
 사용자와의 대화 내역을 분석하여, 사용자의 피부 상태 및 생활 습관을 요약하고 '피부 컨디션 점수(Skin Score)'를 산출해주세요.
 
 [분석 주제]

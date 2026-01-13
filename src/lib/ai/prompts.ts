@@ -1,4 +1,4 @@
-﻿// AI 피부과 프롬프트 - 리원피부과 AI 상담
+﻿// AI 피부과 프롬프트 - 에버피부과 AI 상담
 // 이 파일은 모든 AI 채팅 API에서 중앙 집중식으로 사용됩니다.
 
 import { Topic, TOPIC_LABELS } from '@/lib/constants/topics';
@@ -229,7 +229,7 @@ ${intentHint}
 // 메디컬 AI 시스템 프롬프트 (회원, 예진 상담, 피부과 트랙)
 // =============================================
 
-// 의료진 데이터 (리원피부과)
+// 의료진 데이터 (에버피부과)
 export const SHOW_DOCTOR_EDUCATION = false; // 병원 검수 후 true
 
 export const DOCTORS = [
@@ -392,7 +392,7 @@ export function getMedicalSystemPrompt(
 
    const basePart = `
 [역할]
-당신은 "리원피부과"의 AI 예진 상담사입니다. 
+당신은 "에버피부과"의 AI 예진 상담사입니다. 
 피부 관련 상담을 정리하고 적절한 진료 안내를 도와드립니다.
 진단·처방·단정은 하지 않습니다.
 
@@ -603,7 +603,7 @@ export const SCI_EVIDENCE = {
    journal: "Dermatology Journal",
    title: "피부과 연구 데이터 (추후 업데이트 예정)",
    date: "2025.01",
-   authors: "리원피부과 연구팀",
+   authors: "에버피부과 연구팀",
    link: "#"
 };
 
