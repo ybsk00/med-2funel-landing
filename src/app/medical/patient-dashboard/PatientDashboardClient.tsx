@@ -47,65 +47,105 @@ export default function PatientDashboardClient() {
 
     const fetchLatestAppointment = async () => {
         try {
-            // 1. Check Supabase Auth user
-            const { data: { user } } = await supabase.auth.getUser();
+            // 1. Get current user IDs
+            const { data: { user: supabaseUser } } = await supabase.auth.getUser();
+            const supabaseUserId = supabaseUser?.id;
+            const naverUserId = nextAuthSession?.user?.id;
 
-            let data = null;
+            if (!supabaseUserId && !naverUserId) {
+                setAppointment({
+                    date: "예약 없음",
+                    time: "",
+                    type: "예정된 진료가 없습니다.",
+                    doctor: ""
+                });
+                return;
+            }
 
-            if (user) {
-                // Supabase Auth user: query by user_id from patients table
-                const { data: patientData } = await supabase
-                    .from('patients')
-                    .select('*')
-                    .eq('user_id', user.id)
+            // 2. Query 'appointments' table (Primary source)
+            let query = supabase.from('appointments').select('*');
+
+            if (supabaseUserId && naverUserId) {
+                query = query.or(`user_id.eq.${supabaseUserId},naver_user_id.eq.${naverUserId}`);
+            } else if (supabaseUserId) {
+                query = query.eq('user_id', supabaseUserId);
+            } else if (naverUserId) {
+                query = query.eq('naver_user_id', naverUserId);
+            }
+
+            const { data: appointmentData } = await query
+                .in('status', ['scheduled', 'pending', 'confirmed'])
+                .order('scheduled_at', { ascending: true }) // Get the closest upcoming appointment
+                .limit(1)
+                .maybeSingle();
+
+            let finalData = null;
+
+            if (appointmentData) {
+                const scheduledDate = new Date(appointmentData.scheduled_at);
+                finalData = {
+                    time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
+                    status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
+                    complaint: appointmentData.notes || `${HOSPITAL_CONFIG.name} 진료`,
+                    source: 'appointments'
+                };
+            } else {
+                // 3. Fallback to 'patients' table (Legacy or intake source)
+                let patientQuery = supabase.from('patients').select('*');
+
+                if (supabaseUserId && naverUserId) {
+                    patientQuery = patientQuery.or(`user_id.eq.${supabaseUserId},naver_user_id.eq.${naverUserId}`);
+                } else if (supabaseUserId) {
+                    patientQuery = patientQuery.eq('user_id', supabaseUserId);
+                } else if (naverUserId) {
+                    patientQuery = patientQuery.eq('naver_user_id', naverUserId);
+                }
+
+                const { data: patientData } = await patientQuery
                     .eq('status', 'pending')
                     .order('created_at', { ascending: false })
                     .limit(1)
                     .maybeSingle();
-                data = patientData;
-            } else if (nextAuthSession?.user?.id) {
-                // NextAuth user (Naver login): query by naver_user_id from appointments table
-                // Then get related patient info
-                const { data: appointmentData } = await supabase
-                    .from('appointments')
-                    .select('*')
-                    .or(`naver_user_id.eq.${nextAuthSession.user.id},user_id.is.null`) // ID가 없거나 일치하는 경우
-                    .in('status', ['scheduled', 'pending', 'confirmed'])
-                    .order('created_at', { ascending: false }) // 최신순
-                    .limit(1)
-                    .maybeSingle();
 
-                if (appointmentData) {
-                    // Convert appointments format to patients format for display
-                    const scheduledDate = new Date(appointmentData.scheduled_at);
-                    data = {
-                        time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
-                        status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
-                        complaint: appointmentData.notes || `${HOSPITAL_CONFIG.name} 진료`
+                if (patientData) {
+                    finalData = {
+                        time: patientData.time,
+                        status: patientData.status,
+                        complaint: patientData.complaint || "일반 진료",
+                        source: 'patients'
                     };
                 }
             }
 
-            if (data) {
+            if (finalData) {
                 // Parse the time string "YYYY-MM-DD HH:MM"
-                const timeStr = data.time;
+                const timeStr = finalData.time;
                 let displayDate = "예약 없음";
                 let displayTime = "";
                 let shouldHide = false;
 
                 if (timeStr) {
-                    const [d, t] = timeStr.split(' ');
-                    displayDate = d;
-                    displayTime = t;
+                    // Handle both "YYYY-MM-DD HH:MM" and ISO strings
+                    const parts = timeStr.split(' ');
+                    if (parts.length === 2) {
+                        displayDate = parts[0];
+                        displayTime = parts[1];
+                    } else {
+                        const d = new Date(timeStr);
+                        if (!isNaN(d.getTime())) {
+                            displayDate = d.toISOString().split('T')[0];
+                            displayTime = d.toTimeString().slice(0, 5);
+                        }
+                    }
 
                     // Check if 24 hours have passed since the appointment
                     try {
-                        const appointmentDate = new Date(timeStr.replace(' ', 'T'));
+                        const appointmentDate = new Date(timeStr.includes(' ') ? timeStr.replace(' ', 'T') : timeStr);
                         const now = new Date();
                         const diffInHours = (now.getTime() - appointmentDate.getTime()) / (1000 * 60 * 60);
 
                         // If more than 24 hours passed since appointment time, and it's cancelled or completed
-                        if (diffInHours > 24 && (data.status === 'cancelled' || data.status === 'completed')) {
+                        if (diffInHours > 24 && (finalData.status === 'cancelled' || finalData.status === 'completed')) {
                             shouldHide = true;
                         }
                     } catch (e) {
@@ -120,14 +160,14 @@ export default function PatientDashboardClient() {
                         type: "예정된 진료가 없습니다.",
                         doctor: ""
                     });
-                } else if (data.status === 'cancelled') {
+                } else if (finalData.status === 'cancelled') {
                     setAppointment({
                         date: displayDate,
                         time: displayTime,
                         type: "예약이 취소되었습니다.",
                         doctor: ""
                     });
-                } else if (data.status === 'completed') {
+                } else if (finalData.status === 'completed') {
                     setAppointment({
                         date: "예약 없음",
                         time: "",
@@ -138,7 +178,7 @@ export default function PatientDashboardClient() {
                     setAppointment({
                         date: displayDate,
                         time: displayTime,
-                        type: data.complaint || "일반 진료",
+                        type: finalData.complaint || "일반 진료",
                         doctor: `${HOSPITAL_CONFIG.representative} ${HOSPITAL_CONFIG.representativeTitle}`
                     });
                 }
