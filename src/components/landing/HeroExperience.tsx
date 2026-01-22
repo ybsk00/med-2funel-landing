@@ -326,16 +326,20 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                     {/* Reveal 이미지 (Canvas 마스크로 부분 표시) */}
                     {selectedVariant !== "natural" && maskUrl && (
                         <div
-                            className="absolute inset-0 pointer-events-none"
+                            className="absolute inset-0 pointer-events-none transition-opacity duration-500"
                             style={{
                                 maskImage: `url(${maskUrl})`,
                                 WebkitMaskImage: `url(${maskUrl})`,
                                 maskSize: "100% 100%",
                                 WebkitMaskSize: "100% 100%",
-                                // 추천하는 '부드러운 생기' 필터 조합입니다.
+                                // 섬세한 필터: 붉은기(-8deg → -3deg)를 줄이고, 채도(1.25 → 1.15)를 낮춰 왜곡 방지
                                 filter: selectedVariant === "glow"
-                                    ? "saturate(1.25) hue-rotate(-8deg) contrast(1.02) brightness(1.03)"
-                                    : "none"
+                                    ? "saturate(1.15) hue-rotate(-3deg) brightness(1.02) contrast(1.01)"
+                                    : selectedVariant === "bright"
+                                        ? "brightness(1.1) contrast(1.05)"
+                                        : "none",
+                                // 투명도 조절: 베이스 피부가 살짝 비치게 (보일듯 말듯한 효과)
+                                opacity: selectedVariant === "glow" ? 0.75 : 1,
                             }}
                         >
                             <Image
