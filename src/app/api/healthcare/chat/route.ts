@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
 import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent, detectSkinConcern, getSkinConcernResponsePrompt } from "@/lib/ai/prompts";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 export async function POST(req: NextRequest) {
     try {
@@ -55,7 +56,7 @@ AI:
 ${finalAnalysisPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : 'AI'}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
 사용자: ${message}
 AI(분석 결과):
 `;
@@ -90,7 +91,7 @@ AI(분석 결과):
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : 'AI'}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
 사용자: ${message}
 AI:
 `;

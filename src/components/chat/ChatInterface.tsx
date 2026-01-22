@@ -40,6 +40,8 @@ const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string }> = {
     'skin-concierge': { icon: Heart, color: 'fuchsia' },
 };
 
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+
 export default function ChatInterface(props: ChatInterfaceProps) {
     const searchParams = useSearchParams();
     const rawTopic = searchParams.get("topic");
@@ -92,7 +94,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.mode === 'medical') {
             setMessages([{
                 role: "ai",
-                content: "안녕하세요, 에버피부과 AI 상담입니다.\n\n**✨ 에버피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
+                content: `안녕하세요, ${HOSPITAL_CONFIG.name} AI 상담입니다.\n\n**✨ ${HOSPITAL_CONFIG.name}**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요.`
             }]);
         } else {
             const topicLabel = TOPIC_LABELS[topic];
@@ -100,7 +102,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 에버 스킨케어 가이드입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 ${HOSPITAL_CONFIG.aiPersonaName}입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
@@ -140,15 +142,22 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             if (!response.ok) throw new Error("Failed to send message");
 
             const data = await response.json();
-            let aiContent = data.content;
-
-            if (aiContent.includes("[RESERVATION_TRIGGER]")) {
-                aiContent = aiContent.replace("[RESERVATION_TRIGGER]", "").trim();
-                setShowReservationModal(true);
-            }
-
+            const aiContent = data.content;
             setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
             props.onExternalMessageSent?.();
+
+            if (data.action) {
+                if (data.action === 'RESERVATION_MODAL' || aiContent.includes('[[ACTION:RESERVATION_MODAL]]')) {
+                    setShowReservationModal(true);
+                } else {
+                    props.onAction?.(data.action, {
+                        doctorsData: data.doctorsData,
+                        evidenceData: data.evidenceData
+                    });
+                }
+            } else if (aiContent.includes('[[ACTION:RESERVATION_MODAL]]')) {
+                setShowReservationModal(true);
+            }
         } catch (error) {
             console.error("Error:", error);
             setMessages(prev => [...prev, { role: "ai", content: "죄송합니다. 잠시 문제가 발생했습니다." }]);
@@ -211,7 +220,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             setMessages(prev => [...prev, { role: "ai", content: aiContent }]);
 
             if (data.action) {
-                if (data.action === 'RESERVATION_MODAL') {
+                if (data.action === 'RESERVATION_MODAL' || aiContent.includes('[[ACTION:RESERVATION_MODAL]]')) {
                     track('reservation_modal_open');
                     setShowReservationModal(true);
                 } else {
@@ -220,6 +229,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         evidenceData: data.evidenceData
                     });
                 }
+            } else if (aiContent.includes('[[ACTION:RESERVATION_MODAL]]')) {
+                track('reservation_modal_open');
+                setShowReservationModal(true);
             }
 
             if (data.highlightTabs && data.highlightTabs.length > 0) {
@@ -280,7 +292,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 <header className="bg-skin-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                         <span className="text-2xl">✨</span>
-                        <span className="text-xl font-bold text-white tracking-wide">세인트 아틀리에</span>
+                        <span className="text-xl font-bold text-white tracking-wide">{HOSPITAL_CONFIG.name} AI</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
                         <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -329,7 +341,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
                                 <Image
                                     src="/GALLERY MINIMAL.png"
-                                    alt="에버피부과 프리미엄 스킨케어"
+                                    alt={`${HOSPITAL_CONFIG.name} 프리미엄 스킨케어`}
                                     fill
                                     className="object-cover object-[center_25%]"
                                     priority
@@ -337,7 +349,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
                                 <div className="absolute bottom-4 left-4 right-4">
                                     <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
-                                        에버 뷰티 스킨케어
+                                        {HOSPITAL_CONFIG.name} 프리미엄 스킨케어
                                     </h2>
                                     <p className="text-sm text-white/80 drop-shadow">프리미엄 피부 관리의 시작</p>
                                 </div>
@@ -405,7 +417,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? "에버피부과 AI" : "에버 스킨케어 가이드") : "나"}
+                                    {msg.role === "ai" ? (props.isLoggedIn ? `${HOSPITAL_CONFIG.name} AI` : HOSPITAL_CONFIG.aiPersonaName) : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
@@ -413,7 +425,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                         : "bg-skin-primary text-white rounded-tr-none shadow-md"
                                         }`}
                                 >
-                                    {msg.content}
+                                    {msg.content.replace(/\[\[ACTION:RESERVATION_MODAL\]\]/g, '').trim()}
                                 </div>
                             </div>
                         </div>

@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/client";
 import FaceSimulationModal from "@/components/face-style/FaceSimulationModal";
 import { useSession } from "next-auth/react";
 import { DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
@@ -81,7 +82,7 @@ export default function PatientDashboardClient() {
                     data = {
                         time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
                         status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
-                        complaint: appointmentData.notes || '에버피부과 진료'
+                        complaint: appointmentData.notes || `${HOSPITAL_CONFIG.name} 진료`
                     };
                 }
             }
@@ -139,7 +140,7 @@ export default function PatientDashboardClient() {
                         date: displayDate,
                         time: displayTime,
                         type: data.complaint || "일반 진료",
-                        doctor: "김민승 대표원장"
+                        doctor: `${HOSPITAL_CONFIG.representative} ${HOSPITAL_CONFIG.representativeTitle}`
                     });
                 }
             } else {
@@ -243,7 +244,7 @@ export default function PatientDashboardClient() {
                     <div className="relative w-full h-96 md:h-[500px]">
                         <Image
                             src="/BLINDS SHADOW.png"
-                            alt="에버피부과 프리미엄 시술"
+                            alt={`${HOSPITAL_CONFIG.name} 프리미엄 시술`}
                             fill
                             className="object-cover object-[center_25%]"
                             priority
@@ -312,7 +313,7 @@ export default function PatientDashboardClient() {
                                     <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-amber-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
                                         <MessageSquare className="w-4 h-4 md:w-5 md:h-5 text-white" />
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">에버피부과</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">후기보기</span>
                                 </button>
                                 <button
                                     onClick={() => setShowMapModal(true)}

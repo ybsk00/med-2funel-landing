@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Calendar, Clock, X, CheckCircle2, AlertCircle, User } from "lucide-react";
+import { Calendar, Clock, X, CheckCircle2, AlertCircle, User, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { useSession } from "next-auth/react";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 type ReservationModalProps = {
     isOpen: boolean;
@@ -13,163 +13,45 @@ type ReservationModalProps = {
 };
 
 export default function ReservationModal({ isOpen, onClose, initialTab = "book" }: ReservationModalProps) {
-    const { data: nextAuthSession } = useSession();
     const [activeTab, setActiveTab] = useState<"book" | "reschedule" | "cancel">(initialTab);
-    const [step, setStep] = useState(1); // 1: Input, 2: Confirm, 3: Success
-    const [date, setDate] = useState("");
-    const [hour, setHour] = useState("09");
-    const [minute, setMinute] = useState("00");
-    const [doctor, setDoctor] = useState("");
-
-    // DB에서 의사 목록 가져오기
-    const [doctors, setDoctors] = useState<string[]>([]);
-    const [isLoadingDoctors, setIsLoadingDoctors] = useState(false);
-
-    const [name, setName] = useState("");
-
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [userId, setUserId] = useState<string | null>(null);  // Supabase Auth only (UUID)
-    const [naverUserId, setNaverUserId] = useState<string | null>(null);  // NextAuth/Naver only (not UUID)
-    const [existingReservation, setExistingReservation] = useState<any>(null);
+    const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [userId, setUserId] = useState<string | null>(null);
+    const [naverUserId, setNaverUserId] = useState<string | null>(null);
+    const [existingReservation, setExistingReservation] = useState<any>(null);
     const [availableSlots, setAvailableSlots] = useState<string[]>([]);
     const [isLoadingSlots, setIsLoadingSlots] = useState(false);
 
+    // Form states
+    const [name, setName] = useState("");
+    const [doctor, setDoctor] = useState("");
+    const [date, setDate] = useState("");
+    const [hour, setHour] = useState("09");
+    const [minute, setMinute] = useState("00");
+
     const supabase = createClient();
 
-    // 의사 목록 API에서 가져오기
+    // 의료진 목록 (HOSPITAL_CONFIG 또는 기본값 사용)
+    const doctors = [
+        HOSPITAL_CONFIG.representative,
+        "이미혜 원장",
+        "김지은 원장"
+    ].filter((v, i, a) => a.indexOf(v) === i); // 중복 제거
+
     useEffect(() => {
         if (isOpen) {
-            const fetchDoctors = async () => {
-                setIsLoadingDoctors(true);
-                try {
-                    const response = await fetch('/api/doctors');
-                    const data = await response.json();
-                    if (data.doctors) {
-                        const doctorNames = data.doctors.map((d: { display_name: string }) => d.display_name);
-                        setDoctors(doctorNames);
-                    }
-                } catch (error) {
-                    console.error('Error fetching doctors:', error);
-                    // 폴백: 하드코딩된 목록 사용
-                    setDoctors(['김민승 대표원장', '조병옥 원장']);
-                } finally {
-                    setIsLoadingDoctors(false);
-                }
-            };
-            fetchDoctors();
+            fetchUserData();
         }
     }, [isOpen]);
 
-    useEffect(() => {
-        if (isOpen) {
-            fetchUserAndReservation();
-        }
-    }, [isOpen, nextAuthSession]);
-
-    // 예약 가능 시간 조회
-    useEffect(() => {
-        const fetchAvailableSlots = async () => {
-            if (!date || !doctor) return;
-            setIsLoadingSlots(true);
-            try {
-                const doctorParam = doctor ? `&doctor_name=${encodeURIComponent(doctor)}` : '';
-                const response = await fetch(`/api/appointments/available-slots?date=${date}${doctorParam}`);
-                const data = await response.json();
-                if (data.available_slots) {
-                    setAvailableSlots(data.available_slots);
-                }
-            } catch (error) {
-                console.error('Error fetching slots:', error);
-            } finally {
-                setIsLoadingSlots(false);
-            }
-        };
-        fetchAvailableSlots();
-    }, [date, doctor]);
-
-    const fetchUserAndReservation = async () => {
+    const fetchUserData = async () => {
         setIsLoading(true);
         try {
-            // 1. Get User from Supabase Auth
             const { data: { user } } = await supabase.auth.getUser();
-
             if (user) {
                 setUserId(user.id);
-                // Try to get name from metadata or email
-                const userName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || "";
-                setName(userName);
-
-                // 2. Get Latest Reservation (for cancellation/reschedule)
-                const { data: reservation } = await supabase
-                    .from('patients')
-                    .select('*')
-                    .eq('user_id', user.id)
-                    .eq('status', 'pending') // Only pending reservations
-                    .order('created_at', { ascending: false })
-                    .limit(1)
-                    .maybeSingle();
-
-                if (reservation) {
-                    setExistingReservation(reservation);
-                    // Pre-fill date/time if rescheduling
-                    if (reservation.time) {
-                        const [d, t] = reservation.time.split(' ');
-                        if (d && t) {
-                            setDate(d);
-                            const [h, m] = t.split(':');
-                            setHour(h);
-                            setMinute(m);
-                        }
-                    }
-                } else {
-                    setExistingReservation(null);
-                }
-            } else if (nextAuthSession?.user) {
-                // 2. Fallback to NextAuth session (for Naver login)
-                const nextAuthUser = nextAuthSession.user;
-                setUserId(null);  // Keep userId null - it's for Supabase Auth only (UUID type)
-                setNaverUserId(nextAuthUser.id || null);  // Store naver ID separately
-                const userName = nextAuthUser.name || nextAuthUser.email?.split('@')[0] || "";
-                setName(userName);
-
-                // Get Latest Reservation for NextAuth user from appointments table
-                if (nextAuthUser.id) {
-                    const { data: appointment } = await supabase
-                        .from('appointments')
-                        .select('*')
-                        .eq('naver_user_id', nextAuthUser.id)
-                        .in('status', ['scheduled', 'pending'])
-                        .gte('scheduled_at', new Date().toISOString())
-                        .order('scheduled_at', { ascending: true })
-                        .limit(1)
-                        .maybeSingle();
-
-                    if (appointment) {
-                        // Convert to reservation format for modal display
-                        const scheduledDate = new Date(appointment.scheduled_at);
-                        const dateStr = scheduledDate.toISOString().split('T')[0];
-                        const timeStr = scheduledDate.toTimeString().slice(0, 5);
-
-                        setExistingReservation({
-                            id: appointment.id,
-                            time: `${dateStr} ${timeStr}`,
-                            name: userName,
-                            status: 'pending',
-                            complaint: appointment.notes,
-                            isAppointment: true  // Flag to handle differently in cancel/update
-                        });
-
-                        // Pre-fill date/time if rescheduling
-                        setDate(dateStr);
-                        const [h, m] = timeStr.split(':');
-                        setHour(h);
-                        setMinute(m);
-                    } else {
-                        setExistingReservation(null);
-                    }
-                }
+                setName(user.user_metadata?.full_name || "");
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -183,103 +65,52 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
 
         try {
             if (activeTab === 'cancel') {
-                // Cancellation Logic
                 if (!existingReservation) {
                     alert("취소할 예약이 없습니다.");
                     setIsSubmitting(false);
                     return;
                 }
 
-                // Check if it's from appointments table or patients table
                 if (existingReservation.isAppointment) {
-                    // NextAuth user - cancel from appointments table
                     const { error } = await supabase
                         .from('appointments')
                         .update({ status: 'cancelled' })
                         .eq('id', existingReservation.id);
-
                     if (error) throw error;
                 } else {
-                    // Supabase Auth user - cancel from patients table
                     const { error } = await supabase
                         .from('patients')
                         .update({ status: 'cancelled' })
                         .eq('id', existingReservation.id);
-
                     if (error) throw error;
                 }
-
             } else {
-                // Booking / Reschedule Logic
                 if (!date || !name) {
                     alert("날짜와 이름을 입력해주세요.");
                     setIsSubmitting(false);
                     return;
                 }
 
-                // 의사 선택 필수
                 if (!doctor || doctor === '전체') {
                     alert("담당 의료진을 선택해주세요.");
                     setIsSubmitting(false);
                     return;
                 }
 
-                // Prevent duplicate booking
-                if (activeTab === 'book') {
-                    // Check if there is ALREADY a pending reservation
-                    // For Supabase Auth users, check patients table
-                    // For NextAuth users, check appointments table
-                    const isNextAuthUser = !!naverUserId && !userId;
-
-                    if (isNextAuthUser) {
-                        const { data: dupCheck } = await supabase
-                            .from('appointments')
-                            .select('id')
-                            .eq('naver_user_id', naverUserId)
-                            .in('status', ['scheduled', 'pending'])
-                            .gte('scheduled_at', new Date().toISOString())
-                            .maybeSingle();
-
-                        if (dupCheck) {
-                            alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
-                            setIsSubmitting(false);
-                            return;
-                        }
-                    } else if (userId) {
-                        const { data: dupCheck } = await supabase
-                            .from('patients')
-                            .select('id')
-                            .eq('user_id', userId)
-                            .eq('status', 'pending')
-                            .maybeSingle();
-
-                        if (dupCheck) {
-                            alert("이미 예약된 내역이 있습니다. 기존 예약을 변경하거나 취소해주세요.");
-                            setIsSubmitting(false);
-                            return;
-                        }
-                    }
-                }
-
                 const timeString = `${date} ${hour}:${minute}`;
-                const isNextAuthUser = !!naverUserId && !userId;
 
                 if (activeTab === 'reschedule' && existingReservation) {
-                    // Update existing
                     if (existingReservation.isAppointment) {
-                        // NextAuth user - update in appointments table
                         const scheduledAt = new Date(`${date}T${hour}:${minute}:00`).toISOString();
                         const { error } = await supabase
                             .from('appointments')
                             .update({
                                 scheduled_at: scheduledAt,
-                                notes: doctor === '전체' ? '에버피부과 진료' : `에버피부과 진료 (${doctor})`
+                                notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`
                             })
                             .eq('id', existingReservation.id);
-
                         if (error) throw error;
                     } else {
-                        // Supabase Auth user - update in patients table
                         const { error } = await supabase
                             .from('patients')
                             .update({
@@ -288,58 +119,26 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                 type: '재진'
                             })
                             .eq('id', existingReservation.id);
-
                         if (error) throw error;
                     }
                 } else {
-                    // Create new reservation
-                    if (isNextAuthUser) {
-                        // NextAuth user - use API to create appointment
-                        const scheduledAt = new Date(`${date}T${hour}:${minute}:00`).toISOString();
-                        const response = await fetch('/api/patient/appointments', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                scheduled_at: scheduledAt,
-                                notes: `에버피부과 진료 (${doctor})`,
-                                doctor_name: doctor  // 의사 이름 추가
-                            })
+                    // New booking
+                    const scheduledAt = new Date(`${date}T${hour}:${minute}:00`).toISOString();
+                    const { error } = await supabase
+                        .from('appointments')
+                        .insert({
+                            scheduled_at: scheduledAt,
+                            notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`,
+                            status: 'pending',
+                            naver_user_id: naverUserId
                         });
-
-                        if (!response.ok) {
-                            const errorData = await response.json();
-                            throw new Error(errorData.error || '예약 생성에 실패했습니다.');
-                        }
-                    } else {
-                        // Supabase Auth user - insert directly into patients table
-                        const { error } = await supabase
-                            .from('patients')
-                            .insert([
-                                {
-                                    user_id: userId,
-                                    name: name,
-                                    time: timeString,
-                                    type: '초진',
-                                    status: 'pending',
-                                    complaint: doctor === '전체' ? '에버피부과 진료' : `에버피부과 진료 (${doctor})`,
-                                    keywords: ['예약']
-                                }
-                            ]);
-
-                        if (error) throw error;
-                    }
+                    if (error) throw error;
                 }
             }
 
             setStep(3); // Success
         } catch (e: any) {
-            console.error("Exception details:", {
-                message: e?.message,
-                details: e?.details,
-                hint: e?.hint,
-                code: e?.code,
-                fullError: e
-            });
+            console.error("Exception details:", e);
             alert(`처리 중 오류가 발생했습니다: ${e?.message || "알 수 없는 오류"}`);
         } finally {
             setIsSubmitting(false);
@@ -355,20 +154,15 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
         onClose();
     };
 
-    // Generate hours (9-17 for operating hours)
     const hours = Array.from({ length: 9 }, (_, i) => (9 + i).toString().padStart(2, '0'));
-
-    // Generate minutes (00, 30)
     const minutes = ["00", "30"];
 
-    // 현재 선택된 시간이 예약 가능한지 체크
     const isTimeAvailable = (h: string, m: string) => {
-        if (availableSlots.length === 0) return true;  // 아직 로딩 전이면 모두 가능
+        if (availableSlots.length === 0) return true;
         const timeStr = `${h}:${m}`;
         return availableSlots.includes(timeStr);
     };
 
-    // 현재 선택된 시간 조합이 예약 가능한지
     const currentTimeAvailable = isTimeAvailable(hour, minute);
 
     if (!isOpen) return null;
@@ -380,7 +174,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 <div className="bg-gray-800 p-4 flex justify-between items-center border-b border-gray-700">
                     <h3 className="font-bold text-lg text-white flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-pink-500" />
-                        예약 관리
+                        {HOSPITAL_CONFIG.name} 예약 관리
                     </h3>
                     <button onClick={resetAndClose} className="text-gray-400 hover:text-white">
                         <X size={20} />
@@ -469,11 +263,11 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                             className="w-full p-3 border border-gray-700 rounded-xl bg-gray-800 text-white focus:bg-gray-700 focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition-all appearance-none"
                                                         >
                                                             <option value="">-- 선택해주세요 --</option>
-                                                            {doctors.filter(d => d !== '').map(d => (
+                                                            {doctors.map(d => (
                                                                 <option key={d} value={d}>{d}</option>
                                                             ))}
                                                         </select>
-                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
+                                                        <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
                                                     </div>
                                                 </div>
 
@@ -508,7 +302,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                                         );
                                                                     })}
                                                                 </select>
-                                                                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                                <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                                                             </div>
                                                             <div className="relative flex-1">
                                                                 <select
@@ -525,7 +319,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                                         );
                                                                     })}
                                                                 </select>
-                                                                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
+                                                                <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -579,7 +373,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                                                 <option key={h} value={h}>{h}시</option>
                                                                             ))}
                                                                         </select>
-                                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
+                                                                        <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
                                                                     </div>
                                                                     <div className="relative flex-1">
                                                                         <select
@@ -591,7 +385,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                                                                 <option key={m} value={m}>{m}분</option>
                                                                             ))}
                                                                         </select>
-                                                                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
+                                                                        <ChevronDownIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none" size={16} />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -660,29 +454,8 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
         </div>
     );
 
-    // Render modal to body using portal to avoid parent container clipping
     if (typeof document !== 'undefined') {
         return createPortal(modalContent, document.body);
     }
     return modalContent;
 }
-
-function ChevronDown({ className, size }: { className?: string, size?: number }) {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size || 24}
-            height={size || 24}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={className}
-        >
-            <path d="m6 9 6 6 6-6" />
-        </svg>
-    );
-}
-

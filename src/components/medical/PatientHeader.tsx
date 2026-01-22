@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 export default function PatientHeader() {
     const [userName, setUserName] = useState("환자님");
@@ -60,7 +61,7 @@ export default function PatientHeader() {
                 <div className="w-10 h-10 rounded-full bg-dental-primary/20 flex items-center justify-center">
                     <span className="text-xl">✨</span>
                 </div>
-                <span className="text-xl font-bold text-white">에버피부과</span>
+                <span className="text-xl font-bold text-white">{HOSPITAL_CONFIG.name}</span>
             </Link>
 
             <div className="flex items-center gap-4">

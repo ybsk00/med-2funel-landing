@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import { HOSPITAL_CONFIG } from '@/lib/config/hospital';
 
 // 네이버 검색 API 사용
 // 환경변수: NAVER_SEARCH_CLIENT_ID, NAVER_SEARCH_CLIENT_SECRET
@@ -6,7 +7,7 @@
 
 const NAVER_CLIENT_ID = process.env.NAVER_SEARCH_CLIENT_ID;
 const NAVER_CLIENT_SECRET = process.env.NAVER_SEARCH_CLIENT_SECRET;
-const HOSPITAL_NAME = process.env.HOSPITAL_REVIEW_QUERY_BASE || '에버피부과';
+const HOSPITAL_NAME = process.env.HOSPITAL_REVIEW_QUERY_BASE || HOSPITAL_CONFIG.naverSearchKeyword;
 
 // 제외 키워드 (잡상인 필터링)
 const EXCLUDE_KEYWORDS = [
@@ -98,11 +99,21 @@ export async function GET(req: NextRequest) {
             const text = `${item.title} ${item.description}`.toLowerCase();
 
             // 1. 병원명 포함 여부 (필수)
-            // "강남"이 반드시 포함되어야 하며, "리원피부과" 또는 "리원 피부과"가 포함되어야 함
-            const hasLocation = text.includes('강남');
-            const hasName = text.includes('에버피부과') || text.includes('에버 피부과');
+            // 설정된 병원명 또는 "OO 피부과" 형태가 포함되어야 함
+            const hasName = text.includes(HOSPITAL_CONFIG.name) || text.includes(HOSPITAL_CONFIG.name.replace('피부과', ' 피부과'));
 
-            if (!hasLocation || !hasName) {
+            // 2. 위치 정보 포함 여부 (선택적 또는 유연하게)
+            // 주소에서 동/구 정보를 추출하여 체크 (예: "강남", "압구정")
+            const addressParts = HOSPITAL_CONFIG.address.split(' ');
+            const locationKeywords = [
+                addressParts[1], // 구 (예: 강남구)
+                addressParts[2], // 동/로 (예: 압구정로)
+                '강남', '압구정' // 기본 키워드
+            ].filter(Boolean).map(k => k!.replace(/구$|동$|로$/, ''));
+
+            const hasLocation = locationKeywords.some(k => text.includes(k.toLowerCase()));
+
+            if (!hasName || !hasLocation) {
                 return false;
             }
 
@@ -182,7 +193,7 @@ function formatDate(dateStr?: string): string {
 function getDummyItems(source: string) {
     const items = [
         {
-            title: '강남 에버피부과 방문 후기 - 친절한 진료',
+            title: `강남 ${HOSPITAL_CONFIG.name} 방문 후기 - 친절한 진료`,
             link: 'https://blog.naver.com/example1',
             description: '지인 추천으로 방문했는데 정말 만족스러웠습니다...',
             author: '건강맘',
@@ -190,7 +201,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '청담 피부과 추천 - 에버피부과',
+            title: `청담 피부과 추천 - ${HOSPITAL_CONFIG.name}`,
             link: 'https://blog.naver.com/example2',
             description: '소화가 안되서 방문했는데 꼼꼼하게 봐주셨어요...',
             author: '강남직장인',
@@ -198,7 +209,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '에버피부과 진료 경험 공유',
+            title: `${HOSPITAL_CONFIG.name} 진료 경험 공유`,
             link: 'https://blog.naver.com/example3',
             description: '다이어트 한약 처방받고 효과 좋았습니다...',
             author: '다이어터',
@@ -214,7 +225,7 @@ function getDummyItems(source: string) {
             origin: 'naver'
         },
         {
-            title: '에버피부과 첫 방문기',
+            title: `${HOSPITAL_CONFIG.name} 첫 방문기`,
             link: 'https://blog.naver.com/example5',
             description: '처음 피부과 가봤는데 생각보다 좋았어요...',
             author: '피부과초보',

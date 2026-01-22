@@ -2,6 +2,7 @@
 // 이 파일은 모든 AI 채팅 API에서 중앙 집중식으로 사용됩니다.
 
 import { Topic, TOPIC_LABELS } from '@/lib/constants/topics';
+import { HOSPITAL_CONFIG } from '@/lib/config/hospital';
 
 // =============================================
 // 헬스케어 AI 시스템 프롬프트 (비회원, 피부 습관 점검)
@@ -58,7 +59,7 @@ export function getHealthcareSystemPrompt(
 
    return `
 [페르소나]
-에버피부과 10년 차 에이스 상담실장 "에밀리". 능글맞지만 미워할 수 없는 영업의 신.
+${HOSPITAL_CONFIG.name} 10년 차 에이스 상담실장 "에밀리". 능글맞지만 미워할 수 없는 영업의 신.
 
 [핵심 규칙 - 반드시 준수]
 1. **200자 내외**로 짧고 굵게 말할 것. 길어지면 고객이 지루해함.
@@ -203,28 +204,13 @@ ${intentHint}
 `;
 }
 
-// =============================================
-// 메디컬 AI 시스템 프롬프트 (회원, 예진 상담, 피부과 트랙)
-// =============================================
-
-// 의료진 데이터 (에버피부과)
-export const SHOW_DOCTOR_EDUCATION = false; // 병원 검수 후 true
-
+// 의료진 정보 (피부과 전문의)
 export const DOCTORS = [
    {
-      name: '문정윤',
-      title: '대표원장',
+      name: HOSPITAL_CONFIG.representative,
+      title: HOSPITAL_CONFIG.representativeTitle,
       education: '피부과 전문의',
-      public_title: '대표원장',
-      public_desc: '피부 미용 상담',
-      specialty: ['피부미용', '레이저', '리프팅', '피부관리'],
-      tracks: ['aesthetic', 'laser', 'lifting', 'skincare', 'acne', 'pigment', 'aging', 'general']
-   },
-   {
-      name: '김동영',
-      title: '원장',
-      education: '피부과 전문의',
-      public_title: '원장',
+      public_title: HOSPITAL_CONFIG.representativeTitle,
       public_desc: '피부 트러블 상담',
       specialty: ['여드름', '색소', '피부관리', '민감성'],
       tracks: ['acne', 'pigment', 'skincare', 'sensitivity', 'general']
@@ -242,15 +228,15 @@ export const DOCTORS = [
 
 // 트랙별 의료진 추천 매핑 (피부과 8트랙)
 export const DOCTOR_TRACK_MAPPING: Record<string, string[]> = {
-   acne: ['문정윤', '김동영'],
-   pigment: ['문정윤', '김동영'],
-   aging: ['문정윤', '이미혜'],
-   lifting: ['문정윤', '이미혜'],
-   laser: ['문정윤'],
-   skincare: ['문정윤', '김동영'],
-   sensitivity: ['김동영'],
-   general: ['문정윤', '김동영', '이미혜'],
-   aesthetic: ['문정윤', '이미혜'],
+   acne: [HOSPITAL_CONFIG.representative, '김지은'],
+   pigment: [HOSPITAL_CONFIG.representative, '김지은'],
+   aging: [HOSPITAL_CONFIG.representative, '이미혜'],
+   lifting: [HOSPITAL_CONFIG.representative, '이미혜'],
+   laser: [HOSPITAL_CONFIG.representative],
+   skincare: [HOSPITAL_CONFIG.representative, '김지은'],
+   sensitivity: ['김지은'],
+   general: [HOSPITAL_CONFIG.representative, '김지은', '이미혜'],
+   aesthetic: [HOSPITAL_CONFIG.representative, '이미혜'],
 };
 
 // 피부과 8트랙
@@ -366,11 +352,11 @@ export function getMedicalSystemPrompt(
    const questionCount = askedQuestionCount || 0;
    const canAskQuestion = questionCount < 2;
 
-   const recommendedDoctors = DOCTOR_TRACK_MAPPING[currentTrack] || ['문정윤', '김동영'];
+   const recommendedDoctors = DOCTOR_TRACK_MAPPING[currentTrack] || [HOSPITAL_CONFIG.representative, '김지은'];
    const trackLabel = MEDICAL_TRACKS[currentTrack as keyof typeof MEDICAL_TRACKS] || "일반";
 
    const basePart = `
-[페르소나: 에버피부과 수석 VIP 컨시어지 '에밀리']
+[페르소나: ${HOSPITAL_CONFIG.name} ${HOSPITAL_CONFIG.aiPersonaTitle} '${HOSPITAL_CONFIG.aiPersonaName}']
 당신은 단순 상담원이 아닌, 고객의 피부 주치의를 연결하는 **수석 컨설턴트**입니다.
 품격 있는 강남 피부과 실장의 어조로, 전문 용어를 섞되 고객이 이해하기 쉽게 비유를 곁들입니다.
 "로그인하길 정말 잘하셨다"는 안도감을 주고, 원장님의 권위를 빌려 **당일 예약**을 클로징합니다.
@@ -552,7 +538,7 @@ export const SCI_EVIDENCE = {
    journal: "Dermatology Journal",
    title: "피부과 연구 데이터 (추후 업데이트 예정)",
    date: "2025.01",
-   authors: "에버피부과 연구팀",
+   authors: `${HOSPITAL_CONFIG.name} 연구팀`,
    link: "#"
 };
 

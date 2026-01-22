@@ -3,6 +3,7 @@ import { generateText } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
 import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, detectMedicalTrack, DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 // 액션 토큰 타입
 type ActionType = 'RESERVATION_MODAL' | 'DOCTOR_INTRO_MODAL' | 'EVIDENCE_MODAL' | null;
@@ -12,8 +13,9 @@ function parseActionToken(text: string): { cleanText: string; action: ActionType
     const tokenRegex = /\[\[ACTION:(RESERVATION_MODAL|DOCTOR_INTRO_MODAL|EVIDENCE_MODAL)\]\]/g;
     let action: ActionType = null;
 
-    const match = tokenRegex.exec(text);
-    if (match) {
+    // 모든 매칭되는 토큰을 찾아서 마지막 액션을 취하거나, 특정 로직에 따라 처리
+    let match;
+    while ((match = tokenRegex.exec(text)) !== null) {
         action = match[1] as ActionType;
     }
 
@@ -85,9 +87,9 @@ export async function POST(req: NextRequest) {
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '에버피부과'}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '환자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
 환자: ${message}
-에버피부과:
+${HOSPITAL_CONFIG.name}:
 `;
 
         // 4. Generate Response
@@ -140,4 +142,3 @@ ${history.map((msg: any) => `${msg.role === 'user' ? '환자' : '에버피부과
         );
     }
 }
-
