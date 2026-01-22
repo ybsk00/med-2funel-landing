@@ -17,21 +17,24 @@ export const TREATMENT_VARIANTS = [
         key: "skinbooster",
         label: "물광주사",
         description: "혈색/생기 강조",
-        filter: "saturate(1.15) hue-rotate(-3deg) brightness(1.02) contrast(1.01)",
-        opacity: 0.75,
+        // 채도와 밝기를 높여 물광 느낌 강화, 붉은기 살짝 추가
+        filter: "saturate(1.4) hue-rotate(-5deg) brightness(1.12) contrast(1.05)",
+        opacity: 0.9,
     },
     {
         key: "brightening",
         label: "미백/화이트닝",
         description: "밝기 강조",
-        filter: "brightness(1.1) contrast(1.05)",
-        opacity: 0.85,
+        // 밝기를 대폭 올리고 대비를 낮춰 뽀얀 느낌 구현
+        filter: "brightness(1.25) contrast(0.95) saturate(0.9)",
+        opacity: 0.95,
     },
     {
         key: "lifting",
         label: "리프팅",
         description: "탄력/윤곽 강조",
-        filter: "contrast(1.08) saturate(1.1) brightness(1.02)",
+        // 대비를 높여 윤곽을 뚜렷하게
+        filter: "contrast(1.25) saturate(1.1) brightness(1.05)",
         opacity: 0.9,
     },
 ] as const;
@@ -381,8 +384,8 @@ export default function BrushCanvas({
                                 key={variant.key}
                                 onClick={() => onTreatmentChange?.(variant.key)}
                                 className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${selectedTreatment === variant.key
-                                        ? "bg-pink-500 text-white"
-                                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                                    ? "bg-pink-500 text-white"
+                                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                     }`}
                             >
                                 {variant.label}
