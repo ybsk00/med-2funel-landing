@@ -121,9 +121,21 @@ export default function BrushCanvas({
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
         ctx.fillStyle = gradient;
+
+        // 얼굴 영역(중앙 타원형)으로 클리핑
+        ctx.save();
+        ctx.beginPath();
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height * 0.45; // 얼굴 중심이 약간 위쪽에 있음
+        const radiusX = canvas.width * 0.35; // 가로 반경
+        const radiusY = canvas.height * 0.4; // 세로 반경
+        ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+        ctx.clip();
+
         ctx.beginPath();
         ctx.arc(x, y, BRUSH_SIZE, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
 
         setHasPainted(true);
 
@@ -153,9 +165,21 @@ export default function BrushCanvas({
             gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
             ctx.fillStyle = gradient;
+
+            // 얼굴 영역(중앙 타원형)으로 클리핑
+            ctx.save();
+            ctx.beginPath();
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height * 0.45;
+            const radiusX = canvas.width * 0.35;
+            const radiusY = canvas.height * 0.4;
+            ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+            ctx.clip();
+
             ctx.beginPath();
             ctx.arc(x, y, BRUSH_SIZE, 0, Math.PI * 2);
             ctx.fill();
+            ctx.restore();
         }
 
         setHasPainted(true);

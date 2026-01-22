@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     const source = searchParams.get('source') || 'blog';
     const customQuery = searchParams.get('q');
     const start = parseInt(searchParams.get('start') || '1');
-    const display = parseInt(searchParams.get('display') || '20'); // 필터링 후 줄어들 수 있어서 20개 요청
+    const display = parseInt(searchParams.get('display') || '50'); // 더 많은 결과를 가져와서 필터링
 
     // API 키 확인
     if (!NAVER_CLIENT_ID || !NAVER_CLIENT_SECRET) {
@@ -113,7 +113,8 @@ export async function GET(req: NextRequest) {
 
             const hasLocation = locationKeywords.some(k => text.includes(k.toLowerCase()));
 
-            if (!hasName || !hasLocation) {
+            // 위치 정보가 없더라도 병원명이 정확히 포함되어 있으면 허용 (필터링 완화)
+            if (!hasName) {
                 return false;
             }
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Calendar, Clock, X, CheckCircle2, AlertCircle, User, ChevronDown as ChevronDownIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { createClient } from "@/lib/supabase/client";
 import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
@@ -19,6 +20,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
     const [naverUserId, setNaverUserId] = useState<string | null>(null);
+    const { data: session } = useSession();
     const [existingReservation, setExistingReservation] = useState<any>(null);
     const [availableSlots, setAvailableSlots] = useState<string[]>([]);
     const [isLoadingSlots, setIsLoadingSlots] = useState(false);
@@ -48,10 +50,18 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const fetchUserData = async () => {
         setIsLoading(true);
         try {
+            // 1. Supabase Auth 사용자 확인
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
                 setUserId(user.id);
                 setName(user.user_metadata?.full_name || "");
+                return;
+            }
+
+            // 2. NextAuth (네이버) 사용자 확인
+            if (session?.user) {
+                setNaverUserId(session.user.id || null);
+                setName(session.user.name || "");
             }
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -106,7 +116,9 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                             .from('appointments')
                             .update({
                                 scheduled_at: scheduledAt,
-                                notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`
+                                notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`,
+                                user_id: userId,
+                                naver_user_id: naverUserId
                             })
                             .eq('id', existingReservation.id);
                         if (error) throw error;
@@ -130,6 +142,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                             scheduled_at: scheduledAt,
                             notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`,
                             status: 'pending',
+                            user_id: userId,
                             naver_user_id: naverUserId
                         });
                     if (error) throw error;

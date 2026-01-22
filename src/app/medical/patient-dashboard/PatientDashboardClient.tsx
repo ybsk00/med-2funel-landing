@@ -69,10 +69,9 @@ export default function PatientDashboardClient() {
                 const { data: appointmentData } = await supabase
                     .from('appointments')
                     .select('*')
-                    .eq('naver_user_id', nextAuthSession.user.id)
-                    .in('status', ['scheduled', 'pending', 'confirmed'])  // 취소된 예약 제외
-                    .gte('scheduled_at', new Date().toISOString())
-                    .order('scheduled_at', { ascending: true })
+                    .or(`naver_user_id.eq.${nextAuthSession.user.id},user_id.is.null`) // ID가 없거나 일치하는 경우
+                    .in('status', ['scheduled', 'pending', 'confirmed'])
+                    .order('created_at', { ascending: false }) // 최신순
                     .limit(1)
                     .maybeSingle();
 

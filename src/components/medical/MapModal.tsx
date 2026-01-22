@@ -1,15 +1,14 @@
-﻿'use client';
-
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { MapPin, Navigation, ExternalLink, X } from 'lucide-react';
+import { HOSPITAL_CONFIG } from '@/lib/config/hospital';
 
 interface MapModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const HOSPITAL_NAME = '에버피부과';
-const HOSPITAL_ADDRESS = '서울 강남구 도산대로 327 SGF 청담타워';
+const HOSPITAL_NAME = HOSPITAL_CONFIG.name;
+const HOSPITAL_ADDRESS = HOSPITAL_CONFIG.address;
 const MAP_QUERY = encodeURIComponent(HOSPITAL_ADDRESS);
 
 export default function MapModal({ isOpen, onClose }: MapModalProps) {
