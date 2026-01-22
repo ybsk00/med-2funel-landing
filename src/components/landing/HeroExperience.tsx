@@ -94,7 +94,7 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
         // 부드러운 원형 브러시 (radial gradient)
         const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
         gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        gradient.addColorStop(0.7, "rgba(255, 255, 255, 0.8)");
+        gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)"); // 중간을 더 투명하게 하여 부드러운 전개
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
         ctx.fillStyle = gradient;
@@ -128,7 +128,7 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
 
             const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
             gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-            gradient.addColorStop(0.7, "rgba(255, 255, 255, 0.8)");
+            gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)");
             gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
             ctx.fillStyle = gradient;
@@ -332,6 +332,10 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                                 WebkitMaskImage: `url(${maskUrl})`,
                                 maskSize: "100% 100%",
                                 WebkitMaskSize: "100% 100%",
+                                // 추천하는 '부드러운 생기' 필터 조합입니다.
+                                filter: selectedVariant === "glow"
+                                    ? "saturate(1.25) hue-rotate(-8deg) contrast(1.02) brightness(1.03)"
+                                    : "none"
                             }}
                         >
                             <Image
@@ -386,7 +390,7 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                     </p>
                     <p className="text-sm text-white/80 drop-shadow">
                         {hasPainted
-                            ? "칠한 영역에 스타일이 적용됩니다"
+                            ? "칙칙함은 걷어내고, 숨어있던 '로지 글로우(Rosy Glow)'를 깨워보세요."
                             : "사진 위를 드래그하여 스타일을 칠해보세요"}
                     </p>
                 </div>

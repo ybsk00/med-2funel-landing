@@ -27,7 +27,7 @@ export async function patientLogin(formData: FormData): Promise<{ error?: string
     revalidatePath('/', 'layout')
 
     // Admin redirection logic
-    if (data.user?.email === 'admin@admin.com' || data.user?.user_metadata?.role === 'admin') {
+    if (data.user?.email?.toLowerCase() === 'admin@admin.com' || data.user?.user_metadata?.role === 'admin') {
         redirect('/admin')
     }
 

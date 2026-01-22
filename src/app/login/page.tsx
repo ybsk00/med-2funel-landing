@@ -25,7 +25,7 @@ export default function LoginPage() {
         try {
             // 0. Admin bypass check
             if (email.toLowerCase() === "admin@admin.com") {
-                const { error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
@@ -36,7 +36,10 @@ export default function LoginPage() {
                     return;
                 }
 
-                router.push("/admin");
+                // 세션 업데이트를 위해 잠시 대기 후 이동
+                setTimeout(() => {
+                    window.location.href = "/admin";
+                }, 500);
                 return;
             }
 
