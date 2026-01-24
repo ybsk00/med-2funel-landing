@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
-import "./globals.css";
 import "@mantine/core/styles.css";
+import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { ColorSchemeScript } from "@mantine/core";
 import MantineWrapper from "@/components/MantineWrapper";

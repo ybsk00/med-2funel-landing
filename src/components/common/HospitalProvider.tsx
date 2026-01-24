@@ -15,6 +15,7 @@ export function HospitalProvider({
     const [config] = useState<HospitalConfig>(initialConfig);
 
     useEffect(() => {
+        console.log('HospitalProvider mounted, config:', config);
         // 테마 색상을 CSS 변수로 적용
         const root = document.documentElement;
         root.style.setProperty('--skin-primary', config.theme.primary);

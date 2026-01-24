@@ -38,8 +38,21 @@ export function parseHospitalConfig(): HospitalConfig {
         // ... (Existing persona parsing logic if needed, but we focus on landing modules)
 
         // 3. Theme
+        // 3. Theme
         const primary = extractValue('3. 디자인 및 테마', '기본 색상 \\(Primary\\)');
         if (primary) config.theme.primary = primary;
+
+        const secondary = extractValue('3. 디자인 및 테마', '보조 색상 \\(Secondary\\)');
+        if (secondary) config.theme.secondary = secondary;
+
+        const accent = extractValue('3. 디자인 및 테마', '강조 색상 \\(Accent\\)');
+        if (accent) config.theme.accent = accent;
+
+        const background = extractValue('3. 디자인 및 테마', '배경 색상 \\(Background\\)');
+        if (background) config.theme.background = background;
+
+        const text = extractValue('3. 디자인 및 테마', '텍스트 색상 \\(Text\\)');
+        if (text) config.theme.text = text;
 
         // 4. Landing Modules
         const modulesSectionRegex = /## 4. 랜딩페이지 모듈([\s\S]*?)(?=##|$)/;
