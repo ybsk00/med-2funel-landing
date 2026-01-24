@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 // 클리닉 타입
 interface Clinic {
@@ -54,6 +55,7 @@ function isHoliday(): boolean {
 }
 
 export default function ClinicSearchModule() {
+    const config = useHospital();
     // 지역 선택
     const [selectedCity, setSelectedCity] = useState("서울");
     const [selectedRegion, setSelectedRegion] = useState("강남구");
@@ -335,7 +337,7 @@ export default function ClinicSearchModule() {
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex-1">
                                                         <h3 className="text-lg font-bold text-white">
-                                                            에버피부과
+                                                            {config.name}
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
@@ -347,7 +349,7 @@ export default function ClinicSearchModule() {
                                                         </div>
                                                         <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
                                                             <MapPin size={14} />
-                                                            서울 강남구 도산대로 327 SGF 청담타워
+                                                            {config.address}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -360,7 +362,7 @@ export default function ClinicSearchModule() {
                                                         상담 예약
                                                     </button>
                                                     <a
-                                                        href="tel:1899-1150"
+                                                        href={`tel:${config.tel}`}
                                                         className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
                                                     >
                                                         <Phone size={16} />

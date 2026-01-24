@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Building2, Activity, AlertCircle, Heart } from "lucide-react";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 // 클리닉 타입
 interface Clinic {
@@ -27,30 +28,33 @@ interface ERStatus {
     hvmriayn: string;
 }
 
-// 에버피부과 정보
-const RECOMMENDED_CLINIC = {
-    name: "에버피부과",
-    addr: "서울 강남구 도산대로 327 SGF 청담타워",
-    tel: "1899-1150",
-    closeTime: "21:00",
-    openToday: true,
-    night: true,
-    holiday: true,
-};
-
-// 지역 데이터
-const REGION_DATA: Record<string, string[]> = {
-    "서울특별시": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
-    "경기도": ["수원시", "성남시", "안양시", "부천시", "광명시", "평택시", "안산시", "고양시", "과천시", "구리시", "오산시", "시흥시", "군포시", "의정부시", "하남시", "용인시", "파주시", "이천시", "안성시", "김포시", "화성시", "광주시", "양주시", "포천시", "여주시"],
-    "인천광역시": ["중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"],
-    "부산광역시": ["중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "해운대구", "사하구", "금정구", "강서구", "연제구", "수영구", "사상구", "기장군"],
-    "대구광역시": ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군"],
-    "광주광역시": ["동구", "서구", "남구", "북구", "광산구"],
-    "대전광역시": ["동구", "중구", "서구", "유성구", "대덕구"],
-};
-
 export default function HospitalSearchPage() {
+    const { name, address, tel } = useHospital();
     const [activeTab, setActiveTab] = useState<"clinic" | "er">("clinic");
+
+    // 병원 정보
+    const RECOMMENDED_CLINIC = {
+        name: name,
+        addr: address,
+        tel: tel,
+        closeTime: "21:00",
+        openToday: true,
+        night: true,
+        holiday: true,
+    };
+
+    // 지역 데이터
+    const REGION_DATA: Record<string, string[]> = {
+        "서울특별시": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
+        "경기도": ["수원시", "성남시", "안양시", "부천시", "광명시", "평택시", "안산시", "고양시", "과천시", "구리시", "오산시", "시흥시", "군포시", "의정부시", "하남시", "용인시", "파주시", "이천시", "안성시", "김포시", "화성시", "광주시", "양주시", "포천시", "여주시"],
+        "인천광역시": ["중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"],
+        "부산광역시": ["중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "해운대구", "사하구", "금정구", "강서구", "연제구", "수영구", "사상구", "기장군"],
+        "대구광역시": ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군"],
+        "광주광역시": ["동구", "서구", "남구", "북구", "광산구"],
+        "대전광역시": ["동구", "중구", "서구", "유성구", "대덕구"],
+    };
+
+
 
     // 클리닉 검색 상태
     const [clinics, setClinics] = useState<Clinic[]>([]);
@@ -190,7 +194,7 @@ export default function HospitalSearchPage() {
                 </header>
 
                 <main className="p-4 space-y-4">
-                    {/* 에버피부과 추천 카드 (항상 상단) */}
+                    {/* 추천 카드 (항상 상단) */}
                     <div className="bg-gradient-to-r from-dental-primary/20 to-dental-accent/20 rounded-2xl p-4 border border-dental-primary/30">
                         <div className="flex items-center gap-2 mb-2">
                             <Heart className="w-5 h-5 text-dental-primary" fill="currentColor" />

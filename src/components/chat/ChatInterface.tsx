@@ -40,9 +40,10 @@ const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string }> = {
     'skin-concierge': { icon: Heart, color: 'fuchsia' },
 };
 
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 export default function ChatInterface(props: ChatInterfaceProps) {
+    const config = useHospital();
     const searchParams = useSearchParams();
     const rawTopic = searchParams.get("topic");
     const topic = sanitizeTopic(rawTopic);
@@ -92,21 +93,23 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     // 초기 메시지 설정
     useEffect(() => {
         if (props.mode === 'medical') {
+            const persona = config.personas.medical;
             setMessages([{
                 role: "ai",
-                content: `안녕하세요, ${HOSPITAL_CONFIG.name} AI 상담입니다.\n\n**✨ ${HOSPITAL_CONFIG.name}**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요.`
+                content: `안녕하세요, ${config.name} ${persona.name}입니다.\n\n**✨ ${config.name}**는 ${config.theme.concept} 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요.`
             }]);
         } else {
+            const persona = config.personas.healthcare;
             const topicLabel = TOPIC_LABELS[topic];
             const initialQuestion = initialQuestionMap[topic];
 
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 ${HOSPITAL_CONFIG.aiPersonaName}입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
+                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 ${persona.name}입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
             }]);
         }
         setTurnCount(0);
-    }, [topic, props.mode]);
+    }, [topic, props.mode, config]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -292,7 +295,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 <header className="bg-skin-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                         <span className="text-2xl">✨</span>
-                        <span className="text-xl font-bold text-white tracking-wide">{HOSPITAL_CONFIG.name} AI</span>
+                        <span className="text-xl font-bold text-white tracking-wide">
+                            {props.mode === 'medical' ? `${config.name} AI` : "AI 루틴 체크"}
+                        </span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
                         <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
@@ -341,7 +346,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
                                 <Image
                                     src="/GALLERY MINIMAL.png"
-                                    alt={`${HOSPITAL_CONFIG.name} 프리미엄 스킨케어`}
+                                    alt={`${props.mode === 'medical' ? config.name : '프리미엄'} 스킨케어`}
                                     fill
                                     className="object-cover object-[center_25%]"
                                     priority
@@ -349,9 +354,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
                                 <div className="absolute bottom-4 left-4 right-4">
                                     <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
-                                        {HOSPITAL_CONFIG.name} 프리미엄 스킨케어
+                                        {props.mode === 'medical' ? `${config.name} 프리미엄 스킨케어` : "프리미엄 스킨케어 루틴"}
                                     </h2>
-                                    <p className="text-sm text-white/80 drop-shadow">프리미엄 피부 관리의 시작</p>
+                                    <p className="text-sm text-white/80 drop-shadow">{config.theme.concept} 피부 관리의 시작</p>
                                 </div>
                             </div>
                             {/* Module Tabs */}
@@ -417,7 +422,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
 
                             <div className="flex flex-col gap-1 max-w-[80%]">
                                 <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
-                                    {msg.role === "ai" ? (props.isLoggedIn ? `${HOSPITAL_CONFIG.name} AI` : HOSPITAL_CONFIG.aiPersonaName) : "나"}
+                                    {msg.role === "ai"
+                                        ? (props.mode === 'medical' ? `${config.name} AI` : config.personas.healthcare.name)
+                                        : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"

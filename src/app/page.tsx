@@ -9,6 +9,7 @@ import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic } from "@/lib/constants/topics";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 // 모듈 아이콘/컬러 매핑
 const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradient: string }> = {
@@ -20,6 +21,7 @@ const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradi
 };
 
 export default function LandingPage() {
+  const config = useHospital();
   const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
   return (
@@ -31,7 +33,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
               <span className="text-2xl">✨</span>
-              <span className="text-xl font-bold text-skin-text tracking-wide">EVER ATELIER</span>
+              <span className="text-xl font-bold text-skin-text tracking-wide">{config.name.toUpperCase()}</span>
             </Link>
             <Link
               href="/login"
@@ -140,7 +142,7 @@ export default function LandingPage() {
                 강남 유명한 피부과 찾기
               </h2>
               <p className="text-skin-subtext text-sm">
-                강남구 압구정로 222 에버피부과
+                {config.address} {config.name}
               </p>
             </div>
             <div className="bg-skin-surface rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl">
@@ -243,32 +245,43 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {VALID_TOPICS.map((topic) => {
-                const config = MODULE_CONFIG[topic];
-                const IconComponent = config.icon;
-                const colorMap: Record<string, { border: string; shadow: string; text: string }> = {
-                  pink: { border: 'border-pink-500/30', shadow: 'group-hover:shadow-pink-500/30', text: 'text-pink-400' },
-                  rose: { border: 'border-rose-500/30', shadow: 'group-hover:shadow-rose-500/30', text: 'text-rose-400' },
-                  teal: { border: 'border-teal-500/30', shadow: 'group-hover:shadow-teal-500/30', text: 'text-teal-400' },
-                  purple: { border: 'border-purple-500/30', shadow: 'group-hover:shadow-purple-500/30', text: 'text-purple-400' },
-                  fuchsia: { border: 'border-fuchsia-500/30', shadow: 'group-hover:shadow-fuchsia-500/30', text: 'text-fuchsia-400' },
-                };
-                const colors = colorMap[config.color];
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {(config.landingModules || []).map((module: any) => {
+                  // 아이콘 매핑
+                  const ICON_MAP: Record<string, any> = {
+                    'Sparkles': Sparkles,
+                    'Droplet': Droplet,
+                    'Shield': Shield,
+                    'ArrowUpRight': ArrowUpRight,
+                    'Heart': Heart
+                  };
+                  const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
-                return (
-                  <Link key={topic} href={`/healthcare/chat?topic=${topic}`} className="group">
-                    <div className="h-full bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 flex flex-col items-center text-center">
-                      <div className={`w-14 h-14 bg-gradient-to-br ${config.gradient} rounded-full flex items-center justify-center mb-6 ${colors.border}`}>
-                        <IconComponent className={`w-7 h-7 ${colors.text} group-hover:scale-110 transition-transform`} />
+                  // 컬러 매핑
+                  const colorMap: Record<string, { border: string; shadow: string; text: string; gradient: string }> = {
+                    pink: { border: 'border-pink-500/30', shadow: 'group-hover:shadow-pink-500/30', text: 'text-pink-400', gradient: 'from-pink-500/20 to-pink-600/20' },
+                    rose: { border: 'border-rose-500/30', shadow: 'group-hover:shadow-rose-500/30', text: 'text-rose-400', gradient: 'from-rose-500/20 to-rose-600/20' },
+                    teal: { border: 'border-teal-500/30', shadow: 'group-hover:shadow-teal-500/30', text: 'text-teal-400', gradient: 'from-teal-500/20 to-teal-600/20' },
+                    purple: { border: 'border-purple-500/30', shadow: 'group-hover:shadow-purple-500/30', text: 'text-purple-400', gradient: 'from-purple-500/20 to-purple-600/20' },
+                    fuchsia: { border: 'border-fuchsia-500/30', shadow: 'group-hover:shadow-fuchsia-500/30', text: 'text-fuchsia-400', gradient: 'from-fuchsia-500/20 to-fuchsia-600/20' },
+                  };
+                  const colors = colorMap[module.color] || colorMap['pink'];
+
+                  return (
+                    <Link key={module.id} href={`/healthcare/chat?topic=${module.id}`} className="group">
+                      <div className="h-full bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 flex flex-col items-center text-center">
+                        <div className={`w-14 h-14 bg-gradient-to-br ${colors.gradient} rounded-full flex items-center justify-center mb-6 ${colors.border}`}>
+                          <IconComponent className={`w-7 h-7 ${colors.text} group-hover:scale-110 transition-transform`} />
+                        </div>
+                        <h3 className="text-lg font-bold text-skin-text mb-2 tracking-wide">{module.title}</h3>
+                        <p className="text-xs text-skin-subtext leading-relaxed font-light">
+                          {module.description}
+                        </p>
                       </div>
-                      <h3 className="text-lg font-bold text-skin-text mb-2 tracking-wide">{TOPIC_LABELS[topic]}</h3>
-                      <p className="text-xs text-skin-subtext leading-relaxed font-light">
-                        {TOPIC_DESCRIPTIONS[topic]}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>

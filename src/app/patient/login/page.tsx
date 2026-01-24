@@ -5,8 +5,10 @@ import { useSearchParams } from 'next/navigation'
 import { patientLogin, patientSignup, signInWithGoogle, signInWithKakao } from './actions'
 import { Building2, Mail, Lock, User, Phone, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { useHospital } from '@/components/common/HospitalProvider'
 
 function LoginContent() {
+    const { name } = useHospital()
     const searchParams = useSearchParams()
     const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login')
     const [error, setError] = useState<string | null>(null)
@@ -147,7 +149,7 @@ function LoginContent() {
                         >
                             <Building2 size={32} className="text-white" />
                         </div>
-                        <h1 className="text-2xl font-bold text-white">에버피부과</h1>
+                        <h1 className="text-2xl font-bold text-white">{name}</h1>
                         <p className="text-gray-400 text-sm mt-1">환자 포탈</p>
                     </div>
 

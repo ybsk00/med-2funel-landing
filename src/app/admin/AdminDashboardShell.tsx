@@ -19,8 +19,10 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useHospital } from '@/components/common/HospitalProvider';
 
 export function AdminDashboardShell({ children }: { children: React.ReactNode }) {
+    const { name } = useHospital();
     const [opened, { toggle }] = useDisclosure();
     const pathname = usePathname();
 
@@ -46,7 +48,7 @@ export function AdminDashboardShell({ children }: { children: React.ReactNode })
                         <ThemeIcon variant="gradient" gradient={{ from: 'orange', to: 'yellow' }} size="lg" radius="md">
                             <Stethoscope size={20} />
                         </ThemeIcon>
-                        <Text fw={700} size="xl" c="white">에버피부과 CRM</Text>
+                        <Text fw={700} size="xl" c="white">{name} CRM</Text>
                     </Group>
                     <Badge variant="light" color="green" size="lg">
                         실시간 연동 중

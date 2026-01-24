@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { TrackReturningCustomerView } from '@/components/marketing/MarketingTracker'
 import FaceSimulationCTA from '@/components/patient/FaceSimulationCTA'
+import { HOSPITAL_CONFIG } from '@/lib/config/hospital'
 
 export default async function PatientHome() {
     const supabase = await createClient()
@@ -92,7 +93,7 @@ export default async function PatientHome() {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <span className="text-xl font-bold text-white">에버피부과</span>
+                            <span className="text-xl font-bold text-white">{HOSPITAL_CONFIG.name}</span>
                             <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors">
                                 <Bell size={24} className="text-gray-400" />
                                 <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -238,7 +239,7 @@ export default async function PatientHome() {
                                     </div>
                                     <h4 className="text-white font-bold mb-0.5">진료 예약</h4>
                                     <p className="text-sm text-gray-400">
-                                        {upcomingAppointment.notes || '에버피부과'}
+                                        {upcomingAppointment.notes || HOSPITAL_CONFIG.name}
                                     </p>
                                 </div>
                             </div>

@@ -1,7 +1,8 @@
 ﻿import type { Metadata } from "next";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 export const metadata: Metadata = {
-    title: "에버피부과 진료 시스템",
+    title: `${HOSPITAL_CONFIG.name} 진료 시스템`,
     description: "의료진 전용 대시보드",
 };
 

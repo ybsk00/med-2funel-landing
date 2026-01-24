@@ -2,7 +2,7 @@
 import { generateText } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
-import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, detectMedicalTrack, DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
+import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, detectMedicalTrack } from "@/lib/ai/prompts";
 import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 // 액션 토큰 타입
@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
         } = await req.json();
 
         // 1. Red Flag Detection
-        const isRedFlag = RED_FLAG_KEYWORDS.some(flag => message.includes(flag));
+        const isRedFlag = RED_FLAG_KEYWORDS.some((flag: string) => message.includes(flag));
 
         if (isRedFlag) {
             return NextResponse.json({
@@ -129,9 +129,9 @@ ${HOSPITAL_CONFIG.name}:
             track: track,
             askedQuestionCount: newQuestionCount,
             turnCount: turnCount + 1,
-            // 의료진/논문 데이터 (모달용)
-            doctorsData: action === 'DOCTOR_INTRO_MODAL' ? DOCTORS : undefined,
-            evidenceData: action === 'EVIDENCE_MODAL' ? SCI_EVIDENCE : undefined
+            // 의료진/논문 데이터 (모달용) - 간소화로 제거됨
+            doctorsData: undefined,
+            evidenceData: undefined
         });
 
     } catch (error) {

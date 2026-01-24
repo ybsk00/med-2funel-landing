@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Calendar, Clock, User, MapPin, Edit2, X, CheckCircle } from 'lucide-react'
+import { useHospital } from '@/components/common/HospitalProvider'
 
 type AppointmentDetailProps = {
     appointment: {
@@ -17,6 +18,7 @@ type AppointmentDetailProps = {
 }
 
 export function AppointmentDetailClient({ appointment }: AppointmentDetailProps) {
+    const { name } = useHospital()
     const router = useRouter()
     const [showCancelModal, setShowCancelModal] = useState(false)
     const [showRescheduleModal, setShowRescheduleModal] = useState(false)
@@ -139,7 +141,7 @@ export function AppointmentDetailClient({ appointment }: AppointmentDetailProps)
                             </div>
                             <div>
                                 <p className="text-sm text-gray-400">진료 장소</p>
-                                <p className="text-white font-medium">에버피부과</p>
+                                <p className="text-white font-medium">{name}</p>
                             </div>
                         </div>
 

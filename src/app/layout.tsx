@@ -6,6 +6,8 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { ColorSchemeScript } from "@mantine/core";
 import MantineWrapper from "@/components/MantineWrapper";
 import NextAuthProvider from "@/components/NextAuthProvider";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -20,25 +22,32 @@ const notoSerifKr = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
-  title: "에버피부과",
-  description: "에버피부과에 오신 것을 환영합니다. 프리미엄 피부 관리와 미용 시술을 경험해보세요.",
+  title: HOSPITAL_CONFIG.name,
+  description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다. ${HOSPITAL_CONFIG.theme.concept} 피부 관리와 미용 시술을 경험해보세요.`,
   openGraph: {
-    title: "에버피부과",
-    description: "에버피부과에 오신 것을 환영합니다.",
+    title: HOSPITAL_CONFIG.name,
+    description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다.`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "에버피부과",
-    description: "에버피부과에 오신 것을 환영합니다.",
+    title: HOSPITAL_CONFIG.name,
+    description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다.`,
   },
 };
+
+import { parseHospitalConfig } from "@/lib/config/md-parser";
+
+// ... (imports)
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 서버 사이드에서 마크다운 설정 파일 파싱
+  const config = parseHospitalConfig();
+
   return (
     <html lang="ko">
       <head>
@@ -46,12 +55,14 @@ export default function RootLayout({
       </head>
       <body className={`${notoSansKr.variable} ${notoSerifKr.variable} font-sans antialiased`}>
         <NextAuthProvider>
-          <MantineWrapper>
-            {process.env.NEXT_PUBLIC_GA_ID && (
-              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-            )}
-            {children}
-          </MantineWrapper>
+          <HospitalProvider initialConfig={config}>
+            <MantineWrapper>
+              {process.env.NEXT_PUBLIC_GA_ID && (
+                <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+              )}
+              {children}
+            </MantineWrapper>
+          </HospitalProvider>
         </NextAuthProvider>
       </body>
     </html>

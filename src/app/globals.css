@@ -4,9 +4,14 @@
 :root {
   --background: #0A1628;
   --foreground: #F1F5F9;
-  --dental-bg: #0A1628;
+  --skin-primary: #E91E8C;
+  --skin-secondary: #14B8A6;
+  --skin-accent: #C026D3;
+  --skin-bg: #0A1A2A;
+  --skin-text: #F8F9FA;
+  --dental-bg: var(--skin-bg);
   --dental-surface: #142640;
-  --dental-primary: #3B82F6;
+  --dental-primary: var(--skin-primary);
   --dental-glow: rgba(59, 130, 246, 0.3);
 }
 

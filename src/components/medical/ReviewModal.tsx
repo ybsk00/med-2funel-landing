@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { MessageSquare, ExternalLink, AlertCircle, Coffee, Globe, X, Loader2 } from 'lucide-react';
+import { useHospital } from '@/components/common/HospitalProvider';
 
 interface ReviewModalProps {
     isOpen: boolean;
@@ -28,6 +29,7 @@ interface ReviewResponse {
 type TabType = 'blog' | 'cafearticle' | 'webkr';
 
 export default function ReviewModal({ isOpen, onClose }: ReviewModalProps) {
+    const config = useHospital();
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const [activeTab, setActiveTab] = useState<TabType>('blog');
@@ -59,8 +61,8 @@ export default function ReviewModal({ isOpen, onClose }: ReviewModalProps) {
     const fetchReviews = async (source: string) => {
         setLoading(true);
         try {
-            // "에버피부과"로 명시적 검색
-            const query = encodeURIComponent("에버피부과");
+            // 설정된 키워드로 검색
+            const query = encodeURIComponent(config.naverSearchKeyword);
             const response = await fetch(`/api/reviews/search?source=${source}&q=${query}`);
             const data: ReviewResponse = await response.json();
             setReviews(data.items || []);

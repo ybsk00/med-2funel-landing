@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { HOSPITAL_CONFIG } from '@/lib/config/hospital'
 
 export async function POST(request: NextRequest) {
     const supabase = await createClient()
@@ -123,7 +124,7 @@ export async function POST(request: NextRequest) {
                         phone: user?.user_metadata?.phone || null,
                         time: timeStr,
                         type: '신규 환자',
-                        complaint: notes || '에버피부과 진료 예약',
+                        complaint: notes || `${HOSPITAL_CONFIG.name} 진료 예약`,
                         status: 'pending'
                     })
                     .select('id')
@@ -140,7 +141,7 @@ export async function POST(request: NextRequest) {
         // 3. 예약 생성
         const appointmentData: any = {
             scheduled_at,
-            notes: notes || '에버피부과 진료',
+            notes: notes || `${HOSPITAL_CONFIG.name} 진료`,
             status: 'scheduled',
             doctor_name: doctor_name || null,  // 의사 이름 저장
         }

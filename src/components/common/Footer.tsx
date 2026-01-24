@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
 import PrivacyPolicyModal from "@/components/common/PrivacyPolicyModal";
 
 export default function Footer() {
+    const config = useHospital();
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [initialTab, setInitialTab] = useState<'privacy' | 'terms'>('privacy');
 
@@ -21,12 +22,12 @@ export default function Footer() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text font-serif">{HOSPITAL_CONFIG.name}</span>
+                            <span className="text-xl font-bold text-skin-text font-serif">{config.name}</span>
                         </div>
                         <div className="text-sm text-skin-subtext space-y-2 font-light">
-                            <p>{HOSPITAL_CONFIG.name} {HOSPITAL_CONFIG.address}</p>
-                            <p>Tel: {HOSPITAL_CONFIG.tel} ㅣ Fax: {HOSPITAL_CONFIG.fax}</p>
-                            <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: {HOSPITAL_CONFIG.businessNumber} ㅣ 대표: {HOSPITAL_CONFIG.representative}</p>
+                            <p>{config.name} {config.address}</p>
+                            <p>Tel: {config.tel} ㅣ Fax: {config.fax}</p>
+                            <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: {config.businessNumber} ㅣ 대표: {config.representative}</p>
                         </div>
                     </div>
 
@@ -60,7 +61,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-xs text-skin-subtext/60 font-light">
-                    <p>© 2025 {HOSPITAL_CONFIG.name}. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
+                    <p>© 2025 {config.name}. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
                 </div>
             </footer>
 

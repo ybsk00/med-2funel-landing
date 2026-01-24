@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { ArrowLeft, Mic, ChevronUp, X, Calendar, Stethoscope, Camera, Image as ImageIcon, AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useHospital } from '@/components/common/HospitalProvider'
 
 type Message = {
     id: string
@@ -15,12 +16,13 @@ type Message = {
 const quickReplies = ['여드름이 심해요', '피부가 건조해요', '피부 트러블 상담', '홍조가 있어요']
 
 export default function ChatPage() {
+    const { name } = useHospital()
     const router = useRouter()
     const [messages, setMessages] = useState<Message[]>([
         {
             id: 'init',
             role: 'assistant',
-            content: '안녕하세요, 에버피부과 AI 예진 상담입니다. 🦷\n\n피부 고민이 무엇인가요? 불편한 부분을 말씀해주시면 예진 정리를 도와드리겠습니다. (진단/치료 아님)',
+            content: `안녕하세요, ${name} AI 예진 상담입니다. 🦷\n\n피부 고민이 무엇인가요? 불편한 부분을 말씀해주시면 예진 정리를 도와드리겠습니다. (진단/치료 아님)`,
             timestamp: new Date()
         }
     ])
@@ -169,7 +171,7 @@ export default function ChatPage() {
                         </button>
                     </Link>
                     <div className="text-center">
-                        <h1 className="text-lg font-bold text-white">에버피부과 AI 예진</h1>
+                        <h1 className="text-lg font-bold text-white">{name} AI 예진</h1>
                         <div className="flex items-center justify-center gap-1.5 mt-0.5">
                             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                             <span className="text-xs text-gray-400">상담 중 ({turnCount}턴)</span>
@@ -202,7 +204,7 @@ export default function ChatPage() {
                                         <span className="text-white text-lg">🦷</span>
                                     </div>
                                     <div className="flex flex-col gap-1 max-w-[75%]">
-                                        <span className="text-xs text-gray-500">에버피부과</span>
+                                        <span className="text-xs text-gray-500">{name}</span>
                                         <div
                                             className="px-4 py-3 text-sm text-white leading-relaxed whitespace-pre-line"
                                             style={{
@@ -400,7 +402,7 @@ export default function ChatPage() {
                                         <Stethoscope size={24} className="text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-bold text-white">에버피부과 예약</h3>
+                                        <h3 className="text-lg font-bold text-white">{name} 예약</h3>
                                         <p className="text-sm text-blue-100">상담 분석 완료</p>
                                     </div>
                                 </div>

@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react'
 import { ArrowLeft, Clock, Sun, Moon, ChevronLeft, ChevronRight, Sparkles, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useHospital } from '@/components/common/HospitalProvider'
 
 export default function NewAppointmentPage() {
+    const { name } = useHospital()
     const router = useRouter()
     const [selectedDate, setSelectedDate] = useState<Date>(new Date())
     const [selectedTime, setSelectedTime] = useState<string | null>(null)
@@ -122,7 +124,7 @@ export default function NewAppointmentPage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     scheduled_at: scheduledAt.toISOString(),
-                    notes: selectedDoctor === '전체' ? '에버피부과 진료' : `에버피부과 진료 (${selectedDoctor})`,
+                    notes: selectedDoctor === '전체' ? `${name} 진료` : `${name} 진료 (${selectedDoctor})`,
                     doctor_name: selectedDoctor  // 의사 이름 추가
                 })
             })
