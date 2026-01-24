@@ -71,7 +71,7 @@ export default function LandingPage() {
               </p>
 
               {/* H1 */}
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
                   베이스가 달라지는
                 </span><br />
@@ -79,7 +79,7 @@ export default function LandingPage() {
               </h1>
 
               {/* Body */}
-              <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-lg mx-auto">
+              <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-lg mx-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                 지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
               </p>
 

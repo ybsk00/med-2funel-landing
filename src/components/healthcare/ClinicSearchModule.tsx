@@ -330,7 +330,7 @@ export default function ClinicSearchModule() {
                                     {TARGET_REGIONS.includes(selectedRegion) && (
                                         <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
                                             <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
-                                                추천 피부과
+                                                적합 피부과
                                             </span>
 
                                             <div className="pt-2">

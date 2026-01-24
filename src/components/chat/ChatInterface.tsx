@@ -296,7 +296,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                         <span className="text-2xl">✨</span>
                         <span className="text-xl font-bold text-white tracking-wide">
-                            {props.mode === 'medical' ? `${config.name} AI` : "AI 루틴 체크"}
+                            {props.mode === 'medical' ? `${config.name} AI` : "에버헬스케어"}
                         </span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
