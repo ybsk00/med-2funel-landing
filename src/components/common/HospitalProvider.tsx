@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { HospitalConfig } from '@/lib/config/parser';
+import { HospitalConfig } from '@/lib/config/hospital';
 
 const HospitalContext = createContext<HospitalConfig | null>(null);
 

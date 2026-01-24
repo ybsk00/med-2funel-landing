@@ -177,3 +177,23 @@ export const RED_FLAG_KEYWORDS = [
    "심한 부종", "호흡곤란", "전신 발진", "고열", "39도", "의식 저하",
    "급성 알레르기", "아나필락시스"
 ];
+
+// 의료진 정보 (DoctorIntroModal용)
+export const DOCTORS = [
+   {
+      name: HOSPITAL_CONFIG.representative,
+      title: HOSPITAL_CONFIG.representativeTitle,
+      education: "피부과 전문의",
+      specialty: ["리프팅", "색소", "안티에이징"],
+      tracks: ["lifting", "pigment", "aging"]
+   }
+];
+
+// SCI 논문 정보 (EvidenceModal용)
+export const SCI_EVIDENCE = {
+   journal: "Dermatologic Surgery",
+   title: "Efficacy of High-Intensity Focused Ultrasound",
+   date: "2024-01-15",
+   authors: `${HOSPITAL_CONFIG.representative} et al.`,
+   link: "https://pubmed.ncbi.nlm.nih.gov/"
+};

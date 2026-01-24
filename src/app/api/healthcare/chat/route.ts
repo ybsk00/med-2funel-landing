@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. 피부과 고민 자유발화 감지 - 공감 응답 + 로그인 유도
-        const skinConcern = detectSkinConcern(message, topic);
+        const skinConcern = detectSkinConcern(message);
 
         if (skinConcern.hasConcern) {
             // AI에게 특별 지시를 주어 공감 + 로그인 유도 응답 생성
