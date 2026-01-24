@@ -58,8 +58,8 @@ export default function LandingPage() {
             >
               <source src="/2.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/70 via-skin-bg/50 to-skin-bg/20" />
-            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/10 via-transparent to-skin-bg/50" />
+            <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/70 to-skin-bg/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/80" />
           </div>
 
           {/* Hero Content - 1컬럼 중앙 정렬 */}
@@ -71,15 +71,15 @@ export default function LandingPage() {
               </p>
 
               {/* H1 */}
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-skin-primary via-pink-400 to-skin-accent">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] text-shadow-lg">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-pink-400 to-purple-500 drop-shadow-none">
                   베이스가 달라지는
                 </span><br />
-                광채 루틴 리셋
+                <span className="text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)]">광채 루틴 리셋</span>
               </h1>
 
               {/* Body */}
-              <p className="text-base md:text-lg text-skin-subtext leading-relaxed max-w-lg mx-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+              <p className="text-base md:text-lg text-gray-100 leading-relaxed max-w-lg mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] font-medium">
                 지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
               </p>
 

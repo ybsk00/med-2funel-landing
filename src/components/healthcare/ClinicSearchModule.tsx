@@ -171,7 +171,7 @@ export default function ClinicSearchModule() {
             aria-pressed={active}
             aria-label={ariaLabel}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${active
-                ? "bg-skin-primary text-white"
+                ? "bg-pink-500 text-white shadow-md shadow-pink-500/20"
                 : "bg-transparent text-skin-subtext border border-white/20 hover:border-white/40"
                 }`}
         >
@@ -247,7 +247,7 @@ export default function ClinicSearchModule() {
                     <button
                         onClick={() => handleSearch(false)}
                         disabled={searchState === "loading"}
-                        className="inline-flex items-center justify-center px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="inline-flex items-center justify-center px-8 py-4 bg-pink-500 text-white text-base font-bold rounded-2xl shadow-lg shadow-pink-500/30 hover:bg-pink-600 hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {searchState === "loading" ? (
                             <>
@@ -329,7 +329,7 @@ export default function ClinicSearchModule() {
                                     {/* 에버피부과 추천 카드 (타겟 지역에서만 표시) */}
                                     {TARGET_REGIONS.includes(selectedRegion) && (
                                         <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
-                                            <span className="absolute -top-2 left-4 px-2 py-0.5 bg-skin-primary text-white text-xs font-bold rounded-full">
+                                            <span className="absolute -top-3 left-4 px-3 py-1 bg-pink-500 text-white text-xs font-bold rounded-full shadow-lg z-10 border border-skin-bg">
                                                 적합 피부과
                                             </span>
 

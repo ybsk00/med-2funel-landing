@@ -436,7 +436,7 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                             initCanvas();
                         }}
                         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${variant.key === selectedVariant
-                            ? "bg-skin-primary text-white shadow-lg shadow-skin-primary/30"
+                            ? "bg-pink-500 text-white shadow-lg shadow-pink-500/30 ring-2 ring-pink-400 ring-offset-2 ring-offset-skin-bg"
                             : "bg-white/10 text-skin-subtext hover:bg-white/20 hover:text-white"
                             }`}
                     >
