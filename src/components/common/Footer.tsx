@@ -22,7 +22,7 @@ export default function Footer() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text font-serif">{config.name}</span>
+                            <span className="text-xl font-bold text-skin-text tracking-wide">에버헬스케어</span>
                         </div>
                         <div className="text-sm text-skin-subtext space-y-2 font-light">
                             <p>{config.name} {config.address}</p>

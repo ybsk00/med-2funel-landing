@@ -33,7 +33,7 @@ export default function LandingPage() {
           <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
             <Link href="/" className="flex items-center gap-3 group cursor-pointer">
               <span className="text-2xl">✨</span>
-              <span className="text-xl font-bold text-skin-text tracking-wide">{config.name.toUpperCase()}</span>
+              <span className="text-xl font-bold text-skin-text tracking-wide">에버헬스케어</span>
             </Link>
             <Link
               href="/login"
