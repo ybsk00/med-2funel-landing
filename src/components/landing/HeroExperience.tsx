@@ -32,7 +32,7 @@ interface HeroExperienceProps {
     className?: string;
 }
 
-const BRUSH_SIZE = 35; // 브러시 반경 (px)
+const BRUSH_SIZE = 45; // 브러시 반경 (px) - 조금 더 키워서 시원하게
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 2;
 
@@ -40,15 +40,38 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
     const [selectedVariant, setSelectedVariant] = useState<VariantKey>("glow");
     const [isPainting, setIsPainting] = useState(false);
     const [hasPainted, setHasPainted] = useState(false);
-    const [maskUrl, setMaskUrl] = useState<string | null>(null);
+    // maskUrl 제거됨 (직접 렌더링)
     const [zoomLevel, setZoomLevel] = useState(1);
     const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
     const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const tempCanvasRef = useRef<HTMLCanvasElement | null>(null); // 브러시 합성용 임시 캔버스
     const containerRef = useRef<HTMLDivElement>(null);
     const lastPosRef = useRef<{ x: number; y: number } | null>(null);
-    const rafRef = useRef<number | null>(null);
+
+    // 선택된 스타일 이미지를 메모리에 로드해둠
+    const styleImageRef = useRef<HTMLImageElement | null>(null);
+
+    // 스타일 이미지 로드
+    useEffect(() => {
+        if (selectedVariant === "natural") {
+            styleImageRef.current = null;
+            return;
+        }
+
+        const variant = STYLE_VARIANTS.find(v => v.key === selectedVariant);
+        if (!variant) return;
+
+        const img = new window.Image();
+        img.src = variant.image;
+        img.crossOrigin = "anonymous"; // 필요 시
+        img.onload = () => {
+            styleImageRef.current = img;
+            // 이미지가 로드되면 캔버스 초기화 (새로운 스타일 적용 준비)
+            initCanvas();
+        };
+    }, [selectedVariant]);
 
     // Canvas 초기화
     const initCanvas = useCallback(() => {
@@ -57,15 +80,22 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
         if (!canvas || !container) return;
 
         const rect = container.getBoundingClientRect();
+        // 캔버스 크기를 실제 렌더링 크기에 맞춤 (레티나 디스플레이 고려 가능하지만 성능 위해 1:1 권장)
         canvas.width = rect.width;
         canvas.height = rect.height;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (ctx) {
-            // 완전히 투명하게 초기화
             ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
-        setMaskUrl(null);
+
+        // 임시 캔버스도 크기 맞춤 (브러시 작업용)
+        if (!tempCanvasRef.current) {
+            tempCanvasRef.current = document.createElement('canvas');
+        }
+        tempCanvasRef.current.width = BRUSH_SIZE * 2;
+        tempCanvasRef.current.height = BRUSH_SIZE * 2;
+
         setHasPainted(false);
     }, []);
 
@@ -76,72 +106,104 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
         return () => window.removeEventListener("resize", initCanvas);
     }, [initCanvas]);
 
-    // 마스크 URL 업데이트 (throttled)
-    const updateMaskUrl = useCallback(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        setMaskUrl(canvas.toDataURL("image/png"));
-    }, []);
-
-    // 부드러운 브러시로 페인팅
+    // 부드러운 브러시로 페인팅 (직접 렌더링)
     const paintAt = useCallback((x: number, y: number) => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        const tempCanvas = tempCanvasRef.current;
+        const styleImg = styleImageRef.current;
+
+        if (!canvas || !tempCanvas || !styleImg) return;
 
         const ctx = canvas.getContext("2d");
-        if (!ctx) return;
+        const tempCtx = tempCanvas.getContext("2d");
+        if (!ctx || !tempCtx) return;
 
-        // 부드러운 원형 브러시 (radial gradient)
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
+        // 1. 임시 캔버스 초기화
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // 2. 임시 캔버스에 브러시 알파 마스크 그리기 (중앙이 진하고 가장자리가 흐린 원)
+        const gradient = tempCtx.createRadialGradient(BRUSH_SIZE, BRUSH_SIZE, 0, BRUSH_SIZE, BRUSH_SIZE, BRUSH_SIZE);
         gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)"); // 중간을 더 투명하게 하여 부드러운 전개
+        gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.8)");
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(x, y, BRUSH_SIZE, 0, Math.PI * 2);
-        ctx.fill();
+        tempCtx.fillStyle = gradient;
+        tempCtx.beginPath();
+        tempCtx.arc(BRUSH_SIZE, BRUSH_SIZE, BRUSH_SIZE, 0, Math.PI * 2);
+        tempCtx.fill();
+
+        // 3. 소스 이미지 합성 (source-in: 기존 그려진 브러시 영역에만 이미지가 나타남)
+        tempCtx.globalCompositeOperation = "source-in";
+
+        // 현재 캔버스 좌표(x, y)에 해당하는 이미지 부분을 임시 캔버스에 그림
+        // drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+        // 이미지의 원본 크기와 캔버스 크기 비율 계산 필요
+
+        // 간단한 처리를 위해: 이미지를 캔버스 크기에 맞춰 그리는 방식(cover)을 가정
+        // 실제로는 object-cover 처럼 비율 계산이 필요하지만, 여기서는 캔버스 크기와 이미지 표시 영역이 같다고 가정
+        const imgRatio = styleImg.naturalWidth / styleImg.naturalHeight;
+        const canvasRatio = canvas.width / canvas.height;
+
+        let drawW, drawH, offsetX, offsetY;
+
+        // object-cover 로직 시뮬레이션
+        if (canvasRatio > imgRatio) {
+            drawW = canvas.width;
+            drawH = canvas.width / imgRatio;
+            offsetX = 0;
+            offsetY = (canvas.height - drawH) / 2;
+        } else {
+            drawH = canvas.height;
+            drawW = canvas.height * imgRatio;
+            offsetX = (canvas.width - drawW) / 2;
+            offsetY = 0;
+        }
+
+        // 임시 캔버스(브러시) 위치에 해당하는 이미지 영역을 가져와야 함
+        // 복잡하므로, 더 쉬운 방법:
+        // 1. 메인 캔버스에 브러시 그리기 (destination-out 등으로 구멍 뚫기? 아니면 바로 그리기?)
+
+        // [최적화 방식 수정]
+        // 매번 drawImage를 전체 캔버스에 하는건 무거움.
+        // 하지만 브러시 크기만큼만 잘라서 그리는건 좌표 계산이 복잡함.
+        // -> 성능 테스트 결과: 작은 캔버스(temp)에 부분만 그리는게 훨씬 빠름.
+
+        // 소스 이미지에서 가져올 좌표 계산
+        // 현재 캔버스 상의 (x, y)는 이미지 상의 어디인가?
+        // 위에서 계산한 drawW, drawH, offsetX, offsetY를 역산
+
+        const sourceX = (x - BRUSH_SIZE - offsetX) * (styleImg.naturalWidth / drawW);
+        const sourceY = (y - BRUSH_SIZE - offsetY) * (styleImg.naturalHeight / drawH);
+        const sourceW = (BRUSH_SIZE * 2) * (styleImg.naturalWidth / drawW);
+        const sourceH = (BRUSH_SIZE * 2) * (styleImg.naturalHeight / drawH);
+
+        tempCtx.drawImage(
+            styleImg,
+            sourceX, sourceY, sourceW, sourceH, // Source rect
+            0, 0, BRUSH_SIZE * 2, BRUSH_SIZE * 2 // Dest rect (temp canvas)
+        );
+
+        // 4. 메인 캔버스에 합성
+        tempCtx.globalCompositeOperation = "source-over"; // 복구
+
+        // 메인 캔버스에 임시 캔버스 내용 복사
+        ctx.drawImage(tempCanvas, x - BRUSH_SIZE, y - BRUSH_SIZE);
 
         setHasPainted(true);
-
-        // requestAnimationFrame으로 마스크 업데이트 (성능 최적화)
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        rafRef.current = requestAnimationFrame(updateMaskUrl);
-    }, [updateMaskUrl]);
+    }, []);
 
     // 선을 그리며 페인팅 (드래그 시 부드러운 연결)
     const paintLine = useCallback((fromX: number, fromY: number, toX: number, toY: number) => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        // 두 점 사이를 보간하여 부드럽게 연결
         const distance = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
-        const steps = Math.max(1, Math.floor(distance / 3));
+        const steps = Math.max(1, Math.floor(distance / 5)); // 간격 조절
 
         for (let i = 0; i <= steps; i++) {
             const t = i / steps;
             const x = fromX + (toX - fromX) * t;
             const y = fromY + (toY - fromY) * t;
-
-            const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
-            gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-            gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)");
-            gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(x, y, BRUSH_SIZE, 0, Math.PI * 2);
-            ctx.fill();
+            paintAt(x, y);
         }
-
-        setHasPainted(true);
-
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        rafRef.current = requestAnimationFrame(updateMaskUrl);
-    }, [updateMaskUrl]);
+    }, [paintAt]);
 
     // 좌표 계산
     const getCanvasCoords = useCallback((clientX: number, clientY: number) => {
@@ -259,27 +321,17 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
         setZoomLevel(1);
     };
 
-    // 컴포넌트 언마운트 시 정리
-    useEffect(() => {
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        };
-    }, []);
-
     // 모바일 스크롤 방지를 위한 non-passive 리스너 등록
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
         const preventDefault = (e: TouchEvent) => {
-            // 두 손가락 터치(줌) 또는 페인팅 중일 때 스크롤 방지
             if (e.touches.length >= 2 || isPainting) {
                 e.preventDefault();
             }
         };
 
-        // React의 onTouchStart 등은 passive: true가 기본일 수 있으므로
-        // 직접 addEventListener로 { passive: false } 옵션을 주어 등록
         container.addEventListener('touchstart', preventDefault, { passive: false });
         container.addEventListener('touchmove', preventDefault, { passive: false });
 
@@ -323,41 +375,22 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                         unoptimized
                     />
 
-                    {/* Reveal 이미지 (Canvas 마스크로 부분 표시) */}
-                    {selectedVariant !== "natural" && maskUrl && (
-                        <div
-                            className="absolute inset-0 pointer-events-none transition-opacity duration-500"
-                            style={{
-                                maskImage: `url(${maskUrl})`,
-                                WebkitMaskImage: `url(${maskUrl})`,
-                                maskSize: "100% 100%",
-                                WebkitMaskSize: "100% 100%",
-                                // 섬세한 필터: 붉은기(-8deg → -3deg)를 줄이고, 채도(1.25 → 1.15)를 낮춰 왜곡 방지
-                                filter: selectedVariant === "glow"
-                                    ? "saturate(1.15) hue-rotate(-3deg) brightness(1.02) contrast(1.01)"
-                                    : selectedVariant === "bright"
-                                        ? "brightness(1.1) contrast(1.05)"
-                                        : "none",
-                                // 투명도 조절: 베이스 피부가 살짝 비치게 (보일듯 말듯한 효과)
-                                opacity: selectedVariant === "glow" ? 0.75 : 1,
-                            }}
-                        >
-                            <Image
-                                src={selectedStyle.image}
-                                alt={selectedStyle.label}
-                                fill
-                                className="object-cover object-top"
-                                unoptimized
-                            />
-                        </div>
-                    )}
+                    {/* Canvas (Reveal Layer) - 이제 여기에 직접 그림 */}
+                    <canvas
+                        ref={canvasRef}
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            // 선택된 스타일에 따른 필터 효과 (캔버스 전체에 적용됨)
+                            // 주의: 캔버스에 그려진 부분(Reveal된 부분)에만 필터가 먹힘
+                            filter: selectedVariant === "glow"
+                                ? "saturate(1.15) hue-rotate(-3deg) brightness(1.02) contrast(1.01)"
+                                : selectedVariant === "bright"
+                                    ? "brightness(1.1) contrast(1.05)"
+                                    : "none",
+                            opacity: selectedVariant === "glow" ? 0.75 : 1,
+                        }}
+                    />
                 </div>
-
-                {/* Hidden Canvas for painting */}
-                <canvas
-                    ref={canvasRef}
-                    className="absolute inset-0 pointer-events-none opacity-0"
-                />
 
                 {/* 오버레이 그라데이션 */}
                 <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent pointer-events-none" />
@@ -433,7 +466,7 @@ export default function HeroExperience({ className = "" }: HeroExperienceProps) 
                         key={variant.key}
                         onClick={() => {
                             setSelectedVariant(variant.key);
-                            initCanvas();
+                            // initCanvas는 useEffect에서 처리됨
                         }}
                         className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${variant.key === selectedVariant
                             ? "bg-pink-500 text-white shadow-lg shadow-pink-500/30 ring-2 ring-pink-400 ring-offset-2 ring-offset-skin-bg"
