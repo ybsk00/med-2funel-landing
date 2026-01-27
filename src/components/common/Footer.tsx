@@ -5,7 +5,11 @@ import Link from "next/link";
 import { useHospital } from "@/components/common/HospitalProvider";
 import PrivacyPolicyModal from "@/components/common/PrivacyPolicyModal";
 
-export default function Footer() {
+interface FooterProps {
+    brandName?: string;
+}
+
+export default function Footer({ brandName = "에버헬스케어" }: FooterProps) {
     const config = useHospital();
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [initialTab, setInitialTab] = useState<'privacy' | 'terms'>('privacy');
@@ -22,7 +26,7 @@ export default function Footer() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text tracking-wide">에버헬스케어</span>
+                            <span className="text-xl font-bold text-skin-text tracking-wide">{brandName}</span>
                         </div>
                         <div className="text-sm text-skin-subtext space-y-2 font-light">
                             <p>{config.name} {config.address}</p>
