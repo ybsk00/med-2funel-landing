@@ -1,4 +1,5 @@
-﻿import type { Metadata } from "next";
+﻿
+import type { Metadata } from "next";
 import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
 import "@mantine/core/styles.css";
 import "./globals.css";
@@ -22,31 +23,17 @@ const notoSerifKr = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
-  title: HOSPITAL_CONFIG.name,
-  description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다. ${HOSPITAL_CONFIG.theme.concept} 피부 관리와 미용 시술을 경험해보세요.`,
-  openGraph: {
-    title: HOSPITAL_CONFIG.name,
-    description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다.`,
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: HOSPITAL_CONFIG.name,
-    description: `${HOSPITAL_CONFIG.name}에 오신 것을 환영합니다.`,
-  },
+  title: "AI 헬스케어 플랫폼",
+  description: "AI 기반 맞춤형 헬스케어 솔루션",
 };
-
-import { parseHospitalConfig } from "@/lib/config/md-parser";
-
-// ... (imports)
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 서버 사이드에서 마크다운 설정 파일 파싱
-  const config = parseHospitalConfig();
+  // 기본 설정 (인트로용)
+  const defaultConfig = HOSPITAL_CONFIG;
 
   return (
     <html lang="ko">
@@ -55,7 +42,7 @@ export default function RootLayout({
       </head>
       <body className={`${notoSansKr.variable} ${notoSerifKr.variable} font-sans antialiased`}>
         <NextAuthProvider>
-          <HospitalProvider initialConfig={config}>
+          <HospitalProvider initialConfig={defaultConfig}>
             <MantineWrapper>
               {process.env.NEXT_PUBLIC_GA_ID && (
                 <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
@@ -68,4 +55,3 @@ export default function RootLayout({
     </html>
   );
 }
-

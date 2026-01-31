@@ -1,0 +1,146 @@
+# ============================================
+# 병원 AI 헬스케어 플랫폼 - 설정 파일 템플릿
+# 이 파일을 hospital-config.yaml로 복사하여 사용
+# ============================================
+
+version: "2.0"
+
+# 1. 병원 기본 정보
+hospital:
+  id: "my-hospital"              # 고유 ID (영문, 소문자, 하이픈)
+  name: "우리병원"                # 병원명
+  department: "dermatology"      # 과목 선택:
+                                 # - dermatology (피부과)
+                                 # - dentistry (치과)
+                                 # - orthopedics (정형외과)
+                                 # - urology (비뇨기과)
+                                 # - internal-medicine (내과)
+                                 # - oncology (암요양병원)
+                                 # - korean-medicine (한의원)
+                                 # - plastic-surgery (성형외과)
+                                 # - pediatrics (소아과)
+                                 # - neurosurgery (신경외과)
+                                 # - obgyn (산부인과)
+  
+  representative:
+    name: "김원장"
+    title: "대표원장"
+  
+  contact:
+    address: "서울특별시 강남구"
+    phone: "02-123-4567"
+    fax: "02-123-4568"
+    businessNumber: "123-45-67890"
+  
+  searchKeywords: ["병원", "강남 병원"]
+
+# 2. 테마 설정 (선택사항 - 미설정 시 과별 기본값 사용)
+theme:
+  healthcare:
+    colors:
+      primary: "#E91E8C"
+      secondary: "#14B8A6"
+      accent: "#C026D3"
+      background: "#0A1A2A"
+      text: "#F8F9FA"
+    hero:
+      type: "glow-effect"         # glow-effect | smile-effect | motion-effect | clean-effect
+      headline: "베이스가 달라지는\n광채 루틴 리셋"
+      subheadline: "지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리필보세요."
+      media:
+        type: "video"
+        src: "/videos/hero.mp4"
+        poster: "/images/hero-poster.jpg"
+    
+  medical:
+    colors:
+      primary: "#E91E8C"
+      secondary: "#14B8A6"
+      accent: "#C026D3"
+      background: "#FFFFFF"
+      text: "#1F2937"
+
+# 3. 헬스케어 영역 설정 (비로그인)
+healthcare:
+  branding:
+    logoText: "우리헬스케어"        # 병원명 노출 X 텍스트
+    logoImage: "/assets/logo-healthcare.svg"
+    showHospitalName: false        # 항상 false로 유지
+  
+  # 챗봇 메뉴 모듈 (5개 권장)
+  modules:
+    - id: "module-1"
+      title: "모듈 1"
+      description: "설명을 입력하세요"
+      icon: "Sparkles"              # Lucide 아이콘명
+      color: "pink"                 # pink | rose | teal | purple | fuchsia | blue | green | orange
+    - id: "module-2"
+      title: "모듈 2"
+      description: "설명을 입력하세요"
+      icon: "Heart"
+      color: "purple"
+    - id: "module-3"
+      title: "모듈 3"
+      description: "설명을 입력하세요"
+      icon: "Shield"
+      color: "teal"
+    - id: "module-4"
+      title: "모듈 4"
+      description: "설명을 입력하세요"
+      icon: "Activity"
+      color: "green"
+    - id: "module-5"
+      title: "모듈 5"
+      description: "설명을 입력하세요"
+      icon: "Star"
+      color: "orange"
+  
+  persona:
+    name: "에이미"
+    title: "컨시어지"
+    purpose: "로그인 유도"
+    tone: "친근함, 전문적"
+    rules:
+      - "병원 이름 노출 금지"
+      - "원장 이름 노출 금지"
+      - "진단/처방 금지"
+    maxTurns: 5
+
+# 4. 메디컬 영역 설정 (로그인 후)
+medical:
+  branding:
+    logoText: "우리병원"            # 병원 로고 텍스트
+    logoImage: "/assets/logo-medical.svg"
+    showHospitalName: true         # 항상 true로 유지
+  
+  footer:
+    showHospitalInfo: true
+    showBusinessNumber: true
+    showAddress: true
+    links:
+      privacy: "/privacy"
+      terms: "/terms"
+  
+  persona:
+    name: "에이미"
+    title: "VIP 매니저"
+    purpose: "예약 유도"
+    tone: "전문적, 신뢰감"
+    rules:
+      - "병원 및 원장 이름 노출 권장"
+      - "예약 모달 적극 활용"
+    maxTurns: 10
+  
+  reservation:
+    enableOnlineBooking: true
+    availableDoctors:
+      - name: "김원장"
+        title: "대표원장"
+        specialties: ["전문분야1", "전문분야2"]
+    timeSlots: ["10:00", "11:00", "14:00", "15:00", "16:00"]
+
+# 5. 마케팅 설정 (선택)
+marketing:
+  gaId: ""                        # Google Analytics ID
+  pixelId: ""                     # Facebook Pixel ID
+  utmTracking: true

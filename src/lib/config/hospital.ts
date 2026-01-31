@@ -38,6 +38,7 @@ export interface HospitalConfig {
         concept: string;
     };
 
+    marketingName?: string;
     landingModules?: LandingModuleConfig[];
 }
 

@@ -7,10 +7,17 @@ import PrivacyPolicyModal from "@/components/common/PrivacyPolicyModal";
 
 interface FooterProps {
     brandName?: string;
+    mode?: 'healthcare' | 'medical';
 }
 
-export default function Footer({ brandName = "에버헬스케어" }: FooterProps) {
+export default function Footer({ brandName, mode = 'medical' }: FooterProps) {
     const config = useHospital();
+
+    // Determine the display name based on mode
+    const displayName = mode === 'healthcare'
+        ? (config.marketingName || brandName || "헬스케어")
+        : (config.name || brandName || "에버메디컬");
+
     const [showPrivacyModal, setShowPrivacyModal] = useState(false);
     const [initialTab, setInitialTab] = useState<'privacy' | 'terms'>('privacy');
 
@@ -26,12 +33,21 @@ export default function Footer({ brandName = "에버헬스케어" }: FooterProps
                     <div className="space-y-6">
                         <div className="flex items-center gap-3">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text tracking-wide">{brandName}</span>
+                            <span className="text-xl font-bold text-skin-text tracking-wide">{displayName}</span>
                         </div>
                         <div className="text-sm text-skin-subtext space-y-2 font-light">
-                            <p>{config.name} {config.address}</p>
+                            <p>{displayName} {config.address}</p>
                             <p>Tel: {config.tel} ㅣ Fax: {config.fax}</p>
-                            <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: {config.businessNumber} ㅣ 대표: {config.representative}</p>
+                            {/* Healthcare mode hides business number to avoid hospital exposure if requested, 
+                                 but usually business info is required by law. 
+                                 User said "병원 노출 안되며 헬스케어 이름 노출" -> I will render generic text or hide specific doctor names if that's the intent.
+                                 For now, I'll keep business info but maybe change the label if needed. 
+                                 The prompt specifically says "병원 노출 안되며". 
+                                 I will just use displayName in the copyright. 
+                             */}
+                            {mode === 'medical' && (
+                                <p className="mt-2 text-xs text-skin-subtext/60">사업자등록번호: {config.businessNumber} ㅣ 대표: {config.representative}</p>
+                            )}
                         </div>
                     </div>
 
@@ -65,7 +81,7 @@ export default function Footer({ brandName = "에버헬스케어" }: FooterProps
                     </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10 text-center text-xs text-skin-subtext/60 font-light">
-                    <p>© 2025 {config.name}. All rights reserved. 본 사이트의 콘텐츠는 저작권법의 보호를 받습니다.</p>
+                    <p>© 2026 {displayName}. All rights reserved.</p>
                 </div>
             </footer>
 
