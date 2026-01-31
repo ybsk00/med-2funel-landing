@@ -10,14 +10,15 @@ export function generateStaticParams() {
     }));
 }
 
-export default function DepartmentLayout({
+export default async function DepartmentLayout({
     children,
     params,
 }: {
     children: React.ReactNode;
-    params: { dept: string };
+    params: Promise<{ dept: string }>;
 }) {
-    const config = getDepartmentConfig(params.dept);
+    const { dept } = await params;
+    const config = getDepartmentConfig(dept);
 
     return (
         <HospitalProvider initialConfig={config}>

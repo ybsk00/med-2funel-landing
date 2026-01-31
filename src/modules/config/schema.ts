@@ -45,7 +45,7 @@ export const ModuleConfigSchema = z.object({
   title: z.string(),
   description: z.string(),
   icon: z.string(), // Lucide icon name
-  color: z.enum(['pink', 'rose', 'teal', 'purple', 'fuchsia', 'blue', 'green', 'orange']),
+  color: z.enum(['pink', 'rose', 'teal', 'purple', 'fuchsia', 'blue', 'green', 'orange', 'red', 'cyan', 'indigo']),
 });
 
 export const PersonaSchema = z.object({
@@ -73,7 +73,20 @@ export const HospitalConfigSchema = z.object({
   hospital: z.object({
     id: z.string().regex(/^[a-z0-9-]+$/),
     name: z.string(),
-    department: z.enum(['dermatology', 'dentistry', 'orthopedics', 'plastic', 'general']),
+    department: z.enum([
+      'dermatology', 
+      'dentistry', 
+      'orthopedics', 
+      'plastic-surgery', 
+      'general',
+      'internal-medicine',
+      'oncology',
+      'korean-medicine',
+      'pediatrics',
+      'neurosurgery',
+      'urology',
+      'obgyn'
+    ]),
     representative: RepresentativeSchema,
     contact: ContactSchema,
     searchKeywords: z.array(z.string()),

@@ -1,14 +1,8 @@
 "use client";
 
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import HealthcareChat from "@/components/healthcare/HealthcareChat";
 import { Container } from "@mantine/core";
-
-interface PageProps {
-    params: {
-        service: string;
-    };
-}
 
 const serviceConfig = {
     recovery: {
@@ -33,8 +27,10 @@ const serviceConfig = {
     },
 };
 
-export default function HealthcareServicePage({ params }: PageProps) {
-    const service = serviceConfig[params.service as keyof typeof serviceConfig];
+export default function HealthcareServicePage() {
+    const params = useParams();
+    const serviceKey = typeof params?.service === 'string' ? params.service : '';
+    const service = serviceConfig[serviceKey as keyof typeof serviceConfig];
 
     if (!service) {
         notFound();
@@ -43,7 +39,7 @@ export default function HealthcareServicePage({ params }: PageProps) {
     return (
         <Container size="md" py="xl" pb={100} bg="gray.0" style={{ minHeight: '100vh' }}>
             <HealthcareChat
-                serviceType={params.service}
+                serviceType={serviceKey}
                 serviceName={service.name}
                 initialMessage={service.initialMessage}
             />
