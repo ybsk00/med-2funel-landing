@@ -115,13 +115,6 @@ export default function HealthcareLanding() {
                     </section>
                 )}
 
-                {/* Specialized Evidence Section */}
-                {config.id === 'dentistry' && (
-                    <section className="px-6 py-20 max-w-7xl mx-auto relative z-10">
-                        <DentistryMorphing />
-                    </section>
-                )}
-
                 {/* Healthcare Content reinforcing Sessions A-D */}
                 <section className="py-12 bg-skin-bg relative z-20">
                     <HealthcareContent />
