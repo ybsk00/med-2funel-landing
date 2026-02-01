@@ -30,7 +30,7 @@ export default function LinenCard({ id, title, description, icon: Icon, color, s
                 {/* Linen Texture */}
                 <div className="absolute inset-0 bg-[url('/textures/linen.png')] opacity-20 bg-repeat mix-blend-multiply pointer-events-none"></div>
 
-                <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="relative z-10 flex flex-col items-center text-center h-full">
                     <div className="mb-6 text-amber-600 transition-transform duration-500 group-hover:scale-110">
                         <Icon className="w-10 h-10" strokeWidth={1.5} />
                     </div>
@@ -41,7 +41,7 @@ export default function LinenCard({ id, title, description, icon: Icon, color, s
 
                     <div className="w-full h-[1px] bg-amber-200 mb-4 scale-x-50 group-hover:scale-x-100 transition-transform duration-500"></div>
 
-                    <p className="text-[#8B4513]/70 text-sm font-serif leading-loose">
+                    <p className="text-[#8B4513]/70 text-sm font-serif leading-loose flex-1">
                         {description}
                     </p>
                 </div>

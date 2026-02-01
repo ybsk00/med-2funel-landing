@@ -32,7 +32,7 @@ export default function CarbonCard({ id, title, description, icon: Icon, color, 
                 <div className="absolute inset-0 bg-[url('/textures/carbon.png')] opacity-30 pointer-events-none mix-blend-overlay"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
 
-                <div className="relative z-10 skew-x-[6deg] group-hover:skew-x-0 transition-transform duration-300">
+                <div className="relative z-10 skew-x-[6deg] group-hover:skew-x-0 transition-transform duration-300 flex flex-col h-full">
                     <div className="flex items-center justify-between mb-6">
                         <div className="w-12 h-12 rounded-full border-2 border-indigo-500 group-hover:border-lime-400 flex items-center justify-center bg-black/50 transition-colors">
                             <Icon className="w-6 h-6 text-indigo-400 group-hover:text-lime-400" />
@@ -44,7 +44,7 @@ export default function CarbonCard({ id, title, description, icon: Icon, color, 
                         {title}
                     </h3>
 
-                    <p className="text-zinc-400 font-medium text-sm">
+                    <p className="text-zinc-400 font-medium text-sm flex-1">
                         {description}
                     </p>
 

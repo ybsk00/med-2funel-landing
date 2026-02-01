@@ -44,7 +44,7 @@ export default function HologramCard({ id, title, description, icon: Icon, color
                         {title}
                     </h3>
 
-                    <p className="text-gray-400 text-sm font-light leading-relaxed group-hover:text-gray-200 transition-colors">
+                    <p className="text-gray-400 text-sm font-light leading-relaxed group-hover:text-gray-200 transition-colors flex-1">
                         {description}
                     </p>
 

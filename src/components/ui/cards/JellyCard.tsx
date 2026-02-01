@@ -21,7 +21,7 @@ export default function JellyCard({ id, title, description, icon: Icon, color, s
     });
 
     const Container = onClick ? 'div' : Link;
-    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "" } : { href: `healthcare/chat?topic=${id}`, onMouseEnter: handleHover, onClick: handleClick };
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "h-full" } : { href: `healthcare/chat?topic=${id}`, className: "block h-full", onMouseEnter: handleHover, onClick: handleClick };
     // JellyCard has the className on the Container for Link, but Link wraps motion.div. Wait, in original code Link wraps motion.div.
     // I need to be careful. The Link has NO className in the original code, but it accepts onMouseEnter/onClick.
     // The className is on motion.div.
@@ -42,7 +42,7 @@ export default function JellyCard({ id, title, description, icon: Icon, color, s
                 <div className="absolute -right-10 -top-10 w-32 h-32 bg-yellow-100 rounded-full opacity-50 pointer-events-none"></div>
                 <div className="absolute -left-10 -bottom-10 w-24 h-24 bg-sky-100 rounded-full opacity-50 pointer-events-none"></div>
 
-                <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="relative z-10 flex flex-col items-center text-center h-full">
                     <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4 text-orange-500 shadow-sm transform group-hover:-translate-y-2 transition-transform">
                         <Icon className="w-8 h-8" strokeWidth={2.5} />
                     </div>
@@ -50,7 +50,7 @@ export default function JellyCard({ id, title, description, icon: Icon, color, s
                     <h3 className="text-xl font-bold text-indigo-900 mb-2 font-round">
                         {title}
                     </h3>
-                    <p className="text-sky-700/80 text-sm font-medium leading-relaxed">
+                    <p className="text-sky-700/80 text-sm font-medium leading-relaxed flex-1">
                         {description}
                     </p>
                 </div>

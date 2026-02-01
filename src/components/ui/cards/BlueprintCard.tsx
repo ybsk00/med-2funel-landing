@@ -56,7 +56,7 @@ export default function BlueprintCard({ id, title, description, icon: Icon, colo
                         <div className="h-[1px] bg-white flex-1"></div>
                     </div>
 
-                    <p className="text-sm font-mono text-blue-200 leading-relaxed">
+                    <p className="text-sm font-mono text-blue-200 leading-relaxed flex-1">
                         {description}
                     </p>
 

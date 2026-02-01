@@ -49,7 +49,7 @@ export default function BotanicCard({ id, title, description, icon: Icon, color,
                         NATURAL CARE
                     </p>
 
-                    <p className="text-stone-500 text-sm leading-relaxed z-10 relative">
+                    <p className="text-stone-500 text-sm leading-relaxed z-10 relative flex-1">
                         {description}
                     </p>
                 </div>

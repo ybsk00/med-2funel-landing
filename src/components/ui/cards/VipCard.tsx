@@ -23,7 +23,7 @@ export default function VipCard({ id, title, description, icon: Icon, color, onC
     const Container = 'div';
     const props = {
         onClick: (e: any) => { handleClick(); onClick?.(); },
-        className: "group relative block cursor-pointer"
+        className: "group relative block h-full cursor-pointer"
     };
 
     return (
@@ -36,19 +36,21 @@ export default function VipCard({ id, title, description, icon: Icon, color, onC
                     <div className="absolute inset-0 rounded-xl border border-[#D4AF37]/20 pointer-events-none group-hover:border-[#D4AF37]/60 transition-colors duration-500"></div>
                     <div className="absolute inset-[2px] rounded-[10px] border border-[#D4AF37]/10 pointer-events-none"></div>
 
-                    <div className="flex items-start justify-between mb-6">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B76E79] p-[1px] group-hover:scale-110 transition-transform duration-500">
-                            <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                                <Icon className="w-5 h-5 text-[#D4AF37]" />
+                    <div className="flex flex-col h-full relative z-10">
+                        <div className="flex items-start justify-between mb-6">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#B76E79] p-[1px] group-hover:scale-110 transition-transform duration-500">
+                                <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
+                                    <Icon className="w-5 h-5 text-[#D4AF37]" />
+                                </div>
                             </div>
+                            <ArrowRight className="w-5 h-5 text-[#D4AF37] opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300" />
                         </div>
-                        <ArrowRight className="w-5 h-5 text-[#D4AF37] opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300" />
-                    </div>
 
-                    <h3 className="text-xl font-serif text-[#D4AF37] mb-3">{title}</h3>
-                    <p className="text-gray-400 font-light text-sm leading-relaxed group-hover:text-gray-300 transition-colors">
-                        {description}
-                    </p>
+                        <h3 className="text-xl font-serif text-[#D4AF37] mb-3">{title}</h3>
+                        <p className="text-gray-400 font-light text-sm leading-relaxed group-hover:text-gray-300 transition-colors flex-1">
+                            {description}
+                        </p>
+                    </div>
 
                     {/* Shine Effect */}
                     <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none">

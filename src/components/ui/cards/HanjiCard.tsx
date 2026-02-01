@@ -38,7 +38,7 @@ export default function HanjiCard({ id, title, description, icon: Icon, color, s
                     {/* Ink Splash Effect on Hover */}
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-stone-200 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
 
-                    <div className="relative z-10 flex flex-col items-center text-center">
+                    <div className="relative z-10 flex flex-col items-center text-center h-full">
                         <div className="mb-6 p-4 rounded-full border-2 border-stone-800/10 group-hover:border-stone-800/30 transition-colors duration-500">
                             <Icon className="w-8 h-8 text-[#4A5D23]" strokeWidth={1.5} />
                         </div>
@@ -50,7 +50,7 @@ export default function HanjiCard({ id, title, description, icon: Icon, color, s
                         {/* Vertical Divider */}
                         <div className="w-[1px] h-8 bg-stone-300 mb-4"></div>
 
-                        <p className="text-stone-500 text-sm font-serif leading-loose break-keep">
+                        <p className="text-stone-500 text-sm font-serif leading-loose break-keep flex-1">
                             {description}
                         </p>
                     </div>

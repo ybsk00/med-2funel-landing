@@ -51,7 +51,7 @@ export default function GlassCard({ id, title, description, icon: Icon, color, s
                         <h3 className={`text-lg font-bold ${titleColor} mb-2 group-hover:text-cyan-400 transition-colors`}>
                             {title}
                         </h3>
-                        <p className={`${descColor} text-sm leading-relaxed`}>
+                        <p className={`${descColor} text-sm leading-relaxed flex-1`}>
                             {description}
                         </p>
 

@@ -30,7 +30,7 @@ export default function FlowerCard({ id, title, description, icon: Icon, color, 
                 {/* Petal Layer Effect */}
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-rose-100 to-transparent rounded-bl-[4rem] opacity-30 pointer-events-none group-hover:scale-110 transition-transform duration-700 ease-in-out"></div>
 
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col h-full">
                     <div className="w-12 h-12 bg-rose-50 rounded-full flex items-center justify-center text-rose-400 mb-6 group-hover:bg-rose-100 transition-colors">
                         <Icon className="w-6 h-6" />
                     </div>
@@ -41,7 +41,7 @@ export default function FlowerCard({ id, title, description, icon: Icon, color, 
 
                     <div className="w-8 h-[2px] bg-rose-200 mb-4 group-hover:w-16 transition-all duration-300"></div>
 
-                    <p className="text-rose-800/60 text-sm font-light leading-relaxed">
+                    <p className="text-rose-800/60 text-sm font-light leading-relaxed flex-1">
                         {description}
                     </p>
                 </div>
