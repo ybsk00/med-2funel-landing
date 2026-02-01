@@ -14,23 +14,12 @@ export default function UrologyLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Urology (Cyber/Night)
-    const cyberConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4", // Neon Mint
-            secondary: "#2a3330", // Carbon Light
-            background: "#10221c", // Dark Green/Black
-            text: "#ffffff",
-            font: "sans", // Will use italic/bold styles
-            texture: "carbon"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={cyberConfig}>
-            <div className="min-h-screen bg-[#10221c] text-white font-sans selection:bg-[#13eca4] selection:text-[#111816]">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans transition-colors duration-700"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Urology */}
                 <style jsx global>{`
                     /* Carbon Pattern */
@@ -53,12 +42,12 @@ export default function UrologyLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="urology" />
 
-                <HealthcareNavigation config={cyberConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-carbon-pattern pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10 w-full overflow-hidden">
-                        <HealthcareHero config={cyberConfig} onOpenCamera={open} />
+                        <HealthcareHero config={config} onOpenCamera={open} />
                         {/* Dark Overlay/Scanliens - REMOVED */}
                         {/* <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none"></div> */}
                     </div>
@@ -79,7 +68,7 @@ export default function UrologyLanding() {
                                 </div>
                             </div>
 
-                            <HealthcareModules config={cyberConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

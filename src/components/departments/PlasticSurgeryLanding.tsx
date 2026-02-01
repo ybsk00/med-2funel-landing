@@ -17,22 +17,12 @@ export default function PlasticSurgeryLanding() {
     if (!config) return <div>Department Not Found</div>;
 
     // Custom theme config for Plastic Surgery (Mint/Glass Style now)
-    const glassConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4",
-            primaryDark: "#0eb57d",
-            background: "#f0fdf9", // Very pale mint/white
-            text: "#111816",
-            font: "sans",
-            texture: "glass"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={glassConfig}>
-            <div className="min-h-screen bg-[#f0fdf9] text-[#111816] font-sans selection:bg-[#13eca4]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans selection:bg-skin-primary/30"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Plastic Surgery */}
                 <style jsx global>{`
                     :root {
@@ -73,14 +63,14 @@ export default function PlasticSurgeryLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="plastic-surgery" />
 
-                <HealthcareNavigation config={glassConfig} />
+                <HealthcareNavigation config={config} />
 
-                <PremiumBackground colors={glassConfig.theme} intensity="strong" />
+                <PremiumBackground colors={config.theme} intensity="strong" />
 
                 <main className="relative overflow-hidden pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero config={glassConfig} onOpenCamera={open} />
+                        <HealthcareHero config={config} onOpenCamera={open} />
                     </div>
 
                     {/* Modules Section - Glass Cards */}
@@ -103,7 +93,7 @@ export default function PlasticSurgeryLanding() {
                             </div>
 
                             <div className="[&>div]:gap-8">
-                                <HealthcareModules config={glassConfig} />
+                                <HealthcareModules config={config} />
                             </div>
                         </div>
                     </section>

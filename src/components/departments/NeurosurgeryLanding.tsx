@@ -14,23 +14,12 @@ export default function NeurosurgeryLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Neurosurgery (Neuro/Holo)
-    const neuroConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4",
-            secondary: "#0f172a", // Deep Indigo
-            background: "#0f172a", // Deep Indigo Background
-            text: "#ffffff",
-            font: "sans",
-            texture: "grid"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={neuroConfig}>
-            <div className="min-h-screen bg-[#0f172a] text-white font-sans selection:bg-[#6366f1] selection:text-white">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans transition-colors duration-700"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Neurosurgery */}
                 <style jsx global>{`
                     /* Neural Grid Background */
@@ -58,12 +47,12 @@ export default function NeurosurgeryLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="neurosurgery" />
 
-                <HealthcareNavigation config={neuroConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-neural-grid pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero config={neuroConfig} onOpenCamera={open} />
+                        <HealthcareHero config={config} onOpenCamera={open} />
                         {/* Holographic Overlay - REMOVED */}
                         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none z-10"></div>
                     </div>
@@ -81,7 +70,7 @@ export default function NeurosurgeryLanding() {
                                 </h2>
                             </div>
 
-                            <HealthcareModules config={neuroConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

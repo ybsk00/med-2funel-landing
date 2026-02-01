@@ -18,21 +18,12 @@ export default function DermatologyLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Define custom high-end theme config for this specific page override (Gold/Luxury)
-    const luxuryConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#d4af37", // Gold
-            secondary: "#b88a7d", // Rose Copper
-            background: "#1a1614", // Luxury Dark
-            text: "#ffffff"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={luxuryConfig}>
-            <div className={`min-h-screen bg-[#1a1614] text-white selection:bg-[#b88a7d]/30 font-sans ${isLocked ? 'overflow-hidden h-screen' : ''}`}>
+        <HospitalProvider initialConfig={config}>
+            <div
+                className={`min-h-screen selection:bg-skin-primary/30 font-sans ${isLocked ? 'overflow-hidden h-screen' : ''}`}
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection from Reference Design */}
                 <style jsx global>{`
                     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
@@ -72,20 +63,20 @@ export default function DermatologyLanding() {
                     subtitle="VERIFYING VIP MEMBERSHIP..."
                 />
 
-                <HealthcareNavigation config={luxuryConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative">
                     {/* Hero Section with Custom Branding */}
                     <div className="relative z-10">
                         <HealthcareHero
-                            config={luxuryConfig}
+                            config={config}
                             onOpenCamera={open}
                         />
 
                     </div>
 
                     {/* Modules Section - VIP Card Style */}
-                    <section className="py-24 px-4 relative overflow-hidden bg-[#1a1614]">
+                    <section className="py-24 px-4 relative overflow-hidden" style={{ backgroundColor: config.theme.background }}>
                         {/* Decorative Background Elements from Reference */}
                         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#b88a7d]/10 to-transparent pointer-events-none"></div>
                         <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -101,7 +92,7 @@ export default function DermatologyLanding() {
                                 </p>
                             </div>
 
-                            <HealthcareModules config={luxuryConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

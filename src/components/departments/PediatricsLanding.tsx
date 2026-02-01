@@ -15,23 +15,12 @@ export default function PediatricsLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Pediatrics (Jelly/Bubbles)
-    const jellyConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4", // Minty Green
-            secondary: "#FFFDE7", // Bubble Yellow
-            accent: "#FF69B4", // Hot Pink
-            background: "#ffffff",
-            text: "#0e4134",
-            font: "round"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={jellyConfig}>
-            <div className="min-h-screen bg-white text-[#111816] font-round selection:bg-[#13eca4]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-round transition-colors duration-700"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Pediatrics */}
                 <style jsx global>{`
                     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700&display=swap');
@@ -69,7 +58,7 @@ export default function PediatricsLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="pediatrics" />
 
-                <HealthcareNavigation config={jellyConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative overflow-hidden">
                     {/* Hero Section with Bubbles */}
@@ -79,11 +68,11 @@ export default function PediatricsLanding() {
                         <div className="absolute bottom-40 right-10 w-32 h-32 bg-pink-100/50 rounded-full animate-float blur-sm z-20 pointer-events-none" style={{ animationDelay: '1s' }}></div>
                         <div className="absolute top-40 right-20 w-16 h-16 bg-yellow-100/50 rounded-full animate-float blur-sm z-20 pointer-events-none" style={{ animationDelay: '2s' }}></div>
 
-                        <HealthcareHero config={jellyConfig} onOpenCamera={open} />
+                        <HealthcareHero config={config} onOpenCamera={open} />
                     </div>
 
                     {/* Modules Section - Jelly Card Style */}
-                    <section className="py-24 px-4 relative bg-gradient-to-b from-white to-[#FDFBF7]">
+                    <section className="py-24 px-4 relative" style={{ backgroundColor: config.theme.background }}>
                         <div className="max-w-7xl mx-auto">
                             <div className="text-center mb-16 flex flex-col items-center gap-3">
                                 <span className="px-4 py-1.5 rounded-full bg-[#E1F5FE] text-blue-800 font-bold text-sm border border-blue-100 uppercase tracking-wider">
@@ -97,7 +86,7 @@ export default function PediatricsLanding() {
                                 </p>
                             </div>
 
-                            <HealthcareModules config={jellyConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

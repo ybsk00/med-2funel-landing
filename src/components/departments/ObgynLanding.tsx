@@ -14,24 +14,12 @@ export default function ObgynLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
-    const obgynConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#FF9EAA", // Soft Coral
-            secondary: "#FFF0F1",
-            background: "#FFFBFB",
-            text: "#4A4A4A", // Dark Grey (Hard Coded for Visibility)
-            accent: "#d63384", // Deep Pink for contrast
-            font: "serif",
-            texture: "silk"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={obgynConfig}>
-            <div className="min-h-screen bg-[#FFFBFB] text-[#4A4A4A] font-sans selection:bg-[#FF9EAA]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans selection:bg-skin-primary/30"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for ObGyn */}
                 <style jsx global>{`
                     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
@@ -49,14 +37,14 @@ export default function ObgynLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="obgyn" />
 
-                <HealthcareNavigation config={obgynConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-organic-curve pt-20">
                     {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
                     <div className="relative z-10">
                         {/* Removed p-4 constraints */}
                         <div className="w-full relative shadow-xl shadow-rose-100/50">
-                            <HealthcareHero config={obgynConfig} onOpenCamera={open} />
+                            <HealthcareHero config={config} onOpenCamera={open} />
                         </div>
                     </div>
 
@@ -72,7 +60,7 @@ export default function ObgynLanding() {
                                 <div className="w-16 h-1 bg-[#FF9EAA] mt-4 rounded-full"></div>
                             </div>
 
-                            <HealthcareModules config={obgynConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

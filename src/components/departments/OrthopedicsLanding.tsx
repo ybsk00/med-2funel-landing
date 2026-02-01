@@ -15,24 +15,12 @@ export default function OrthopedicsLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
-    const blueprintConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4", // Vibrant Green
-            secondary: "#e2e8f0",
-            background: "#f6f8f7",
-            text: "#0f172a", // Dark Navy (Verified High Contrast)
-            accent: "#00b894", // Darker Green for Gradients
-            font: "mono",
-            texture: "grid"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={blueprintConfig}>
-            <div className="min-h-screen bg-[#f6f8f7] text-[#0f172a] font-sans selection:bg-[#13eca4]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans selection:bg-skin-primary/30"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Orthopedics */}
                 <style jsx global>{`
                     /* Grid Pattern Background */
@@ -73,7 +61,7 @@ export default function OrthopedicsLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="orthopedics" />
 
-                <HealthcareNavigation config={blueprintConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-grid-pattern pt-20">
                     {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
@@ -81,7 +69,7 @@ export default function OrthopedicsLanding() {
                         {/* Removed p-4 md:p-8 and max-w constraints */}
                         <div className="w-full relative overflow-hidden shadow-xl border-b border-slate-200">
                             {/* Hard-coded Glassmorphism Logic Injection via Config is tricky, so we rely on the clean wrapper + config overrides */}
-                            <HealthcareHero config={blueprintConfig} onOpenCamera={open} />
+                            <HealthcareHero config={config} onOpenCamera={open} />
                         </div>
                     </div>
 
@@ -100,7 +88,7 @@ export default function OrthopedicsLanding() {
 
 
 
-                            <HealthcareModules config={blueprintConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

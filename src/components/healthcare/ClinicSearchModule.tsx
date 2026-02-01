@@ -146,7 +146,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     const styles = getThemeStyles();
 
     // Dynamic Button Class (Main Search Button)
-    const themeButtonClass = `bg-skin-primary ${buttonTextColor} shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent`;
+    const themeButtonClass = isLight
+        ? `bg-skin-primary ${buttonTextColor} shadow-xl shadow-skin-primary/30 hover:bg-skin-accent`
+        : `bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-2xl hover:bg-white/20`;
+
+    const finalButtonClass = `${themeButtonClass} hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black px-10 py-5 text-lg rounded-2xl`;
 
     // 추천 병원 로드 (동적 로딩)
     const [recommendedClinic, setRecommendedClinic] = useState<any>(null);
@@ -419,7 +423,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     <button
                         onClick={() => handleSearch(false)}
                         disabled={searchState === "loading"}
-                        className={`inline-flex items-center justify-center px-10 py-5 text-lg font-black rounded-2xl ${themeButtonClass} disabled:opacity-70 disabled:cursor-not-allowed`}
+                        className={`${finalButtonClass} disabled:opacity-70 disabled:cursor-not-allowed`}
                     >
                         {searchState === "loading" ? (
                             <>
@@ -537,7 +541,10 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                     <div className="flex flex-col gap-3 min-w-[180px]">
                                                         <button
                                                             onClick={handleConnect}
-                                                            className="w-full py-5 px-8 bg-skin-primary text-white rounded-2xl font-black hover:bg-skin-accent transition-all duration-300 text-lg shadow-[0_10px_30px_-10px_rgba(var(--skin-primary-rgb),0.5)] active:scale-95"
+                                                            className={`w-full py-5 px-8 rounded-2xl font-black transition-all duration-300 text-lg active:scale-95 ${isLight
+                                                                    ? "bg-skin-primary text-white shadow-[0_10px_30px_-10px_rgba(var(--skin-primary-rgb),0.5)] hover:bg-skin-accent"
+                                                                    : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 shadow-2xl"
+                                                                }`}
                                                         >
                                                             비대면 상담예약
                                                         </button>

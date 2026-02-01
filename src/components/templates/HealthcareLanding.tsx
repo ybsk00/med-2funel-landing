@@ -182,8 +182,11 @@ export default function HealthcareLanding() {
                                 <MagneticInteraction distance={80} strength={0.3}>
                                     <Link
                                         href={config.marketing?.cta?.link || "healthcare/chat"}
-                                        className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                                        style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
+                                        className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10"
+                                        style={{
+                                            backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.1)' : config.theme.primary,
+                                            backdropFilter: isThemeDark() ? 'blur(12px)' : 'none'
+                                        }}
                                     >
                                         <CtaIcon className="w-5 h-5" />
                                         {config.marketing?.cta?.buttonText || "AI 진단 시작"}
@@ -193,10 +196,11 @@ export default function HealthcareLanding() {
                                 <MagneticInteraction distance={60} strength={0.2}>
                                     <button
                                         onClick={() => setIsPhotoSlideOverOpen(true)}
-                                        className="px-6 py-3 border-2 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
+                                        className="px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
                                         style={{
-                                            borderColor: config.theme.primary,
-                                            color: config.theme.primary
+                                            borderColor: isThemeDark() ? 'rgba(255,255,255,0.2)' : config.theme.primary,
+                                            color: isThemeDark() ? '#FFFFFF' : config.theme.primary,
+                                            backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.05)' : 'transparent'
                                         }}
                                     >
                                         <Camera className="w-4 h-4" />
@@ -327,7 +331,13 @@ export default function HealthcareLanding() {
 
                 <div className="fixed bottom-8 right-8 z-50">
                     <MagneticInteraction distance={50} strength={0.5}>
-                        <Link href={config.marketing?.cta?.link || "healthcare/chat"} className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20">
+                        <Link
+                            href={config.marketing?.cta?.link || "healthcare/chat"}
+                            className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-md"
+                            style={{
+                                backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.1)' : config.theme.primary
+                            }}
+                        >
                             <CtaIcon className="w-8 h-8" />
                         </Link>
                     </MagneticInteraction>

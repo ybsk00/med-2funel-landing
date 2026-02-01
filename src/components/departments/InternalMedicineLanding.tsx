@@ -17,24 +17,12 @@ export default function InternalMedicineLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
-    const botanicConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4", // Brand Primary
-            secondary: "#61897c", // Leaf Medium
-            background: "#f6f8f7",
-            text: "#1e3a2f", // Dark Green (Hard Coded for Visibility)
-            accent: "#0f5132", // Deep Forest for gradients
-            font: "display",
-            texture: "glass"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={botanicConfig}>
-            <div className="min-h-screen bg-[#f6f8f7] text-[#1e3a2f] font-sans selection:bg-[#13eca4]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans transition-colors duration-700"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
 
                 <style jsx global>{`
                     /* Leaf Pattern Background */
@@ -48,19 +36,19 @@ export default function InternalMedicineLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="internal-medicine" />
 
-                <HealthcareNavigation config={botanicConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-leaf-pattern pt-20">
                     {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
                     <div className="relative z-10 p-0">
                         {/* Removed p-4 md:p-8 constraints to fix box layout */}
                         <div className="w-full relative overflow-hidden shadow-2xl border-b border-white/20">
-                            <HealthcareHero config={botanicConfig} onOpenCamera={open} />
+                            <HealthcareHero config={config} onOpenCamera={open} />
                         </div>
                     </div>
 
                     {/* Botanic Modules Section */}
-                    <section className="pb-16 px-4 md:px-8 mt-12 bg-[#f6f8f7]">
+                    <section className="pb-16 px-4 md:px-8 mt-12" style={{ backgroundColor: config.theme.background }}>
                         <div className="max-w-[1440px] mx-auto">
                             <div className="flex items-center gap-3 mb-8 mt-4">
                                 <span className="material-symbols-outlined text-[#13eca4] text-3xl">spa</span>
@@ -69,7 +57,7 @@ export default function InternalMedicineLanding() {
                                 </h2>
                             </div>
 
-                            <HealthcareModules config={botanicConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

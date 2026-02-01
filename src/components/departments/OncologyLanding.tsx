@@ -15,24 +15,12 @@ export default function OncologyLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
-    const linenConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#13eca4", // Brand
-            secondary: "#EBE8E3", // Stone
-            background: "#F5F2ED",
-            text: "#2D3633", // Dark Stone (Hard Coded for Visibility)
-            accent: "#1c2522", // Dark Charcoal for accents
-            font: "display",
-            texture: "paper"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={linenConfig}>
-            <div className="min-h-screen bg-[#F5F2ED] text-[#2D3633] font-sans selection:bg-[#13eca4]/30">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans selection:bg-skin-primary/30"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Oncology */}
                 <style jsx global>{`
                     /* Linen Texture */
@@ -56,19 +44,19 @@ export default function OncologyLanding() {
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="oncology" />
 
-                <HealthcareNavigation config={linenConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-linen-texture pt-20">
                     {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
                     <div className="relative z-10">
                         {/* Removed p-4/rounded constraints for edge-to-edge look */}
                         <div className="w-full relative overflow-hidden shadow-sm border-b border-[#EBE8E3]">
-                            <HealthcareHero config={linenConfig} onOpenCamera={open} />
+                            <HealthcareHero config={config} onOpenCamera={open} />
                         </div>
                     </div>
 
                     {/* Modules Section */}
-                    <section className="pb-16 px-4 md:px-8 mt-12">
+                    <section className="pb-16 px-4 md:px-8 mt-12" style={{ backgroundColor: config.theme.background }}>
                         <div className="max-w-[1440px] mx-auto">
                             <div className="text-center mb-12">
                                 <span className="material-symbols-outlined text-[#13eca4] text-4xl mb-4">healing</span>
@@ -81,7 +69,7 @@ export default function OncologyLanding() {
 
                             </div>
 
-                            <HealthcareModules config={linenConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>

@@ -14,23 +14,12 @@ export default function DentistryLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Dentistry (Ice/Clean)
-    const iceConfig = {
-        ...config,
-        theme: {
-            ...config.theme,
-            primary: "#00CED1", // Dark Turquoise/Cyan
-            secondary: "#E0F2FE", // Ice Blue
-            background: "#F0F9FF", // Very light blue
-            text: "#0F172A", // Slate 900
-            font: "sans",
-            texture: "glass"
-        }
-    };
-
     return (
-        <HospitalProvider initialConfig={iceConfig}>
-            <div className="min-h-screen bg-[#F0F9FF] text-[#0F172A] font-sans">
+        <HospitalProvider initialConfig={config}>
+            <div
+                className="min-h-screen font-sans"
+                style={{ backgroundColor: config.theme.background, color: config.theme.text }}
+            >
                 {/* Custom Theme Injection for Dentistry */}
                 <style jsx global>{`
                     /* Ice/Gloss Effects */
@@ -64,22 +53,22 @@ export default function DentistryLanding() {
 
                     /* Background Pattern */
                     .bg-ice-pattern {
-                        background-image: 
-                            radial-gradient(at 0% 0%, rgba(19, 236, 164, 0.15) 0px, transparent 50%),
-                            radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
-                            radial-gradient(at 100% 100%, rgba(19, 236, 164, 0.1) 0px, transparent 50%);
                         background-attachment: fixed;
+                        background-image: 
+                            radial-gradient(at 0% 0%, ${config.theme.primary}26, transparent 50%),
+                            radial-gradient(at 100% 0%, ${config.theme.secondary}1a, transparent 50%),
+                            radial-gradient(at 100% 100%, ${config.theme.primary}1a, transparent 50%);
                     }
                 `}</style>
 
                 <PhotoSlideOver isOpen={opened} onClose={close} department="dentistry" />
 
-                <HealthcareNavigation config={iceConfig} />
+                <HealthcareNavigation config={config} />
 
                 <main className="relative bg-ice-pattern pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero config={iceConfig} onOpenCamera={open} />
+                        <HealthcareHero config={config} onOpenCamera={open} />
                         {/* Ice Overlay - REMOVED */}
                         {/* <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/80 pointer-events-none"></div> */}
                     </div>
@@ -92,15 +81,15 @@ export default function DentistryLanding() {
                                     <span className="w-2 h-2 rounded-full bg-[#00CED1] animate-pulse"></span>
                                     <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Crystal Clear Care</span>
                                 </span>
-                                <h2 className="text-slate-900 text-4xl md:text-5xl font-bold tracking-tight">
-                                    Radiance <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00CED1] to-teal-400">Revealed</span>
+                                <h2 className="text-4xl md:text-5xl font-bold tracking-tight" style={{ color: config.theme.text }}>
+                                    Radiance <span className="text-transparent bg-clip-text" style={{ backgroundImage: `linear-gradient(to right, ${config.theme.primary}, ${config.theme.accent || config.theme.primary})`, WebkitBackgroundClip: 'text' }}>Revealed</span>
                                 </h2>
                                 <p className="text-slate-500 text-lg max-w-[600px]">
                                     Advanced treatments utilizing gloss-finish technology for the perfect smile.
                                 </p>
                             </div>
 
-                            <HealthcareModules config={iceConfig} />
+                            <HealthcareModules config={config} />
                         </div>
                     </section>
                 </main>
