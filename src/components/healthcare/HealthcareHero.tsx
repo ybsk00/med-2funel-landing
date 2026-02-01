@@ -29,6 +29,11 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
 
     const isThemeDark = isColorDark(config.theme.background);
     const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
+
+    // Visibility Logic: Prefer theme text color but ensure contrast against media
+    // If background is extreme (too bright/dark), we might need to nudge it
+    const heroTitleColor = config.theme.text || (isThemeDark ? "#FFFFFF" : "#111111");
+    const heroSubtitleColor = isThemeDark ? "#FFFFFF" : "#333333";
     const buttonTextColor = (isPrimaryBright && !isThemeDark) ? "text-slate-900 font-extrabold" : "text-white";
 
     return (
@@ -79,29 +84,29 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         PREMIUM AI HEALTHCARE
                     </p>
 
-                    {/* H1 */}
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]">
+                    {/* H1: Branded Gradient + Theme Text */}
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter leading-[1.05] drop-shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
                         <span
-                            className="bg-clip-text text-transparent drop-shadow-none"
+                            className="bg-clip-text text-transparent drop-shadow-none block mb-1"
                             style={{
                                 backgroundImage: `linear-gradient(to right, ${config.theme.primary}, ${config.theme.accent})`,
                                 WebkitBackgroundClip: 'text'
                             }}
                         >
                             {config.hero?.title.split(',')[0] || config.marketingName}
-                        </span><br />
+                        </span>
                         <span
-                            className="drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]"
-                            style={{ color: config.theme.text }}
+                            className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.08)] block"
+                            style={{ color: heroTitleColor }}
                         >
                             {config.hero?.title.split(',')[1] || "스마트 케어 솔루션"}
                         </span>
                     </h1>
 
-                    {/* Body */}
+                    {/* Body: Enhanced for Background Contrast */}
                     <p
-                        className="text-base md:text-lg leading-relaxed max-w-lg mx-auto drop-shadow-sm font-medium"
-                        style={{ color: config.theme.text, opacity: 0.9 }}
+                        className="text-lg md:text-xl leading-relaxed max-w-xl mx-auto drop-shadow-md font-medium px-4"
+                        style={{ color: heroSubtitleColor, opacity: 0.85 }}
                     >
                         {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                     </p>
