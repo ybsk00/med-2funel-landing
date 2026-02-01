@@ -123,7 +123,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 // Inactive: White Background + Grey Border + Grey Text (Standard Light Button)
                 inactive: isLight
                     ? "bg-white border-2 border-stone-300 text-stone-500 hover:border-skin-primary hover:text-skin-primary hover:bg-stone-50 transition-all font-bold"
-                    : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
+                    : "bg-white/10 border-white/20 text-gray-200 hover:bg-white/20 hover:text-white hover:border-white/40 font-medium"
             },
 
             // 결과 카드
