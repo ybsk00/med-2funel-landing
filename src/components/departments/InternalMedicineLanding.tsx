@@ -35,12 +35,7 @@ export default function InternalMedicineLanding() {
     return (
         <HospitalProvider initialConfig={botanicConfig}>
             <div className="min-h-screen bg-[#f6f8f7] text-[#1e3a2f] font-sans selection:bg-[#13eca4]/30">
-                {/* Custom Theme Injection for Internal Medicine */}
-                <ClinicSearchModule
-                    department="internal-medicine"
-                    searchKeyword="내과"
-                    theme="modern"
-                />
+
                 <style jsx global>{`
                     /* Leaf Pattern Background */
                     .bg-leaf-pattern {

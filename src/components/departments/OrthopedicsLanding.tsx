@@ -98,12 +98,7 @@ export default function OrthopedicsLanding() {
                                 </div>
                             </div>
 
-                            {/* Clinic Search Module */}
-                            <ClinicSearchModule
-                                department="orthopedics"
-                                searchKeyword="도수치료 정형외과"
-                                theme="modern"
-                            />
+
 
                             <HealthcareModules config={blueprintConfig} />
                         </div>

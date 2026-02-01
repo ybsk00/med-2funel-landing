@@ -78,13 +78,7 @@ export default function OncologyLanding() {
                                 <p className="text-[#636E69] mt-2 max-w-2xl mx-auto">
                                     Comprehensive care centered around healing the whole person.
                                 </p>
-                                <div className="mt-8 mb-8">
-                                    <ClinicSearchModule
-                                        department="oncology"
-                                        searchKeyword="암요양병원"
-                                        theme="modern"
-                                    />
-                                </div>
+
                             </div>
 
                             <HealthcareModules config={linenConfig} />

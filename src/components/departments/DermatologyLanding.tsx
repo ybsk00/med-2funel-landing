@@ -81,11 +81,7 @@ export default function DermatologyLanding() {
                             config={luxuryConfig}
                             onOpenCamera={open}
                         />
-                        <ClinicSearchModule
-                            department="dermatology"
-                            searchKeyword="피부과 전문의 추천"
-                            theme="modern"
-                        />        {/* Overlay removed as requested */}
+
                     </div>
 
                     {/* Modules Section - VIP Card Style */}

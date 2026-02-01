@@ -187,6 +187,32 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     const [holidayOpen, setHolidayOpen] = useState(isHoliday());
 
     // 검색 상태
+    const DEPARTMENT_KEYWORDS: Record<string, string> = {
+        "dermatology": "피부과",
+        "plastic-surgery": "성형외과",
+        "korean-medicine": "한의원",
+        "dentistry": "치과",
+        "orthopedics": "정형외과",
+        "internal-medicine": "내과",
+        "surgery": "외과",
+        "obgyn": "산부인과",
+        "urology": "비뇨기과",
+        "pediatrics": "소아과",
+        "oncology": "암요양병원",
+        "neurosurgery": "신경외과",
+        "rehabilitation": "재활의학과",
+        "mental-health": "정신건강의학과",
+        "ophthalmology": "안과",
+        "ent": "이비인후과"
+    };
+
+    const targetKeyword = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과"; // 키워드 자동 매핑
+    const [searchTerm, setSearchTerm] = useState(targetKeyword);
+    // useDebouncedValue is not defined in the provided context, assuming it's an external hook.
+    // For now, we'll use searchTerm directly. If useDebouncedValue is available, it should be used.
+    // const [debouncedSearch] = useDebouncedValue(searchTerm, 500);
+    const debouncedSearch = searchTerm; // Placeholder if useDebouncedValue is not available
+
     const [searchState, setSearchState] = useState<SearchState>("idle");
     const [clinics, setClinics] = useState<Clinic[]>([]);
     const [errorMessage, setErrorMessage] = useState("");
