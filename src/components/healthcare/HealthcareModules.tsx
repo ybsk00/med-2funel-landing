@@ -14,7 +14,6 @@ import BotanicCard from "@/components/ui/cards/BotanicCard";
 import LinenCard from "@/components/ui/cards/LinenCard";
 import HologramCard from "@/components/ui/cards/HologramCard";
 import ChatInterface from "@/components/chat/ChatInterface";
-import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import HealthcareContent from "@/components/healthcare/HealthcareContent";
 
@@ -238,10 +237,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                 )}
             </div>
 
-            {/* Footer */}
-            <div className="mt-20">
-                <Footer mode="healthcare" />
-            </div>
+        </div>
         </section >
     );
 }
