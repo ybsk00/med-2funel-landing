@@ -1,25 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { HospitalConfig } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
 import { HEALTHCARE_CONTENT } from "@/lib/constants/healthcare_content";
 import { Check, ArrowRight, Activity, Moon, Sun, ShieldCheck } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
 
-interface HealthcareContentProps {
-    config: HospitalConfig;
-}
-
-export default function HealthcareContent({ config }: HealthcareContentProps) {
+export default function HealthcareContent() {
+    const config = useHospital();
     const content = config.id ? HEALTHCARE_CONTENT[config.id as keyof typeof HEALTHCARE_CONTENT] : null;
     const [activeSession, setActiveSession] = useState<string | null>(null);
     const [isChatOpen, setIsChatOpen] = useState(false);
 
-    // Theme Darkness Check
+    // Theme Darkness Check (Refined)
     const isColorDark = (hex?: string) => {
         if (!hex) return false;
-        const h = hex.replace('#', '');
-        if (h.length < 4) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
         const r = parseInt(h.substring(0, 2), 16);
         const g = parseInt(h.substring(2, 4), 16);
         const b = parseInt(h.substring(4, 6), 16);
@@ -28,26 +28,26 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
 
     const isThemeDark = config.theme ? isColorDark(config.theme.background) : false;
 
-    // Dynamic Styles based on Theme Mode
+    // Dynamic Styles based on Theme Mode (Improved contrast for dark mode)
     const styles = {
         // Session A Container
         container: isThemeDark
-            ? "bg-white/5 border border-white/10 backdrop-blur-sm"
-            : "bg-white/90 border border-stone-200 shadow-2xl backdrop-blur-xl",
+            ? "bg-white/10 border border-white/20 backdrop-blur-md shadow-2xl"
+            : "bg-white/95 border border-stone-200 shadow-2xl backdrop-blur-xl",
 
         // Session A Checklist Items
         checkItem: isThemeDark
-            ? "bg-skin-surface/50 border border-skin-text/5 hover:border-skin-primary/30"
+            ? "bg-white/5 border border-white/10 hover:border-skin-primary/50"
             : "bg-white border border-stone-100 shadow-sm hover:border-skin-primary hover:shadow-md",
 
         // Session B Guide Cards
         guideCard: isThemeDark
-            ? "bg-skin-surface border border-skin-text/5 hover:border-skin-primary/30"
+            ? "bg-white/10 border border-white/10 hover:border-skin-primary/50 shadow-xl"
             : "bg-white border border-stone-100 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-skin-primary/50",
 
         // Session D FAQ Items
         faqItem: isThemeDark
-            ? "bg-skin-surface/30 border border-skin-text/5 hover:bg-skin-surface"
+            ? "bg-white/5 border border-white/5 hover:bg-white/10"
             : "bg-white border border-stone-200 hover:bg-stone-50 shadow-sm"
     };
 
@@ -65,7 +65,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
     };
 
     return (
-        <section className="w-full max-w-7xl mx-auto px-4 space-y-24 mb-24">
+        <section className="w-full max-w-7xl mx-auto px-4 space-y-24 mb-24 relative z-10">
             {/* Session A: 60-Second Check / Symptom Check */}
             <div className={`relative group p-8 md:p-12 rounded-[2.5rem] overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700 ${styles.container}`}>
                 <div className={`absolute top-0 left-0 w-2 h-full bg-skin-primary opactiy-80`} />
@@ -88,7 +88,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
                                     <div className="w-6 h-6 rounded-full border-2 border-skin-text/20 flex items-center justify-center group-hover/item:border-skin-primary group-hover/item:bg-skin-primary transition-all">
                                         <Check className="w-3 h-3 text-white opacity-0 group-hover/item:opacity-100" />
                                     </div>
-                                    <span className="font-medium text-skin-text/80 group-hover/item:text-skin-text">{item}</span>
+                                    <span className={`font-medium transition-colors ${isThemeDark ? 'text-gray-200' : 'text-gray-800'} group-hover/item:text-skin-primary`}>{item}</span>
                                 </div>
                             ))}
                         </div>
@@ -123,8 +123,8 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
                             <div className="w-12 h-12 rounded-2xl bg-skin-primary/10 flex items-center justify-center mb-6 text-skin-primary group-hover:scale-110 transition-transform duration-300">
                                 {idx === 0 ? <Sun className="w-6 h-6" /> : idx === 1 ? <Activity className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
                             </div>
-                            <h4 className="text-xl font-bold text-skin-text mb-3">{card.title}</h4>
-                            <p className="text-skin-text/60 leading-relaxed font-light">{card.description}</p>
+                            <h4 className={`text-xl font-bold mb-3 ${isThemeDark ? 'text-white' : 'text-slate-900'}`}>{card.title}</h4>
+                            <p className={`${isThemeDark ? 'text-gray-400' : 'text-slate-500'} leading-relaxed font-light`}>{card.description}</p>
                         </div>
                     ))}
                 </div>
@@ -159,11 +159,11 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
             {/* Inline Chat Display Area */}
             <div id="healthcare-content-chat" className={`transition-all duration-700 ease-in-out ${isChatOpen ? 'opacity-100 max-h-[800px] mt-12' : 'opacity-0 max-h-0 overflow-hidden'}`}>
                 {isChatOpen && (
-                    <div className="rounded-[2rem] overflow-hidden shadow-2xl border border-skin-text/10 bg-skin-surface h-[600px] md:h-[700px]">
+                    <div className={`rounded-[2rem] overflow-hidden shadow-2xl border ${isThemeDark ? 'border-white/10 bg-white/5' : 'border-skin-text/10 bg-skin-surface'} h-[600px] md:h-[700px]`}>
                         <ChatInterface
-                            mode="healthcare" // or specific department mode if supported
+                            mode="healthcare"
                             isEmbedded={true}
-                            topic={config.id} // Pass department ID as topic Context
+                            topic={config.id}
                         />
                     </div>
                 )}

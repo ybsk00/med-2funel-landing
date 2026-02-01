@@ -74,6 +74,7 @@ export const HOSPITAL_CONFIG: HospitalConfig = {
     fax: "02-516-0514",
     businessNumber: "317-14-00846",
     naverSearchKeyword: "에버피부과",
+    id: "dermatology",
     personas: {
         healthcare: {
             name: "에밀리",

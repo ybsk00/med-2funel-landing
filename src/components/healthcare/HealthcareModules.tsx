@@ -146,7 +146,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                 </div>
 
                 {/* NEW: Healthcare Content Reinforcement (Sessions A-D) */}
-                <HealthcareContent config={config} />
+                <HealthcareContent />
 
                 {/* Module Header (Bottom Menu Section) */}
                 <div className="text-center mb-12 mt-24 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 pt-24 border-t border-skin-text/5">
