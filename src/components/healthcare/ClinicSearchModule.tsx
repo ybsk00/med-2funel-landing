@@ -67,26 +67,26 @@ const THEME_STYLES = {
 };
 
 const THEME_CLASSES = {
-    // 테두리: 테마 텍스트 색상의 20% + 테마 프라이머리 색상의 30% 혼합하여 가시성 확보
-    border: "border-skin-text/20 hover:border-skin-primary/50",
+    // 테두리: 2px 두께로 변경하여 확실하게 보이게 함, 투명도 30% -> 50% 상향
+    border: "border-skin-text/30 hover:border-skin-primary",
 
-    // 텍스트: 무조건 테마 텍스트 색상 사용
-    textMuted: "text-skin-text/60",
+    // 텍스트: 투명도를 줄여서 진하게 표시
+    textMuted: "text-skin-text/90",
 
-    // 입력 필드: 배경을 옅은 테마 배경색(가시성 확보) + 텍스트는 테마 텍스트
-    input: "bg-skin-text/[0.03] border-skin-text/20 text-skin-text font-bold focus:border-skin-primary focus:ring-1 focus:ring-skin-primary transition-all duration-300 shadow-sm placeholder:text-skin-text/30",
+    // 입력 필드: 배경을 거의 불투명하게(Surface) 설정하고, 테두리 두께 2px 적용
+    input: "bg-skin-surface border-2 border-skin-text/20 text-skin-text font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-skin-text/50",
 
-    // 칩 (버튼): 활성 시 프라이머리, 비활성 시 투명+테두리
+    // 칩 (버튼): 비활성 상태에서도 배경색(Surface)을 깔아서 글자가 묻히지 않게 함
     chip: {
-        active: "bg-skin-primary text-white shadow-md shadow-skin-primary/20 border-skin-primary",
-        inactive: "bg-transparent text-skin-text/70 border-skin-text/20 hover:border-skin-primary hover:text-skin-primary hover:bg-skin-primary/5 transition-all shadow-sm"
+        active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary",
+        inactive: "bg-skin-surface text-skin-text border-2 border-skin-text/20 hover:border-skin-primary hover:text-skin-primary transition-all"
     },
 
-    // 카드: 배경을 반투명하게 깔아서 텍스트 가독성 확보 (Glassmorphism + Card)
-    card: "bg-skin-surface/80 backdrop-blur-xl border border-skin-text/10 hover:border-skin-primary/50 transition-all duration-500 shadow-lg",
+    // 카드: 배경 불투명도 95%로 상향하여 뒤 배경과 완벽 분리
+    card: "bg-skin-surface/95 backdrop-blur-xl border border-skin-text/20 shadow-2xl",
 
     // 메인 버튼
-    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-black tracking-tight border border-white/10"
+    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all font-black border-2 border-transparent"
 };
 
 // 오늘 요일 계산 (1=월 ~ 7=일)

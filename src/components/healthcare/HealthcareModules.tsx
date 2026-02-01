@@ -72,13 +72,11 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                             전문 의료진과 최첨단 장비를 갖춘 최적의 진료 환경을 약속합니다.
                         </p>
                     </div>
-                    <div className="max-w-4xl mx-auto px-4">
-                        <div className="p-8 md:p-12 rounded-[2.5rem] bg-skin-surface/30 border border-skin-border/20 backdrop-blur-md shadow-lg relative overflow-hidden group hover:border-skin-primary/30 transition-colors duration-500">
-                            {/* Decorative Background Glow */}
-                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-skin-primary/5 rounded-full blur-[80px] pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
+                    <div className="p-8 md:p-12 rounded-[2.5rem] bg-skin-surface/70 border border-skin-text/10 backdrop-blur-xl shadow-2xl relative overflow-hidden group hover:border-skin-primary/50 transition-colors duration-500">
+                        {/* Decorative Background Glow */}
+                        <div className="absolute -top-24 -right-24 w-64 h-64 bg-skin-primary/5 rounded-full blur-[80px] pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
 
-                            <ClinicSearchModule department={config.id} />
-                        </div>
+                        <ClinicSearchModule department={config.id} />
                     </div>
                 </div>
 
@@ -144,6 +142,6 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
             <div className="mt-20">
                 <Footer mode="healthcare" />
             </div>
-        </section>
+        </section >
     );
 }
