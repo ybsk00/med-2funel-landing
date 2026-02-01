@@ -60,7 +60,7 @@ export default function IntroPage() {
           {DEPARTMENTS.map((dept) => (
             <Link
               key={dept.id}
-              href={`/${dept.id}/healthcare`}
+              href={`/${dept.id}`}
               onMouseEnter={() => setHoveredDept(dept.id)}
               onMouseLeave={() => setHoveredDept(null)}
               className="group relative flex flex-col items-center justify-center p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-pink-500/50 hover:scale-105 transition-all duration-300 backdrop-blur-sm aspect-square md:aspect-[4/3]"

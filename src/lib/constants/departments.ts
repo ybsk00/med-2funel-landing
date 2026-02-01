@@ -27,17 +27,17 @@ export const DEPARTMENTS: Department[] = [
         name: "피부과",
         label: "피부과",
         virtualName: "블랑 드 스킨",
-        video: "/피부과.mp4",
+        video: "/2.mp4",
         hero: {
             title: "베이스가 달라지는 광채 루틴 리셋",
             subtitle: "지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요."
         },
         theme: {
-            primary: "#E91E8C",
-            secondary: "#F472B6",
-            accent: "#BE185D",
-            background: "#0F172A",
-            text: "#FFFFFF",
+            primary: "#FB7185", // Rose-400
+            secondary: "#FDA4AF", // Rose-300
+            accent: "#F43F5E", // Rose-500
+            background: "#FFF1F2", // Rose-50 (Warm very light pink)
+            text: "#881337", // Rose-900
             concept: "화려하고 생기있는",
         },
         keywords: ["여드름", "기미", "리프팅", "모공"],
@@ -55,17 +55,17 @@ export const DEPARTMENTS: Department[] = [
         name: "치과",
         label: "치과",
         virtualName: "덴티 크루",
-        video: "/치과.mp4",
+        video: "/1.mp4",
         hero: {
             title: "자신감 있는 미소, 숨기지 마세요",
             subtitle: "치아 상태부터 입냄새 고민까지, 30초 체크로 시작하는 덴탈 케어."
         },
         theme: {
-            primary: "#0EA5E9",
-            secondary: "#38BDF8",
-            accent: "#0284C7",
-            background: "#FFFFFF",
-            text: "#0F172A",
+            primary: "#0EA5E9", // Sky-500
+            secondary: "#7DD3FC", // Sky-300
+            accent: "#0284C7", // Sky-600
+            background: "#F0F9FF", // Sky-50 (Very light cool blue)
+            text: "#0C4A6E", // Sky-900
             concept: "깨끗하고 신뢰가는",
         },
         keywords: ["임플란트", "교정", "미백", "충치"],
@@ -80,17 +80,17 @@ export const DEPARTMENTS: Department[] = [
         name: "정형외과",
         label: "정형외과",
         virtualName: "본 밸런스",
-        video: "/정형외과.mp4",
+        video: "/2.mp4",
         hero: {
             title: "무너진 균형, 다시 바로잡을 시간",
             subtitle: "통증의 원인은 잘못된 자세에 있습니다. 내 몸의 기울기를 확인해보세요."
         },
         theme: {
-            primary: "#2563EB",
-            secondary: "#60A5FA",
-            accent: "#1D4ED8",
-            background: "#F8FAFC",
-            text: "#172554",
+            primary: "#3B82F6", // Blue-500
+            secondary: "#93C5FD", // Blue-300
+            accent: "#2563EB", // Blue-600
+            background: "#EFF6FF", // Blue-50
+            text: "#1E3A8A", // Blue-900
             concept: "튼튼하고 곧은",
         },
         keywords: ["관절", "척추", "물리치료", "도수치료"],
@@ -105,17 +105,17 @@ export const DEPARTMENTS: Department[] = [
         name: "비뇨기과",
         label: "비뇨기과",
         virtualName: "맨즈 프라이빗",
-        video: "/비뇨기과.mp4",
+        video: "/1.mp4",
         hero: {
             title: "남자의 활력을 되찾는 프라이빗 케어",
             subtitle: "누구에게도 말 못한 고민, AI가 비밀스럽고 정확하게 들어드립니다."
         },
         theme: {
-            primary: "#7C3AED",
-            secondary: "#A78BFA",
-            accent: "#5B21B6",
-            background: "#1E1B4B",
-            text: "#F3F4F6",
+            primary: "#8B5CF6", // Violet-500
+            secondary: "#C4B5FD", // Violet-300
+            accent: "#7C3AED", // Violet-600
+            background: "#F5F3FF", // Violet-50
+            text: "#4C1D95", // Violet-900
             concept: "프라이빗하고 전문적인",
         },
         keywords: ["전립선", "요로결석", "남성수술"],
@@ -129,17 +129,17 @@ export const DEPARTMENTS: Department[] = [
         name: "내과",
         label: "내과",
         virtualName: "이너 웰니스",
-        video: "/내과.mp4",
+        video: "/2.mp4",
         hero: {
             title: "속부터 편안해야 진짜 건강입니다",
             subtitle: "소화불량부터 만성피로까지, 내 몸이 보내는 신호에 귀 기울여보세요."
         },
         theme: {
-            primary: "#10B981",
-            secondary: "#34D399",
-            accent: "#059669",
-            background: "#F0FDF4",
-            text: "#064E3B",
+            primary: "#10B981", // Emerald-500
+            secondary: "#6EE7B7", // Emerald-300
+            accent: "#059669", // Emerald-600
+            background: "#ECFDF5", // Emerald-50
+            text: "#064E3B", // Emerald-900
             concept: "편안하고 건강한",
         },
         keywords: ["검진", "내시경", "수액", "만성질환"],
@@ -153,17 +153,17 @@ export const DEPARTMENTS: Department[] = [
         name: "암요양병원",
         label: "암요양병원",
         virtualName: "케어 포 유",
-        video: "/암요양병원.mp4",
+        video: "/1.mp4",
         hero: {
             title: "당신의 회복을 위한 따뜻한 동행",
             subtitle: "면역 증진부터 심리 케어까지, 통합적인 요양 솔루션을 제공합니다."
         },
         theme: {
-            primary: "#F59E0B",
-            secondary: "#FCD34D",
-            accent: "#D97706",
-            background: "#FFFBEB",
-            text: "#451A03",
+            primary: "#F59E0B", // Amber-500
+            secondary: "#FCD34D", // Amber-300
+            accent: "#D97706", // Amber-600
+            background: "#FFFBEB", // Amber-50
+            text: "#78350F", // Amber-900
             concept: "따뜻하고 치유되는",
         },
         keywords: ["요양", "면역", "재활", "통합의학"],
@@ -177,17 +177,17 @@ export const DEPARTMENTS: Department[] = [
         name: "한의원",
         label: "한의원",
         virtualName: "본 초",
-        video: "/한방병원.mp4",
+        video: "/2.mp4",
         hero: {
             title: "전통의 지혜로 균형을 찾다",
             subtitle: "체질에 맞는 처방으로 흐트러진 기와 혈을 바로잡으세요."
         },
         theme: {
-            primary: "#B45309",
-            secondary: "#D97706",
-            accent: "#78350F",
-            background: "#F5F5F4",
-            text: "#1C1917",
+            primary: "#78716C", // Stone-500
+            secondary: "#A8A29E", // Stone-400
+            accent: "#57534E", // Stone-600
+            background: "#FAFAF9", // Stone-50
+            text: "#292524", // Stone-900
             concept: "전통적이고 짙은 한지 느낌",
         },
         keywords: ["침", "보약", "체질", "추나"],
@@ -201,17 +201,17 @@ export const DEPARTMENTS: Department[] = [
         name: "성형외과",
         label: "성형외과",
         virtualName: "더 라인",
-        video: "/성형외과.mp4",
+        video: "/1.mp4",
         hero: {
             title: "당신이 꿈꾸던 라인의 완성",
             subtitle: "가상 성형 시뮬레이션으로 변화된 모습을 미리 확인해보세요."
         },
         theme: {
-            primary: "#F43F5E",
-            secondary: "#FB7185",
-            accent: "#E11D48",
-            background: "#FFF1F2",
-            text: "#881337",
+            primary: "#EC4899", // Pink-500 (Hot Pink)
+            secondary: "#F9A8D4", // Pink-300
+            accent: "#DB2777", // Pink-600
+            background: "#FDF2F8", // Pink-50
+            text: "#831843", // Pink-900
             concept: "아름답고 세련된",
         },
         keywords: ["눈/코", "리프팅", "가슴", "지방흡입"],
@@ -225,17 +225,17 @@ export const DEPARTMENTS: Department[] = [
         name: "소아과",
         label: "소아과",
         virtualName: "키즈 닥터",
-        video: "/소아과.mp4",
+        video: "/2.mp4",
         hero: {
             title: "우리 아이 건강 지킴이",
             subtitle: "성장 발달부터 예방 접종까지, 부모님의 걱정을 덜어드립니다."
         },
         theme: {
-            primary: "#FBBF24",
-            secondary: "#FDE047",
-            accent: "#F59E0B",
-            background: "#FFFCF0",
-            text: "#451A03",
+            primary: "#FACC15", // Yellow-400
+            secondary: "#FEF08A", // Yellow-200
+            accent: "#EAB308", // Yellow-500
+            background: "#FEFCE8", // Yellow-50
+            text: "#713F12", // Yellow-900
             concept: "귀엽고 아기자기한",
         },
         keywords: ["예방접종", "영유아검진", "호흡기", "알레르기"],
@@ -249,17 +249,17 @@ export const DEPARTMENTS: Department[] = [
         name: "신경외과",
         label: "신경외과",
         virtualName: "뉴로 스캔",
-        video: "/신경외과.mp4",
+        video: "/1.mp4",
         hero: {
             title: "복잡한 신경계, 정밀하게 들여다보다",
             subtitle: "두통, 어지럼증부터 척추 질환까지 원인을 정확히 분석합니다."
         },
         theme: {
-            primary: "#6366F1",
-            secondary: "#818CF8",
-            accent: "#4F46E5",
-            background: "#312E81",
-            text: "#EEF2FF",
+            primary: "#6366F1", // Indigo-500
+            secondary: "#A5B4FC", // Indigo-300
+            accent: "#4F46E5", // Indigo-600
+            background: "#EEF2FF", // Indigo-50
+            text: "#312E81", // Indigo-900
             concept: "정밀하고 고도화된",
         },
         keywords: ["뇌혈관", "디스크", "척추", "두통"],
@@ -273,17 +273,17 @@ export const DEPARTMENTS: Department[] = [
         name: "산부인과",
         label: "산부인과",
         virtualName: "마망 케어",
-        video: "/산부인과.mp4",
+        video: "/2.mp4",
         hero: {
             title: "여성의 생애 주기를 함께합니다",
             subtitle: "월경, 임신, 출산, 갱년기까지 여성의 건강을 세심하게 살핍니다."
         },
         theme: {
-            primary: "#EC4899",
-            secondary: "#F472B6",
-            accent: "#DB2777",
-            background: "#FDF2F8",
-            text: "#831843",
+            primary: "#D946EF", // Fuchsia-500
+            secondary: "#F0ABFC", // Fuchsia-300
+            accent: "#C026D3", // Fuchsia-600
+            background: "#FDF4FF", // Fuchsia-50
+            text: "#701A75", // Fuchsia-900
             concept: "따뜻하고 포근한",
         },
         keywords: ["산전검사", "출산", "여성질환", "검진"],

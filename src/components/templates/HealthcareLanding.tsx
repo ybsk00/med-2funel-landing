@@ -26,19 +26,31 @@ export default function HealthcareLanding() {
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
     return (
+    return (
         <TrackF1View>
-            <div className="min-h-screen bg-skin-bg text-skin-text font-sans selection:bg-skin-primary selection:text-white">
-
+            <div
+                className="min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700"
+                style={{
+                    backgroundColor: config.theme.background,
+                    color: config.theme.text
+                }}
+            >
                 {/* Navigation */}
-                <nav className="fixed top-0 left-0 right-0 z-50 bg-skin-bg/80 backdrop-blur-md border-b border-white/10">
+                <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: `${config.theme.background}cc` }}>
                     <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
                         <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                             <span className="text-2xl">✨</span>
-                            <span className="text-xl font-bold text-skin-text tracking-wide">{config.marketingName || config.name}</span>
+                            <span
+                                className="text-xl font-bold tracking-wide"
+                                style={{ color: config.theme.text }}
+                            >
+                                {config.marketingName || config.name}
+                            </span>
                         </Link>
                         <Link
                             href="/login"
-                            className="px-6 py-2.5 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:shadow-skin-primary/30 transition-all duration-300"
+                            className="px-6 py-2.5 text-white text-sm font-medium rounded-full hover:shadow-lg transition-all duration-300"
+                            style={{ backgroundColor: config.theme.primary }}
                         >
                             로그인
                         </Link>
@@ -60,30 +72,56 @@ export default function HealthcareLanding() {
                         >
                             <source src={config.videoSource || "/2.mp4"} type="video/mp4" />
                         </video>
-                        <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/70 to-skin-bg/40" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/80" />
-                    </div>
+                        {/* Overlays - Dynamic Background Based */}
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(to right, ${config.theme.background}E6, ${config.theme.background}B3, ${config.theme.background}66)`
+                            }}
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(to bottom, ${config.theme.background}4D, transparent, ${config.theme.background}CC)`
+                            }}
+                        />
+                    </div >
 
                     {/* Hero Content - 1컬럼 중앙 정렬 */}
-                    <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
+                    < div className="relative z-10 max-w-3xl mx-auto w-full text-center" >
                         <div className="space-y-6 animate-fade-in">
                             {/* Eyebrow */}
-                            <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
+                            <p
+                                className="font-semibold tracking-[0.15em] uppercase text-xs"
+                                style={{ color: config.theme.secondary }}
+                            >
                                 PREMIUM AI HEALTHCARE
                             </p>
 
                             {/* H1 */}
-                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] text-shadow-lg">
-                                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-pink-400 to-purple-500 drop-shadow-none">
+                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]">
+                                <span
+                                    className="bg-clip-text text-transparent drop-shadow-none"
+                                    style={{
+                                        backgroundImage: `linear-gradient(to right, ${config.theme.primary}, ${config.theme.accent})`,
+                                        WebkitBackgroundClip: 'text'
+                                    }}
+                                >
                                     {config.hero?.title.split(',')[0] || config.marketingName}
                                 </span><br />
-                                <span className="text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)]">
+                                <span
+                                    className="drop-shadow-[0_4px_4px_rgba(0,0,0,0.1)]"
+                                    style={{ color: config.theme.text }}
+                                >
                                     {config.hero?.title.split(',')[1] || "스마트 케어 솔루션"}
                                 </span>
                             </h1>
 
                             {/* Body */}
-                            <p className="text-base md:text-lg text-gray-100 leading-relaxed max-w-lg mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] font-medium">
+                            <p
+                                className="text-base md:text-lg leading-relaxed max-w-lg mx-auto drop-shadow-sm font-medium"
+                                style={{ color: config.theme.text, opacity: 0.9 }}
+                            >
                                 {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                             </p>
 
@@ -92,7 +130,8 @@ export default function HealthcareLanding() {
                                 {/* Primary CTA - 사진으로 스타일 보기 */}
                                 <button
                                     onClick={() => setIsPhotoSlideOverOpen(true)}
-                                    className="px-8 py-4 bg-skin-primary text-white text-base font-bold rounded-2xl shadow-lg shadow-skin-primary/40 hover:bg-skin-accent hover:shadow-xl hover:shadow-skin-primary/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                                    className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                                    style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
                                 >
                                     <Camera className="w-5 h-5" />
                                     사진으로 스타일 보기
@@ -101,7 +140,11 @@ export default function HealthcareLanding() {
                                 {/* Secondary CTA - 30초 체크 */}
                                 <Link
                                     href="healthcare/chat?topic=glow-booster"
-                                    className="px-6 py-3 border-2 border-skin-primary/50 text-skin-primary bg-skin-bg/50 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-skin-primary/10 hover:border-skin-primary transition-all duration-300 flex items-center gap-2"
+                                    className="px-6 py-3 border-2 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
+                                    style={{
+                                        borderColor: config.theme.primary,
+                                        color: config.theme.primary
+                                    }}
                                 >
                                     <Sparkles className="w-4 h-4" />
                                     30초 체크 시작
@@ -126,13 +169,14 @@ export default function HealthcareLanding() {
                                 </span>
                             </div>
                         </div>
-                    </div>
-                </header>
+                    </div >
+                </header >
 
                 {/* Photo SlideOver */}
-                <PhotoSlideOver
+                < PhotoSlideOver
                     isOpen={isPhotoSlideOverOpen}
-                    onClose={() => setIsPhotoSlideOverOpen(false)}
+                    onClose={() => setIsPhotoSlideOverOpen(false)
+                    }
                 />
 
                 {/* How It Works - 3단 카드 */}
@@ -309,7 +353,7 @@ export default function HealthcareLanding() {
                         <span className="text-3xl">✨</span>
                     </Link>
                 </div>
-            </div>
+            </div >
         </TrackF1View >
     );
 }
