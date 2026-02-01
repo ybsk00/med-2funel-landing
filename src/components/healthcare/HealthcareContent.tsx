@@ -15,6 +15,42 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
     const [activeSession, setActiveSession] = useState<string | null>(null);
     const [isChatOpen, setIsChatOpen] = useState(false);
 
+    // Theme Darkness Check
+    const isColorDark = (hex?: string) => {
+        if (!hex) return false;
+        const h = hex.replace('#', '');
+        if (h.length < 4) return false;
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+    };
+
+    const isThemeDark = config.theme ? isColorDark(config.theme.background) : false;
+
+    // Dynamic Styles based on Theme Mode
+    const styles = {
+        // Session A Container
+        container: isThemeDark
+            ? "bg-white/5 border border-white/10 backdrop-blur-sm"
+            : "bg-white/90 border border-stone-200 shadow-2xl backdrop-blur-xl",
+
+        // Session A Checklist Items
+        checkItem: isThemeDark
+            ? "bg-skin-surface/50 border border-skin-text/5 hover:border-skin-primary/30"
+            : "bg-white border border-stone-100 shadow-sm hover:border-skin-primary hover:shadow-md",
+
+        // Session B Guide Cards
+        guideCard: isThemeDark
+            ? "bg-skin-surface border border-skin-text/5 hover:border-skin-primary/30"
+            : "bg-white border border-stone-100 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-skin-primary/50",
+
+        // Session D FAQ Items
+        faqItem: isThemeDark
+            ? "bg-skin-surface/30 border border-skin-text/5 hover:bg-skin-surface"
+            : "bg-white border border-stone-200 hover:bg-stone-50 shadow-sm"
+    };
+
     if (!content) return null;
 
     // Helper to scroll to chat
@@ -31,7 +67,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
     return (
         <section className="w-full max-w-7xl mx-auto px-4 space-y-24 mb-24">
             {/* Session A: 60-Second Check / Symptom Check */}
-            <div className="relative group p-8 md:p-12 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-sm overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className={`relative group p-8 md:p-12 rounded-[2.5rem] overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700 ${styles.container}`}>
                 <div className={`absolute top-0 left-0 w-2 h-full bg-skin-primary opactiy-80`} />
 
                 <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start justify-between">
@@ -48,7 +84,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
 
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                             {content.sessionA.checkList.map((item: string, idx: number) => (
-                                <div key={idx} className="flex items-center gap-3 p-4 rounded-xl bg-skin-surface/50 border border-skin-text/5 hover:border-skin-primary/30 transition-colors cursor-pointer group/item">
+                                <div key={idx} className={`flex items-center gap-3 p-4 rounded-xl transition-all cursor-pointer group/item ${styles.checkItem}`}>
                                     <div className="w-6 h-6 rounded-full border-2 border-skin-text/20 flex items-center justify-center group-hover/item:border-skin-primary group-hover/item:bg-skin-primary transition-all">
                                         <Check className="w-3 h-3 text-white opacity-0 group-hover/item:opacity-100" />
                                     </div>
@@ -83,7 +119,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {content.sessionB.cards.map((card: { title: string; description: string }, idx: number) => (
-                        <div key={idx} className="p-8 rounded-[2rem] bg-skin-surface border border-skin-text/5 hover:border-skin-primary/30 transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-xl group">
+                        <div key={idx} className={`p-8 rounded-[2rem] transition-all duration-300 group ${styles.guideCard}`}>
                             <div className="w-12 h-12 rounded-2xl bg-skin-primary/10 flex items-center justify-center mb-6 text-skin-primary group-hover:scale-110 transition-transform duration-300">
                                 {idx === 0 ? <Sun className="w-6 h-6" /> : idx === 1 ? <Activity className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
                             </div>
@@ -140,7 +176,7 @@ export default function HealthcareContent({ config }: HealthcareContentProps) {
                 </h4>
                 <div className="grid gap-4">
                     {content.sessionD.faqs.map((faq: { question: string; answer: string }, idx: number) => (
-                        <div key={idx} className="p-6 rounded-2xl bg-skin-surface/30 border border-skin-text/5 hover:bg-skin-surface transition-colors">
+                        <div key={idx} className={`p-6 rounded-2xl transition-colors ${styles.faqItem}`}>
                             <h5 className="font-bold text-lg text-skin-text mb-2 flex items-start gap-3">
                                 <span className="text-skin-primary">Q.</span>
                                 {faq.question}
