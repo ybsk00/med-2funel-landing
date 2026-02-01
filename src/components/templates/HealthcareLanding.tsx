@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight, Camera } from "lucide-react";
+import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight, Camera, User } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
@@ -11,13 +11,14 @@ import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { useHospital } from "@/components/common/HospitalProvider";
 import { Topic } from "@/lib/constants/topics";
 
-// 모듈 아이콘/컬러 매핑
-const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string; gradient: string }> = {
+// 모듈 아이콘/컬러 매핑 (확장)
+const MODULE_CONFIG: Record<string, { icon: any; color: string; gradient: string }> = {
     'glow-booster': { icon: Sparkles, color: 'pink', gradient: 'from-pink-500/20 to-pink-600/20' },
     'makeup-killer': { icon: Droplet, color: 'rose', gradient: 'from-rose-500/20 to-rose-600/20' },
     'barrier-reset': { icon: Shield, color: 'teal', gradient: 'from-teal-500/20 to-teal-600/20' },
     'lifting-check': { icon: ArrowUpRight, color: 'purple', gradient: 'from-purple-500/20 to-purple-600/20' },
     'skin-concierge': { icon: Heart, color: 'fuchsia', gradient: 'from-fuchsia-500/20 to-fuchsia-600/20' },
+    // Add mappings for new modules if needed, or rely on fallback in rendering loop
 };
 
 export default function HealthcareLanding() {
@@ -56,7 +57,7 @@ export default function HealthcareLanding() {
                             preload="metadata"
                             className="absolute inset-0 w-full h-full object-cover"
                         >
-                            <source src="/2.mp4" type="video/mp4" />
+                            <source src={config.videoSource || "/2.mp4"} type="video/mp4" />
                         </video>
                         <div className="absolute inset-0 bg-gradient-to-r from-skin-bg/90 via-skin-bg/70 to-skin-bg/40" />
                         <div className="absolute inset-0 bg-gradient-to-b from-skin-bg/30 via-transparent to-skin-bg/80" />
@@ -67,20 +68,22 @@ export default function HealthcareLanding() {
                         <div className="space-y-6 animate-fade-in">
                             {/* Eyebrow */}
                             <p className="text-skin-secondary font-semibold tracking-[0.15em] uppercase text-xs">
-                                ROUTINE · BASE · GLOW · RESET
+                                PREMIUM AI HEALTHCARE
                             </p>
 
                             {/* H1 */}
-                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] font-serif drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] text-shadow-lg">
+                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] text-shadow-lg">
                                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-pink-400 to-purple-500 drop-shadow-none">
-                                    달라지는 헬스케어
+                                    {config.hero?.title.split(',')[0] || config.marketingName}
                                 </span><br />
-                                <span className="text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)]">광채 루틴 리셋</span>
+                                <span className="text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)]">
+                                    {config.hero?.title.split(',')[1] || "스마트 케어 솔루션"}
+                                </span>
                             </h1>
 
                             {/* Body */}
                             <p className="text-base md:text-lg text-gray-100 leading-relaxed max-w-lg mx-auto drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] font-medium">
-                                지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리해보세요.
+                                {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                             </p>
 
                             {/* CTA 3종 */}
@@ -233,7 +236,7 @@ export default function HealthcareLanding() {
                     <div className="relative z-10 max-w-7xl mx-auto px-6">
                         <div className="text-center mb-16">
                             <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">Health Check</span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-skin-text font-serif">
+                            <h2 className="text-4xl md:text-5xl font-bold text-skin-text">
                                 내 건강 체크
                             </h2>
                             <p className="text-skin-subtext mt-4 max-w-2xl mx-auto">
@@ -253,7 +256,17 @@ export default function HealthcareLanding() {
                                         'Droplet': Droplet,
                                         'Shield': Shield,
                                         'ArrowUpRight': ArrowUpRight,
-                                        'Heart': Heart
+                                        'Heart': Heart,
+                                        'Activity': BarChart2,
+                                        'Zap': Sparkles,
+                                        'Lock': Shield,
+                                        'Sun': Sparkles,
+                                        'User': User,
+                                        'Camera': Camera,
+                                        'Thermometer': ArrowUpRight,
+                                        'Calendar': Calendar,
+                                        'Beaker': Droplet,
+                                        'BarChart': BarChart2
                                     };
                                     const IconComponent = ICON_MAP[module.icon] || Sparkles;
 

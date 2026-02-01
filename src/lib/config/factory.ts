@@ -61,7 +61,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
     // Construct Config
     return {
         name: `${dept.name} 클리닉`, // "Medical Area uses XX Clinic"
-        marketingName: `${dept.label} 헬스케어`, // "Healthcare Area uses XX Healthcare"
+        marketingName: dept.virtualName, // Use Virtual Name
         representative: "김닥터", // Placeholder
         representativeTitle: "대표원장",
         address: "서울특별시 강남구 테헤란로 123",
@@ -76,7 +76,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
                 title: "헬스케어 가이드",
                 purpose: "로그인 유도 및 흥미 유발",
                 tone: "재치있고 귀여운, 애교많은, 영업 잘하는",
-                rules: ["병원 이름 노출 금지", `헬스케어 이름(${dept.label} 헬스케어) 노출`, "로그인 유도"]
+                rules: ["병원 이름 노출 금지", `헬스케어 이름(${dept.virtualName}) 노출`, "로그인 유도"]
             },
             medical: {
                 name: "그레이스", // Professional name
@@ -86,6 +86,10 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
                 rules: ["병원 이름(OO의원) 노출 권장", "예약 적극 유도"]
             }
         },
+
+        // Pass Hero Content
+        hero: dept.hero,
+        videoSource: dept.video,
 
         theme: dept.theme,
 

@@ -1,6 +1,6 @@
 ﻿
 import type { Metadata } from "next";
-import { Noto_Sans_KR, Noto_Serif_KR } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import "@mantine/core/styles.css";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -14,12 +14,6 @@ const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
   variable: "--font-noto-sans-kr",
-});
-
-const notoSerifKr = Noto_Serif_KR({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
-  variable: "--font-noto-serif-kr",
 });
 
 export const metadata: Metadata = {
@@ -40,7 +34,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={`${notoSansKr.variable} ${notoSerifKr.variable} font-sans antialiased`}>
+      <body className={`${notoSansKr.variable} font-sans antialiased`}>
         <NextAuthProvider>
           <HospitalProvider initialConfig={defaultConfig}>
             <MantineWrapper>

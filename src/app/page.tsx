@@ -46,7 +46,7 @@ export default function IntroPage() {
             <Sparkles className="w-3 h-3" />
             <span>AI 맞춤형 헬스케어</span>
           </div>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight font-serif text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-white/70">
             당신의 병원을 선택하세요
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
@@ -70,7 +70,7 @@ export default function IntroPage() {
                 style={{ background: `linear-gradient(135deg, ${dept.theme.primary}, ${dept.theme.secondary})` }}
               />
 
-              <h3 className="text-2xl md:text-3xl font-bold z-10 text-white group-hover:text-pink-200 transition-colors font-serif">
+              <h3 className="text-2xl md:text-3xl font-bold z-10 text-white group-hover:text-pink-200 transition-colors">
                 {dept.label}
               </h3>
 

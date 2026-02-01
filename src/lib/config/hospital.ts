@@ -40,6 +40,11 @@ export interface HospitalConfig {
 
     marketingName?: string;
     landingModules?: LandingModuleConfig[];
+    hero?: {
+        title: string;
+        subtitle: string;
+    };
+    videoSource?: string;
 }
 
 export const HOSPITAL_CONFIG: HospitalConfig = {
