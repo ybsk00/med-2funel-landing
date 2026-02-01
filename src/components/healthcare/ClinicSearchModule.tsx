@@ -71,7 +71,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     // 부서별 기본 테마 매핑
     const getThemeMode = () => {
         if (theme) return theme;
-        // 모든 진료과 기본값을 Light로 변경 (사용자 테마 변경 반영)
+        // 비뇨기과, 신경외과 = Dark Theme (Cyber/Night)
+        if (["urology", "neurosurgery"].includes(department)) {
+            return "dark";
+        }
+        // 나머지(성형, 피부, 소아, 치과, 내과, 한의원, 산부인과, 암요양) = Light Theme
         return "light";
     };
 
