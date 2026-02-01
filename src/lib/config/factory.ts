@@ -60,6 +60,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
 
     // Construct Config
     return {
+        id: dept.id, // Department ID 주입 (HealthcareContent 매핑용)
         name: `${dept.name} 클리닉`, // "Medical Area uses XX Clinic"
         marketingName: dept.virtualName, // Use Virtual Name
         representative: "김닥터", // Placeholder
