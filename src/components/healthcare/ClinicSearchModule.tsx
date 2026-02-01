@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback } from "react";
 import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown, Sparkles } from "lucide-react";
@@ -67,23 +67,23 @@ const THEME_STYLES = {
 };
 
 const THEME_CLASSES = {
-    // 테두리: 2px 두께로 변경하여 확실하게 보이게 함, 투명도 30% -> 50% 상향
-    border: "border-skin-text/30 hover:border-skin-primary",
+    // 테두리: 2px 두께, 선명한 색상(#111/20) 적용
+    border: "border-gray-900/20 hover:border-skin-primary",
 
-    // 텍스트: 투명도를 줄여서 진하게 표시
-    textMuted: "text-skin-text/90",
+    // 텍스트: 무조건 진한 회색(#1f2937) 적용 (흰색 방지)
+    textMuted: "text-gray-800 font-medium",
 
-    // 입력 필드: 배경을 거의 불투명하게(Surface) 설정하고, 테두리 두께 2px 적용
-    input: "bg-skin-surface border-2 border-skin-text/20 text-skin-text font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-skin-text/50",
+    // 입력 필드: 흰색 배경(또는 아주 밝은 Surface), 진한 텍스트(#111) 강제
+    input: "bg-white/80 border-2 border-gray-900/10 text-gray-900 font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-gray-500",
 
-    // 칩 (버튼): 비활성 상태에서도 배경색(Surface)을 깔아서 글자가 묻히지 않게 함
+    // 칩 (버튼): 비활성 상태일 때 배경 있음 + 진한 글씨(#4b5563)
     chip: {
-        active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary",
-        inactive: "bg-skin-surface text-skin-text border-2 border-skin-text/20 hover:border-skin-primary hover:text-skin-primary transition-all"
+        active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary font-bold",
+        inactive: "bg-white/90 text-gray-600 border-2 border-gray-200 hover:border-skin-primary hover:text-skin-primary hover:bg-white transition-all font-semibold"
     },
 
-    // 카드: 배경 불투명도 95%로 상향하여 뒤 배경과 완벽 분리
-    card: "bg-skin-surface/95 backdrop-blur-xl border border-skin-text/20 shadow-2xl",
+    // 카드: 배경 불투명도 95% 이상 + 진한 텍스트 context
+    card: "bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-2xl text-gray-900",
 
     // 메인 버튼
     button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all font-black border-2 border-transparent"
@@ -261,7 +261,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             <div className="w-full space-y-6">
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
-                        <label className="text-xs font-black text-skin-text uppercase tracking-widest absolute -top-5 left-1 opacity-90">Location / City</label>
+                        <label className="text-xs font-black text-gray-800 uppercase tracking-widest absolute -top-5 left-1 opacity-90">Location / City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
@@ -270,22 +270,22 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                 if (city === "서울") setSelectedRegion("강남구");
                                 else if (city === "경기도") setSelectedRegion("의정부시");
                             }}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer ${THEME_CLASSES.input}`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white/80 text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
                         >
-                            <option value="서울">서울</option>
-                            <option value="경기도">경기도</option>
+                            <option value="서울" className="text-gray-900 bg-white">서울</option>
+                            <option value="경기도" className="text-gray-900 bg-white">경기도</option>
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
                     <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
-                        <label className="text-xs font-black text-skin-text uppercase tracking-widest absolute -top-5 left-1 opacity-90">Area / District</label>
+                        <label className="text-xs font-black text-gray-800 uppercase tracking-widest absolute -top-5 left-1 opacity-90">Area / District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer ${THEME_CLASSES.input}`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white/80 text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
                         >
                             {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
-                                <option key={region} value={region}>{region}</option>
+                                <option key={region} value={region} className="text-gray-900 bg-white">{region}</option>
                             ))}
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
@@ -465,8 +465,8 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                     {/* 검색 결과 목록 */}
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between px-2 mb-2">
-                                            <h4 className="text-xl font-black text-white/80 tracking-tight">
-                                                검색 결과 <span className="text-skin-primary ml-1 opacity-80">({clinics.length}개)</span>
+                                            <h4 className="text-xl font-black text-gray-800 tracking-tight">
+                                                검색 결과 <span className="text-skin-primary ml-1 opacity-100">({clinics.length}개)</span>
                                             </h4>
                                             <div className="h-[1px] flex-1 mx-6 bg-white/10"></div>
                                         </div>
