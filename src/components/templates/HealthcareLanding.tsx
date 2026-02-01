@@ -108,22 +108,30 @@ export default function HealthcareLanding() {
                     onClose={() => setIsPhotoSlideOverOpen(false)}
                 />
 
-                {/* Session 2: Clinic Search (Restored & Glassmorphed) */}
-                <section id="clinic-search" className="relative py-12 md:py-20 z-20">
+                {/* Session 2: Clinic Search (Moved from Legacy Location) */}
+                <section id="clinic-search" className="relative py-24 z-20">
                     <div className="w-full max-w-4xl px-6 mx-auto">
-                        <div className="text-center mb-10">
-                            <h2 className={`text-3xl md:text-4xl font-black mb-3 drop-shadow-md ${isThemeDark ? 'text-white' : ''}`} style={{ color: isThemeDark ? undefined : config.theme.text }}>
-                                {config.marketing?.searchKeyword || "유명한 의원 찾기"}
-                            </h2>
-                            <p className={`text-base opacity-80 font-bold ${isThemeDark ? 'text-white/60' : ''}`} style={{ color: isThemeDark ? undefined : config.theme.text }}>
-                                {config.address} {config.name}
+                        <div className="text-center mb-12 px-4">
+                            <span className="px-5 py-2 rounded-full bg-white/10 text-white text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase border border-white/20 mb-8 inline-block shadow-lg backdrop-blur-md">
+                                Healthcare Network
+                            </span>
+                            <h3 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-2xl">
+                                유명한 <span className="text-skin-primary">{config.name}</span> 찾기
+                            </h3>
+                            <p className="text-white/70 max-w-xl mx-auto text-lg md:text-xl font-bold leading-relaxed drop-shadow-md">
+                                검증된 {config.name} 전문 병원을 찾아보세요. <br className="hidden md:block" />
+                                전문 의료진과 최첨단 장비를 갖춘 최적의 진료 환경을 약속합니다.
                             </p>
                         </div>
-                        <div className="relative group">
-                            {/* Glass Background */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
 
-                            <div className="relative bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                        <div className="relative group">
+                            {/* Deep Glass Background */}
+                            <div className="absolute -inset-2 bg-gradient-to-r from-skin-primary/30 to-skin-accent/30 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+
+                            <div className="relative bg-white/[0.05] backdrop-blur-[60px] rounded-[3rem] p-10 md:p-16 border border-white/20 shadow-[0_32px_80px_rgba(0,0,0,0.5)] overflow-hidden">
+                                {/* Decorative Glow */}
+                                <div className="absolute -top-32 -right-32 w-96 h-96 bg-skin-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
+
                                 <ClinicSearchModule department={config.id} searchKeyword={config.marketing?.searchKeyword} />
                             </div>
                         </div>
