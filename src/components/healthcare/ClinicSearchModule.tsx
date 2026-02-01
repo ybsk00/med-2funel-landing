@@ -5,6 +5,7 @@ import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle
 import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { useHospital } from "@/components/common/HospitalProvider";
+import { getRecommendedClinic } from "@/lib/config/marketing";
 
 // 클리닉 타입
 interface Clinic {
@@ -44,28 +45,6 @@ const TARGET_REGIONS = ["강남구", "서초구", "송파구", "용산구", "성
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
-// Theme-compatible UI colors and styles
-const THEME_STYLES = {
-    glass: {
-        container: "bg-white/10 backdrop-blur-xl border-white/20",
-        input: "bg-white/10 border-white/20 text-white focus:border-white/50",
-        chipActive: "bg-white text-slate-900 border-white shadow-lg shadow-white/10",
-        chipInactive: "bg-white/5 text-white/60 border-white/10 hover:border-white/30 hover:text-white"
-    },
-    silk: {
-        container: "bg-black/40 backdrop-blur-xl border-white/10",
-        input: "bg-white/5 border-white/10 text-white focus:border-[#D4AF37]/50",
-        chipActive: "bg-[#D4AF37] text-black border-[#D4AF37] shadow-lg shadow-[#D4AF37]/20",
-        chipInactive: "bg-white/5 text-white/50 border-white/10 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
-    },
-    hanji: {
-        container: "bg-[#FAFAF9] border-stone-200 shadow-sm",
-        input: "bg-stone-50 border-stone-200 text-stone-800 focus:border-stone-400",
-        chipActive: "bg-stone-800 text-stone-50 border-stone-800 shadow-lg shadow-stone-200",
-        chipInactive: "bg-stone-50 text-stone-500 border-stone-200 hover:border-stone-400 hover:text-stone-800"
-    }
-};
-
 const THEME_CLASSES = {
     button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent"
 };
@@ -93,7 +72,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     // 부서별 기본 테마 매핑
     const getThemeMode = () => {
         if (theme) return theme;
-        // 한의원, 내과, 소아과, 산부인과, 암요양병원 = Light Theme (Hanji/Modern)
+        // 한의원, 내과, 소아과, 산부인과, 암요양병원, 정형외과 = Light Theme (Hanji/Modern)
         if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics"].includes(department)) {
             return "light";
         }
@@ -118,9 +97,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             textSecondary: isLight ? "text-stone-600" : "text-gray-400",
             textAccent: "text-skin-primary",
 
+            // 라벨 (입력폼 위)
+            label: isLight ? "text-stone-500" : "text-skin-primary/60",
+
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
-                ? "bg-white border text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium" // 보더 색상 강화
+                ? "bg-white border text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm" // 보더 색상 강화
                 : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
 
             // 선택창 옵션
@@ -129,11 +111,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 text: isLight ? "#111111" : "#e5e5e5"
             },
 
-            // 칩 (버튼)
+            // 칩 (버튼) - Inactive 상태 가독성 개선
             chip: {
                 active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
                 inactive: isLight
-                    ? "bg-stone-100/50 border-stone-200 text-stone-600 hover:border-skin-primary hover:text-skin-primary"
+                    ? "bg-stone-100 border-stone-300 text-stone-600 hover:border-skin-primary hover:text-skin-primary hover:bg-white" // 배경 회색조 추가
                     : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
@@ -208,10 +190,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
     const targetKeyword = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과"; // 키워드 자동 매핑
     const [searchTerm, setSearchTerm] = useState(targetKeyword);
-    // useDebouncedValue is not defined in the provided context, assuming it's an external hook.
-    // For now, we'll use searchTerm directly. If useDebouncedValue is available, it should be used.
-    // const [debouncedSearch] = useDebouncedValue(searchTerm, 500);
-    const debouncedSearch = searchTerm; // Placeholder if useDebouncedValue is not available
+    const debouncedSearch = searchTerm; 
 
     const [searchState, setSearchState] = useState<SearchState>("idle");
     const [clinics, setClinics] = useState<Clinic[]>([]);
@@ -234,7 +213,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             }
 
             // 키워드 조합 (피부과 관련)
-            const qn = searchKeyword || "피부과";
+            const qn = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과";
 
             const params = new URLSearchParams({
                 q0: selectedCity,
@@ -275,10 +254,10 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 }
             }
 
-            // 피부과 관련 키워드 필터
-            results = results.filter((c) =>
-                SKIN_KEYWORDS.some(kw => c.name.toLowerCase().includes(kw.toLowerCase()))
-            );
+            // 키워드 필터 (검색어 없을 때 대비)
+            if (qn) {
+                results = results.filter((c) => c.name.includes(qn) || c.name.includes("의원") || c.name.includes("병원"));
+            }
 
             // 야간 진료 필터
             if (nightOpen) {
@@ -311,14 +290,14 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             );
             setSearchState("error");
         }
-    }, [holidayOpen, nightOpen, selectedCity, selectedRegion, autoExpanded]);
+    }, [holidayOpen, nightOpen, selectedCity, selectedRegion, autoExpanded, searchKeyword, department, recommendedClinic]);
 
     // 상담 연결 클릭
     const handleConnect = () => {
         setIsLoginModalOpen(true);
     };
 
-    // 세그먼트 컨트롤 스타일 칩 컴포넌트 (글로우 금지, 테두리/채움만)
+    // 세그먼트 컨트롤 스타일 칩 컴포넌트
     const SegmentChip = ({
         label,
         icon,
@@ -352,7 +331,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             <div className="w-full space-y-6">
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
-                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.textPrimary}`}>Location / City</label>
+                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.label}`}>Location / City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
@@ -361,7 +340,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                 if (city === "서울") setSelectedRegion("강남구");
                                 else if (city === "경기도") setSelectedRegion("의정부시");
                             }}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 shadow-sm ${styles.input}`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 ${styles.input}`}
                             style={{ color: styles.select.text, backgroundColor: styles.select.bg }}
                         >
                             <option value="서울" style={{ color: styles.select.text, backgroundColor: styles.select.bg }}>서울</option>
@@ -370,11 +349,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${styles.textAccent}`} />
                     </div>
                     <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
-                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.textPrimary}`}>Area / District</label>
+                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.label}`}>Area / District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 shadow-sm ${styles.input}`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 ${styles.input}`}
                             style={{ color: styles.select.text, backgroundColor: styles.select.bg }}
                         >
                             {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
@@ -425,7 +404,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         ) : (
                             <>
                                 <Search className="w-6 h-6 mr-3" />
-                                오늘 운영 {department === "dermatology" ? "피부과" : "전문의"} 확인
+                                오늘 운영 {DEPARTMENT_KEYWORDS[department] || "병원"} 확인
                             </>
                         )}
                     </button>
@@ -630,4 +609,3 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         </>
     );
 }
-
