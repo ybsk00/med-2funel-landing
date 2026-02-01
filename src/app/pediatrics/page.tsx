@@ -1,5 +1,12 @@
-import PediatricsLanding from "@/components/departments/PediatricsLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function PediatricsPage() {
-    return <PediatricsLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("pediatrics");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }

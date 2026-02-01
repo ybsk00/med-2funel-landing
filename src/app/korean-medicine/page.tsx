@@ -1,5 +1,12 @@
-import KoreanMedicineLanding from "@/components/departments/KoreanMedicineLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function KoreanMedicinePage() {
-    return <KoreanMedicineLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("korean-medicine");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }

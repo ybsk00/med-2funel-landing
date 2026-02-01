@@ -1,5 +1,12 @@
-import DermatologyLanding from "@/components/departments/DermatologyLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function DermatologyPage() {
-    return <DermatologyLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("dermatology");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }

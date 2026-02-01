@@ -18,6 +18,10 @@ const NeuralAttentionFlow = dynamic(() => import("@/components/healthcare/specia
 const FluidBotanic = dynamic(() => import("@/components/healthcare/specialized/FluidBotanic").then(mod => mod.FluidBotanic), { ssr: false });
 const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/PremiumBackground"), { ssr: false });
 import HealthcareContent from "@/components/healthcare/HealthcareContent";
+import PrivacyScreen from "@/components/ui/PrivacyScreen";
+import HealthcareHero from "@/components/healthcare/HealthcareHero";
+import HealthcareModules from "@/components/healthcare/HealthcareModules";
+import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 
 // Icon Map for Dynamic Loading
 const ICON_MAP: Record<string, any> = {
@@ -46,6 +50,7 @@ const ICON_MAP: Record<string, any> = {
 export default function HealthcareLanding() {
     const config = useHospital();
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
+    const [isLocked, setIsLocked] = useState(config.id === 'dermatology');
 
     // Unified Darkness Check (Re-refined)
     const isColorDark = (hex?: string) => {
@@ -72,165 +77,31 @@ export default function HealthcareLanding() {
     return (
         <TrackF1View>
             <div
-                className={`min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700`}
+                className={`min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700 ${isLocked ? 'overflow-hidden h-screen' : ''}`}
                 style={{
-                    // Background handled by PremiumBackground
                     color: config.theme.text
                 }}
             >
+                {config.id === 'dermatology' && (
+                    <PrivacyScreen
+                        isLocked={isLocked}
+                        onUnlock={() => setIsLocked(false)}
+                        title={config.marketingName || "SECURE ACCESS"}
+                        subtitle="VERIFYING VIP MEMBERSHIP..."
+                    />
+                )}
+
                 <PremiumBackground colors={config.theme} intensity="subtle" />
 
-                {/* Navigation */}
-                <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: `${config.theme.background}cc` }}>
-                    <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-                        <Link href="/" className="flex items-center gap-3 group cursor-pointer">
-                            <span className="text-2xl">✨</span>
-                            <span
-                                className="text-xl font-bold tracking-wide"
-                                style={{ color: config.theme.text }}
-                            >
-                                {config.marketingName || config.name}
-                            </span>
-                        </Link>
-                        <Link
-                            href="/login"
-                            className="px-6 py-2.5 text-white text-sm font-medium rounded-full hover:shadow-lg transition-all duration-300"
-                            style={{ backgroundColor: config.theme.primary }}
-                        >
-                            로그인
-                        </Link>
-                    </div>
-                </nav>
+                <HealthcareNavigation config={config} />
 
-                {/* Hero Section */}
-                <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
-                    {/* Hero Background (Video or Image) */}
-                    <div className="absolute inset-0 z-0">
-                        {(() => {
-                            const source = config.videoSource || "/2.mp4";
-                            const isImage = source.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                {/* Navigation (Simplified to match departments) */}
+                {/* HealthcareNavigation is now used instead of this manual nav */}
 
-                            if (isImage) {
-                                return (
-                                    <img
-                                        src={source}
-                                        alt="Background"
-                                        className="absolute inset-0 w-full h-full object-cover"
-                                    />
-                                );
-                            }
-
-                            return (
-                                <video
-                                    key={source}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    preload="metadata"
-                                    className="absolute inset-0 w-full h-full object-cover"
-                                >
-                                    <source src={source} type="video/mp4" />
-                                </video>
-                            );
-                        })()}
-                        {/* Overlays */}
-                        <div
-                            className="absolute inset-0"
-                            style={{
-                                background: `linear-gradient(to right, ${config.theme.background}E6, ${config.theme.background}B3, ${config.theme.background}66)`
-                            }}
-                        />
-                        <div
-                            className="absolute inset-0"
-                            style={{
-                                background: `linear-gradient(to bottom, ${config.theme.background}4D, transparent, ${config.theme.background}CC)`
-                            }}
-                        />
-
-                        {/* Specialized 3D Layers */}
-                        {config.id === 'neurosurgery' && <NeuralAttentionFlow />}
-                        {config.id && ['internal-medicine', 'pediatrics', 'obgyn'].includes(config.id) && <FluidBotanic />}
-                    </div>
-
-                    {/* Hero Content */}
-                    <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
-                        <div className="space-y-6 animate-fade-in">
-                            {/* Eyebrow */}
-                            <p
-                                className="font-semibold tracking-[0.15em] uppercase text-xs"
-                                style={{ color: config.theme.secondary }}
-                            >
-                                {config.catchphrase || "PREMIUM AI HEALTHCARE"}
-                            </p>
-
-                            {/* H1 */}
-                            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-                                <span
-                                    className="bg-clip-text text-transparent drop-shadow-none"
-                                    style={{
-                                        backgroundImage: `linear-gradient(to right, ${config.theme.primary}, ${config.theme.accent})`,
-                                        WebkitBackgroundClip: 'text'
-                                    }}
-                                >
-                                    {config.hero?.title || config.marketingName}
-                                </span>
-                            </h1>
-
-                            {/* Body */}
-                            <p
-                                className="text-base md:text-lg leading-relaxed max-w-lg mx-auto font-medium"
-                                style={{ color: config.theme.text, opacity: 0.9 }}
-                            >
-                                {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
-                            </p>
-
-                            {/* CTA Buttons */}
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                                <MagneticInteraction distance={80} strength={0.3}>
-                                    <Link
-                                        href={config.marketing?.cta?.link || "healthcare/chat"}
-                                        className={`px-8 py-4 ${buttonTextColor} text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10`}
-                                        style={{
-                                            backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary,
-                                            backdropFilter: isThemeDark ? 'blur(12px)' : 'none'
-                                        }}
-                                    >
-                                        <CtaIcon className="w-5 h-5" />
-                                        {config.marketing?.cta?.buttonText || "AI 진단 시작"}
-                                    </Link>
-                                </MagneticInteraction>
-
-                                <MagneticInteraction distance={60} strength={0.2}>
-                                    <button
-                                        onClick={() => setIsPhotoSlideOverOpen(true)}
-                                        className="px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
-                                        style={{
-                                            borderColor: isThemeDark ? 'rgba(255,255,255,0.2)' : config.theme.primary,
-                                            color: isThemeDark ? '#FFFFFF' : config.theme.primary,
-                                            backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'transparent'
-                                        }}
-                                    >
-                                        <Camera className="w-4 h-4" />
-                                        사진으로 스타일 보기
-                                    </button>
-                                </MagneticInteraction>
-                            </div>
-
-                            {/* Clinic Search Link */}
-                            <div className="pt-2">
-                                <a
-                                    href="#clinic-search"
-                                    className="hover:opacity-80 text-sm font-medium inline-flex items-center gap-1 transition-opacity"
-                                    style={{ color: config.theme.text }}
-                                >
-                                    {config.marketing?.searchKeyword || "유명한 의원 찾기"}
-                                    <ChevronRight className="w-4 h-4" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </header>
+                <main className="relative">
+                    {/* Centralized Hero */}
+                    <HealthcareHero config={config} onOpenCamera={() => setIsPhotoSlideOverOpen(true)} />
+                </main>
 
                 <PhotoSlideOver
                     isOpen={isPhotoSlideOverOpen}
@@ -268,72 +139,10 @@ export default function HealthcareLanding() {
                     <HealthcareContent />
                 </section>
 
-                {/* Modules Grid */}
+                {/* Modules Grid (HealthcareModules) */}
                 <section className="relative py-32 overflow-hidden z-10">
-                    <div className="absolute inset-0 z-0">
-                        <video
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className="w-full h-full object-cover object-[75%_35%] md:object-center scale-[0.8] md:scale-100 origin-center"
-                        >
-                            <source src="/1.mp4" type="video/mp4" />
-                        </video>
-                        <div className="absolute inset-0 bg-black/45" />
-                    </div>
-
-                    <div className="relative z-10 max-w-7xl mx-auto px-6">
-                        <div className="text-center mb-16">
-                            <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">My Health Check</span>
-                            <h2 className="text-4xl md:text-5xl font-bold" style={{ color: config.theme.text }}>
-                                {config.marketing?.surveyHeadline || "맞춤형 헬스케어 체크"}
-                            </h2>
-                            <p className="mt-4 max-w-2xl mx-auto font-medium opacity-70" style={{ color: config.theme.text }}>
-                                아래 모듈을 선택해 정밀한 자가 진단을 시작하고 나만의 요약 리포트를 받아보세요.
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-                            {(config.landingModules || []).map((module: any) => {
-                                const IconComponent = ICON_MAP[module.icon] || Sparkles;
-
-                                // Color mapping for the icon and subtle accents only
-                                const colorMap: Record<string, { bg: string; text: string; lightBg: string }> = {
-                                    pink: { bg: 'bg-pink-500/10', text: 'text-pink-400', lightBg: 'bg-pink-50' },
-                                    rose: { bg: 'bg-rose-500/10', text: 'text-rose-400', lightBg: 'bg-rose-50' },
-                                    teal: { bg: 'bg-teal-500/10', text: 'text-teal-400', lightBg: 'bg-teal-50' },
-                                    purple: { bg: 'bg-purple-500/10', text: 'text-purple-400', lightBg: 'bg-purple-50' },
-                                    fuchsia: { bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', lightBg: 'bg-fuchsia-50' },
-                                    cyan: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', lightBg: 'bg-cyan-50' },
-                                    blue: { bg: 'bg-blue-500/10', text: 'text-blue-400', lightBg: 'bg-blue-50' },
-                                    orange: { bg: 'bg-orange-500/10', text: 'text-orange-400', lightBg: 'bg-orange-50' },
-                                    yellow: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', lightBg: 'bg-yellow-50' },
-                                    red: { bg: 'bg-red-500/10', text: 'text-red-400', lightBg: 'bg-red-50' },
-                                    indigo: { bg: 'bg-indigo-500/10', text: 'text-indigo-400', lightBg: 'bg-indigo-50' },
-                                    gold: { bg: 'bg-yellow-600/10', text: 'text-yellow-500', lightBg: 'bg-yellow-50' },
-                                    amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', lightBg: 'bg-amber-50' },
-                                    green: { bg: 'bg-green-500/10', text: 'text-green-400', lightBg: 'bg-green-50' },
-                                    stone: { bg: 'bg-stone-500/10', text: 'text-stone-400', lightBg: 'bg-stone-50' },
-                                    violet: { bg: 'bg-violet-500/10', text: 'text-violet-400', lightBg: 'bg-violet-50' },
-                                };
-                                const colors = colorMap[module.color] || colorMap['pink'];
-
-                                return (
-                                    <Link key={module.id} href={`healthcare/chat?topic=${module.id}`} className="group flex">
-                                        <div className="flex-1 min-h-[160px] bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/50 transition-all duration-300 hover:scale-[1.02] flex flex-col items-center text-center shadow-xl">
-                                            <div className={`w-12 h-12 ${isThemeDark ? 'bg-white/5' : colors.lightBg} rounded-xl flex items-center justify-center mb-5 border border-white/10`}>
-                                                <IconComponent className={`w-6 h-6 ${colors.text} group-hover:scale-110 transition-transform`} />
-                                            </div>
-                                            <h3 className="text-lg font-bold mb-2 tracking-tight" style={{ color: config.theme.text }}>{module.title}</h3>
-                                            <p className="text-xs leading-relaxed font-medium opacity-60" style={{ color: config.theme.text }}>
-                                                {module.description}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
-                        </div>
+                    <div className="max-w-7xl mx-auto px-6">
+                        <HealthcareModules config={config} />
                     </div>
                 </section>
 

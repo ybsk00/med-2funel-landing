@@ -1,5 +1,12 @@
-import ObgynLanding from "@/components/departments/ObgynLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function ObgynPage() {
-    return <ObgynLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("obgyn");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }

@@ -1,5 +1,12 @@
-import UrologyLanding from "@/components/departments/UrologyLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function UrologyPage() {
-    return <UrologyLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("urology");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }

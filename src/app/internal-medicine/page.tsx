@@ -1,5 +1,12 @@
-import InternalMedicineLanding from "@/components/departments/InternalMedicineLanding";
+﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
+import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
-export default function InternalMedicinePage() {
-    return <InternalMedicineLanding />;
+export default function Page() {
+    const config = getDepartmentConfig("internal-medicine");
+    return (
+        <HospitalProvider initialConfig={config}>
+            <HealthcareLanding />
+        </HospitalProvider>
+    );
 }
