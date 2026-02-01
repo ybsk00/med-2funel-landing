@@ -35,50 +35,61 @@ const CARD_COMPONENTS: Record<string, any> = {
     circuit: HologramCard,
 };
 
-const DEPARTMENT_MODULE_HEADERS: Record<string, { title: string; subtitle: string }> = {
+const DEPARTMENT_MODULE_HEADERS: Record<string, { title: string; subtitle1: string; subtitle2: string }> = {
     "plastic-surgery": {
-        title: "페이스 & 바디 뷰티 밸런스 체크",
-        subtitle: "나에게 어울리는 이상적인 비율과 스타일을 찾아드립니다."
+        title: "퍼스널 뷰티 밸런스 체크",
+        subtitle1: "나에게 가장 잘 어울리는 스타일과 비율을 분석해드립니다.",
+        subtitle2: "부담 없이 간편하게, 나만의 아름다움을 찾아보세요."
     },
     "dermatology": {
-        title: "피부 컨디션 & 타입 자가 체크",
-        subtitle: "현재 내 피부 상태를 확인하고, 딱 맞는 홈케어 루틴을 알아보세요."
+        title: "데일리 피부 컨디션 체크",
+        subtitle1: "현재 내 피부 상태에 딱 맞는 홈케어 루틴을 제안합니다.",
+        subtitle2: "계절과 환경에 흔들리지 않는 건강한 피부를 만들어보세요."
     },
     "korean-medicine": {
-        title: "내 몸의 기운 & 체질 밸런스 확인",
-        subtitle: "나의 체질을 알아보고, 생활 속에서 건강의 균형을 찾아드립니다."
+        title: "내 몸의 기운 & 체질 분석",
+        subtitle1: "타고난 체질을 알아보고 나에게 맞는 생활 습관을 확인하세요.",
+        subtitle2: "자연의 흐름에 맞춘 건강한 밸런스를 찾아드립니다."
     },
     "dentistry": {
-        title: "치아 청결도 & 미소 라인 체크",
-        subtitle: "치아 색상부터 잇몸 건강까지, 밝은 미소를 위한 상태를 점검해보세요."
+        title: "치아 청결도 & 미소 라인 점검",
+        subtitle1: "치아 청결도부터 잇몸 건강까지 꼼꼼하게 점검해드립니다.",
+        subtitle2: "자신 있는 미소를 위한 맞춤형 관리 팁을 받아보세요."
     },
     "orthopedics": {
-        title: "바른 자세 & 관절 유연성 체크",
-        subtitle: "불편한 움직임은 없는지 확인하고, 가벼운 스트레칭 정보를 받아보세요."
+        title: "바른 자세 & 관절 유연성 점검",
+        subtitle1: "불편한 움직임은 없는지 내 몸의 균형 상태를 확인해보세요.",
+        subtitle2: "일상에서 실천할 수 있는 가벼운 스트레칭 정보를 드립니다."
     },
     "internal-medicine": {
         title: "이너 뷰티 & 신체 리듬 관리",
-        subtitle: "내 몸의 컨디션 신호를 확인하고, 활력 넘치는 일상을 계획하세요."
+        subtitle1: "내 몸의 에너지가 보내는 신호를 놓치지 말고 체크하세요.",
+        subtitle2: "활력 넘치는 매일을 위한 건강한 습관을 제안합니다."
     },
     "urology": {
-        title: "맨즈 헬스 & 활력 컨디션 체크",
-        subtitle: "말하기 힘든 고민, 프라이빗한 공간에서 편안하게 상태를 확인해보세요."
+        title: "맨즈 헬스 & 활력 컨디션 가이드",
+        subtitle1: "말하기 어려운 고민도 프라이빗하게 상태를 확인해보세요.",
+        subtitle2: "자신감을 되찾고 에너지를 충전하는 방법을 안내해드립니다."
     },
     "pediatrics": {
-        title: "우리 아이 성장 속도 & 발달 체크",
-        subtitle: "아이의 키와 컨디션을 기록하고, 월령별 육아 팁을 받아보세요."
+        title: "우리 아이 성장 발달 & 육아 멘토",
+        subtitle1: "아이의 성장 속도와 컨디션을 기록하고 변화를 살펴보세요.",
+        subtitle2: "초보 엄마아빠를 위한 월령별 맞춤 육아 팁을 제공합니다."
     },
     "obgyn": {
-        title: "우먼 웰니스 & 밸런스 라이프",
-        subtitle: "여성의 건강한 리듬을 위한 생애주기별 맞춤형 케어 가이드입니다."
+        title: "우먼 웰니스 라이프 케어",
+        subtitle1: "여성의 생애 주기에 맞춘 건강한 리듬을 찾아드립니다.",
+        subtitle2: "소중한 내 몸을 위한 맞춤형 관리 가이드를 확인해보세요."
     },
     "oncology": {
-        title: "면역 밸런스 & 회복 식단 가이드",
-        subtitle: "건강한 일상 회복을 위한 면역 관리법과 영양 정보를 안내해드립니다."
+        title: "면역 밸런스 & 영양 관리 가이드",
+        subtitle1: "건강한 일상으로 복귀하기 위한 면역 관리법을 안내합니다.",
+        subtitle2: "활력을 높여주는 식단과 생활 수칙을 지금 바로 확인하세요."
     },
     "neurosurgery": {
         title: "두뇌 컨디션 & 집중력 밸런스",
-        subtitle: "머리가 맑아지는 생활 습관과 일상 속 컨디션 관리법을 알아보세요."
+        subtitle1: "머리가 맑아지는 생활 습관과 컨디션 관리법을 알아보세요.",
+        subtitle2: "복잡한 머릿속을 비우고 집중력을 높이는 팁을 드립니다."
     }
 };
 
@@ -92,8 +103,9 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
 
     const CardComponent = CARD_COMPONENTS[texture] || GlassCard;
     const moduleHeader = DEPARTMENT_MODULE_HEADERS[config.id] || {
-        title: "전문 의료진 AI 상담",
-        subtitle: "평소 궁금했던 건강 정보를 실시간으로 확인해보세요."
+        title: "스마트 헬스케어 체크",
+        subtitle1: "나의 건강 상태를 간편하게 확인해보세요.",
+        subtitle2: "맞춤형 정보를 통해 더 건강한 내일을 제안합니다."
     };
 
     const handleModuleClick = (id: string) => {
@@ -135,12 +147,16 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
 
 
                 {/* Module Header (Between Search and Grid) */}
-                <div className="text-center mb-10 mt-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-                    <h3 className="text-2xl md:text-3xl font-bold text-skin-text mb-3">
+                <div className="text-center mb-12 mt-16 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                    <span className="px-3 py-1 rounded-full bg-skin-primary/5 text-skin-primary text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/10 mb-4 inline-block">
+                        Smart Check
+                    </span>
+                    <h3 className="text-2xl md:text-4xl font-black text-skin-text mb-4 leading-tight">
                         {moduleHeader.title}
                     </h3>
-                    <p className="text-skin-text/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                        {moduleHeader.subtitle}
+                    <p className="text-skin-text/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                        {moduleHeader.subtitle1} <br className="hidden md:block" />
+                        {moduleHeader.subtitle2}
                     </p>
                 </div>
 
