@@ -26,7 +26,6 @@ export default function HealthcareLanding() {
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
     return (
-    return (
         <TrackF1View>
             <div
                 className="min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700"
@@ -85,10 +84,10 @@ export default function HealthcareLanding() {
                                 background: `linear-gradient(to bottom, ${config.theme.background}4D, transparent, ${config.theme.background}CC)`
                             }}
                         />
-                    </div >
+                    </div>
 
                     {/* Hero Content - 1컬럼 중앙 정렬 */}
-                    < div className="relative z-10 max-w-3xl mx-auto w-full text-center" >
+                    <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
                         <div className="space-y-6 animate-fade-in">
                             {/* Eyebrow */}
                             <p
@@ -169,14 +168,13 @@ export default function HealthcareLanding() {
                                 </span>
                             </div>
                         </div>
-                    </div >
-                </header >
+                    </div>
+                </header>
 
                 {/* Photo SlideOver */}
-                < PhotoSlideOver
+                <PhotoSlideOver
                     isOpen={isPhotoSlideOverOpen}
-                    onClose={() => setIsPhotoSlideOverOpen(false)
-                    }
+                    onClose={() => setIsPhotoSlideOverOpen(false)}
                 />
 
                 {/* How It Works - 3단 카드 */}
