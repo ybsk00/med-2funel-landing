@@ -50,6 +50,7 @@ export default function HealthcareLanding() {
                     {/* 영상 배경 */}
                     <div className="absolute inset-0 z-0">
                         <video
+                            key={config.videoSource}
                             autoPlay
                             loop
                             muted

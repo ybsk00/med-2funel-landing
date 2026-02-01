@@ -12,25 +12,27 @@ export function HospitalProvider({
     children: React.ReactNode;
     initialConfig: HospitalConfig;
 }) {
-    const [config] = useState<HospitalConfig>(initialConfig);
+    // Keep internal state synced if needed, but for now just use props directly for side effects
+    // to ensure updates propagate immediately.
 
     useEffect(() => {
-        console.log('HospitalProvider mounted, config:', config);
-        // 테마 색상을 CSS 변수로 적용
-        const root = document.documentElement;
-        root.style.setProperty('--skin-primary', config.theme.primary);
-        root.style.setProperty('--skin-secondary', config.theme.secondary);
-        root.style.setProperty('--skin-accent', config.theme.accent);
-        root.style.setProperty('--skin-bg', config.theme.background);
-        root.style.setProperty('--skin-text', config.theme.text);
+        if (!initialConfig?.theme) return;
 
-        // 기존 dental 변수들도 호환성을 위해 업데이트 (필요시)
-        root.style.setProperty('--dental-primary', config.theme.primary);
-        root.style.setProperty('--dental-bg', config.theme.background);
-    }, [config]);
+        console.log('Applying Theme:', initialConfig.theme.concept);
+        const root = document.documentElement;
+        root.style.setProperty('--skin-primary', initialConfig.theme.primary);
+        root.style.setProperty('--skin-secondary', initialConfig.theme.secondary);
+        root.style.setProperty('--skin-accent', initialConfig.theme.accent);
+        root.style.setProperty('--skin-bg', initialConfig.theme.background);
+        root.style.setProperty('--skin-text', initialConfig.theme.text);
+
+        // Dental compatibility
+        root.style.setProperty('--dental-primary', initialConfig.theme.primary);
+        root.style.setProperty('--dental-bg', initialConfig.theme.background);
+    }, [initialConfig]);
 
     return (
-        <HospitalContext.Provider value={config}>
+        <HospitalContext.Provider value={initialConfig}>
             {children}
         </HospitalContext.Provider>
     );
