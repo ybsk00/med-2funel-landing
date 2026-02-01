@@ -31,26 +31,27 @@ export default function HeroExperience({ className = "", department = "dermatolo
 
         // AI Analysis Animation Sequence
         setIsAnalyzing(true);
-        setMode(newMode);
-
-        // 1. Analyzing Phase (Blur)
+        // Keep showing original during analysis, switch later
+        
+        // 1. Analyzing Phase (Blur) - 1.5s
         setTimeout(() => {
             setIsAnalyzing(false);
+            setMode(newMode); // Switch content now
             // 2. Reveal Phase (Flash)
             setShowFlash(true);
-            setTimeout(() => setShowFlash(false), 500);
+            setTimeout(() => setShowFlash(false), 800);
         }, 1500);
     };
 
-    // Define filters for effects
+    // Define DRAMATIC filters for effects
     const getFilterStyle = (currentMode: EffectMode) => {
         switch (currentMode) {
             case 'glow':
-                // 물광: 밝기 증가, 대비 증가, 약간의 채도 증가
-                return 'brightness(1.1) contrast(1.1) saturate(1.1) drop-shadow(0 0 5px rgba(255,255,255,0.3))';
+                // 물광: 밝기/대비/채도 대폭 증가 + 블러로 광택 효과 시뮬레이션
+                return 'brightness(1.15) contrast(1.2) saturate(1.3) blur(0.5px) drop-shadow(0 0 8px rgba(255,255,255,0.6))';
             case 'whitening':
-                // 미백: 밝기 대폭 증가, 채도 약간 감소 (하얗게)
-                return 'brightness(1.25) saturate(0.9) contrast(1.05)';
+                // 미백: 밝기 대폭 증가 + 채도 대폭 감소(붉은기 제거) + 약간의 쿨톤 보정
+                return 'brightness(1.35) contrast(0.9) saturate(0.4) hue-rotate(-5deg)';
             default:
                 return 'none';
         }
@@ -64,86 +65,114 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     {department === 'plastic-surgery' ? 'AI 가상 성형' : 'AI 피부 시뮬레이션'}
                 </h3>
                 <p className="text-sm text-skin-subtext mt-1">
-                    왼쪽은 원본, 오른쪽은 시술 후 예상 모습입니다.
+                    {mode === 'original' 
+                        ? '원하는 효과를 선택하여 시뮬레이션을 시작하세요.' 
+                        : '왼쪽(Before)과 오른쪽(After)을 비교해보세요.'}
                 </p>
             </div>
 
             {/* Main Viewport */}
             <div className="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/20 bg-skin-bgSecondary group">
                 
-                {/* 1. Original / Result Layer */}
+                {/* 1. Content Layer */}
                 <div className={`absolute inset-0 transition-all duration-700 ${isAnalyzing ? 'blur-xl scale-105 opacity-80' : 'blur-0 scale-100 opacity-100'}`}>
                     
-                    {/* Split View Container */}
-                    <div className="absolute inset-0 flex">
-                        {/* Left Half: Original (Always) */}
-                        <div className="relative w-1/2 h-full overflow-hidden border-r border-white/20">
-                            <div className="absolute inset-0 w-[200%] h-full">
-                                <Image
-                                    src={baseImage}
-                                    alt="Original Left"
-                                    fill
-                                    className="object-cover"
-                                    priority
-                                />
+                    {mode === 'original' || isAnalyzing ? (
+                        // Single Full Image (Original)
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={baseImage}
+                                alt="Original"
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                            {/* Vignette Mask */}
+                            <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary"
+                                style={{
+                                    maskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)',
+                                    WebkitMaskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)'
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        // Split View (Before & After)
+                        <div className="absolute inset-0 flex">
+                            {/* Left Half: Original */}
+                            <div className="relative w-1/2 h-full overflow-hidden border-r-2 border-white/50 z-10">
+                                <div className="absolute inset-0 w-[200%] h-full">
+                                    <Image
+                                        src={baseImage}
+                                        alt="Original Left"
+                                        fill
+                                        className="object-cover"
+                                        priority
+                                    />
+                                    {/* Vignette Mask (Applied individually to match alignment) */}
+                                    <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary"
+                                        style={{
+                                            maskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)',
+                                            WebkitMaskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)'
+                                        }}
+                                    />
+                                </div>
+                                <div className="absolute top-4 left-4 px-3 py-1.5 bg-black/60 text-white text-xs font-bold rounded-lg backdrop-blur-md z-20">
+                                    Before
+                                </div>
                             </div>
-                            <div className="absolute top-4 left-4 px-2 py-1 bg-black/50 text-white text-[10px] rounded backdrop-blur-md">
-                                Before
+
+                            {/* Right Half: Effect */}
+                            <div className="relative w-1/2 h-full overflow-hidden">
+                                <div className="absolute inset-0 w-[200%] h-full -left-full">
+                                    <Image
+                                        src={baseImage}
+                                        alt="Effect Right"
+                                        fill
+                                        className="object-cover transition-all duration-700"
+                                        style={{ 
+                                            filter: getFilterStyle(mode) 
+                                        }}
+                                    />
+                                    {/* Vignette Mask */}
+                                    <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary"
+                                        style={{
+                                            maskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)',
+                                            WebkitMaskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)'
+                                        }}
+                                    />
+                                </div>
+                                <div className="absolute top-4 right-4 px-3 py-1.5 bg-skin-primary text-white text-xs font-bold rounded-lg backdrop-blur-md shadow-lg z-20">
+                                    After
+                                </div>
                             </div>
                         </div>
-
-                        {/* Right Half: Effect (or Original) */}
-                        <div className="relative w-1/2 h-full overflow-hidden">
-                            <div className="absolute inset-0 w-[200%] h-full -left-full">
-                                <Image
-                                    src={baseImage}
-                                    alt="Effect Right"
-                                    fill
-                                    className="object-cover transition-all duration-700"
-                                    style={{ 
-                                        filter: getFilterStyle(mode) 
-                                    }}
-                                />
-                            </div>
-                            <div className="absolute top-4 right-4 px-2 py-1 bg-skin-primary/80 text-white text-[10px] rounded backdrop-blur-md font-bold">
-                                {mode === 'original' ? 'Before' : 'After'}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Vignette Mask (Face Focus) */}
-                    {mode !== 'original' && (
-                        <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary"
-                             style={{
-                                 maskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)',
-                                 WebkitMaskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)'
-                             }}
-                        />
                     )}
                 </div>
 
                 {/* 2. Scanning Overlay (Animation) */}
                 {isAnalyzing && (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/20 backdrop-blur-[2px]">
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
                         <div className="relative">
-                            <ScanFace className="w-16 h-16 text-white/80 animate-pulse" />
-                            <div className="absolute top-0 left-0 w-full h-1 bg-skin-primary shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-scan-down" />
+                            <ScanFace className="w-20 h-20 text-white/90 animate-pulse" />
+                            <div className="absolute top-0 left-0 w-full h-1 bg-skin-primary shadow-[0_0_20px_rgba(255,255,255,1)] animate-scan-down" />
                         </div>
-                        <p className="mt-4 text-white font-bold text-lg animate-pulse">
-                            AI 피부 분석 중...
+                        <p className="mt-6 text-white font-black text-xl animate-pulse tracking-widest">
+                            AI ANALYSIS...
                         </p>
                     </div>
                 )}
 
                 {/* 3. Flash Effect (Transition) */}
-                <div className={`absolute inset-0 z-30 bg-white pointer-events-none transition-opacity duration-500 ease-out ${showFlash ? 'opacity-80' : 'opacity-0'}`} />
+                <div className={`absolute inset-0 z-30 bg-white pointer-events-none transition-opacity duration-700 ease-out ${showFlash ? 'opacity-90' : 'opacity-0'}`} />
 
-                {/* 4. Center Line (Guide) */}
-                <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/50 z-10 shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/50 rounded-full flex items-center justify-center bg-white/10 backdrop-blur-sm">
-                        <div className="w-1 h-1 bg-white rounded-full" />
+                {/* 4. Center Line (Guide) - Only in Split View */}
+                {mode !== 'original' && !isAnalyzing && (
+                    <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-white/80 z-20 shadow-[0_0_15px_rgba(255,255,255,0.8)]">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 border-2 border-white rounded-full flex items-center justify-center bg-white/20 backdrop-blur-md shadow-lg">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Controls */}
@@ -151,19 +180,21 @@ export default function HeroExperience({ className = "", department = "dermatolo
                 <button
                     onClick={() => handleModeChange('glow')}
                     disabled={isAnalyzing}
-                    className={`relative p-4 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-2 group overflow-hidden ${
+                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${
                         mode === 'glow' 
-                        ? 'bg-skin-primary text-white border-skin-primary shadow-lg scale-[1.02]' 
-                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50'
+                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]' 
+                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
                     }`}
                 >
-                    <div className="p-2 rounded-full bg-white/10 group-hover:scale-110 transition-transform">
-                        <Droplet className="w-6 h-6" />
+                    <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'glow' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
+                        <Droplet className={`w-6 h-6 ${mode === 'glow' ? 'text-white' : 'text-skin-primary'}`} />
                     </div>
-                    <span className="font-bold">물광 효과</span>
-                    <span className="text-[10px] opacity-70">수분 가득한 촉촉함</span>
+                    <div className="text-center">
+                        <span className="block font-bold text-lg">물광 효과</span>
+                        <span className={`text-xs ${mode === 'glow' ? 'opacity-90' : 'opacity-60'}`}>수분 가득한 광채</span>
+                    </div>
                     {mode === 'glow' && !isAnalyzing && (
-                        <span className="absolute top-2 right-2 flex h-3 w-3">
+                        <span className="absolute top-3 right-3 flex h-3 w-3">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                         </span>
@@ -173,19 +204,21 @@ export default function HeroExperience({ className = "", department = "dermatolo
                 <button
                     onClick={() => handleModeChange('whitening')}
                     disabled={isAnalyzing}
-                    className={`relative p-4 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-2 group overflow-hidden ${
+                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${
                         mode === 'whitening' 
-                        ? 'bg-skin-primary text-white border-skin-primary shadow-lg scale-[1.02]' 
-                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50'
+                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]' 
+                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
                     }`}
                 >
-                    <div className="p-2 rounded-full bg-white/10 group-hover:scale-110 transition-transform">
-                        <Sun className="w-6 h-6" />
+                    <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'whitening' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
+                        <Sun className={`w-6 h-6 ${mode === 'whitening' ? 'text-white' : 'text-skin-primary'}`} />
                     </div>
-                    <span className="font-bold">미백 효과</span>
-                    <span className="text-[10px] opacity-70">투명하고 환한 피부</span>
+                    <div className="text-center">
+                        <span className="block font-bold text-lg">미백 효과</span>
+                        <span className={`text-xs ${mode === 'whitening' ? 'opacity-90' : 'opacity-60'}`}>투명하고 뽀얀 피부</span>
+                    </div>
                     {mode === 'whitening' && !isAnalyzing && (
-                        <span className="absolute top-2 right-2 flex h-3 w-3">
+                        <span className="absolute top-3 right-3 flex h-3 w-3">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                         </span>
@@ -195,13 +228,13 @@ export default function HeroExperience({ className = "", department = "dermatolo
 
             {/* Reset Button */}
             {mode !== 'original' && (
-                <div className="mt-6 text-center">
+                <div className="mt-8 text-center animate-in fade-in slide-in-from-bottom-4">
                     <button
                         onClick={() => handleModeChange('original')}
-                        className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-skin-surface border border-skin-text/10 text-skin-text text-sm hover:bg-skin-text/5 transition-colors"
+                        className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-skin-surface border border-skin-text/10 text-skin-text font-medium hover:bg-skin-text/5 hover:border-skin-text/30 transition-all shadow-sm"
                     >
                         <RotateCcw className="w-4 h-4" />
-                        원본 보기
+                        처음으로 돌아가기
                     </button>
                 </div>
             )}
