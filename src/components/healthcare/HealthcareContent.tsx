@@ -131,29 +131,42 @@ export default function HealthcareContent() {
             </div>
 
             {/* Session C & Chat Integration */}
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-skin-primary to-skin-accent text-white p-8 md:p-16 text-center shadow-2xl">
+            <div className={`relative overflow-hidden rounded-[2.5rem] p-8 md:p-16 text-center shadow-2xl transition-all duration-500 ${isThemeDark
+                    ? 'bg-gradient-to-br from-skin-primary to-skin-accent text-white'
+                    : 'bg-white border border-stone-200'
+                }`}>
                 <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-                    <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-md">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-md ${isThemeDark ? 'bg-white/20 text-white' : 'bg-skin-primary/10 text-skin-primary border border-skin-primary/20'
+                        }`}>
                         Session C · Personal Plan
                     </span>
-                    <h3 className="text-3xl md:text-5xl font-black mb-6 leading-tight">
+                    <h3 className={`text-3xl md:text-5xl font-black mb-6 leading-tight ${isThemeDark ? 'text-white' : 'text-slate-900'
+                        }`}>
                         {content.sessionC.title}
                     </h3>
-                    <p className="text-white/80 text-lg md:text-xl leading-relaxed mb-8">
+                    <p className={`text-lg md:text-xl leading-relaxed mb-8 ${isThemeDark ? 'text-white/80' : 'text-slate-600'
+                        }`}>
                         {content.sessionC.description}
                     </p>
                     <button
                         onClick={scrollToChat}
-                        className="inline-flex items-center gap-3 px-10 py-5 bg-white text-skin-primary rounded-2xl font-black text-lg hover:bg-white/90 transition-all shadow-xl active:scale-95"
+                        className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-95 ${isThemeDark
+                                ? 'bg-white text-skin-primary hover:bg-white/90'
+                                : 'bg-skin-primary text-white hover:bg-skin-accent'
+                            }`}
                     >
                         {content.sessionC.cta}
                         <ShieldCheck className="w-5 h-5" />
                     </button>
                 </div>
 
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-black/10 rounded-full blur-[80px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
+                {/* Decorative Elements - Hidden or adjusted for light theme */}
+                {isThemeDark && (
+                    <>
+                        <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                        <div className="absolute bottom-0 right-0 w-80 h-80 bg-black/10 rounded-full blur-[80px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
+                    </>
+                )}
             </div>
 
             {/* Inline Chat Display Area */}

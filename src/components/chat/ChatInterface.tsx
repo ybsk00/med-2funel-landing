@@ -41,7 +41,7 @@ const MODULE_CONFIG: Record<string, { icon: any; color: string }> = {
     'barrier-reset': { icon: Shield, color: 'teal' },
     'lifting-check': { icon: ArrowUpRight, color: 'purple' },
     'skin-concierge': { icon: Heart, color: 'fuchsia' },
-    
+
     // 성형외과
     'face-ratio': { icon: Camera, color: 'rose' },
     'trend-check': { icon: Sparkles, color: 'gold' },
@@ -365,26 +365,35 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         }
     };
 
-    const colorClasses: Record<string, { bg: string; text: string; ring: string }> = {
-        pink: { bg: 'bg-pink-500/20', text: 'text-pink-400', ring: 'ring-pink-400' },
-        rose: { bg: 'bg-rose-500/20', text: 'text-rose-400', ring: 'ring-rose-400' },
-        teal: { bg: 'bg-teal-500/20', text: 'text-teal-400', ring: 'ring-teal-400' },
-        purple: { bg: 'bg-purple-500/20', text: 'text-purple-400', ring: 'ring-purple-400' },
-        fuchsia: { bg: 'bg-fuchsia-500/20', text: 'text-fuchsia-400', ring: 'ring-fuchsia-400' },
+    // Theme Darkness Check (Refined)
+    const isColorDark = (hex?: string) => {
+        if (!hex) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
     };
 
+    const isThemeDark = config.theme ? isColorDark(config.theme.background) : false;
+    const isPrimaryDark = config.theme ? isColorDark(config.theme.primary) : true;
+
     return (
-        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} bg-skin-bg font-sans flex flex-col selection:bg-skin-accent selection:text-white`}>
+        <div className={`${props.isEmbedded ? "h-full" : "min-h-screen"} ${isThemeDark ? 'bg-skin-bg' : 'bg-stone-50'} font-sans flex flex-col selection:bg-skin-accent selection:text-white`}>
             {/* Header */}
             {!props.isEmbedded && (
-                <header className="bg-skin-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300">
+                <header className={`${isThemeDark ? 'bg-skin-bg/80 border-white/10' : 'bg-white/80 border-stone-200'} backdrop-blur-md border-b px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all duration-300`}>
                     <Link href="/" className="flex items-center gap-3 group cursor-pointer">
                         <span className="text-2xl">✨</span>
-                        <span className="text-xl font-bold text-white tracking-wide">
+                        <span className={`text-xl font-bold tracking-wide ${isThemeDark ? 'text-white' : 'text-slate-900'}`}>
                             {props.mode === 'medical' ? `${config.name} AI` : "에버헬스케어"}
                         </span>
                     </Link>
-                    <div className="hidden md:flex items-center gap-6 text-sm font-medium text-skin-subtext">
+                    <div className="hidden md:flex items-center gap-6 text-sm font-medium">
                         <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                             로그인
                         </Link>
@@ -398,14 +407,15 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     <div className="mb-4">
                         <button
                             onClick={() => setShowBadgeExpanded(!showBadgeExpanded)}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-skin-muted/50 rounded-full text-sm text-skin-subtext hover:bg-skin-muted transition-colors"
+                            className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm transition-colors ${isThemeDark ? 'bg-skin-muted/50 text-skin-subtext hover:bg-skin-muted' : 'bg-stone-100 text-stone-500 hover:bg-stone-200'
+                                }`}
                         >
                             <Info size={14} />
                             <span>참고용 안내 | 진단·처방 아님</span>
                             <ChevronDown size={14} className={`transition-transform ${showBadgeExpanded ? 'rotate-180' : ''}`} />
                         </button>
                         {showBadgeExpanded && (
-                            <div className="mt-2 px-4 py-3 bg-skin-surface rounded-xl text-sm text-skin-subtext">
+                            <div className={`mt-2 px-4 py-3 rounded-xl text-sm ${isThemeDark ? 'bg-skin-surface text-skin-subtext' : 'bg-white border border-stone-100 text-stone-600 shadow-sm'}`}>
                                 본 기능은 참고용 루틴/선택 기준 안내이며, 진단·처방을 대신하지 않습니다.
                                 {topic === 'lifting-check' && (
                                     <p className="mt-2 text-skin-primary">
@@ -428,7 +438,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                     ) : (
                         <div className="mb-6">
                             {/* Healthcare Banner Image */}
-                            <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4">
+                            <div className="relative w-full h-40 md:h-48 rounded-2xl overflow-hidden mb-4 shadow-lg">
                                 <Image
                                     src="/GALLERY MINIMAL.png"
                                     alt={`${props.mode === 'medical' ? config.name : '프리미엄'} 스킨케어`}
@@ -436,7 +446,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                     className="object-cover object-[center_25%]"
                                     priority
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-skin-bg/80 via-transparent to-transparent" />
+                                <div className={`absolute inset-0 ${isThemeDark ? 'bg-gradient-to-t from-skin-bg/80' : 'bg-gradient-to-t from-black/40'} via-transparent to-transparent`} />
                                 <div className="absolute bottom-4 left-4 right-4">
                                     <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
                                         {props.mode === 'medical' ? `${config.name} 프리미엄 스킨케어` : "프리미엄 스킨케어 루틴"}
@@ -447,9 +457,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Module Tabs */}
                             <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 scrollbar-hide">
                                 {VALID_TOPICS.map((t) => {
-                                    const config = MODULE_CONFIG[t] || MODULE_CONFIG['glow-booster'];
-                                    const IconComponent = config.icon;
-                                    const colors = colorClasses[config.color] || colorClasses['pink'];
+                                    const modConfig = MODULE_CONFIG[t] || MODULE_CONFIG['glow-booster'];
+                                    const IconComponent = modConfig.icon;
                                     const isActive = topic === t;
 
                                     return (
@@ -458,7 +467,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                             href={`/healthcare/chat?topic=${t}`}
                                             className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all ${isActive
                                                 ? `bg-skin-primary text-white shadow-lg`
-                                                : 'bg-white/10 text-skin-subtext hover:bg-white/20'
+                                                : isThemeDark ? 'bg-white/10 text-skin-subtext hover:bg-white/20' : 'bg-white text-stone-500 border border-stone-200 hover:bg-stone-50'
                                                 }`}
                                         >
                                             <IconComponent size={16} />
@@ -472,14 +481,18 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 )}
 
                 {/* Chat Area */}
-                <div className={`bg-skin-surface backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-skin-bg shadow-none" : "min-h-[500px]"}`}>
+                <div className={`backdrop-blur-xl rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded
+                    ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none"
+                    : `${isThemeDark ? 'bg-skin-surface border-white/10' : 'bg-white border-stone-200'} border min-h-[500px]`
+                    }`}>
                     {/* Safety Badge (logged in only) */}
                     {props.isLoggedIn && <SafetyBadge />}
 
                     {/* Turn Counter (로그인 전만 표시) */}
                     {!props.isLoggedIn && (
                         <div className="flex justify-center">
-                            <span className="px-4 py-1.5 text-xs text-skin-subtext bg-skin-bg rounded-full border border-white/10">
+                            <span className={`px-4 py-1.5 text-xs rounded-full border ${isThemeDark ? 'text-skin-subtext bg-skin-bg border-white/10' : 'text-stone-500 bg-stone-50 border-stone-200'
+                                }`}>
                                 대화 {turnCount}/5 {turnCount >= 5 && "· 로그인하면 계속 상담 가능"}
                             </span>
                         </div>
@@ -491,7 +504,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             className={`flex items-start gap-4 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                         >
                             <div
-                                className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-md overflow-hidden border-2 ${msg.role === "ai"
+                                className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 shadow-md overflow-hidden border-2 transition-transform hover:scale-105 active:scale-95 ${msg.role === "ai"
                                     ? "border-skin-primary bg-skin-bg"
                                     : "border-skin-accent bg-skin-bg"
                                     }`}
@@ -506,15 +519,17 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             </div>
 
                             <div className="flex flex-col gap-1 max-w-[80%]">
-                                <span className={`text-xs font-medium ${msg.role === "user" ? "text-right text-skin-subtext" : "text-left text-skin-primary"}`}>
+                                <span className={`text-[10px] font-bold uppercase tracking-widest ${msg.role === "user" ? "text-right opacity-60" : "text-left text-skin-primary"}`}>
                                     {msg.role === "ai"
                                         ? (props.mode === 'medical' ? `${config.name} AI` : config.personas.healthcare.name)
                                         : "나"}
                                 </span>
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
-                                        ? "bg-skin-surface text-white border border-white/10 rounded-tl-none"
-                                        : "bg-skin-primary text-white rounded-tr-none shadow-md" 
+                                        ? isThemeDark
+                                            ? "bg-stone-800/50 text-white border border-white/10 rounded-tl-none backdrop-blur-sm"
+                                            : "bg-stone-50 text-slate-800 border border-stone-200 rounded-tl-none"
+                                        : `${isPrimaryDark ? 'text-white' : 'text-slate-900'} bg-skin-primary rounded-tr-none shadow-md`
                                         }`}
                                 >
                                     {msg.content.replace(/[[ACTION:RESERVATION_MODAL]]/g, '').trim()}
@@ -541,21 +556,25 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             </main>
 
             {/* Input Area */}
-            <div className={`${props.isEmbedded ? "relative bg-skin-bg border-t border-white/10" : "fixed bottom-0 left-0 right-0 bg-skin-bg/90 backdrop-blur-xl border-t border-white/10"} p-4 z-40`}>
+            <div className={`${props.isEmbedded ? "relative border-t" : "fixed bottom-0 left-0 right-0 border-t backdrop-blur-xl"} p-4 z-40 transition-colors ${isThemeDark ? 'bg-skin-bg/90 border-white/10' : 'bg-white/90 border-stone-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]'
+                }`}>
                 <div className={`${props.isEmbedded ? "w-full" : "max-w-4xl mx-auto"} relative`}>
-                    <form onSubmit={handleSubmit} className="relative bg-skin-surface rounded-full shadow-xl border border-white/10 flex items-center p-2 pl-6 transition-shadow hover:shadow-2xl">
+                    <form onSubmit={handleSubmit} className={`relative rounded-full shadow-xl border flex items-center p-2 pl-6 transition-all ${isThemeDark ? 'bg-skin-surface border-white/10 hover:shadow-2xl' : 'bg-stone-50 border-stone-200 hover:shadow-md'
+                        }`}>
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder="피부 고민이나 궁금한 점을 입력해주세요..."
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-white placeholder:text-skin-subtext/50 text-base"
+                            className={`flex-1 bg-transparent border-none focus:ring-0 text-base ${isThemeDark ? 'text-white placeholder:text-skin-subtext/50' : 'text-slate-800 placeholder:text-stone-400'
+                                }`}
                             disabled={!props.isLoggedIn && turnCount >= 5}
                         />
                         <button
                             type="button"
                             onClick={handleImageClick}
-                            className="p-3 text-skin-subtext hover:text-skin-primary transition-colors hover:bg-white/10 rounded-full"
+                            className={`p-3 transition-colors rounded-full ${isThemeDark ? 'text-skin-subtext hover:text-skin-primary hover:bg-white/10' : 'text-stone-400 hover:text-skin-primary hover:bg-stone-100'
+                                }`}
                         >
                             <Paperclip size={20} />
                         </button>

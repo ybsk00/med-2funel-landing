@@ -165,7 +165,7 @@ export const DEPARTMENTS: Department[] = [
         label: "치과",
         virtualName: "Denti Crew",
         catchphrase: "0.1mm 오차 없는 정밀한 미소 설계",
-        video: "/히어로세션/dentistry_hero.jpg",
+        video: "/히어로세션/치과.mp4",
         hero: {
             title: "완벽한 미소의 설계",
             subtitle: "미소는 당신이 내미는 가장 아름다운 명함입니다. 0.1mm의 오차 없는 정밀함."
