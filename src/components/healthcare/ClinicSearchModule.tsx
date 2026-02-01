@@ -72,11 +72,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     // 부서별 기본 테마 매핑
     const getThemeMode = () => {
         if (theme) return theme;
-        // 한의원, 내과, 소아과, 산부인과, 암요양병원, 정형외과 = Light Theme (Hanji/Modern)
-        if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics"].includes(department)) {
+        // 한의원, 내과, 소아과, 산부인과, 암요양병원, 정형외과, 치과 = Light Theme (Hanji/Modern)
+        if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics", "dentistry"].includes(department)) {
             return "light";
         }
-        // 성형/피부/치과/비뇨/신경 = Dark Theme (Glass/Silk)
+        // 성형/피부/비뇨/신경 = Dark Theme (Glass/Silk)
         return "dark";
     };
 
@@ -98,7 +98,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             textAccent: "text-skin-primary",
 
             // 라벨 (입력폼 위)
-            label: isLight ? "text-stone-500" : "text-skin-primary/60",
+            label: isLight ? "text-stone-600 font-bold" : "text-skin-primary/80 font-bold",
 
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
@@ -115,7 +115,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             chip: {
                 active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
                 inactive: isLight
-                    ? "bg-stone-100 border-stone-300 text-stone-600 hover:border-skin-primary hover:text-skin-primary hover:bg-white" // 배경 회색조 추가
+                    ? "bg-stone-100 border-stone-300 text-stone-700 hover:border-skin-primary hover:text-skin-primary hover:bg-white" // 배경 회색조 추가
                     : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
@@ -544,7 +544,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                         </div>
 
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                                            {clinics.filter(c => c.name !== recommendedClinic?.name).slice(0, 10).map((clinic, idx) => (
+                                            {clinics.filter(c => !c.isRecommended).slice(0, 10).map((clinic, idx) => (
                                                 <div
                                                     key={idx}
                                                     className={`group p-6 rounded-[1.5rem] transition-all duration-500 border relative overflow-hidden ${styles.card} hover:-translate-y-1`}

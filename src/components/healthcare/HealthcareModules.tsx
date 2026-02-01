@@ -16,6 +16,7 @@ import HologramCard from "@/components/ui/cards/HologramCard";
 import ChatInterface from "@/components/chat/ChatInterface";
 import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
+import HealthcareContent from "@/components/healthcare/HealthcareContent";
 
 interface HealthcareModulesProps {
     config: HospitalConfig;
@@ -102,7 +103,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
     const sound = config.theme.sound;
 
     const CardComponent = CARD_COMPONENTS[texture] || GlassCard;
-    const moduleHeader = DEPARTMENT_MODULE_HEADERS[config.id] || {
+    const moduleHeader = (config.id && DEPARTMENT_MODULE_HEADERS[config.id]) || {
         title: "스마트 헬스케어 체크",
         subtitle1: "나의 건강 상태를 간편하게 확인해보세요.",
         subtitle2: "맞춤형 정보를 통해 더 건강한 내일을 제안합니다."
@@ -144,10 +145,11 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                     </div>
                 </div>
 
+                {/* NEW: Healthcare Content Reinforcement (Sessions A-D) */}
+                <HealthcareContent config={config} />
 
-
-                {/* Module Header (Between Search and Grid) */}
-                <div className="text-center mb-12 mt-16 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+                {/* Module Header (Bottom Menu Section) */}
+                <div className="text-center mb-12 mt-24 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 pt-24 border-t border-skin-text/5">
                     <span className="px-3 py-1 rounded-full bg-skin-primary/5 text-skin-primary text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/10 mb-4 inline-block">
                         Smart Check
                     </span>
