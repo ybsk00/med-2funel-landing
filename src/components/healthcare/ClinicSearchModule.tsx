@@ -78,13 +78,9 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     const currentTheme = getThemeMode();
 
     // 밝은 Primary 컬러를 사용하는 진료과인지 확인 (White Text 가독성 문제 해결)
-    // 성형외과(#13eca4), 소아과(#FFD700/High), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
-    // Plastic Surgery: #13eca4 (Mint) -> Needs Dark Text
-    // Pediatrics: #FBBF24 (Amber) -> Needs Dark Text
-    // Dentistry: #2DD4BF (Teal) -> Needs Dark Text
-    // Korean Medicine: #8FBC8F (Green Green) -> White might be okay, but let's check.
-    const isBrightPrimary = ["plastic-surgery", "pediatrics", "dentistry", "korean-medicine"].includes(department);
-    const buttonTextColor = isBrightPrimary ? "text-stone-950 font-black" : "text-white";
+    // 성형외과(#13eca4), 피부과(#FFC0CB), 소아과(#FBBF24), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
+    const isBrightPrimary = ["plastic-surgery", "dermatology", "pediatrics", "dentistry"].includes(department);
+    const buttonTextColor = isBrightPrimary ? "text-slate-900 font-extrabold" : "text-white";
 
     // 테마별 스타일 정의 (동적 적용)
     const getThemeStyles = () => {
@@ -93,7 +89,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         return {
             // 컨테이너 배경
             container: isLight
-                ? "bg-white/90 backdrop-blur-xl border-stone-200 shadow-xl" // Light
+                ? "bg-white/95 backdrop-blur-xl border-stone-200 shadow-xl" // Light
                 : "bg-black/40 backdrop-blur-xl border-white/10",
 
             // 텍스트 기본 색상
@@ -106,7 +102,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
-                ? "bg-white border-2 text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm"
+                ? "bg-stone-50 border-2 text-stone-900 border-stone-200 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm transition-all focus:bg-white"
                 : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
 
             // 선택창 옵션
@@ -117,9 +113,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
             // 칩 (버튼) - Inactive 상태 가독성 확실하게 수정
             chip: {
-                active: `bg-skin-primary ${buttonTextColor} border-skin-primary shadow-md`,
+                // Active: Skin Primary Background + Dynamic Text Color
+                active: `bg-skin-primary ${buttonTextColor} border-2 border-skin-primary shadow-md transform scale-105`,
+
+                // Inactive: White Background + Grey Border + Grey Text (Standard Light Button)
                 inactive: isLight
-                    ? "bg-stone-200/50 border-stone-400 text-stone-800 hover:border-skin-primary hover:text-skin-primary hover:bg-white transition-colors"
+                    ? "bg-white border-2 border-stone-300 text-stone-500 hover:border-skin-primary hover:text-skin-primary hover:bg-stone-50 transition-all font-bold"
                     : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
@@ -135,7 +134,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
     const styles = getThemeStyles();
 
-    // Dynamic Button Class
+    // Dynamic Button Class (Main Search Button)
     const themeButtonClass = `bg-skin-primary ${buttonTextColor} shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent`;
 
     // 추천 병원 로드 (동적 로딩)
