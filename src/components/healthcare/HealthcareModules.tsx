@@ -207,8 +207,8 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                         </div>
                     </div>
                 )}
+                )}
             </div>
-        </div>
         </section >
     );
 }

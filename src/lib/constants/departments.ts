@@ -228,9 +228,9 @@ export const DEPARTMENTS: Department[] = [
             accent: "#1E90FF",
             background: "#F8FAFC", // Very Light Slate
             text: "#1E3A8A", // Dark Blue
-            concept: "Engineering Blueprint",
-            texture: "blueprint",
-            font: "mono",
+            concept: "Engineering Balance",
+            texture: "glass",
+            font: "sans",
             sound: "/sounds/ruler.mp3"
         },
         keywords: ["관절", "척추", "물리치료", "도수치료"],
