@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { X, Camera, Sparkles } from "lucide-react";
-import HeroExperience from "./HeroExperience";
+
+// Dynamically import HeroExperience to avoid SSR issues with window/canvas
+const HeroExperience = dynamic(() => import("./HeroExperience"), { ssr: false });
 
 interface PhotoSlideOverProps {
     isOpen: boolean;
