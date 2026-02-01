@@ -47,6 +47,17 @@ export default function HealthcareLanding() {
     const config = useHospital();
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
+    // Theme Darkness Check
+    const isThemeDark = () => {
+        const hex = config.theme.background;
+        if (!hex || hex.length < 4) return false;
+        const h = hex.replace('#', '');
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+    };
+
     // Dynamic Icon for CTA
     const CtaIcon = ICON_MAP[config.marketing?.cta?.icon as string] || Sparkles;
 
@@ -68,7 +79,7 @@ export default function HealthcareLanding() {
                             <span className="text-2xl">✨</span>
                             <span
                                 className="text-xl font-bold tracking-wide"
-                                style={{ color: config.theme.text }}
+                                style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}
                             >
                                 {config.marketingName || config.name}
                             </span>
@@ -199,7 +210,7 @@ export default function HealthcareLanding() {
                                 <a
                                     href="#clinic-search"
                                     className="hover:opacity-80 text-sm font-medium inline-flex items-center gap-1 transition-opacity"
-                                    style={{ color: config.theme.text }}
+                                    style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}
                                 >
                                     {config.marketing?.searchKeyword || "유명한 의원 찾기"}
                                     <ChevronRight className="w-4 h-4" />
@@ -220,10 +231,10 @@ export default function HealthcareLanding() {
                 <section id="clinic-search" className="relative py-16">
                     <div className="w-full max-w-4xl px-6 md:px-0 md:pl-[clamp(48px,10vw,160px)] md:pr-[clamp(16px,8vw,180px)] mx-auto">
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: config.theme.text }}>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}>
                                 {config.marketing?.searchKeyword || "유명한 의원 찾기"}
                             </h2>
-                            <p className="text-sm opacity-70" style={{ color: config.theme.text }}>
+                            <p className="text-sm opacity-70" style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}>
                                 {config.address} {config.name}
                             </p>
                         </div>

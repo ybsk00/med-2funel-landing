@@ -182,12 +182,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#0EA5E9", // Slightly darker Sky Blue
+            primary: "#0EA5E9",
             secondary: "#38BDF8",
-            accent: "#0284C7",
-            background: "#F0F9FF", // Very Light Sky Blue
-            text: "#0C4A6E", // Dark Sky Blue
-            concept: "Super Clean Lab",
+            accent: "#00CED1",
+            background: "#020617", // Oceanic Black
+            text: "#F0F9FF", // Ice White
+            concept: "Premium Dark Lab",
             texture: "glass",
             font: "sans",
             sound: "/sounds/crystal.mp3"

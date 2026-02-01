@@ -75,10 +75,10 @@ export default function HealthcareContent() {
                         <span className="inline-block px-3 py-1 rounded-full bg-skin-primary/10 text-skin-primary text-xs font-bold uppercase tracking-wider mb-4 border border-skin-primary/20">
                             Session A · Check
                         </span>
-                        <h3 className="text-3xl md:text-4xl font-black text-skin-text mb-4 leading-tight">
+                        <h3 className={`text-3xl md:text-4xl font-black mb-4 leading-tight ${isThemeDark ? 'text-[#F0F9FF]' : 'text-skin-text'}`}>
                             {content.sessionA.title}
                         </h3>
-                        <p className="text-lg text-skin-text/70 mb-8 max-w-xl">
+                        <p className={`text-lg mb-8 max-w-xl ${isThemeDark ? 'text-[#F0F9FF]/70' : 'text-skin-text/70'}`}>
                             {content.sessionA.subtitle}
                         </p>
 
@@ -123,8 +123,8 @@ export default function HealthcareContent() {
                             <div className="w-12 h-12 rounded-2xl bg-skin-primary/10 flex items-center justify-center mb-6 text-skin-primary group-hover:scale-110 transition-transform duration-300">
                                 {idx === 0 ? <Sun className="w-6 h-6" /> : idx === 1 ? <Activity className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
                             </div>
-                            <h4 className={`text-xl font-bold mb-3 ${isThemeDark ? 'text-white' : 'text-slate-900'}`}>{card.title}</h4>
-                            <p className={`${isThemeDark ? 'text-gray-400' : 'text-slate-500'} leading-relaxed font-light`}>{card.description}</p>
+                            <h4 className={`text-xl font-bold mb-3 ${isThemeDark ? 'text-[#F0F9FF]' : 'text-slate-900'}`}>{card.title}</h4>
+                            <p className={`${isThemeDark ? 'text-[#F0F9FF]/70' : 'text-slate-500'} leading-relaxed font-light`}>{card.description}</p>
                         </div>
                     ))}
                 </div>
@@ -132,27 +132,27 @@ export default function HealthcareContent() {
 
             {/* Session C & Chat Integration */}
             <div className={`relative overflow-hidden rounded-[2.5rem] p-8 md:p-16 text-center shadow-2xl transition-all duration-500 ${isThemeDark
-                    ? 'bg-gradient-to-br from-skin-primary to-skin-accent text-white'
-                    : 'bg-white border border-stone-200'
+                ? 'bg-gradient-to-br from-skin-primary to-skin-accent text-white'
+                : 'bg-white border border-stone-200'
                 }`}>
                 <div className="relative z-10 max-w-3xl mx-auto space-y-6">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-md ${isThemeDark ? 'bg-white/20 text-white' : 'bg-skin-primary/10 text-skin-primary border border-skin-primary/20'
                         }`}>
                         Session C · Personal Plan
                     </span>
-                    <h3 className={`text-3xl md:text-5xl font-black mb-6 leading-tight ${isThemeDark ? 'text-white' : 'text-slate-900'
+                    <h3 className={`text-3xl md:text-5xl font-black mb-6 leading-tight ${isThemeDark ? 'text-[#F0F9FF]' : 'text-slate-900'
                         }`}>
                         {content.sessionC.title}
                     </h3>
-                    <p className={`text-lg md:text-xl leading-relaxed mb-8 ${isThemeDark ? 'text-white/80' : 'text-slate-600'
+                    <p className={`text-lg md:text-xl leading-relaxed mb-8 ${isThemeDark ? 'text-[#F0F9FF]/80' : 'text-slate-600'
                         }`}>
                         {content.sessionC.description}
                     </p>
                     <button
                         onClick={scrollToChat}
                         className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-95 ${isThemeDark
-                                ? 'bg-white text-skin-primary hover:bg-white/90'
-                                : 'bg-skin-primary text-white hover:bg-skin-accent'
+                            ? 'bg-white text-skin-primary hover:bg-white/90'
+                            : 'bg-skin-primary text-white hover:bg-skin-accent'
                             }`}
                     >
                         {content.sessionC.cta}
@@ -194,7 +194,7 @@ export default function HealthcareContent() {
                                 <span className="text-skin-primary">Q.</span>
                                 {faq.question}
                             </h5>
-                            <p className="text-skin-text/70 pl-8 leading-relaxed font-light">
+                            <p className={`pl-8 leading-relaxed font-light ${isThemeDark ? 'text-[#F0F9FF]/70' : 'text-skin-text/70'}`}>
                                 {faq.answer}
                             </p>
                         </div>

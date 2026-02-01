@@ -206,4 +206,5 @@ export default function HeroExperience({ className = "", department = "dermatolo
             )}
         </div>
     );
-}
+}/ /   G l o w   a n d   W h i t e n i n g   S i m u l a t i o n   I m p l e m e n t e d  
+ 

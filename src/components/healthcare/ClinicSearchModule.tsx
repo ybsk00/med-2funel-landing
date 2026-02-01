@@ -104,8 +104,8 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 : "bg-black/40 backdrop-blur-xl border-white/10",
 
             // 텍스트 기본 색상
-            textPrimary: isLight ? "text-stone-900" : "text-gray-100",
-            textSecondary: isLight ? "text-stone-600" : "text-gray-400",
+            textPrimary: isLight ? "text-stone-900" : "text-[#F0F9FF]",
+            textSecondary: isLight ? "text-stone-600" : "text-[#F0F9FF]/70",
             textAccent: "text-skin-primary",
 
             // 라벨 (입력폼 위)
@@ -114,7 +114,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
                 ? "bg-stone-50 border-2 text-stone-900 border-stone-200 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm transition-all focus:bg-white"
-                : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
+                : "bg-white/5 border border-white/10 text-[#F0F9FF] focus:border-skin-primary placeholder:text-white/20",
 
             // 선택창 옵션
             select: {
@@ -515,7 +515,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                             <div className="relative z-10">
                                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                                     <div className="flex-1">
-                                                        <h3 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">
+                                                        <h3 className="text-3xl md:text-4xl font-black text-[#F0F9FF] mb-4 tracking-tight">
                                                             {recommendedClinic.name}
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mb-6">
