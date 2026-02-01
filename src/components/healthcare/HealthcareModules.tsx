@@ -206,7 +206,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                         const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
                         return (
-                            <div key={module.id} className="flex">
+                            <div key={module.id} className="flex h-full">
                                 <CardComponent
                                     id={module.id}
                                     title={module.title}
@@ -215,13 +215,12 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                                     color={module.color}
                                     sound={sound}
                                     onClick={() => handleModuleClick(module.id)}
+                                    isDark={isThemeDark}
                                 />
                             </div>
                         );
                     })}
                 </div>
-
-
 
                 {/* Inline Chat Area */}
                 {selectedTopic && (
