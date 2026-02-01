@@ -223,7 +223,7 @@ export default function HealthcareLanding() {
 
                 {/* Healthcare Content reinforcing Sessions A-D */}
                 <section className="py-12 bg-skin-bg relative z-20">
-                    <HealthcareContent config={config} />
+                    <HealthcareContent />
                 </section>
 
                 {/* Modules Grid */}
