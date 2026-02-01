@@ -38,7 +38,7 @@ export default function HealthcareContent() {
         // Session A Checklist Items
         checkItem: isThemeDark
             ? "bg-white/5 border border-white/10 hover:border-skin-primary/50"
-            : "bg-white border border-stone-100 shadow-sm hover:border-skin-primary hover:shadow-md",
+            : "bg-skin-primary/5 border border-skin-primary/10 shadow-sm hover:bg-skin-primary/10 hover:border-skin-primary transition-all",
 
         // Session B Guide Cards
         guideCard: isThemeDark
@@ -48,7 +48,7 @@ export default function HealthcareContent() {
         // Session D FAQ Items
         faqItem: isThemeDark
             ? "bg-white/5 border border-white/5 hover:bg-white/10"
-            : "bg-white border border-stone-200 hover:bg-stone-50 shadow-sm"
+            : "bg-skin-primary/5 border border-skin-primary/5 hover:bg-skin-primary/10 shadow-sm"
     };
 
     if (!content) return null;
@@ -96,7 +96,10 @@ export default function HealthcareContent() {
                         <div className="mt-8">
                             <button
                                 onClick={scrollToChat}
-                                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-skin-primary text-white font-bold text-lg hover:bg-skin-accent transition-all shadow-lg shadow-skin-primary/20 active:scale-95"
+                                className={`inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 ${isThemeDark
+                                        ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
+                                        : "bg-skin-primary text-white hover:bg-skin-accent shadow-skin-primary/20"
+                                    }`}
                             >
                                 {content.sessionA.cta}
                                 <ArrowRight className="w-5 h-5" />
@@ -151,7 +154,7 @@ export default function HealthcareContent() {
                     <button
                         onClick={scrollToChat}
                         className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-95 ${isThemeDark
-                            ? 'bg-white text-skin-primary hover:bg-white/90'
+                            ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20'
                             : 'bg-skin-primary text-white hover:bg-skin-accent'
                             }`}
                     >
