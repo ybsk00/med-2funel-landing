@@ -10,20 +10,21 @@ interface CardProps {
     description: string;
     icon: any;
     color: string;
+    onClick?: () => void;
 }
 
-export default function VipCard({ id, title, description, icon: Icon, color }: CardProps) {
+export default function VipCard({ id, title, description, icon: Icon, color, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: '/sounds/tick.mp3', // Example sound
         vibration: 'light'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-black/80 backdrop-blur-md rounded-xl p-8 border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-500 hover:transform hover:-translate-y-1 shadow-2xl hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]">
                 {/* Gold Frame Effect */}
@@ -49,6 +50,6 @@ export default function VipCard({ id, title, description, icon: Icon, color }: C
                     <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-tr from-transparent via-[#D4AF37]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

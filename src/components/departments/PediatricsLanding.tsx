@@ -6,9 +6,12 @@ import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
 import { useState } from "react";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function PediatricsLanding() {
     const config = getDepartmentConfig("pediatrics");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -64,6 +67,8 @@ export default function PediatricsLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="pediatrics" />
+
                 <HealthcareNavigation config={jellyConfig} />
 
                 <main className="relative overflow-hidden">
@@ -74,7 +79,7 @@ export default function PediatricsLanding() {
                         <div className="absolute bottom-40 right-10 w-32 h-32 bg-pink-100/50 rounded-full animate-float blur-sm z-20 pointer-events-none" style={{ animationDelay: '1s' }}></div>
                         <div className="absolute top-40 right-20 w-16 h-16 bg-yellow-100/50 rounded-full animate-float blur-sm z-20 pointer-events-none" style={{ animationDelay: '2s' }}></div>
 
-                        <HealthcareHero config={jellyConfig} />
+                        <HealthcareHero config={jellyConfig} onOpenCamera={open} />
                     </div>
 
                     {/* Modules Section - Jelly Card Style */}

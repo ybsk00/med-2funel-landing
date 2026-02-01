@@ -10,20 +10,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function FlowerCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function FlowerCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'light'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-white rounded-tr-[3rem] rounded-bl-[3rem] p-8 border border-rose-100 shadow-sm hover:shadow-[0_20px_40px_-5px_rgba(255,182,193,0.3)] transition-all duration-500 overflow-hidden relative">
                 {/* Petal Layer Effect */}
@@ -45,6 +46,6 @@ export default function FlowerCard({ id, title, description, icon: Icon, color, 
                     </p>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

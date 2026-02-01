@@ -29,6 +29,7 @@ type ChatInterfaceProps = {
     onExternalMessageSent?: () => void;
     onAction?: (action: ActionType, data?: any) => void;
     onTabHighlight?: (tabs: ('review' | 'map')[]) => void;
+    topic?: string; // NEW: Inline topic override
 };
 
 // 모듈 아이콘/컬러 매핑
@@ -45,7 +46,7 @@ import { useHospital } from "@/components/common/HospitalProvider";
 export default function ChatInterface(props: ChatInterfaceProps) {
     const config = useHospital();
     const searchParams = useSearchParams();
-    const rawTopic = searchParams.get("topic");
+    const rawTopic = props.topic || searchParams.get("topic"); // Use prop if available
     const topic = sanitizeTopic(rawTopic);
     const { track } = useMarketingTracker();
 

@@ -4,104 +4,105 @@ import { HospitalProvider } from "@/components/common/HospitalProvider";
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
-import { getDepartmentConfig } from "@/lib/config/factory";
-import { useState } from "react";
-import PrivacyScreen from "@/components/ui/PrivacyScreen";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
+import { getDepartmentConfig } from "@/lib/config/factory";
 
 export default function PlasticSurgeryLanding() {
     const config = getDepartmentConfig("plastic-surgery");
-    const [isLocked, setIsLocked] = useState(true);
     const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Define custom high-end theme config for this specific page override
-    const luxuryConfig = {
+    // Custom theme config for Plastic Surgery (Mint/Glass Style now)
+    const glassConfig = {
         ...config,
         theme: {
             ...config.theme,
-            primary: "#d4af37", // Gold
-            secondary: "#b88a7d", // Rose Copper
-            background: "#1a1614", // Luxury Dark
-            text: "#ffffff"
+            primary: "#13eca4",
+            primaryDark: "#0eb57d",
+            background: "#f0fdf9", // Very pale mint/white
+            text: "#111816",
+            font: "sans",
+            texture: "glass"
         }
     };
 
     return (
-        <HospitalProvider initialConfig={luxuryConfig}>
-            <div className={`min-h-screen bg-[#1a1614] text-white selection:bg-[#b88a7d]/30 font-sans ${isLocked ? 'overflow-hidden h-screen' : ''}`}>
-                {/* Custom Theme Injection from Reference Design */}
+        <HospitalProvider initialConfig={glassConfig}>
+            <div className="min-h-screen bg-[#f0fdf9] text-[#111816] font-sans selection:bg-[#13eca4]/30">
+                {/* Custom Theme Injection for Plastic Surgery */}
                 <style jsx global>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
-
                     :root {
-                        --font-serif: "Playfair Display", serif;
-                        --font-sans: "Inter", sans-serif;
-                        --texture-silk: url('/textures/silk.png');
-                        --color-gold: #d4af37;
-                        --color-rose-copper: #b88a7d;
-                        --color-luxury-dark: #1a1614;
+                        --color-primary: #13eca4;
+                        --glass-border: rgba(255, 255, 255, 0.5);
+                    }
+                    
+                    /* Shimmer Effect */
+                    @keyframes shimmer {
+                        0% { background-position: -200% 0; }
+                        100% { background-position: 200% 0; }
+                    }
+                    .animate-shimmer {
+                        background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+                        background-size: 200% 100%;
+                        animation: shimmer 3s infinite linear;
                     }
 
-                    .font-serif { font-family: var(--font-serif); }
-                    .font-sans { font-family: var(--font-sans); }
-                    
-                    /* Gold Text Gradient Animation */
-                    .text-gradient-gold {
-                        background: linear-gradient(to right, #aa8c2c, #d4af37, #aa8c2c);
-                        -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        background-clip: text;
-                        background-size: 200% auto;
-                        animation: shine 5s linear infinite;
+                    /* Hologram Gradient */
+                    .bg-hologram {
+                        background-image: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
                     }
-                    @keyframes shine {
-                        to { background-position: 200% center; }
+                    
+                    /* Glass Card */
+                    .glass-card {
+                        background: rgba(255, 255, 255, 0.4);
+                        backdrop-filter: blur(12px);
+                        border: 1px solid rgba(255, 255, 255, 0.6);
+                        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+                        transition: all 0.5s ease;
+                    }
+                    .glass-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 15px 40px 0 rgba(19, 236, 164, 0.15);
+                        background: linear-gradient(45deg, rgba(19, 236, 164, 0.05) 0%, rgba(160, 210, 255, 0.05) 50%, rgba(220, 180, 255, 0.05) 100%);
                     }
                 `}</style>
 
-                <PhotoSlideOver isOpen={opened} onClose={close} />
+                <PhotoSlideOver isOpen={opened} onClose={close} department="plastic-surgery" />
 
-                <PrivacyScreen
-                    isLocked={isLocked}
-                    onUnlock={() => setIsLocked(false)}
-                    title="AESTHETICA"
-                    subtitle="VERIFYING VIP MEMBERSHIP..."
-                />
+                <HealthcareNavigation config={glassConfig} />
 
-                <HealthcareNavigation config={luxuryConfig} />
-
-                <main className="relative">
-                    {/* Hero Section with Custom Branding */}
+                <main className="relative overflow-hidden pt-20">
+                    {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero
-                            config={luxuryConfig}
-                            onOpenCamera={open}
-                        />
-                        {/* Extra Branding Overlay - Gold/Dark Gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none mix-blend-multiply"></div>
+                        <HealthcareHero config={glassConfig} onOpenCamera={open} />
+                        {/* Overlay removed as requested */}
                     </div>
 
-                    {/* Modules Section - VIP Card Style */}
-                    <section className="py-24 px-4 relative overflow-hidden bg-[#1a1614]">
-                        {/* Decorative Background Elements from Reference */}
-                        <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#b88a7d]/10 to-transparent pointer-events-none"></div>
-                        <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none"></div>
+                    {/* Modules Section - Glass Cards */}
+                    <section className="py-24 px-4 relative">
+                        {/* Decorative Blobs */}
+                        <div className="absolute top-0 left-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#13eca4]/5 blur-[100px]"></div>
+                        <div className="absolute bottom-0 right-0 -z-10 h-[500px] w-[500px] translate-x-1/3 translate-y-1/3 rounded-full bg-purple-200/20 blur-[100px]"></div>
 
                         <div className="max-w-7xl mx-auto relative z-10">
-                            <div className="text-center mb-16">
-                                <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 text-white leading-tight">
-                                    The Golden Ratio of <span className="text-gradient-gold italic">Beauty</span>
+                            <div className="mb-16 text-center">
+                                <div className="inline-flex items-center rounded-full border border-[#13eca4]/30 bg-white/40 px-3 py-1 text-sm font-medium text-[#0eb57d] backdrop-blur-md mb-4">
+                                    <span className="mr-2 h-2 w-2 rounded-full bg-[#13eca4] animate-pulse"></span>
+                                    Plastic Surgery
+                                </div>
+                                <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 mb-4">
+                                    AESTHETICA <span className="text-[#13eca4] font-light">PLASTIC</span>
                                 </h2>
-                                <div className="w-24 h-1 bg-gradient-to-r from-[#d4af37] to-transparent mx-auto mb-8"></div>
-                                <p className="text-[#e8dcd9] text-lg font-light max-w-2xl mx-auto leading-relaxed">
-                                    {config.catchphrase || "Redefining confidence with mathematical precision and absolute privacy."}
+                                <p className="text-slate-600 max-w-2xl mx-auto text-lg font-light">
+                                    Experience the clarity of natural beauty with our advanced aesthetic technology.
                                 </p>
                             </div>
 
-                            <HealthcareModules config={luxuryConfig} />
+                            <div className="[&>div]:gap-8">
+                                <HealthcareModules config={glassConfig} />
+                            </div>
                         </div>
                     </section>
                 </main>

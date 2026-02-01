@@ -11,20 +11,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function BlueprintCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function BlueprintCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'medium'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-[#000080] text-blue-100 rounded-none p-6 relative overflow-hidden transition-all duration-300 hover:bg-[#000090] border-2 border-white/20">
                 {/* Grid Overlay */}
@@ -64,6 +65,6 @@ export default function BlueprintCard({ id, title, description, icon: Icon, colo
                     </div>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

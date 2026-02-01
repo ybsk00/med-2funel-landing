@@ -17,6 +17,7 @@ interface Clinic {
     openToday?: boolean;
     night?: boolean;
     holiday?: boolean;
+    isRecommended?: boolean; // 추천 병원 여부 추가
 }
 
 // 검색 상태
@@ -54,8 +55,17 @@ function isHoliday(): boolean {
     return false;
 }
 
-export default function ClinicSearchModule() {
+import { getRecommendedClinic } from "@/lib/config/marketing";
+
+interface ClinicSearchModuleProps {
+    department?: string; // 부서 ID 추가
+}
+
+export default function ClinicSearchModule({ department = "dermatology" }: ClinicSearchModuleProps) {
     const config = useHospital();
+
+    // 추천 병원 로드
+    const recommendedClinic = getRecommendedClinic(department, config);
     // 지역 선택
     const [selectedCity, setSelectedCity] = useState("서울");
     const [selectedRegion, setSelectedRegion] = useState("강남구");
@@ -108,6 +118,25 @@ export default function ClinicSearchModule() {
             }
 
             let results: Clinic[] = data.clinics || [];
+
+            // 0. 추천 병원 최우선 주입 (환경변수 매칭 시)
+            if (recommendedClinic) {
+                // 지역 매칭 로직 (서울이면 강남구 등 주요 구에 노출, 경기도면 전체 노출 등)
+                // 사용자가 선택한 지역이 추천 병원의 타겟 지역과 맞는지 확인
+                // 여기서는 간단하게 "무조건 상단 노출" 하되, 도시(City)만 맞으면 보여주는 식으로 구현
+
+                // 만약 추천 병원이 '현재 병원'이면 주소가 있으므로 주소 기반 매칭
+                const isRegionMatch = recommendedClinic.addr.includes(selectedCity) ||
+                    (selectedCity === "서울" && TARGET_REGIONS.includes(selectedRegion)) ||
+                    recommendedClinic.addr === "프리미엄 추천 위치"; // 외부 병원은 항상 노출
+
+                if (isRegionMatch) {
+                    // 중복 제거
+                    results = results.filter(c => c.name !== recommendedClinic.name);
+                    // 최상단 추가
+                    results.unshift(recommendedClinic);
+                }
+            }
 
             // 피부과 관련 키워드 필터
             results = results.filter((c) =>
@@ -326,30 +355,30 @@ export default function ClinicSearchModule() {
                             {/* 성공 - 결과 리스트 */}
                             {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
                                 <div className="space-y-4">
-                                    {/* 에버피부과 추천 카드 (타겟 지역에서만 표시) */}
-                                    {TARGET_REGIONS.includes(selectedRegion) && (
-                                        <div className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30">
+                                    {/* 추천 병원 카드 (isRecommended 플래그 기반) */}
+                                    {clinics.filter(c => c.isRecommended).map((recClinic, idx) => (
+                                        <div key={`rec-${idx}`} className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30 mb-4 h-full">
                                             <span className="absolute -top-3 left-4 px-3 py-1 bg-pink-500 text-white text-xs font-bold rounded-full shadow-lg z-10 border border-skin-bg">
-                                                적합 피부과
+                                                적합 의원
                                             </span>
 
                                             <div className="pt-2">
                                                 <div className="flex items-start justify-between gap-4">
                                                     <div className="flex-1">
                                                         <h3 className="text-lg font-bold text-white">
-                                                            {config.name}
+                                                            {recClinic.name}
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
-                                                                프리미엄 케어
+                                                                공공 포털 인증
                                                             </span>
                                                             <span className="px-2 py-0.5 bg-skin-primary/30 text-skin-primary text-xs font-medium rounded-full">
-                                                                피부미용 전문
+                                                                오늘 운영
                                                             </span>
                                                         </div>
                                                         <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
                                                             <MapPin size={14} />
-                                                            {config.address}
+                                                            {recClinic.addr}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -362,7 +391,7 @@ export default function ClinicSearchModule() {
                                                         상담 예약
                                                     </button>
                                                     <a
-                                                        href={`tel:${config.tel}`}
+                                                        href={`tel:${recClinic.tel}`}
                                                         className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
                                                     >
                                                         <Phone size={16} />
@@ -371,7 +400,7 @@ export default function ClinicSearchModule() {
                                                 </div>
                                             </div>
                                         </div>
-                                    )}
+                                    ))}
 
                                     {/* 변동 고지 문구 */}
                                     <p className="text-xs text-skin-subtext/70 text-center bg-white/5 rounded-lg py-2">

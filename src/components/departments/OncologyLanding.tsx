@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function OncologyLanding() {
     const config = getDepartmentConfig("cancer_center"); // Assuming 'cancer_center' is key, or 'oncology' if mapped
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -49,15 +52,17 @@ export default function OncologyLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="cancer_center" />
+
                 <HealthcareNavigation config={linenConfig} />
 
                 <main className="relative bg-linen-texture pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10 p-4 md:p-8">
                         <div className="max-w-[1440px] mx-auto rounded-3xl overflow-hidden relative shadow-xl border border-white/50">
-                            <HealthcareHero config={linenConfig} />
-                            {/* Warm Overlay */}
-                            <div className="absolute inset-0 bg-[#F5F2ED]/20 pointer-events-none z-20 mix-blend-overlay"></div>
+                            <HealthcareHero config={linenConfig} onOpenCamera={open} />
+                            {/* Warm Overlay - REMOVED */}
+                            {/* <div className="absolute inset-0 bg-[#F5F2ED]/20 pointer-events-none z-20 mix-blend-overlay"></div> */}
                         </div>
                     </div>
 

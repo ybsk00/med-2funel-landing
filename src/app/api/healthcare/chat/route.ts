@@ -7,43 +7,8 @@ export async function POST(req: NextRequest) {
     try {
         const { message, history, turnCount, topic, entryIntent } = await req.json();
 
-        // 1. 의료 키워드/증상 감지 - 즉시 로그인 유도 (AI 답변 생성 없이 즉시 리턴)
-        const hasMedicalQuestion = MEDICAL_KEYWORDS.some(keyword =>
-            message.toLowerCase().includes(keyword.toLowerCase())
-        );
-
-        if (hasMedicalQuestion) {
-            return NextResponse.json({
-                role: "ai",
-                content: "말씀하신 내용은 **의료 상담 영역**이라 이 단계에서는 답변드리기 어렵습니다.\n\n지금까지 정리한 내용을 저장하고, 로그인 후 더 정확한 확인을 진행하시는 게 안전합니다.\n\n로그인하시겠습니까?",
-                requireLogin: true,
-                isSymptomTrigger: true
-            });
-        }
-
-        // 2. 피부과 고민 자유발화 감지 - 공감 응답 + 로그인 유도
-        const skinConcern = detectSkinConcern(message);
-
-        if (skinConcern.hasConcern) {
-            // AI에게 특별 지시를 주어 공감 + 로그인 유도 응답 생성
-            const concernPrompt = getSkinConcernResponsePrompt(skinConcern.concernType, skinConcern.isProcedure);
-
-            const fullPrompt = `
-${concernPrompt}
-
-사용자: ${message}
-AI:
-`;
-            const responseText = await generateText(fullPrompt, "healthcare");
-
-            return NextResponse.json({
-                role: "ai",
-                content: responseText.trim(),
-                requireLogin: true,
-                isSkinConcernRedirect: true,
-                concernType: skinConcern.concernType
-            });
-        }
+        // 1. Guardrails Removed - Direct AI Chat
+        // 의료 키워드 차단 및 피부 고민 감지 로직 제거하고 AI가 자유롭게 답변하도록 함.
 
         // 3. 5턴째 (마지막 턴) - 종합 분석 및 결과 제공
         if (turnCount === 4) {

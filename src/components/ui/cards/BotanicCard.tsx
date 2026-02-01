@@ -11,20 +11,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function BotanicCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function BotanicCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'light'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-[#FAFAF9] rounded-lg p-6 border border-stone-200 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group-hover:-translate-y-1">
                 {/* Botanic Texture Overlay */}
@@ -53,6 +54,6 @@ export default function BotanicCard({ id, title, description, icon: Icon, color,
                     </p>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

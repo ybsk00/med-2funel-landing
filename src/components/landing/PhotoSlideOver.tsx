@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Camera } from "lucide-react";
+import { X, Camera, Sparkles } from "lucide-react";
 import HeroExperience from "./HeroExperience";
 
 interface PhotoSlideOverProps {
     isOpen: boolean;
     onClose: () => void;
+    department?: string;
 }
 
-export default function PhotoSlideOver({ isOpen, onClose }: PhotoSlideOverProps) {
+export default function PhotoSlideOver({ isOpen, onClose, department = "dermatology" }: PhotoSlideOverProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -74,8 +75,8 @@ export default function PhotoSlideOver({ isOpen, onClose }: PhotoSlideOverProps)
                 {/* 헤더 */}
                 <div className="flex items-center justify-between p-4 border-b border-white/10">
                     <div className="flex items-center gap-2">
-                        <Camera className="w-5 h-5 text-skin-primary" />
-                        <span className="font-semibold text-skin-text">사진으로 스타일 보기</span>
+                        <Sparkles className="w-5 h-5 text-skin-primary" />
+                        <span className="font-semibold text-skin-text">AI 시뮬레이션</span>
                     </div>
                     <button
                         onClick={onClose}
@@ -87,7 +88,7 @@ export default function PhotoSlideOver({ isOpen, onClose }: PhotoSlideOverProps)
 
                 {/* 콘텐츠 */}
                 <div className="h-[calc(100%-65px)] overflow-y-auto p-4 overscroll-y-contain">
-                    <HeroExperience />
+                    <HeroExperience department={department} />
 
                     {/* 내 사진 업로드 버튼 */}
                     <div className="mt-6 pt-4 border-t border-white/10">

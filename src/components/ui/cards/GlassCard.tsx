@@ -11,20 +11,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function GlassCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function GlassCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'medium'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-white/40 backdrop-blur-xl rounded-2xl p-6 border border-white/60 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] hover:shadow-[0_8px_32px_0_rgba(6,182,212,0.15)] hover:border-cyan-200 transition-all duration-300 group-hover:-translate-y-1">
                 <div className="relative z-10 flex flex-col h-full">
@@ -46,6 +47,6 @@ export default function GlassCard({ id, title, description, icon: Icon, color, s
                     <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

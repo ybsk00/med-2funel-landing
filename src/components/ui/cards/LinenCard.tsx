@@ -10,20 +10,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function LinenCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function LinenCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'light'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-[#FAF0E6] p-8 shadow-sm hover:shadow-[0_10px_30px_-10px_rgba(218,165,32,0.2)] transition-shadow duration-500 relative">
                 {/* Linen Texture */}
@@ -45,6 +46,6 @@ export default function LinenCard({ id, title, description, icon: Icon, color, s
                     </p>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

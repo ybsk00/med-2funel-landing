@@ -27,19 +27,7 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                 >
                     <source src={config.video || config.videoSource || "/2.mp4"} type="video/mp4" />
                 </video>
-                {/* Overlays - Dynamic Background Based */}
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: `linear-gradient(to right, ${config.theme.background}E6, ${config.theme.background}B3, ${config.theme.background}66)`
-                    }}
-                />
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: `linear-gradient(to bottom, ${config.theme.background}4D, transparent, ${config.theme.background}CC)`
-                    }}
-                />
+                {/* Overlays - Dynamic Background Based - REMOVED for visibility */}
             </div>
 
             {/* Hero Content - 1컬럼 중앙 정렬 */}
@@ -82,15 +70,15 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
 
                     {/* CTA 3종 */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                        {/* Primary CTA - 사진으로 스타일 보기 */}
+                        {/* Primary CTA - AI 시뮬레이션 */}
                         {onOpenCamera && (
                             <button
                                 onClick={onOpenCamera}
                                 className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                                 style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
                             >
-                                <Camera className="w-5 h-5" />
-                                사진으로 스타일 보기
+                                <Sparkles className="w-5 h-5" />
+                                AI 시뮬레이션 보기
                             </button>
                         )}
 

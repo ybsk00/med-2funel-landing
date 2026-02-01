@@ -6,8 +6,12 @@ import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
 
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
+
 export default function InternalMedicineLanding() {
     const config = getDepartmentConfig("internal_medicine");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -41,15 +45,17 @@ export default function InternalMedicineLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="internal_medicine" />
+
                 <HealthcareNavigation config={botanicConfig} />
 
                 <main className="relative pt-20">
                     {/* Hero Section with Natural Gradient */}
                     <div className="relative z-10 p-4 md:p-8">
                         <div className="max-w-[1440px] mx-auto rounded-3xl overflow-hidden relative shadow-2xl">
-                            <HealthcareHero config={botanicConfig} />
-                            {/* Green Overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a2f]/80 to-transparent pointer-events-none z-20 mix-blend-multiply"></div>
+                            <HealthcareHero config={botanicConfig} onOpenCamera={open} />
+                            {/* Green Overlay - REMOVED */}
+                            {/* <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a2f]/80 to-transparent pointer-events-none z-20 mix-blend-multiply"></div> */}
                         </div>
                     </div>
 

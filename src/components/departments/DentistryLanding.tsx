@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function DentistryLanding() {
     const config = getDepartmentConfig("dentistry");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -69,14 +72,16 @@ export default function DentistryLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="dentistry" />
+
                 <HealthcareNavigation config={iceConfig} />
 
                 <main className="relative bg-ice-pattern pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero config={iceConfig} />
-                        {/* Ice Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/80 pointer-events-none"></div>
+                        <HealthcareHero config={iceConfig} onOpenCamera={open} />
+                        {/* Ice Overlay - REMOVED */}
+                        {/* <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/80 pointer-events-none"></div> */}
                     </div>
 
                     {/* Modules Section */}

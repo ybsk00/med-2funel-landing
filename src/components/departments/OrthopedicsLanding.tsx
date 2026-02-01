@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function OrthopedicsLanding() {
     const config = getDepartmentConfig("orthopedics");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -66,15 +69,17 @@ export default function OrthopedicsLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="orthopedics" />
+
                 <HealthcareNavigation config={blueprintConfig} />
 
                 <main className="relative bg-grid-pattern pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10 p-4 md:p-8">
                         <div className="max-w-[1440px] mx-auto rounded-2xl overflow-hidden relative">
-                            <HealthcareHero config={blueprintConfig} />
-                            {/* Grid Overlay on Hero */}
-                            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwdi41aDM5LjV2MzlIMHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==')] pointer-events-none z-20"></div>
+                            <HealthcareHero config={blueprintConfig} onOpenCamera={open} />
+                            {/* Grid Overlay on Hero - REMOVED */}
+                            {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwdi41aDM5LjV2MzlIMHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==')] pointer-events-none z-20"></div> */}
                         </div>
                     </div>
 

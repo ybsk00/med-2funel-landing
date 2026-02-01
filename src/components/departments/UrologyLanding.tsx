@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function UrologyLanding() {
     const config = getDepartmentConfig("urology");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -48,14 +51,16 @@ export default function UrologyLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="urology" />
+
                 <HealthcareNavigation config={cyberConfig} />
 
                 <main className="relative bg-carbon-pattern pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10 w-full overflow-hidden">
-                        <HealthcareHero config={cyberConfig} />
-                        {/* Dark Overlay/Scanliens */}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none"></div>
+                        <HealthcareHero config={cyberConfig} onOpenCamera={open} />
+                        {/* Dark Overlay/Scanliens - REMOVED */}
+                        {/* <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-20 bg-[length:100%_2px,3px_100%] pointer-events-none"></div> */}
                     </div>
 
                     {/* Stats / Modules Section */}

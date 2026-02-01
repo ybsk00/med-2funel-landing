@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function KoreanMedicineLanding() {
     const config = getDepartmentConfig("korean-medicine");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -54,14 +57,16 @@ export default function KoreanMedicineLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="korean-medicine" />
+
                 <HealthcareNavigation config={hanjiConfig} />
 
                 <main className="relative bg-hanji pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        {/* Ink Diffusion Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#FBF7F2]/90 via-[#FBF7F2]/40 to-transparent pointer-events-none z-20"></div>
-                        <HealthcareHero config={hanjiConfig} />
+                        {/* Ink Diffusion Overlay - REMOVED */}
+                        {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FBF7F2]/90 via-[#FBF7F2]/40 to-transparent pointer-events-none z-20"></div> */}
+                        <HealthcareHero config={hanjiConfig} onOpenCamera={open} />
                     </div>
 
                     {/* Philosophy / Modules Section */}

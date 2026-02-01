@@ -5,9 +5,12 @@ import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function NeurosurgeryLanding() {
     const config = getDepartmentConfig("neurosurgery");
+    const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
@@ -53,14 +56,15 @@ export default function NeurosurgeryLanding() {
                     }
                 `}</style>
 
+                <PhotoSlideOver isOpen={opened} onClose={close} department="neurosurgery" />
+
                 <HealthcareNavigation config={neuroConfig} />
 
                 <main className="relative bg-neural-grid pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
-                        <HealthcareHero config={neuroConfig} />
-                        {/* Holographic Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent pointer-events-none z-20"></div>
+                        <HealthcareHero config={neuroConfig} onOpenCamera={open} />
+                        {/* Holographic Overlay - REMOVED */}
                         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none z-10"></div>
                     </div>
 

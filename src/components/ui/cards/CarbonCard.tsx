@@ -11,20 +11,21 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function CarbonCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function CarbonCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'heavy'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left", onMouseEnter: handleHover, onClick: handleClick };
+
     return (
-        <Link
-            href={`healthcare/chat?topic=${id}`}
-            className="group relative block h-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left"
-            onMouseEnter={handleHover}
-            onClick={handleClick}
+        <Container
+            {...props as any}
         >
             <div className="h-full bg-zinc-900 rounded-xl p-8 relative overflow-hidden transition-all duration-300 border-l-4 border-indigo-600 hover:border-lime-400 shadow-[10px_10px_0_0_rgba(79,70,229,0.2)] hover:shadow-[10px_10px_0_0_rgba(163,230,53,0.3)]">
                 {/* Carbon Texture */}
@@ -53,6 +54,6 @@ export default function CarbonCard({ id, title, description, icon: Icon, color, 
                     </div>
                 </div>
             </div>
-        </Link>
+        </Container>
     );
 }

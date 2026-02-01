@@ -23,6 +23,8 @@ export interface HospitalConfig {
     fax: string;
     businessNumber: string;
     naverSearchKeyword: string;
+    id?: string; // Department ID
+    dept?: string; // Department Name (Label)
 
     personas: {
         healthcare: PersonaConfig;

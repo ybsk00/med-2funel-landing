@@ -11,16 +11,27 @@ interface CardProps {
     icon: any;
     color: string;
     sound?: string;
+    onClick?: () => void;
 }
 
-export default function JellyCard({ id, title, description, icon: Icon, color, sound }: CardProps) {
+export default function JellyCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'medium'
     });
 
+    const Container = onClick ? 'div' : Link;
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "" } : { href: `healthcare/chat?topic=${id}`, onMouseEnter: handleHover, onClick: handleClick };
+    // JellyCard has the className on the Container for Link, but Link wraps motion.div. Wait, in original code Link wraps motion.div.
+    // I need to be careful. The Link has NO className in the original code, but it accepts onMouseEnter/onClick.
+    // The className is on motion.div.
+    // Correction: In original code: <Link href... onMouseEnter... onClick...><motion.div ... className="..."></motion.div></Link>
+    // So if it's a div, it just wraps motion.div.
+
     return (
-        <Link href={`healthcare/chat?topic=${id}`} onMouseEnter={handleHover} onClick={handleClick}>
+        <Container
+            {...props as any}
+        >
             <motion.div
                 whileHover={{ scale: 1.05, rotate: 1 }}
                 whileTap={{ scale: 0.95 }}
@@ -44,6 +55,6 @@ export default function JellyCard({ id, title, description, icon: Icon, color, s
                     </p>
                 </div>
             </motion.div>
-        </Link>
+        </Container>
     );
 }
