@@ -205,7 +205,15 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         "ent": "이비인후과"
     };
 
-    const targetKeyword = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과"; // 키워드 자동 매핑
+    // 검색어 결정 로직 (하드코딩 제거 및 환경설정 기반 동적 적용)
+    const resolveKeyword = () => {
+        if (searchKeyword) return searchKeyword;
+        if (department && DEPARTMENT_KEYWORDS[department]) return DEPARTMENT_KEYWORDS[department];
+        if (config?.name) return config.name; // 환경설정의 병원명 사용 (ex: 소아과, 내과)
+        return "병원";
+    };
+
+    const targetKeyword = resolveKeyword();
     const [searchTerm, setSearchTerm] = useState(targetKeyword);
     const debouncedSearch = searchTerm;
 
@@ -229,8 +237,8 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 qt = "8";
             }
 
-            // 키워드 조합 (피부과 관련)
-            const qn = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과";
+            // 키워드 조합 (동적 적용)
+            const qn = targetKeyword;
 
             const params = new URLSearchParams({
                 q0: selectedCity,
@@ -307,7 +315,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             );
             setSearchState("error");
         }
-    }, [holidayOpen, nightOpen, selectedCity, selectedRegion, autoExpanded, searchKeyword, department, recommendedClinic]);
+    }, [holidayOpen, nightOpen, selectedCity, selectedRegion, autoExpanded, searchKeyword, department, recommendedClinic, targetKeyword]);
 
     // 상담 연결 클릭
     const handleConnect = () => {
@@ -421,7 +429,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         ) : (
                             <>
                                 <Search className="w-6 h-6 mr-3" />
-                                오늘 운영 {DEPARTMENT_KEYWORDS[department] || "병원"} 확인
+                                운영병원 찾기
                             </>
                         )}
                     </button>
