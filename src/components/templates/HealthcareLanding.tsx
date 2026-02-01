@@ -39,6 +39,8 @@ const ICON_MAP: Record<string, any> = {
     'Battery': Battery
 };
 
+import PremiumBackground from "@/components/ui/backgrounds/PremiumBackground";
+
 export default function HealthcareLanding() {
     const config = useHospital();
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
@@ -49,12 +51,14 @@ export default function HealthcareLanding() {
     return (
         <TrackF1View>
             <div
-                className={`min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700 bg-texture-${config.theme.texture || 'default'}`}
+                className={`min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700`}
                 style={{
-                    backgroundColor: config.theme.background,
+                    // Background handled by PremiumBackground
                     color: config.theme.text
                 }}
             >
+                <PremiumBackground colors={config.theme} intensity="subtle" />
+
                 {/* Navigation */}
                 <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-white/10" style={{ backgroundColor: `${config.theme.background}cc` }}>
                     <div className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">

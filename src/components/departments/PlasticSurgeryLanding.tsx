@@ -8,6 +8,7 @@ import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
 import { getDepartmentConfig } from "@/lib/config/factory";
+import PremiumBackground from "@/components/ui/backgrounds/PremiumBackground";
 
 export default function PlasticSurgeryLanding() {
     const config = getDepartmentConfig("plastic-surgery");
@@ -74,18 +75,17 @@ export default function PlasticSurgeryLanding() {
 
                 <HealthcareNavigation config={glassConfig} />
 
+                <PremiumBackground colors={glassConfig.theme} intensity="strong" />
+
                 <main className="relative overflow-hidden pt-20">
                     {/* Hero Section */}
                     <div className="relative z-10">
                         <HealthcareHero config={glassConfig} onOpenCamera={open} />
-                        {/* Overlay removed as requested */}
                     </div>
 
                     {/* Modules Section - Glass Cards */}
                     <section className="py-24 px-4 relative">
-                        {/* Decorative Blobs */}
-                        <div className="absolute top-0 left-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#13eca4]/5 blur-[100px]"></div>
-                        <div className="absolute bottom-0 right-0 -z-10 h-[500px] w-[500px] translate-x-1/3 translate-y-1/3 rounded-full bg-purple-200/20 blur-[100px]"></div>
+                        {/* Decorative Blobs Removed - Replaced by PremiumBackground */}
 
                         <div className="max-w-7xl mx-auto relative z-10">
                             <div className="mb-16 text-center">
