@@ -9,10 +9,14 @@ import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { useHospital } from "@/components/common/HospitalProvider";
-import { MagneticInteraction, ParallaxLayer } from "@/components/ui/ThreeDInteraction";
-import { DentistryMorphing } from "@/components/healthcare/specialized/DentistryMorphing";
-import { NeuralAttentionFlow } from "@/components/healthcare/specialized/NeuralAttentionFlow";
-import { FluidBotanic } from "@/components/healthcare/specialized/FluidBotanic";
+import dynamic from 'next/dynamic';
+
+const MagneticInteraction = dynamic(() => import("@/components/ui/ThreeDInteraction").then(mod => mod.MagneticInteraction), { ssr: false });
+const ParallaxLayer = dynamic(() => import("@/components/ui/ThreeDInteraction").then(mod => mod.ParallaxLayer), { ssr: false });
+const DentistryMorphing = dynamic(() => import("@/components/healthcare/specialized/DentistryMorphing").then(mod => mod.DentistryMorphing), { ssr: false });
+const NeuralAttentionFlow = dynamic(() => import("@/components/healthcare/specialized/NeuralAttentionFlow").then(mod => mod.NeuralAttentionFlow), { ssr: false });
+const FluidBotanic = dynamic(() => import("@/components/healthcare/specialized/FluidBotanic").then(mod => mod.FluidBotanic), { ssr: false });
+const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/PremiumBackground"), { ssr: false });
 import HealthcareContent from "@/components/healthcare/HealthcareContent";
 
 // Icon Map for Dynamic Loading
@@ -38,8 +42,6 @@ const ICON_MAP: Record<string, any> = {
     'Brain': Brain,
     'Battery': Battery
 };
-
-import PremiumBackground from "@/components/ui/backgrounds/PremiumBackground";
 
 export default function HealthcareLanding() {
     const config = useHospital();
