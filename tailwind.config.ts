@@ -48,15 +48,15 @@ const config: Config = {
         // Skin Theme (Premium Dermatology Clinic)
         skin: {
           bg: "var(--skin-bg)",
-          bgSecondary: "#0F2535",  // 보조 배경 (필요시 변수화 가능)
-          surface: "#152A3D",      // 표면 색상
+          bgSecondary: "var(--skin-bg-secondary)",
+          surface: "var(--skin-surface)",
           text: "var(--skin-text)",
-          subtext: "#94A3B8",      // 보조 텍스트
+          subtext: "var(--skin-subtext)",
           primary: "var(--skin-primary)",
           secondary: "var(--skin-secondary)",
           accent: "var(--skin-accent)",
           glow: "var(--skin-primary)",
-          muted: "#1E3A5F",        // 뮤트 컬러
+          muted: "var(--skin-muted)",
           tint: "rgba(20, 184, 166, 0.04)", // 컬러 틴트 (색감 일관성)
         },
       },

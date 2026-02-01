@@ -69,13 +69,13 @@ const THEME_STYLES = {
 const THEME_CLASSES = {
     border: "border-skin-primary/30",
     textMuted: "text-skin-text/60",
-    input: "bg-skin-bg/50 border-skin-primary/20 text-skin-text focus:border-skin-primary/50 focus:ring-1 focus:ring-skin-primary/50 transition-all duration-300",
+    input: "bg-skin-surface border-skin-primary/10 text-skin-text focus:border-skin-primary/50 focus:ring-1 focus:ring-skin-primary/50 transition-all duration-300 shadow-inner",
     chip: {
-        active: "bg-skin-primary text-white shadow-xl shadow-skin-primary/20 border-skin-primary",
-        inactive: "bg-white/5 text-skin-text/60 border-skin-primary/10 hover:border-skin-primary/40 hover:text-skin-text"
+        active: "bg-skin-primary text-white shadow-lg shadow-skin-primary/30 border-skin-primary",
+        inactive: "bg-skin-surface/50 text-skin-text/60 border-skin-primary/10 hover:border-skin-primary/40 hover:text-skin-text hover:bg-skin-surface transition-all"
     },
-    card: "bg-white/[0.02] backdrop-blur-xl border border-skin-primary/10 hover:border-skin-primary/30 transition-all duration-500",
-    button: "bg-gradient-to-r from-skin-primary to-skin-accent text-white shadow-2xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+    card: "bg-skin-surface/40 backdrop-blur-2xl border border-skin-primary/10 hover:border-skin-primary/30 transition-all duration-500 shadow-xl",
+    button: "bg-gradient-to-r from-skin-primary to-skin-accent text-white shadow-xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-black tracking-tight"
 };
 
 // 오늘 요일 계산 (1=월 ~ 7=일)
@@ -248,10 +248,9 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         <>
             {/* 조회 모듈 - Row 기반 레이아웃 */}
             <div className="w-full space-y-6">
-                {/* Row 1: 지역 드롭다운 */}
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
-                        <label className="text-[10px] font-bold text-skin-primary/60 uppercase tracking-widest absolute -top-5 left-1">City</label>
+                        <label className="text-[9px] font-black text-skin-text uppercase tracking-[0.2em] absolute -top-5 left-1 opacity-40">Location / City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
@@ -268,7 +267,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
                     <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
-                        <label className="text-[10px] font-bold text-skin-primary/60 uppercase tracking-widest absolute -top-5 left-1">District</label>
+                        <label className="text-[9px] font-black text-skin-text uppercase tracking-[0.2em] absolute -top-5 left-1 opacity-40">Area / District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
@@ -496,7 +495,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                                 className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-white/5 rounded-2xl hover:bg-skin-primary hover:text-white transition-all duration-300 border border-white/5 group-hover:border-skin-primary/30 active:scale-90"
                                                                 aria-label={`${clinic.name} 전화하기`}
                                                             >
-                                                                <Phone size={24} />
+                                                                <Phone size={24} className="text-skin-primary group-hover:text-white" />
                                                             </a>
                                                         )}
                                                     </div>
@@ -516,20 +515,6 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     )}
                 </div>
 
-                {/* 스킨 체크 CTA */}
-                <div className="mt-6 pt-6 border-t border-white/10">
-                    <p className="text-skin-subtext text-sm mb-3 font-medium text-center">
-                        ✨ 피부 습관이 궁금하다면?
-                    </p>
-                    <Link
-                        href="/healthcare/chat?topic=glow-booster"
-                        className="group relative w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-sm text-skin-text border border-white/20 text-base font-medium rounded-full hover:bg-skin-primary hover:text-white hover:border-skin-primary transition-all duration-300 mx-auto block"
-                    >
-                        <span className="relative flex items-center gap-2">
-                            D-7 광채 부스터 시작 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                    </Link>
-                </div>
             </div>
 
             {/* 로그인 필요 모달 */}

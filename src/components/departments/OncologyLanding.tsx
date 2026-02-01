@@ -9,7 +9,7 @@ import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function OncologyLanding() {
-    const config = getDepartmentConfig("cancer_center"); // Assuming 'cancer_center' is key, or 'oncology' if mapped
+    const config = getDepartmentConfig("oncology"); // Assuming 'cancer_center' is key, or 'oncology' if mapped
     const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
@@ -52,7 +52,7 @@ export default function OncologyLanding() {
                     }
                 `}</style>
 
-                <PhotoSlideOver isOpen={opened} onClose={close} department="cancer_center" />
+                <PhotoSlideOver isOpen={opened} onClose={close} department="oncology" />
 
                 <HealthcareNavigation config={linenConfig} />
 

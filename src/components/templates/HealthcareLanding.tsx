@@ -176,7 +176,7 @@ export default function HealthcareLanding() {
                                 {/* Primary CTA (Dynamic) */}
                                 <MagneticInteraction distance={80} strength={0.3}>
                                     <Link
-                                        href={config.marketing?.cta?.link || "healthcare/chat?topic=glow-booster"}
+                                        href={config.marketing?.cta?.link || "healthcare/chat"}
                                         className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                                         style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
                                     >
@@ -336,14 +336,14 @@ export default function HealthcareLanding() {
                         <div className="text-center mb-16">
                             <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">My Health Check</span>
                             <h2 className="text-4xl md:text-5xl font-bold text-skin-text">
-                                {config.name} 전용 모듈
+                                {config.marketing?.surveyHeadline || "맞춤형 헬스케어 체크"}
                             </h2>
-                            <p className="text-skin-subtext mt-4 max-w-2xl mx-auto">
-                                아래 모듈을 선택해 정밀한 자가 진단을 시작해보세요.
+                            <p className="text-skin-subtext mt-4 max-w-2xl mx-auto font-medium">
+                                아래 모듈을 선택해 정밀한 자가 진단을 시작하고 나만의 요약 리포트를 받아보세요.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
                             {(config.landingModules || []).map((module: any) => {
                                 const IconComponent = ICON_MAP[module.icon] || Sparkles;
                                 const colorMap: Record<string, { border: string; shadow: string; text: string; gradient: string }> = {
@@ -390,7 +390,7 @@ export default function HealthcareLanding() {
                 {/* Floating Chat Button */}
                 <div className="fixed bottom-8 right-8 z-50">
                     <MagneticInteraction distance={50} strength={0.5}>
-                        <Link href={config.marketing?.cta?.link || "healthcare/chat?topic=glow-booster"} className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20">
+                        <Link href={config.marketing?.cta?.link || "healthcare/chat"} className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20">
                             <CtaIcon className="w-8 h-8" />
                         </Link>
                     </MagneticInteraction>

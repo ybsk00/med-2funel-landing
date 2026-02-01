@@ -91,6 +91,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
         // Pass Hero Content
         hero: dept.hero,
         videoSource: dept.video,
+        video: dept.video,
         marketing: dept.marketing,
 
         theme: dept.theme,

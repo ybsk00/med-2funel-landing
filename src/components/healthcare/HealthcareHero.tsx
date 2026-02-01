@@ -13,7 +13,10 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
     if (!config.theme) return null;
 
     return (
-        <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
+        <header
+            className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-screen flex flex-col justify-center"
+            style={{ backgroundColor: config.theme.background }}
+        >
             {/* 영상 배경 */}
             <div className="absolute inset-0 z-0">
                 <video

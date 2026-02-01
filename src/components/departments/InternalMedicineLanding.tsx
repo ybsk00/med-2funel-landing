@@ -10,7 +10,7 @@ import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function InternalMedicineLanding() {
-    const config = getDepartmentConfig("internal_medicine");
+    const config = getDepartmentConfig("internal-medicine");
     const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
@@ -45,7 +45,7 @@ export default function InternalMedicineLanding() {
                     }
                 `}</style>
 
-                <PhotoSlideOver isOpen={opened} onClose={close} department="internal_medicine" />
+                <PhotoSlideOver isOpen={opened} onClose={close} department="internal-medicine" />
 
                 <HealthcareNavigation config={botanicConfig} />
 

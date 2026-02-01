@@ -52,6 +52,7 @@ export interface HospitalConfig {
     };
     marketing?: {
         searchKeyword: string;
+        surveyHeadline?: string;
         cta: {
             title: string;
             buttonText: string;
