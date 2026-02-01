@@ -343,7 +343,7 @@ export default function HealthcareLanding() {
                     <MagneticInteraction distance={50} strength={0.5}>
                         <Link
                             href={config.marketing?.cta?.link || "healthcare/chat"}
-                            className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-md"
+                            className={`w-16 h-16 rounded-full flex items-center justify-center ${buttonTextColor} shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-md`}
                             style={{
                                 backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary
                             }}

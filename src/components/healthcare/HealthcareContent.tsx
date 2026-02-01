@@ -23,32 +23,38 @@ export default function HealthcareContent() {
         const r = parseInt(h.substring(0, 2), 16);
         const g = parseInt(h.substring(2, 4), 16);
         const b = parseInt(h.substring(4, 6), 16);
-        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance < 0.5;
     };
 
     const isThemeDark = config.theme ? isColorDark(config.theme.background) : false;
+    const isLight = !isThemeDark;
 
-    // Dynamic Styles based on Theme Mode (Improved contrast for dark mode)
+    // Primary 컬러 가독성 체크 - 텍스트 색상 결정
+    const isPrimaryBright = config?.theme?.primary ? !isColorDark(config.theme.primary) : false;
+    const buttonTextColor = (isPrimaryBright && isLight) ? "text-slate-900 font-extrabold" : "text-white";
+
+    // Dynamic Styles based on Theme Mode (Branded Surfaces)
     const styles = {
-        // Session A Container
+        // Session Containers (Using tinted surfaces instead of generic white)
         container: isThemeDark
             ? "bg-white/10 border border-white/20 backdrop-blur-md shadow-2xl"
-            : "bg-white/95 border border-stone-200 shadow-2xl backdrop-blur-xl",
+            : "bg-skin-primary/5 border border-skin-primary/10 shadow-xl backdrop-blur-xl",
 
         // Session A Checklist Items
         checkItem: isThemeDark
             ? "bg-white/5 border border-white/10 hover:border-skin-primary/50"
-            : "bg-skin-primary/5 border border-skin-primary/10 shadow-sm hover:bg-skin-primary/10 hover:border-skin-primary transition-all",
+            : "bg-white/40 border border-skin-primary/10 shadow-sm hover:bg-white/60 hover:border-skin-primary transition-all backdrop-blur-sm",
 
         // Session B Guide Cards
         guideCard: isThemeDark
             ? "bg-white/10 border border-white/10 hover:border-skin-primary/50 shadow-xl"
-            : "bg-white border border-stone-100 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-skin-primary/50",
+            : "bg-white/40 border border-skin-primary/10 shadow-lg hover:shadow-xl hover:-translate-y-1 hover:border-skin-primary/50 backdrop-blur-md",
 
         // Session D FAQ Items
         faqItem: isThemeDark
             ? "bg-white/5 border border-white/5 hover:bg-white/10"
-            : "bg-skin-primary/5 border border-skin-primary/5 hover:bg-skin-primary/10 shadow-sm"
+            : "bg-white/30 border border-skin-primary/5 hover:bg-white/50 shadow-sm backdrop-blur-sm"
     };
 
     if (!content) return null;
@@ -96,10 +102,11 @@ export default function HealthcareContent() {
                         <div className="mt-8">
                             <button
                                 onClick={scrollToChat}
-                                className={`inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 ${isThemeDark
-                                        ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-                                        : "bg-skin-primary text-white hover:bg-skin-accent shadow-skin-primary/20"
+                                className={`inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg active:scale-95 ${buttonTextColor} ${isThemeDark
+                                    ? "bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20"
+                                    : "hover:bg-skin-accent shadow-skin-primary/20 brightness-110"
                                     }`}
+                                style={!isThemeDark ? { backgroundColor: config.theme?.primary } : {}}
                             >
                                 {content.sessionA.cta}
                                 <ArrowRight className="w-5 h-5" />
@@ -136,7 +143,7 @@ export default function HealthcareContent() {
             {/* Session C & Chat Integration */}
             <div className={`relative overflow-hidden rounded-[2.5rem] p-8 md:p-16 text-center shadow-2xl transition-all duration-500 ${isThemeDark
                 ? 'bg-gradient-to-br from-skin-primary to-skin-accent text-white'
-                : 'bg-white border border-stone-200'
+                : 'bg-gradient-to-br from-skin-primary/5 via-skin-primary/10 to-skin-accent/5 border border-skin-primary/20 backdrop-blur-xl'
                 }`}>
                 <div className="relative z-10 max-w-3xl mx-auto space-y-6">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-md ${isThemeDark ? 'bg-white/20 text-white' : 'bg-skin-primary/10 text-skin-primary border border-skin-primary/20'
@@ -153,10 +160,11 @@ export default function HealthcareContent() {
                     </p>
                     <button
                         onClick={scrollToChat}
-                        className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-95 ${isThemeDark
-                            ? 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20'
-                            : 'bg-skin-primary text-white hover:bg-skin-accent'
+                        className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl active:scale-95 ${buttonTextColor} ${isThemeDark
+                            ? 'bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20'
+                            : 'hover:bg-skin-accent'
                             }`}
+                        style={!isThemeDark ? { backgroundColor: config.theme?.primary } : {}}
                     >
                         {content.sessionC.cta}
                         <ShieldCheck className="w-5 h-5" />

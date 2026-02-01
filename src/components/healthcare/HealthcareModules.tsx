@@ -102,6 +102,26 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
     const texture = config.theme.texture || 'glass';
     const sound = config.theme.sound;
 
+    // Theme Darkness Check (Refined)
+    const isColorDarkValue = (hex?: string) => {
+        if (!hex) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance < 0.5;
+    };
+
+    const isThemeDark = isColorDarkValue(config.theme.background);
+    const isLight = !isThemeDark;
+    const isPrimaryBright = config?.theme?.primary ? !isColorDarkValue(config.theme.primary) : false;
+    const badgeTextColor = (isPrimaryBright && isLight) ? "text-slate-900 font-extrabold" : "text-white";
+
     const CardComponent = CARD_COMPONENTS[texture] || GlassCard;
     const moduleHeader = (config.id && DEPARTMENT_MODULE_HEADERS[config.id]) || {
         title: "스마트 헬스케어 체크",
@@ -126,7 +146,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                 {/* Famous Clinic Search Module - Unified at Top */}
                 <div className="mb-16 mt-8">
                     <div className="text-center mb-10 px-4">
-                        <span className="px-3 py-1 rounded-full bg-skin-primary/10 text-skin-primary text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/20 mb-6 inline-block animate-fade-in text-white">
+                        <span className={`px-3 py-1 rounded-full ${isLight ? 'bg-skin-primary' : 'bg-skin-primary/10'} ${badgeTextColor} text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/20 mb-6 inline-block animate-fade-in`}>
                             Healthcare Network
                         </span>
                         <h3 className="text-3xl md:text-5xl font-black text-skin-text mb-6 leading-tight">
@@ -137,7 +157,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                             전문 의료진과 최첨단 장비를 갖춘 최적의 진료 환경을 약속합니다.
                         </p>
                     </div>
-                    <div className="p-8 md:p-12 rounded-[2.5rem] bg-skin-surface/70 border border-skin-text/10 backdrop-blur-xl shadow-2xl relative overflow-hidden group hover:border-skin-primary/50 transition-colors duration-500">
+                    <div className={`p-8 md:p-12 rounded-[2.5rem] border border-skin-primary/10 backdrop-blur-xl shadow-2xl relative overflow-hidden group hover:border-skin-primary/50 transition-colors duration-500 ${isThemeDark ? 'bg-skin-surface/70' : 'bg-skin-primary/5'}`}>
                         {/* Decorative Background Glow */}
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-skin-primary/5 rounded-full blur-[80px] pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
 

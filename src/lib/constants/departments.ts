@@ -100,12 +100,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#FFC0CB",
-            secondary: "#E0E0E0",
-            accent: "#FF69B4",
-            background: "#FAFAFA", // Slight grey tint
-            text: "#333333", // Dark Gray
-            concept: "Holographic Gloss",
+            primary: "#13eca4", // Vibrant Emerald Green
+            secondary: "#00e5ff", // Cyan Blue
+            accent: "#7cfc00", // Lawn Green
+            background: "#0B1215", // Deep Dark Greenish Charcoal
+            text: "#E5E7EB", // Light Gray
+            concept: "Blanc de Skin - Emerald Dark",
             texture: "hologram",
             font: "sans",
             sound: "/sounds/sparkle.mp3"
