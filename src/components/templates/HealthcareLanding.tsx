@@ -108,7 +108,6 @@ export default function HealthcareLanding() {
                     onClose={() => setIsPhotoSlideOverOpen(false)}
                 />
 
-                <HowItWorksCards className="bg-skin-bg" />
 
                 {/* Clinic Search Section */}
                 <section id="clinic-search" className="relative py-16">
