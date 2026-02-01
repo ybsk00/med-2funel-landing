@@ -84,7 +84,7 @@ export default function DermatologyLanding() {
                         <ClinicSearchModule
                             department="dermatology"
                             searchKeyword="피부과 전문의 추천"
-                            theme="glass"
+                            theme="modern"
                         />        {/* Overlay removed as requested */}
                     </div>
 

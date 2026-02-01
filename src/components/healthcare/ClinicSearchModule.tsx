@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
@@ -81,8 +81,6 @@ function isHoliday(): boolean {
     return false;
 }
 
-import { getRecommendedClinic } from "@/lib/config/marketing";
-
 interface ClinicSearchModuleProps {
     department?: string; // 부서 ID 추가
     searchKeyword?: string; // 검색 키워드 추가
@@ -112,47 +110,72 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         return {
             // 컨테이너 배경
             container: isLight
-                ? "bg-white/60 backdrop-blur-xl border-gray-200 shadow-sm"
-                : "bg-black/30 backdrop-blur-xl border-white/10",
+                ? "bg-white/90 backdrop-blur-xl border-stone-200 shadow-xl" // Light: 화이트 불투명도 높임 + 스톤 보더
+                : "bg-black/40 backdrop-blur-xl border-white/10",
 
             // 텍스트 기본 색상
-            textPrimary: isLight ? "text-gray-900" : "text-white",
-            textSecondary: isLight ? "text-gray-600" : "text-white/60",
-            textAccent: isLight ? "text-skin-primary" : "text-skin-primary",
+            textPrimary: isLight ? "text-stone-900" : "text-gray-100", // 완전 화이트(#FFF) 대신 부드러운 화이트
+            textSecondary: isLight ? "text-stone-600" : "text-gray-400",
+            textAccent: "text-skin-primary",
 
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
-                ? "bg-white border-2 border-gray-200 text-gray-900 focus:border-skin-primary placeholder:text-gray-400"
-                : "bg-white/10 border-2 border-white/10 text-white focus:border-skin-primary placeholder:text-white/40",
+                ? "bg-white border text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium" // 보더 색상 강화
+                : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
 
             // 선택창 옵션
             select: {
                 bg: isLight ? "#ffffff" : "#1a1a1a",
-                text: isLight ? "#111111" : "#ffffff"
+                text: isLight ? "#111111" : "#e5e5e5"
             },
 
             // 칩 (버튼)
             chip: {
                 active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
                 inactive: isLight
-                    ? "bg-white border-gray-200 text-gray-600 hover:border-skin-primary hover:text-skin-primary"
-                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/30"
+                    ? "bg-stone-100/50 border-stone-200 text-stone-600 hover:border-skin-primary hover:text-skin-primary"
+                    : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
             // 결과 카드
             card: isLight
-                ? "bg-white border-gray-100 shadow-xl text-gray-900"
-                : "bg-gray-900/80 backdrop-blur-md border-white/10 text-white",
+                ? "bg-white border-stone-200 shadow-xl text-stone-900"
+                : "bg-gray-900/90 backdrop-blur-md border-white/10 text-gray-200",
 
             // 구분선
-            divider: isLight ? "bg-gray-200" : "bg-white/10"
+            divider: isLight ? "bg-stone-200" : "bg-white/10"
         };
     };
 
     const styles = getThemeStyles();
 
-    // 추천 병원 로드
-    const recommendedClinic = getRecommendedClinic(department, config);
+    // 추천 병원 로드 (동적 로딩)
+    const [recommendedClinic, setRecommendedClinic] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchRecommended = async () => {
+            if (!config?.name) return;
+
+            try {
+                // 환경설정의 병원명으로 검색 (API 필터 제한 해제됨)
+                const res = await fetch(`/api/clinics/search?qn=${encodeURIComponent(config.name)}&q0=서울`);
+                const data = await res.json();
+
+                if (data.clinics && data.clinics.length > 0) {
+                    // 첫 번째 결과를 추천 병원으로 설정
+                    const premiumClinic = {
+                        ...data.clinics[0],
+                        isRecommended: true // 강제 추천 플래그
+                    };
+                    setRecommendedClinic(premiumClinic);
+                }
+            } catch (error) {
+                console.error("Failed to fetch recommended clinic:", error);
+            }
+        };
+
+        fetchRecommended();
+    }, [config.name]);
 
     // 지역 선택
     const [selectedCity, setSelectedCity] = useState("서울");
@@ -443,11 +466,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                             )}
 
                             {/* 성공 - 결과 리스트 */}
-                            {(searchState === "success" || searchState === "auto-expanded") && clinics.length > 0 && (
+                            {(searchState === "success" || searchState === "auto-expanded") && (
                                 <div className="space-y-4">
-                                    {/* 추천 병원 카드 (isRecommended 플래그 기반) */}
-                                    {clinics.filter(c => c.isRecommended).map((recClinic, idx) => (
-                                        <div key={`rec-${idx}`} className={`relative overflow-hidden rounded-3xl p-6 md:p-10 border-2 border-skin-primary/40 bg-gradient-to-br from-skin-primary/20 via-white/[0.03] to-skin-accent/20 shadow-2xl group/card transition-all duration-700 hover:border-skin-primary mb-8 animate-in zoom-in-95 duration-500`}>
+                                    {/* 추천 병원 카드 (환경설정 기반 동적 로딩) */}
+                                    {recommendedClinic && (
+                                        <div className={`relative overflow-hidden rounded-3xl p-6 md:p-10 border-2 border-skin-primary/40 bg-gradient-to-br from-skin-primary/20 via-white/[0.03] to-skin-accent/20 shadow-2xl group/card transition-all duration-700 hover:border-skin-primary mb-8 animate-in zoom-in-95 duration-500`}>
                                             <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover/card:opacity-[0.08] transition-opacity pointer-events-none">
                                                 <Sparkles className="w-32 h-32 text-skin-primary" />
                                             </div>
@@ -463,7 +486,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                                     <div className="flex-1">
                                                         <h3 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">
-                                                            {recClinic.name}
+                                                            {recommendedClinic.name}
                                                         </h3>
                                                         <div className="flex flex-wrap gap-2 mb-6">
                                                             <span className="px-3.5 py-1.5 bg-skin-primary/20 text-skin-primary text-[11px] font-black rounded-xl border border-skin-primary/30 uppercase tracking-tighter">
@@ -477,7 +500,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                             <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
                                                                 <MapPin size={20} className="text-skin-primary" />
                                                             </div>
-                                                            {recClinic.addr}
+                                                            {recommendedClinic.addr}
                                                         </p>
                                                     </div>
 
@@ -489,7 +512,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                             비대면 상담예약
                                                         </button>
                                                         <a
-                                                            href={`tel:${recClinic.tel}`}
+                                                            href={`tel:${recommendedClinic.tel}`}
                                                             className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-white/5 text-white rounded-2xl font-black hover:bg-white/10 transition-all duration-300 text-base border border-white/10 active:scale-95"
                                                         >
                                                             <Phone size={20} />
@@ -499,7 +522,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                 </div>
                                             </div>
                                         </div>
-                                    ))}
+                                    )}
 
                                     {/* 변동 고지 문구 */}
                                     <p className={`text-xs text-center rounded-lg py-2 ${styles.textSecondary} bg-black/5`}>
@@ -516,7 +539,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                         </div>
 
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                                            {clinics.filter(c => !c.isRecommended).slice(0, 10).map((clinic, idx) => (
+                                            {clinics.filter(c => c.name !== recommendedClinic?.name).slice(0, 10).map((clinic, idx) => (
                                                 <div
                                                     key={idx}
                                                     className={`group p-6 rounded-[1.5rem] transition-all duration-500 border relative overflow-hidden ${styles.card} hover:-translate-y-1`}
