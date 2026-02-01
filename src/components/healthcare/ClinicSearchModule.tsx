@@ -112,12 +112,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
                 ? "bg-stone-50 border-2 text-stone-900 border-stone-200 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm transition-all focus:bg-white"
-                : "bg-white/5 border border-white/10 text-skin-text focus:border-skin-primary placeholder:text-skin-text/20",
+                : "bg-white/10 backdrop-blur-md border border-white/20 text-white focus:border-skin-primary placeholder:text-white/20 shadow-inner",
 
-            // 선택창 옵션
+            // 선택창 옵션 (Deep Glass)
             select: {
-                bg: isLight ? "#ffffff" : "#1a1a1a",
-                text: isLight ? "#111111" : "#e5e5e5"
+                bg: isLight ? "#ffffff" : "#000000",
+                text: isLight ? "#111111" : "#ffffff"
             },
 
             // 칩 (버튼) - Inactive 상태 가독성 확실하게 수정

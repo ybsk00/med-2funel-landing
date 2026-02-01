@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight, Camera, User, Smile, Zap, Ruler, Moon, Brain, Battery } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
+import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { useHospital } from "@/components/common/HospitalProvider";
@@ -106,6 +107,28 @@ export default function HealthcareLanding() {
                     isOpen={isPhotoSlideOverOpen}
                     onClose={() => setIsPhotoSlideOverOpen(false)}
                 />
+
+                {/* Session 2: Clinic Search (Restored & Glassmorphed) */}
+                <section id="clinic-search" className="relative py-12 md:py-20 z-20">
+                    <div className="w-full max-w-4xl px-6 mx-auto">
+                        <div className="text-center mb-10">
+                            <h2 className={`text-3xl md:text-4xl font-black mb-3 drop-shadow-md ${isThemeDark ? 'text-white' : ''}`} style={{ color: isThemeDark ? undefined : config.theme.text }}>
+                                {config.marketing?.searchKeyword || "유명한 의원 찾기"}
+                            </h2>
+                            <p className={`text-base opacity-80 font-bold ${isThemeDark ? 'text-white/60' : ''}`} style={{ color: isThemeDark ? undefined : config.theme.text }}>
+                                {config.address} {config.name}
+                            </p>
+                        </div>
+                        <div className="relative group">
+                            {/* Glass Background */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+
+                            <div className="relative bg-white/5 backdrop-blur-[40px] rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                                <ClinicSearchModule department={config.id} searchKeyword={config.marketing?.searchKeyword} />
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
 
                 {/* Specialized Evidence Section */}

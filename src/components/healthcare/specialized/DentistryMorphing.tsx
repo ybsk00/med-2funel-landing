@@ -27,9 +27,9 @@ export const DentistryMorphing = () => {
     ];
 
     return (
-        <div ref={containerRef} className="relative py-20 overflow-hidden bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]">
+        <div ref={containerRef} className="relative py-20 overflow-hidden bg-white/[0.03] backdrop-blur-[60px] rounded-[3rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
             <div className="max-w-md mx-auto text-center">
-                <h3 className="text-2xl font-bold mb-8 text-white drop-shadow-md">
+                <h3 className="text-3xl font-black mb-10 text-white drop-shadow-xl tracking-tight">
                     AI가 예측하는 <span className="text-cyan-400">완벽한 미소</span>
                 </h3>
 
@@ -63,7 +63,7 @@ export const DentistryMorphing = () => {
                         opacity: useTransform(scrollYProgress, [0.4, 0.6], [0.5, 1]),
                         y: useTransform(scrollYProgress, [0.4, 0.6], [10, 0]),
                     }}
-                    className="mt-12 text-white/70 font-bold tracking-tight drop-shadow-sm"
+                    className="mt-12 text-white font-black text-lg tracking-tight drop-shadow-sm opacity-80"
                 >
                     스크롤을 내려 <br />정밀 교정 후의 변화를 확인하세요
                 </motion.p>
