@@ -16,6 +16,7 @@ export interface LandingModuleConfig {
 
 export interface HospitalConfig {
     name: string;
+    virtualName?: string; // NEW: Added to support virtual brand names
     representative: string;
     representativeTitle: string;
     address: string;

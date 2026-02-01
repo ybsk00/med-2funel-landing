@@ -62,6 +62,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
     return {
         id: dept.id, // Department ID 주입 (HealthcareContent 매핑용)
         name: `${dept.name} 클리닉`, // "Medical Area uses XX Clinic"
+        virtualName: dept.virtualName, // Map virtualName
         marketingName: dept.virtualName, // Use Virtual Name
         representative: "김닥터", // Placeholder
         representativeTitle: "대표원장",

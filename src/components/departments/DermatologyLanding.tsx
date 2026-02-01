@@ -10,6 +10,9 @@ import PrivacyScreen from "@/components/ui/PrivacyScreen";
 import { getDepartmentConfig } from "@/lib/config/factory";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+
+const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/PremiumBackground"), { ssr: false });
 
 export default function DermatologyLanding() {
     const config = getDepartmentConfig("dermatology");
@@ -58,11 +61,11 @@ export default function DermatologyLanding() {
                         <div className="max-w-7xl mx-auto relative z-10">
                             <div className="text-center mb-16">
                                 <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight" style={{ color: config.theme.text }}>
-                                    {config.hero.title}
+                                    {config.hero?.title}
                                 </h2>
                                 <div className="w-24 h-1 bg-gradient-to-r from-skin-primary to-transparent mx-auto mb-8"></div>
                                 <p className="opacity-70 text-lg font-light max-w-2xl mx-auto leading-relaxed" style={{ color: config.theme.text }}>
-                                    {config.hero.subtitle}
+                                    {config.hero?.subtitle}
                                 </p>
                             </div>
 
