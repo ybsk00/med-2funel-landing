@@ -45,9 +45,8 @@ const TARGET_REGIONS = ["강남구", "서초구", "송파구", "용산구", "성
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
-const THEME_CLASSES = {
-    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent"
-};
+// THEME_CLASSES removed for dynamic button styling
+
 
 // 오늘 요일 계산 (1=월 ~ 7=일)
 function getTodayQt(): string {
@@ -72,15 +71,20 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     // 부서별 기본 테마 매핑
     const getThemeMode = () => {
         if (theme) return theme;
-        // 한의원, 내과, 소아과, 산부인과, 암요양병원, 정형외과, 치과, 성형외과 = Light Theme (Hanji/Modern)
-        if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics", "dentistry", "plastic-surgery"].includes(department)) {
-            return "light";
-        }
-        // 피부/비뇨/신경 = Dark Theme (Glass/Silk)
-        return "dark";
+        // 모든 진료과 기본값을 Light로 변경 (사용자 테마 변경 반영)
+        return "light";
     };
 
     const currentTheme = getThemeMode();
+
+    // 밝은 Primary 컬러를 사용하는 진료과인지 확인 (White Text 가독성 문제 해결)
+    // 성형외과(#13eca4), 소아과(#FFD700/High), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
+    // Plastic Surgery: #13eca4 (Mint) -> Needs Dark Text
+    // Pediatrics: #FBBF24 (Amber) -> Needs Dark Text
+    // Dentistry: #2DD4BF (Teal) -> Needs Dark Text
+    // Korean Medicine: #8FBC8F (Green Green) -> White might be okay, but let's check.
+    const isBrightPrimary = ["plastic-surgery", "pediatrics", "dentistry", "korean-medicine"].includes(department);
+    const buttonTextColor = isBrightPrimary ? "text-stone-950 font-black" : "text-white";
 
     // 테마별 스타일 정의 (동적 적용)
     const getThemeStyles = () => {
@@ -89,20 +93,20 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
         return {
             // 컨테이너 배경
             container: isLight
-                ? "bg-white/90 backdrop-blur-xl border-stone-200 shadow-xl" // Light: 화이트 불투명도 높임 + 스톤 보더
+                ? "bg-white/90 backdrop-blur-xl border-stone-200 shadow-xl" // Light
                 : "bg-black/40 backdrop-blur-xl border-white/10",
 
             // 텍스트 기본 색상
-            textPrimary: isLight ? "!text-stone-900" : "!text-gray-100", // 완전 화이트(#FFF) 대신 부드러운 화이트
-            textSecondary: isLight ? "!text-stone-600" : "!text-gray-400",
+            textPrimary: isLight ? "text-stone-900" : "text-gray-100",
+            textSecondary: isLight ? "text-stone-600" : "text-gray-400",
             textAccent: "text-skin-primary",
 
             // 라벨 (입력폼 위)
-            label: isLight ? "!text-stone-600 font-bold" : "text-skin-primary/80 font-bold",
+            label: isLight ? "text-stone-700 font-bold" : "text-skin-primary/80 font-bold",
 
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
-                ? "bg-white border !text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm" // 보더 색상 강화
+                ? "bg-white border-2 text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm"
                 : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
 
             // 선택창 옵션
@@ -111,11 +115,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 text: isLight ? "#111111" : "#e5e5e5"
             },
 
-            // 칩 (버튼) - Inactive 상태 가독성 개선
+            // 칩 (버튼) - Inactive 상태 가독성 확실하게 수정
             chip: {
-                active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
+                active: `bg-skin-primary ${buttonTextColor} border-skin-primary shadow-md`,
                 inactive: isLight
-                    ? "bg-stone-100 border-stone-300 !text-stone-800 hover:border-skin-primary hover:text-skin-primary hover:bg-white" // 배경 회색조 추가
+                    ? "bg-stone-200/50 border-stone-400 text-stone-800 hover:border-skin-primary hover:text-skin-primary hover:bg-white transition-colors"
                     : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
@@ -130,6 +134,9 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     };
 
     const styles = getThemeStyles();
+
+    // Dynamic Button Class
+    const themeButtonClass = `bg-skin-primary ${buttonTextColor} shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent`;
 
     // 추천 병원 로드 (동적 로딩)
     const [recommendedClinic, setRecommendedClinic] = useState<any>(null);
@@ -190,7 +197,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
     const targetKeyword = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과"; // 키워드 자동 매핑
     const [searchTerm, setSearchTerm] = useState(targetKeyword);
-    const debouncedSearch = searchTerm; 
+    const debouncedSearch = searchTerm;
 
     const [searchState, setSearchState] = useState<SearchState>("idle");
     const [clinics, setClinics] = useState<Clinic[]>([]);
@@ -394,7 +401,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     <button
                         onClick={() => handleSearch(false)}
                         disabled={searchState === "loading"}
-                        className={`inline-flex items-center justify-center px-10 py-5 text-lg font-black rounded-2xl ${THEME_CLASSES.button} disabled:opacity-70 disabled:cursor-not-allowed`}
+                        className={`inline-flex items-center justify-center px-10 py-5 text-lg font-black rounded-2xl ${themeButtonClass} disabled:opacity-70 disabled:cursor-not-allowed`}
                     >
                         {searchState === "loading" ? (
                             <>
