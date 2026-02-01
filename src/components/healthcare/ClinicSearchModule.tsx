@@ -68,19 +68,26 @@ interface ClinicSearchModuleProps {
 export default function ClinicSearchModule({ department = "dermatology", searchKeyword = "", theme }: ClinicSearchModuleProps) {
     const config = useHospital();
 
-    // 부서별 기본 테마 매핑
-    const getThemeMode = () => {
-        if (theme) return theme;
-        // 비뇨기과, 신경외과 = Dark Theme (Cyber/Night)
-        if (["urology", "neurosurgery"].includes(department)) {
-            return "dark";
-        }
-        // 나머지(성형, 피부, 소아, 치과, 내과, 한의원, 산부인과, 암요양) = Light Theme
-        return "light";
+    // 배경색 기반 다크모드 감지 유틸리티
+    const isColorDark = (hex: string) => {
+        if (!hex || hex.length < 4) return false;
+        const h = hex.replace('#', '');
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
     };
 
-    const currentTheme = getThemeMode();
-    const isLight = currentTheme === "light" || currentTheme === "hanji" || currentTheme === "modern";
+    // 실제 테마 모드 결정 (설정 또는 override 기반)
+    const isThemeDark = () => {
+        if (theme === "dark") return true;
+        if (theme === "light" || theme === "hanji" || theme === "modern") return false;
+        if (config?.theme?.background) return isColorDark(config.theme.background);
+        return false; // 기본값 Light
+    };
+
+    const isLight = !isThemeDark();
+    // const currentTheme = isLight ? "light" : "dark"; // Not really needed for logic below, isLight is key
 
     // 밝은 Primary 컬러를 사용하는 진료과인지 확인 (White Text 가독성 문제 해결)
     // 성형외과(#13eca4), 피부과(#FFC0CB), 소아과(#FBBF24), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
