@@ -294,37 +294,39 @@ export default function HealthcareLanding() {
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
                             {(config.landingModules || []).map((module: any) => {
                                 const IconComponent = ICON_MAP[module.icon] || Sparkles;
-                                const colorMap: Record<string, { border: string; shadow: string; text: string; gradient: string }> = {
-                                    pink: { border: 'border-pink-500/30', shadow: 'group-hover:shadow-pink-500/30', text: 'text-pink-400', gradient: 'from-pink-500/20 to-pink-600/20' },
-                                    rose: { border: 'border-rose-500/30', shadow: 'group-hover:shadow-rose-500/30', text: 'text-rose-400', gradient: 'from-rose-500/20 to-rose-600/20' },
-                                    teal: { border: 'border-teal-500/30', shadow: 'group-hover:shadow-teal-500/30', text: 'text-teal-400', gradient: 'from-teal-500/20 to-teal-600/20' },
-                                    purple: { border: 'border-purple-500/30', shadow: 'group-hover:shadow-purple-500/30', text: 'text-purple-400', gradient: 'from-purple-500/20 to-purple-600/20' },
-                                    fuchsia: { border: 'border-fuchsia-500/30', shadow: 'group-hover:shadow-fuchsia-500/30', text: 'text-fuchsia-400', gradient: 'from-fuchsia-500/20 to-fuchsia-600/20' },
-                                    cyan: { border: 'border-cyan-500/30', shadow: 'group-hover:shadow-cyan-500/30', text: 'text-cyan-400', gradient: 'from-cyan-500/20 to-cyan-600/20' },
-                                    blue: { border: 'border-blue-500/30', shadow: 'group-hover:shadow-blue-500/30', text: 'text-blue-400', gradient: 'from-blue-500/20 to-blue-600/20' },
-                                    orange: { border: 'border-orange-500/30', shadow: 'group-hover:shadow-orange-500/30', text: 'text-orange-400', gradient: 'from-orange-500/20 to-orange-600/20' },
-                                    yellow: { border: 'border-yellow-500/30', shadow: 'group-hover:shadow-yellow-500/30', text: 'text-yellow-400', gradient: 'from-yellow-500/20 to-yellow-600/20' },
-                                    red: { border: 'border-red-500/30', shadow: 'group-hover:shadow-red-500/30', text: 'text-red-400', gradient: 'from-red-500/20 to-red-600/20' },
-                                    indigo: { border: 'border-indigo-500/30', shadow: 'group-hover:shadow-indigo-500/30', text: 'text-indigo-400', gradient: 'from-indigo-500/20 to-indigo-600/20' },
-                                    gold: { border: 'border-yellow-600/30', shadow: 'group-hover:shadow-yellow-600/30', text: 'text-yellow-500', gradient: 'from-yellow-500/20 to-yellow-600/20' },
-                                    amber: { border: 'border-amber-500/30', shadow: 'group-hover:shadow-amber-500/30', text: 'text-amber-400', gradient: 'from-amber-500/20 to-amber-600/20' },
-                                    green: { border: 'border-green-500/30', shadow: 'group-hover:shadow-green-500/30', text: 'text-green-400', gradient: 'from-green-500/20 to-green-600/20' },
-                                    stone: { border: 'border-stone-500/30', shadow: 'group-hover:shadow-stone-500/30', text: 'text-stone-400', gradient: 'from-stone-500/20 to-stone-600/20' },
-                                    violet: { border: 'border-violet-500/30', shadow: 'group-hover:shadow-violet-500/30', text: 'text-violet-400', gradient: 'from-violet-500/20 to-violet-600/20' },
+
+                                // Color mapping for the icon and subtle accents only
+                                const colorMap: Record<string, { bg: string; text: string; lightBg: string }> = {
+                                    pink: { bg: 'bg-pink-500/10', text: 'text-pink-400', lightBg: 'bg-pink-50' },
+                                    rose: { bg: 'bg-rose-500/10', text: 'text-rose-400', lightBg: 'bg-rose-50' },
+                                    teal: { bg: 'bg-teal-500/10', text: 'text-teal-400', lightBg: 'bg-teal-50' },
+                                    purple: { bg: 'bg-purple-500/10', text: 'text-purple-400', lightBg: 'bg-purple-50' },
+                                    fuchsia: { bg: 'bg-fuchsia-500/10', text: 'text-fuchsia-400', lightBg: 'bg-fuchsia-50' },
+                                    cyan: { bg: 'bg-cyan-500/10', text: 'text-cyan-400', lightBg: 'bg-cyan-50' },
+                                    blue: { bg: 'bg-blue-500/10', text: 'text-blue-400', lightBg: 'bg-blue-50' },
+                                    orange: { bg: 'bg-orange-500/10', text: 'text-orange-400', lightBg: 'bg-orange-50' },
+                                    yellow: { bg: 'bg-yellow-500/10', text: 'text-yellow-400', lightBg: 'bg-yellow-50' },
+                                    red: { bg: 'bg-red-500/10', text: 'text-red-400', lightBg: 'bg-red-50' },
+                                    indigo: { bg: 'bg-indigo-500/10', text: 'text-indigo-400', lightBg: 'bg-indigo-50' },
+                                    gold: { bg: 'bg-yellow-600/10', text: 'text-yellow-500', lightBg: 'bg-yellow-50' },
+                                    amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', lightBg: 'bg-amber-50' },
+                                    green: { bg: 'bg-green-500/10', text: 'text-green-400', lightBg: 'bg-green-50' },
+                                    stone: { bg: 'bg-stone-500/10', text: 'text-stone-400', lightBg: 'bg-stone-50' },
+                                    violet: { bg: 'bg-violet-500/10', text: 'text-violet-400', lightBg: 'bg-violet-50' },
                                 };
                                 const colors = colorMap[module.color] || colorMap['pink'];
 
                                 return (
-                                    <Link key={module.id} href={`healthcare/chat?topic=${module.id}`} className="group">
-                                        <div className="h-full bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/30 transition-all duration-300 hover:scale-105 flex flex-col items-center text-center">
-                                            <div className={`w-14 h-14 bg-gradient-to-br ${colors.gradient} rounded-full flex items-center justify-center mb-6 ${colors.border}`}>
-                                                <IconComponent className={`w-7 h-7 ${colors.text} group-hover:scale-110 transition-transform`} />
+                                    <Link key={module.id} href={`healthcare/chat?topic=${module.id}`} className="group flex">
+                                        <div className="flex-1 min-h-[160px] bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 hover:bg-white/10 hover:border-skin-primary/50 transition-all duration-300 hover:scale-[1.02] flex flex-col items-center text-center shadow-xl">
+                                            <div className={`w-12 h-12 ${isThemeDark ? 'bg-white/5' : colors.lightBg} rounded-xl flex items-center justify-center mb-5 border border-white/10`}>
+                                                <IconComponent className={`w-6 h-6 ${colors.text} group-hover:scale-110 transition-transform`} />
                                             </div>
-                                            <h3 className="text-lg font-bold text-skin-text mb-2 tracking-wide">{module.title}</h3>
-                                            <p className="text-xs text-skin-subtext leading-relaxed font-light">
+                                            <h3 className="text-lg font-bold mb-2 tracking-tight" style={{ color: config.theme.text }}>{module.title}</h3>
+                                            <p className="text-xs leading-relaxed font-medium opacity-60" style={{ color: config.theme.text }}>
                                                 {module.description}
                                             </p>
                                         </div>
