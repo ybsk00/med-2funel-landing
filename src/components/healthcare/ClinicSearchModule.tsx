@@ -80,16 +80,16 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     };
 
     const currentTheme = getThemeMode();
+    const isLight = currentTheme === "light" || currentTheme === "hanji" || currentTheme === "modern";
 
     // 밝은 Primary 컬러를 사용하는 진료과인지 확인 (White Text 가독성 문제 해결)
     // 성형외과(#13eca4), 피부과(#FFC0CB), 소아과(#FBBF24), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
+    // 단, Dark Mode일 때는 Primary Color가 어두울 수 있으므로(혹은 배경이 어두우므로) White Text 유지
     const isBrightPrimary = ["plastic-surgery", "dermatology", "pediatrics", "dentistry"].includes(department);
-    const buttonTextColor = isBrightPrimary ? "text-slate-900 font-extrabold" : "text-white";
+    const buttonTextColor = (isBrightPrimary && isLight) ? "text-slate-900 font-extrabold" : "text-white";
 
     // 테마별 스타일 정의 (동적 적용)
     const getThemeStyles = () => {
-        const isLight = currentTheme === "light" || currentTheme === "hanji" || currentTheme === "modern";
-
         return {
             // 컨테이너 배경
             container: isLight
