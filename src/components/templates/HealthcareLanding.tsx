@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Sparkles, Droplet, Shield, ArrowUpRight, Heart, CheckCircle, BarChart2, Calendar, ChevronRight, Camera, User, Smile, Zap, Ruler, Moon, Brain, Battery } from "lucide-react";
 import { TrackF1View } from "@/components/marketing/MarketingTracker";
 import Footer from "@/components/common/Footer";
-import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
 import { useHospital } from "@/components/common/HospitalProvider";
@@ -109,22 +108,12 @@ export default function HealthcareLanding() {
                 />
 
 
-                {/* Clinic Search Section */}
-                <section id="clinic-search" className="relative py-16">
-                    <div className="w-full max-w-4xl px-6 md:px-0 md:pl-[clamp(48px,10vw,160px)] md:pr-[clamp(16px,8vw,180px)] mx-auto">
-                        <div className="text-center mb-8">
-                            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: config.theme.text }}>
-                                {config.marketing?.searchKeyword || "유명한 의원 찾기"}
-                            </h2>
-                            <p className="text-sm opacity-70" style={{ color: config.theme.text }}>
-                                {config.address} {config.name}
-                            </p>
-                        </div>
-                        <div className="bg-skin-surface rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl">
-                            <ClinicSearchModule department={config.id} searchKeyword={config.marketing?.searchKeyword} />
-                        </div>
-                    </div>
-                </section>
+                {/* Specialized Evidence Section */}
+                {config.id === 'dentistry' && (
+                    <section className="px-6 py-20 max-w-7xl mx-auto relative z-10">
+                        <DentistryMorphing />
+                    </section>
+                )}
 
                 {/* Specialized Evidence Section */}
                 {config.id === 'dentistry' && (
