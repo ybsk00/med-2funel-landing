@@ -31,10 +31,17 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
     const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
 
     // Visibility Logic: Prefer theme text color but ensure contrast against media
-    // If background is extreme (too bright/dark), we might need to nudge it
     const heroTitleColor = config.theme.text || (isThemeDark ? "#FFFFFF" : "#111111");
     const heroSubtitleColor = isThemeDark ? "#FFFFFF" : "#333333";
-    const buttonTextColor = (isPrimaryBright && !isThemeDark) ? "text-slate-900 font-extrabold" : "text-white";
+
+    // Primary CTA Button: Use primary theme color, text depends on how bright that color is
+    const primaryButtonBg = config.theme.primary || "#000000";
+    const primaryButtonText = isPrimaryBright ? "text-slate-900" : "text-white";
+    const primaryButtonBorder = isPrimaryBright ? "border-slate-900/10" : "border-white/20";
+
+    // Secondary CTA Button: Glass effect but high visibility
+    const secondaryButtonText = isThemeDark ? "text-white" : "text-slate-800";
+    const secondaryButtonBorder = isThemeDark ? "border-white/30" : "border-slate-800/30";
 
     return (
         <header
@@ -111,34 +118,35 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                     </p>
 
-                    {/* CTA 3종 */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    {/* CTA Section: High-Impact Buttons */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-8">
                         {/* Primary CTA - AI 시뮬레이션 */}
                         {onOpenCamera && (
                             <button
                                 onClick={onOpenCamera}
-                                className={`px-8 py-4 ${buttonTextColor} text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10`}
-                                style={{
-                                    backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary,
-                                    backdropFilter: isThemeDark ? 'blur(12px)' : 'none'
-                                }}
+                                className={`group relative px-10 py-5 ${primaryButtonText} text-lg font-black rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center gap-3 border ${primaryButtonBorder} overflow-hidden`}
+                                style={{ backgroundColor: primaryButtonBg }}
                             >
-                                <Sparkles className="w-5 h-5" />
-                                AI 시뮬레이션 보기
+                                {/* Button Shine Effect */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+                                <Camera className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                                <span className="relative z-10">AI 시뮬레이션 보기</span>
+
+                                {/* Glow pulse */}
+                                <div className="absolute inset-0 rounded-2xl ring-4 ring-white/20 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
                             </button>
                         )}
 
                         {/* Secondary CTA - 30초 체크 */}
                         <Link
                             href="healthcare/chat?topic=glow-booster"
-                            className={`px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2`}
+                            className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl ${secondaryButtonText} text-base font-bold rounded-2xl hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center gap-2 shadow-xl`}
                             style={{
-                                borderColor: isThemeDark ? 'rgba(255,255,255,0.2)' : config.theme.primary,
-                                color: isThemeDark ? '#FFFFFF' : config.theme.primary,
-                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'transparent'
+                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
                             }}
                         >
-                            <Sparkles className="w-4 h-4" />
+                            <Sparkles className="w-5 h-5 text-skin-primary animate-pulse" />
                             30초 체크 시작
                         </Link>
                     </div>
