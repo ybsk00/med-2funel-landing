@@ -79,7 +79,7 @@ export default function HealthcareLanding() {
                             <span className="text-2xl">✨</span>
                             <span
                                 className="text-xl font-bold tracking-wide"
-                                style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}
+                                style={{ color: config.theme.text }}
                             >
                                 {config.marketingName || config.name}
                             </span>
@@ -210,7 +210,7 @@ export default function HealthcareLanding() {
                                 <a
                                     href="#clinic-search"
                                     className="hover:opacity-80 text-sm font-medium inline-flex items-center gap-1 transition-opacity"
-                                    style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}
+                                    style={{ color: config.theme.text }}
                                 >
                                     {config.marketing?.searchKeyword || "유명한 의원 찾기"}
                                     <ChevronRight className="w-4 h-4" />
@@ -231,10 +231,10 @@ export default function HealthcareLanding() {
                 <section id="clinic-search" className="relative py-16">
                     <div className="w-full max-w-4xl px-6 md:px-0 md:pl-[clamp(48px,10vw,160px)] md:pr-[clamp(16px,8vw,180px)] mx-auto">
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: config.theme.text }}>
                                 {config.marketing?.searchKeyword || "유명한 의원 찾기"}
                             </h2>
-                            <p className="text-sm opacity-70" style={{ color: isThemeDark() ? '#F0F9FF' : config.theme.text }}>
+                            <p className="text-sm opacity-70" style={{ color: config.theme.text }}>
                                 {config.address} {config.name}
                             </p>
                         </div>

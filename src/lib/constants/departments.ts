@@ -141,13 +141,13 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#4A5D23",
-            secondary: "#8D8D8D",
-            accent: "#8B4513",
-            background: "#F5F5F4", // Warm Stone Gray (Hanji)
-            text: "#1C1917", // Very Dark Warm Gray
-            concept: "Modern Tradition",
-            texture: "hanji",
+            primary: "#D4A373", // Ocher Gold
+            secondary: "#F5E6D3",
+            accent: "#A0522D", // Sienna Accent
+            background: "#2D241E", // Deep Ocher Dark
+            text: "#F5F5F4", // Stone White
+            concept: "Premium Dark Heritage",
+            texture: "glass",
             font: "serif",
             sound: "/sounds/gong.mp3"
         },
