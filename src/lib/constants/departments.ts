@@ -492,5 +492,3 @@ export const DEPARTMENTS: Department[] = [
 export function getDepartment(id: string) {
     return DEPARTMENTS.find((d) => d.id === id);
 }
-/ /   U p d a t e d   t h e m e s   f o r   b e t t e r   v i s i b i l i t y  
- 
