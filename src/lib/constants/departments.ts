@@ -71,9 +71,9 @@ export const DEPARTMENTS: Department[] = [
         },
         keywords: ["눈/코", "리프팅", "가슴", "지방흡입"],
         modules: [
-            { id: 'virtual-plastic', title: 'AI 미러', description: '사진으로 미리 보는 나의 변화', icon: 'Camera', color: 'rose' },
-            { id: 'trend-check', title: '트렌드 분석', description: '요즘 유행하는 스타일과 내 얼굴의 조화', icon: 'Sparkles', color: 'gold' },
-            { id: 'ratio-doctor', title: '비율 닥터', description: '나만 모르는 얼굴 황금비율 찾기', icon: 'Ruler', color: 'stone' },
+            { id: 'virtual-plastic', title: 'AI 미러', description: '사진으로 미리 보는 나의 아름다운 변화', icon: 'Camera', color: 'rose' },
+            { id: 'trend-check', title: '트렌드 분석', description: '최신 트렌드와 내 얼굴의 완벽한 조화', icon: 'Sparkles', color: 'gold' },
+            { id: 'ratio-doctor', title: '비율 닥터', description: '나만 모르는 얼굴 황금비율 정밀 분석', icon: 'Ruler', color: 'stone' },
             { id: 'recovery-tip', title: '애프터 케어', description: '빠른 회복을 위한 1:1 루틴 가이드', icon: 'Heart', color: 'pink' }
         ]
     },

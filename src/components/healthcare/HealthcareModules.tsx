@@ -22,7 +22,7 @@ interface HealthcareModulesProps {
 }
 
 const CARD_COMPONENTS: Record<string, any> = {
-    silk: VipCard,
+    silk: GlassCard, // User request: Design synergy. Silk was too detachment.
     hanji: HanjiCard,
     glass: GlassCard,
     blueprint: BlueprintCard,
@@ -181,8 +181,8 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                     </p>
                 </div>
 
-                {/* Module Grid: 2+2 Layout (2 cols on tablet/desktop, 4 cols on large screens if needed, but request was 2+2) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+                {/* Module Grid: Consistent Height & Branded Style */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 items-stretch">
                     {config.landingModules.map((module: any) => {
                         const ICON_MAP: any = {
                             'Sparkles': Sparkles,
@@ -194,7 +194,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                             'Activity': Activity,
                             'Sun': Sun,
                             'Camera': Camera,
-                            'Thermometer': Thermometer,
+                            'Thermometer': ArrowUpRight,
                             'Zap': Zap,
                             'Lock': Lock,
                             'Calendar': Calendar,
@@ -206,7 +206,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                         const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
                         return (
-                            <div key={module.id} className="h-full">
+                            <div key={module.id} className="flex">
                                 <CardComponent
                                     id={module.id}
                                     title={module.title}
@@ -236,8 +236,6 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                     </div>
                 )}
             </div>
-
-        </div>
         </section >
     );
 }
