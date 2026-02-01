@@ -1,6 +1,7 @@
 "use client";
 
 import { HospitalProvider } from "@/components/common/HospitalProvider";
+import ClinicSearchModule from '@/components/healthcare/ClinicSearchModule';
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
@@ -77,6 +78,13 @@ export default function OncologyLanding() {
                                 <p className="text-[#636E69] mt-2 max-w-2xl mx-auto">
                                     Comprehensive care centered around healing the whole person.
                                 </p>
+                                <div className="mt-8 mb-8">
+                                    <ClinicSearchModule
+                                        department="oncology"
+                                        searchKeyword="암요양병원"
+                                        theme="modern"
+                                    />
+                                </div>
                             </div>
 
                             <HealthcareModules config={linenConfig} />

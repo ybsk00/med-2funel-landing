@@ -68,6 +68,11 @@ export default function ObgynLanding() {
                                 <h2 className="text-4xl font-serif italic text-[#4A4A4A]">
                                     Women's Wellness
                                 </h2>
+                                <ClinicSearchModule
+                                    department="obgyn"
+                                    searchKeyword="산부인과"
+                                    theme="modern"
+                                />
                                 <div className="w-16 h-1 bg-[#FF9EAA] mt-4 rounded-full"></div>
                             </div>
 

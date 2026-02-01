@@ -38,13 +38,13 @@ export default function InternalMedicineLanding() {
                 {/* Custom Theme Injection for Internal Medicine */}
                 <ClinicSearchModule
                     department="internal-medicine"
-                    searchKeyword="건강검진 내과"
+                    searchKeyword="내과"
                     theme="modern"
                 />
                 <style jsx global>{`
                     /* Leaf Pattern Background */
                     .bg-leaf-pattern {
-                        background-image: 
+                        background-image:
                             linear-gradient(rgba(30, 58, 47, 0.03) 1px, transparent 1px),
                             linear-gradient(90deg, rgba(30, 58, 47, 0.03) 1px, transparent 1px);
                         background-size: 40px 40px;
