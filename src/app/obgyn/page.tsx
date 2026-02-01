@@ -1,7 +1,5 @@
-"use client";
+import ObgynLanding from "@/components/departments/ObgynLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="obgyn" />;
+export default function ObgynPage() {
+    return <ObgynLanding />;
 }

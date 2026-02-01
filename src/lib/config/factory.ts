@@ -69,6 +69,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
         fax: "02-1234-5679",
         businessNumber: "123-45-67890",
         naverSearchKeyword: `${dept.label} 추천`,
+        catchphrase: dept.catchphrase, // Map catchphrase
 
         personas: {
             healthcare: {

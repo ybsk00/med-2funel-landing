@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neurology Department - NeuroDept</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "deep-indigo": "#0f172a", // Custom for the requested dark theme
+                        "electric-purple": "#6366f1", // Custom accent
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    backgroundImage: {
+                        'neural-grid': "radial-gradient(circle at center, rgba(19, 236, 164, 0.05) 1px, transparent 1px)",
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(19, 236, 164, 0.15)',
+                        'card-glow': '0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 20px rgba(0, 0, 0, 0.5)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for technical feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #13eca4;
+        }
+        
+        /* Animation utility for the pulsing effect */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-glow 3s infinite;
+        }
+    </style>
+</head>
+<body class="bg-deep-indigo text-white font-display overflow-x-hidden antialiased selection:bg-primary selection:text-deep-indigo">
+<!-- Top Navigation Bar -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-deep-indigo/80 backdrop-blur-md border-b border-white/10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<!-- Logo -->
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 text-primary">
+<span class="material-symbols-outlined text-2xl">neurology</span>
+</div>
+<div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-tight">NeuroDept</h2>
+<span class="text-xs text-slate-400 font-medium tracking-wider uppercase">Advanced Diagnostics</span>
+</div>
+</div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Clinical Services</a>
+<a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Research</a>
+<a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Team</a>
+<a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Patient Portal</a>
+</nav>
+<button class="bg-primary hover:bg-primary/90 text-deep-indigo text-sm font-bold py-2.5 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(19,236,164,0.3)] hover:shadow-[0_0_25px_rgba(19,236,164,0.5)]">
+                        Book Consultation
+                    </button>
+</div>
+<!-- Mobile menu button -->
+<div class="md:hidden flex items-center">
+<button class="text-slate-300 hover:text-white">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<div class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden">
+<!-- Background with neural network abstract image -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-deep-indigo/60 z-10"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-deep-indigo via-transparent to-transparent z-10"></div>
+<div class="w-full h-full bg-cover bg-center opacity-40 animate-pulse-slow" data-alt="Abstract neural network connections glowing blue and purple" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQoN7CvKDQWwGzoulXTeB_JnjpDEd8BVkmeZZP6zXEyh63bLhG_uztq-_RwNrKMetol0XwkmtmTWuN9CZG80C_zCqLaN1C9RyipeaxowePfSq3lM-10FqUpLg9UH9K08KVzqcAdoCxLlf_V_sA3n6VOFyUlyJOZljnjssQ1A8Gu-vAfujM-DtZdcbp5fAnr9uiArr_il-NGc3FbhiuxF3bXswsOY6jwDMs-nQ9VTpSN6xDZ5k1YNamYwj75_sYITvo-ujKu6d6NTvN');">
+</div>
+</div>
+<div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<div class="flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 w-fit backdrop-blur-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-primary text-xs font-bold tracking-widest uppercase">System Online • Variant 10</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
+                        Decoding the <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-primary/60">Human Mind</span>
+</h1>
+<p class="text-lg text-slate-300 max-w-xl leading-relaxed">
+                        Advanced Neurology &amp; Neurosurgery powered by next-generation holographic diagnostics and AI-driven analysis.
+                    </p>
+<div class="flex flex-wrap gap-4 mt-4">
+<button class="bg-primary text-deep-indigo font-bold h-12 px-8 rounded-lg shadow-glow hover:scale-105 transition-transform flex items-center gap-2">
+<span>Request Scan</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<button class="bg-white/5 hover:bg-white/10 border border-white/20 text-white font-bold h-12 px-8 rounded-lg backdrop-blur-sm transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">view_in_ar</span>
+<span>View Technology</span>
+</button>
+</div>
+</div>
+<!-- 3D Hologram Representation -->
+<div class="hidden lg:flex justify-center items-center relative">
+<!-- Decorative rings -->
+<div class="absolute w-[500px] h-[500px] border border-white/5 rounded-full animate-[spin_10s_linear_infinite]"></div>
+<div class="absolute w-[400px] h-[400px] border border-primary/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+<!-- Brain Image/Hologram placeholder -->
+<div class="relative z-10 w-[400px] h-[400px] bg-gradient-to-b from-primary/20 to-transparent rounded-full flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-glow">
+<div class="w-full h-full rounded-full overflow-hidden relative">
+<div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&amp;w=2940&amp;auto=format&amp;fit=crop')] bg-cover bg-center opacity-80 mix-blend-screen" data-alt="Holographic visualization of a human brain"></div>
+<!-- Scanning line -->
+<div class="absolute top-0 left-0 w-full h-1 bg-primary/50 shadow-[0_0_15px_#13eca4] animate-[scan_3s_ease-in-out_infinite]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Section - "Neural Network Bar" -->
+<div class="border-y border-white/10 bg-[#0B1221]/50 backdrop-blur-sm relative z-20">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<!-- Stat 1 -->
+<div class="flex flex-col gap-1 relative group">
+<div class="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                        Success Rate
+                    </div>
+<p class="text-4xl font-bold text-white group-hover:text-primary transition-colors">98.4%</p>
+<div class="h-0.5 w-12 bg-primary/30 mt-2"></div>
+</div>
+<!-- Stat 2 -->
+<div class="flex flex-col gap-1 relative group">
+<div class="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-primary text-lg">groups</span>
+                        Patients
+                    </div>
+<p class="text-4xl font-bold text-white group-hover:text-primary transition-colors">12k+</p>
+<div class="h-0.5 w-12 bg-primary/30 mt-2"></div>
+</div>
+<!-- Stat 3 -->
+<div class="flex flex-col gap-1 relative group">
+<div class="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-primary text-lg">science</span>
+                        Papers
+                    </div>
+<p class="text-4xl font-bold text-white group-hover:text-primary transition-colors">450+</p>
+<div class="h-0.5 w-12 bg-primary/30 mt-2"></div>
+</div>
+<!-- Stat 4 -->
+<div class="flex flex-col gap-1 relative group">
+<div class="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">
+<span class="material-symbols-outlined text-primary text-lg">medical_services</span>
+                        Specialists
+                    </div>
+<p class="text-4xl font-bold text-white group-hover:text-primary transition-colors">24</p>
+<div class="h-0.5 w-12 bg-primary/30 mt-2"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative">
+<!-- Background Grid Decoration -->
+<div class="absolute inset-0 bg-neural-grid bg-[length:32px_32px] opacity-20 pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+<!-- Sidebar / Introduction -->
+<div class="lg:col-span-4 flex flex-col gap-8">
+<div>
+<h2 class="text-primary font-bold tracking-widest uppercase text-sm mb-3">Diagnostic Services</h2>
+<h3 class="text-4xl font-bold text-white mb-4">Holographic Diagnostics</h3>
+<p class="text-slate-400 leading-relaxed">
+                        State-of-the-art neurological care leveraging the latest in medical imaging and AI analysis to map the complexities of the human brain with sub-millimeter precision.
+                    </p>
+</div>
+<!-- Featured Tech Card (Mini) -->
+<div class="p-6 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm relative overflow-hidden group hover:border-primary/50 transition-all">
+<div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-4xl">view_in_ar</span>
+</div>
+<h4 class="text-lg font-bold text-white mb-2">AI-Assisted Interpretation</h4>
+<p class="text-sm text-slate-400 mb-4">Real-time analysis of CT and MRI data streams.</p>
+<div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+</div>
+<!-- Services Grid (Holographic Cards) -->
+<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="group p-6 rounded-lg bg-[#1a2333]/80 border border-white/10 hover:border-primary/50 hover:shadow-glow transition-all duration-300 backdrop-blur-md flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">neurology</span>
+</div>
+<span class="text-xs font-mono text-slate-500 group-hover:text-primary">ID: SV-01</span>
+</div>
+<div>
+<h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Stroke &amp; Cerebrovascular</h4>
+<p class="text-slate-400 text-sm">Rapid response interventions for stroke and complex vascular conditions utilizing thrombectomy.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group p-6 rounded-lg bg-[#1a2333]/80 border border-white/10 hover:border-primary/50 hover:shadow-glow transition-all duration-300 backdrop-blur-md flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">monitor_heart</span>
+</div>
+<span class="text-xs font-mono text-slate-500 group-hover:text-primary">ID: EM-02</span>
+</div>
+<div>
+<h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Epilepsy Monitoring</h4>
+<p class="text-slate-400 text-sm">Comprehensive 24/7 monitoring units for precise seizure mapping and focal point identification.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group p-6 rounded-lg bg-[#1a2333]/80 border border-white/10 hover:border-primary/50 hover:shadow-glow transition-all duration-300 backdrop-blur-md flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">accessibility_new</span>
+</div>
+<span class="text-xs font-mono text-slate-500 group-hover:text-primary">ID: MD-03</span>
+</div>
+<div>
+<h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Movement Disorders</h4>
+<p class="text-slate-400 text-sm">Specialized care for Parkinson's and other motor system disorders with deep brain stimulation.</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group p-6 rounded-lg bg-[#1a2333]/80 border border-white/10 hover:border-primary/50 hover:shadow-glow transition-all duration-300 backdrop-blur-md flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined text-2xl">radiology</span>
+</div>
+<span class="text-xs font-mono text-slate-500 group-hover:text-primary">ID: NI-04</span>
+</div>
+<div>
+<h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Advanced Neuroimaging</h4>
+<p class="text-slate-400 text-sm">High-resolution MRI and CT diagnostics with AI-assisted interpretation layers.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Symptom Mapper Section -->
+<div class="relative py-20 bg-black/20 border-t border-white/5">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="relative rounded-2xl overflow-hidden border border-white/10 bg-[#0f172a] shadow-card-glow">
+<div class="grid lg:grid-cols-2">
+<!-- Interactive Visual Side -->
+<div class="relative min-h-[400px] bg-black/50 p-8 flex items-center justify-center overflow-hidden">
+<!-- Grid Background inside card -->
+<div class="absolute inset-0 bg-[linear-gradient(rgba(19,236,164,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(19,236,164,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+<!-- 3D Brain Model Placeholder -->
+<div class="relative z-10 w-full h-full flex items-center justify-center">
+<div class="w-64 h-64 bg-cover bg-center rounded-full shadow-[0_0_50px_rgba(19,236,164,0.2)] animate-pulse-slow relative group cursor-crosshair" data-alt="Top-down view of a glowing blue brain scan on a dark background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCeJ5wR3oPAf7ni_ll-VwXKiupHx3y8U9Vt0DNKP36Baovnt4M6Ccjgdm9XhkYsUFYsHOuXayjQynCvA3TSTT9V0KarsPdpfCdGWYEhUUiH4AnMn_yd8bTtS88WZFirefdcAHtGojoGFNte3xtYOH521nQ-yj-BLw7b1iQmY6uuoZct0M9SJ2AcCzE3LdVB9Twggp_Nwj3XVWWHnCPrI7T379Tiyk6bUAVTBkzKsjzpQhOzmos-YIA9-1aQ4QaunlM0YGAQdzs5-ovS');">
+<!-- Interactive Hotspots -->
+<div class="absolute top-1/3 left-1/3 w-3 h-3 bg-primary rounded-full animate-ping cursor-pointer hover:scale-150 transition-transform"></div>
+<div class="absolute bottom-1/3 right-1/3 w-3 h-3 bg-primary rounded-full animate-ping delay-700 cursor-pointer hover:scale-150 transition-transform"></div>
+<!-- Overlay Tooltip (Simulated) -->
+<div class="absolute -right-24 top-10 bg-black/80 text-white text-xs p-2 rounded border border-primary/30 backdrop-blur-md hidden group-hover:block">
+                                     Frontal Lobe <br/> <span class="text-primary">Function: Cognitive</span>
+</div>
+</div>
+</div>
+<!-- UI Controls overlay -->
+<div class="absolute bottom-4 left-4 flex gap-2">
+<button class="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white">
+<span class="material-symbols-outlined text-sm">rotate_left</span>
+</button>
+<button class="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white">
+<span class="material-symbols-outlined text-sm">zoom_in</span>
+</button>
+</div>
+</div>
+<!-- Content Side -->
+<div class="p-8 lg:p-12 flex flex-col justify-center">
+<div class="flex items-center gap-2 mb-4">
+<span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Interactive Tool</span>
+</div>
+<h3 class="text-3xl font-bold text-white mb-4">3D Symptom Mapper</h3>
+<p class="text-slate-300 mb-8 leading-relaxed">
+                            Experience our diagnostic process. Rotate the holographic model to locate pain points. Click on specific brain regions to identify potential conditions and learn about our targeted treatment pathways.
+                        </p>
+<div class="flex flex-col gap-4 border-l-2 border-primary/20 pl-4 mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+<span class="text-sm text-slate-300">Identify potential migraine triggers</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+<span class="text-sm text-slate-300">Learn about lobe-specific functions</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">check</span>
+<span class="text-sm text-slate-300">Directly book relevant specialists</span>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-deep-indigo font-bold py-3 px-6 rounded-lg hover:shadow-glow transition-all flex items-center justify-center gap-2">
+<span>Launch Interactive Map</span>
+<span class="material-symbols-outlined text-lg">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trust/Doctor Section -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="text-3xl font-bold text-white mb-2">The Neural Trust</h2>
+<p class="text-slate-400">Leading experts in neurosurgery and neurology.</p>
+</div>
+<a class="text-primary font-medium hover:text-white transition-colors flex items-center gap-1 group" href="#">
+                Meet the full team 
+                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Doctor 1 -->
+<div class="group relative rounded-lg overflow-hidden bg-[#1a2333] border border-white/5 hover:border-primary/50 transition-colors">
+<div class="aspect-[4/3] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Portrait of Dr. Sarah Chen, Chief of Neurology" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDYwrxVRnGCWn83kmLekXx-Ovcu74LTV16W7LdFeS-g3obKAxeuof0-SFC9OnJLnUN8vxPzGmu4MxA3PyNqYP7K_6Lk1fWj8KVWkpuOgdXxhtgkr0A1O2Nzn3KP3SdKinQdN3PCNGfFlJnB2Ldm_eHj6aAY1S0i7ncea9_A6rzUy-s1Uw72So8YNHE9K3Z6QuV_M8eLq_gyn-f7AjhyZnBtEF24CwvNxZkGVLSmrHE8gRZTUu8fFCNjeCsNxHco9VVkFiS2k1P-fZY')">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1a2333] to-transparent opacity-90"></div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<p class="text-primary text-xs font-bold uppercase tracking-wider mb-1">Chief of Neurology</p>
+<h3 class="text-xl font-bold text-white">Dr. Sarah Chen</h3>
+<p class="text-slate-400 text-sm mt-2 line-clamp-2">Specializing in holographic guided neurosurgery and complex tumor removal.</p>
+</div>
+</div>
+<!-- Doctor 2 -->
+<div class="group relative rounded-lg overflow-hidden bg-[#1a2333] border border-white/5 hover:border-primary/50 transition-colors">
+<div class="aspect-[4/3] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Portrait of Dr. James Wilson, Epilepsy Specialist" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuABqXaYxETgZmMVueaScxWp2FJIA2PNrBJliJ8RWOrKIC-wGeXk-NEnx0uM8sMGDuzIPzy_pcO3HvxEixAi7KEDPjQKLTHrcnX_cFUoBQroo7HjpbZ5fOpBuqiaGyOXx9syeeer0tmvp--0gQ0of6WhpxOXDsw2WpyJ6KaIhOnx3jhcG8VXIaKXWj7jr21LWJXOGTbdNedVXq416JBGrTEcUruNCvdGjIndpqL5aB_J2pcGc-RH9Bx48YP-RbP2Zubv4w17L1_3N75m')">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1a2333] to-transparent opacity-90"></div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<p class="text-primary text-xs font-bold uppercase tracking-wider mb-1">Epileptologist</p>
+<h3 class="text-xl font-bold text-white">Dr. James Wilson</h3>
+<p class="text-slate-400 text-sm mt-2 line-clamp-2">Leading researcher in non-invasive seizure monitoring technologies.</p>
+</div>
+</div>
+<!-- Doctor 3 -->
+<div class="group relative rounded-lg overflow-hidden bg-[#1a2333] border border-white/5 hover:border-primary/50 transition-colors">
+<div class="aspect-[4/3] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500" data-alt="Portrait of Dr. Emily Davis, Cognitive Neurologist" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuxNQh637pDh4Jz1W_56ke-2G5y4XUyWuvXrlD_RpDks8aLIFDBjpnqhYcKw1pNKpZDVRNoKTBxDDO4zzWzXn6rokzrG7FWiWV1Amnxxot9lJG4rfjuc0Gg7MsmR4HAH1RM2LfOcP2QpOGe2mxK0nx-21jOQN-bv_4DWVAR7B8ZBJSpcufVAFnVDaZVnZS7NmxfbZ41wClEJzJnbtpFkAKHGv3LWky07dw-HyP8yGk17L3BvUeeF9SHLQayiutT6Mmzw-YyLMSbMz-')">
+<div class="absolute inset-0 bg-gradient-to-t from-[#1a2333] to-transparent opacity-90"></div>
+</div>
+<div class="absolute bottom-0 left-0 right-0 p-6">
+<p class="text-primary text-xs font-bold uppercase tracking-wider mb-1">Cognitive Neuroscience</p>
+<h3 class="text-xl font-bold text-white">Dr. Emily Davis</h3>
+<p class="text-slate-400 text-sm mt-2 line-clamp-2">Expert in memory disorders and early Alzheimer's detection protocols.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Simple Footer -->
+<footer class="border-t border-white/10 bg-[#0B1221] pt-12 pb-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-primary flex items-center justify-center text-deep-indigo">
+<span class="material-symbols-outlined text-xl">neurology</span>
+</div>
+<span class="text-white font-bold text-lg">NeuroDept</span>
+</div>
+<p class="text-slate-500 text-sm">© 2024 NeuroDept Hospital System. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<!-- Style for scanning animation -->
+<style>
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+</body></html>

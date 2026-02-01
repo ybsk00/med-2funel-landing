@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Urology Dept | Peak Performance</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4", // Neon Mint
+                        "primary-dark": "#0fb880",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "carbon-dark": "#111816",
+                        "carbon-light": "#2a3330",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'carbon-pattern': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%231a2220' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E\")",
+                        'grid-pattern': "linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Utilities for the "Sports" feel */
+        .skew-box {
+            transform: skewX(-12deg);
+        }
+        .unskew-content {
+            transform: skewX(12deg);
+        }
+        .clip-diagonal {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+        }
+        .tachometer-gradient {
+            background: conic-gradient(from 180deg, #ef4444 0deg, #eab308 90deg, #13eca4 180deg, #13eca4 220deg, transparent 220deg);
+            mask: radial-gradient(transparent 60%, black 61%);
+            -webkit-mask: radial-gradient(transparent 60%, black 61%);
+        }
+        .bg-grid {
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-carbon-dark font-display antialiased overflow-x-hidden">
+<!-- Navbar -->
+<header class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-[#e1e6e4]">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<!-- Logo Area -->
+<div class="flex items-center gap-4">
+<div class="size-10 bg-carbon-dark rounded-lg flex items-center justify-center text-primary shadow-[0_0_15px_rgba(19,236,164,0.3)]">
+<span class="material-symbols-outlined text-3xl">speed</span>
+</div>
+<div>
+<h1 class="text-xl font-black uppercase tracking-tighter leading-none italic">Peak<span class="text-primary">Performance</span></h1>
+<p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Urology Dept</p>
+</div>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors" href="#">Services</a>
+<a class="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors" href="#">Team</a>
+<a class="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors" href="#">Diagnostics</a>
+<a class="text-sm font-bold uppercase tracking-wide hover:text-primary transition-colors" href="#">Portal</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-carbon-dark px-4 py-2 rounded-lg font-bold text-sm transition-all border border-gray-200">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+<span>Privacy Mode</span>
+</button>
+<button class="flex items-center gap-2 bg-primary hover:bg-primary-dark text-carbon-dark px-5 py-2 rounded-lg font-black text-sm uppercase italic tracking-wider shadow-[0_4px_14px_rgba(19,236,164,0.4)] transition-all transform hover:-translate-y-0.5">
+<span>Book Pit Stop</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<div class="relative w-full bg-carbon-dark overflow-hidden">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-r from-carbon-dark via-carbon-dark/90 to-transparent z-10"></div>
+<img class="w-full h-full object-cover opacity-60 mix-blend-overlay" data-alt="Abstract blue high performance car engine detail symbolizing precision and power" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNQEKzv2dzMrLFyHdlMvJoJ-j9pFv46BLU5iRvbncHMFfN2FyId7-0_cZyu_xc1mBVvjIi2WotXVvzRvwic8EDZszKJNNFjEg4yAVX6Eu7QBIF1FQDflqS7MGUbfdxJ7rJsbVGEoMNGMQXSsh8a-Upd4hPbC6J0CFgXveEeH8sTkR9L1giVFVi4ET8dgDOp2on-GUR7j3O82d-dxI5YIdM5X8ZaPueDr1YhQn-x99lyCzUV4s4AA1ygArv7y5UaD1TFEUcqrk9rWP3"/>
+</div>
+<!-- Animated Grid Overlay -->
+<div class="absolute inset-0 z-0 opacity-10 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+<div class="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+<div class="max-w-2xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/20 border border-primary/40 rounded-full text-primary text-xs font-bold uppercase tracking-widest mb-6">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    System Status: Optimal
+                </div>
+<h1 class="text-6xl md:text-7xl font-black text-white uppercase italic tracking-tighter leading-[0.9] mb-6 drop-shadow-lg">
+                    Reclaim Your <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">Vitality</span>
+</h1>
+<p class="text-lg text-gray-300 mb-8 font-medium leading-relaxed max-w-lg border-l-4 border-primary pl-6">
+                    Advanced urology solutions engineered for high-performance living. Precision diagnostics and rapid recovery protocols to get you back on track.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="group relative px-8 py-4 bg-primary text-carbon-dark font-black uppercase italic tracking-wider overflow-hidden rounded transform hover:skew-x-[-6deg] transition-all">
+<div class="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out skew-x-12"></div>
+<span class="relative inline-flex items-center gap-2">
+                            Start Engine Check
+                            <span class="material-symbols-outlined">network_check</span>
+</span>
+</button>
+<button class="px-8 py-4 bg-transparent border-2 border-white/30 text-white font-bold uppercase tracking-wider hover:bg-white/10 rounded transition-all flex items-center gap-2">
+                        View Specs
+                        <span class="material-symbols-outlined">description</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Hero Bottom Stat Bar -->
+<div class="relative z-20 bg-carbon-light border-t border-white/10">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+<div class="p-6 flex flex-col items-center md:items-start">
+<span class="text-primary font-black text-3xl">5,000+</span>
+<span class="text-gray-400 text-xs uppercase tracking-widest font-bold">Procedures</span>
+</div>
+<div class="p-6 flex flex-col items-center md:items-start">
+<span class="text-primary font-black text-3xl">98%</span>
+<span class="text-gray-400 text-xs uppercase tracking-widest font-bold">Success Rate</span>
+</div>
+<div class="p-6 flex flex-col items-center md:items-start">
+<span class="text-primary font-black text-3xl">2x</span>
+<span class="text-gray-400 text-xs uppercase tracking-widest font-bold">Faster Recovery</span>
+</div>
+<div class="p-6 flex flex-col items-center md:items-start">
+<span class="text-primary font-black text-3xl">24/7</span>
+<span class="text-gray-400 text-xs uppercase tracking-widest font-bold">Monitoring</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats / Tachometer Section -->
+<section class="py-20 bg-background-light bg-grid-pattern relative">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row items-center gap-12">
+<!-- Text Content -->
+<div class="flex-1">
+<h2 class="text-4xl font-black text-carbon-dark uppercase italic tracking-tighter mb-4">
+                        Performance <span class="text-primary">Metrics</span>
+</h2>
+<p class="text-gray-600 mb-8 text-lg">
+                        Our diagnostic approach mirrors high-end telemetry. We track, analyze, and optimize your urological health indicators in real-time.
+                    </p>
+<div class="space-y-4">
+<div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-primary flex items-center justify-between">
+<div>
+<h4 class="font-bold text-carbon-dark">Testosterone Levels</h4>
+<p class="text-sm text-gray-500">Optimized for energy &amp; focus</p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">bolt</span>
+</div>
+<div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-gray-300 flex items-center justify-between opacity-70 hover:opacity-100 transition-opacity">
+<div>
+<h4 class="font-bold text-carbon-dark">Prostate Health Index</h4>
+<p class="text-sm text-gray-500">Proactive screening score</p>
+</div>
+<span class="material-symbols-outlined text-gray-400 text-3xl">shield</span>
+</div>
+</div>
+</div>
+<!-- The Tachometer Graphic -->
+<div class="flex-1 flex justify-center relative">
+<div class="relative w-80 h-80 flex items-center justify-center">
+<!-- Outer Rim -->
+<div class="absolute inset-0 rounded-full border-[12px] border-gray-200"></div>
+<!-- Gradient Arc (Tachometer fill) -->
+<div class="absolute inset-0 rounded-full tachometer-gradient transform rotate-[-120deg]"></div>
+<!-- Inner Circle -->
+<div class="absolute inset-4 bg-white rounded-full shadow-inner flex flex-col items-center justify-center z-10 border border-gray-100">
+<span class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Vitality Score</span>
+<span class="text-6xl font-black text-carbon-dark tabular-nums tracking-tighter">94</span>
+<div class="flex items-center gap-1 mt-2 text-primary font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Optimal</span>
+</div>
+</div>
+<!-- Needle (CSS Rotation) -->
+<div class="absolute w-1 h-32 bg-carbon-dark origin-bottom bottom-1/2 left-1/2 transform -translate-x-1/2 rotate-[50deg] z-20 rounded-full shadow-lg" style="transform-origin: bottom center;">
+<div class="w-3 h-3 bg-primary rounded-full absolute -bottom-1 -left-1 border-2 border-white"></div>
+</div>
+<!-- RPM Labels -->
+<div class="absolute bottom-10 left-10 text-xs font-bold text-gray-400">0</div>
+<div class="absolute top-10 left-10 text-xs font-bold text-gray-400">3</div>
+<div class="absolute top-4 left-1/2 text-xs font-bold text-gray-400">5</div>
+<div class="absolute top-10 right-10 text-xs font-bold text-red-500">8</div>
+<div class="absolute bottom-10 right-10 text-xs font-bold text-red-500">10</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Cards (Sports Cards) -->
+<section class="py-24 bg-white">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between mb-16">
+<div>
+<h2 class="text-4xl font-black text-carbon-dark uppercase italic tracking-tighter">Maintenance <span class="text-primary">Services</span></h2>
+<div class="h-1 w-20 bg-primary mt-2 transform skew-x-[-12deg]"></div>
+</div>
+<a class="hidden md:flex items-center gap-2 font-bold hover:text-primary transition-colors" href="#">
+                    View Full Catalog <span class="material-symbols-outlined">arrow_right_alt</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group relative bg-gray-50 rounded-xl overflow-hidden shadow-lg border-b-4 border-transparent hover:border-primary transition-all duration-300 hover:-translate-y-2">
+<div class="h-48 overflow-hidden bg-carbon-dark relative">
+<div class="absolute inset-0 bg-black/20 z-10"></div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" data-alt="Abstract medical imaging scanner in dark environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANiSIOPwQqXnXkrNeXqCuZv7r5VoAZjXOKndZbUFaDHAGZc9RYyv2pDfNrqsQ3ROP7KutD0eUtXDci-1zbnT8KotvkYHq7me7_zvqtL4pc6SEhnVUVAlmVcIdhAd698O_vygeDat0CtcHOOI5W-ZB8lux_0sO4fW9RJvGE1oAns4TQP6pot1sb_P7Xf2j2qoe8XnBptCO8lOT72ODONrAUbLlz2wBF9t2tamQVb3KWsQkNmcJB-Wtuez4jifyuZ5Z-GbFK1JtAm0wK"/>
+<div class="absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-md p-2 rounded text-white">
+<span class="material-symbols-outlined">search</span>
+</div>
+</div>
+<div class="p-8 relative">
+<div class="absolute -top-6 left-6 bg-primary text-carbon-dark p-3 shadow-lg rounded transform skew-x-[-6deg]">
+<span class="material-symbols-outlined unskew-content">monitor_heart</span>
+</div>
+<h3 class="mt-4 text-xl font-bold uppercase italic text-carbon-dark mb-2">Diagnostics</h3>
+<p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                            High-fidelity imaging and lab work to pinpoint issues with sub-millimeter precision.
+                        </p>
+<a class="inline-flex items-center text-sm font-bold text-primary uppercase tracking-wider group-hover:gap-2 transition-all" href="#">
+                            Book Scan <span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-gray-50 rounded-xl overflow-hidden shadow-lg border-b-4 border-transparent hover:border-primary transition-all duration-300 hover:-translate-y-2">
+<div class="h-48 overflow-hidden bg-carbon-dark relative">
+<div class="absolute inset-0 bg-black/20 z-10"></div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" data-alt="Close up of robotic surgery arm tool" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDViBSw-WI6Wnvph-_cym_YMTDc1fXv9HdcceK1XI0Id-UFB9Pn71OOGW_T2udYeunPT0HNqol6b2orFTLZRr5T5E6eMDLzkVtUPCZu_iM9qIlArzbg4c5gHXRngYezQwydrB4kfCokrk1adXHYdl8UGxzbhNGrnShjxOX5edD3Z3F8oXIs37omGccFtegu-4LP-Jdky73tqq-MqMbCktwAPW6qztzr6lwEY9Hqd4taJIphQhVc3pS-A_TB9YK9FPDF-A25r7C-hOe-"/>
+<div class="absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-md p-2 rounded text-white">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+</div>
+</div>
+<div class="p-8 relative">
+<div class="absolute -top-6 left-6 bg-carbon-dark text-white p-3 shadow-lg rounded transform skew-x-[-6deg]">
+<span class="material-symbols-outlined unskew-content">medical_services</span>
+</div>
+<h3 class="mt-4 text-xl font-bold uppercase italic text-carbon-dark mb-2">Robotic Surgery</h3>
+<p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                            Minimally invasive procedures using da Vinci® systems for faster recovery times.
+                        </p>
+<a class="inline-flex items-center text-sm font-bold text-primary uppercase tracking-wider group-hover:gap-2 transition-all" href="#">
+                            Learn More <span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-gray-50 rounded-xl overflow-hidden shadow-lg border-b-4 border-transparent hover:border-primary transition-all duration-300 hover:-translate-y-2">
+<div class="h-48 overflow-hidden bg-carbon-dark relative">
+<div class="absolute inset-0 bg-black/20 z-10"></div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80" data-alt="Man lifting weights in gym abstract concept of strength" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQdzWgfbUQk1jhTuQHCtyHqEM2oIFyx2f_AJpS9CCtOcHI_WXtOwxOQtKMfMFNUZG9pkIAhWyrtdsZPCu0SjehFsb7oXMWomKje_fmZGa6IO03e9BnD3Ag2Y2hfTlgFzd8syIZb8F5f3M43CmZg8AJCI3yJ8NJFXpKU0ROpVQkjs9aaG72KReE_VnZk00ikizJ3sg0b66zeAN1PXpIMItphggASzB4vhlHFiwRU77i8fdOxQrD6_Fk0Ebe-ix_-4n_-49qUl-TmksS"/>
+<div class="absolute top-4 right-4 z-20 bg-white/10 backdrop-blur-md p-2 rounded text-white">
+<span class="material-symbols-outlined">upgrade</span>
+</div>
+</div>
+<div class="p-8 relative">
+<div class="absolute -top-6 left-6 bg-white border border-gray-200 text-carbon-dark p-3 shadow-lg rounded transform skew-x-[-6deg]">
+<span class="material-symbols-outlined unskew-content">battery_charging_full</span>
+</div>
+<h3 class="mt-4 text-xl font-bold uppercase italic text-carbon-dark mb-2">Vitality Restoration</h3>
+<p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                            Hormone optimization and therapy to restore peak physical and sexual performance.
+                        </p>
+<a class="inline-flex items-center text-sm font-bold text-primary uppercase tracking-wider group-hover:gap-2 transition-all" href="#">
+                            Check Levels <span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Team / Driver Profiles -->
+<section class="py-20 bg-background-light relative overflow-hidden">
+<!-- Decoration -->
+<div class="absolute -right-20 top-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<h2 class="text-4xl font-black text-center text-carbon-dark uppercase italic tracking-tighter mb-16">
+                Elite <span class="text-primary">Crew</span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Doctor 1 -->
+<div class="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center border border-gray-100">
+<div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-gray-200 to-primary mb-4">
+<img class="w-full h-full rounded-full object-cover border-4 border-white" data-alt="Headshot of Dr. Sarah Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXeTYecBYbPYvMedRZLhjIsRGYaWHUBUI_JtXlWxs6HO21mshGjGYrO5SrJ_egpSz5G0f83o6uqW30MJUA68JIlh73DRwd-8qis0niA-R_ZgdHCiedmLLOTLNl11DLxUZ5Twemb9YUf0hWwyIIuysje-F53Z8AnWrOGXx8UCe042ru7J_9DIpJwljBUwTTrKvOR673TDr0_0J0d2nR2TQDjgh1daOuBqCdumcqeHDcX285H0UrsZj5tDiSr3sp0mcz5VlIq0EUy-aK"/>
+</div>
+<h3 class="font-bold text-lg text-carbon-dark">Dr. Sarah Chen</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-4">Lead Surgeon</p>
+<div class="w-full space-y-3">
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Experience</span>
+<span>15 Yrs</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-carbon-dark w-[85%] rounded-full"></div>
+</div>
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Patient Rating</span>
+<span>4.9/5</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[98%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Doctor 2 -->
+<div class="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center border border-gray-100">
+<div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-gray-200 to-primary mb-4">
+<img class="w-full h-full rounded-full object-cover border-4 border-white" data-alt="Headshot of Dr. Marcus Sterling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs95LYI9gtdrBd4r3llWbYICGfTS05krnhf_kimkQueeRXTPpwfNzuqLSrGGh4yCIx4jyeIjZ4j8OadGQbqROlTiRr2ujdEOODL9iri3-AMc3vL-qF33BFc7ROYkhNBtlCKMCaFVtl2ECsxM_yQFdTx8vNZehA4hpmOobBbcm2BL9kWD9wPMYotyD5hpQA7M3mIN_R3hdiPZWjmeCRcfqpDycGYiZ6zaWpkHJvqABHRmrmh1eI7glK9BbNEctuTheTojTf59Ie8t7q"/>
+</div>
+<h3 class="font-bold text-lg text-carbon-dark">Dr. Marcus Sterling</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-4">Oncology Specialist</p>
+<div class="w-full space-y-3">
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Experience</span>
+<span>12 Yrs</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-carbon-dark w-[75%] rounded-full"></div>
+</div>
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Patient Rating</span>
+<span>4.8/5</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[96%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Doctor 3 -->
+<div class="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center border border-gray-100">
+<div class="w-24 h-24 rounded-full p-1 bg-gradient-to-br from-gray-200 to-primary mb-4">
+<img class="w-full h-full rounded-full object-cover border-4 border-white" data-alt="Headshot of Dr. Elena Rodriguez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtwDGklfJitQzHI9gMcjV9j0TXxhUMczh4Fhd2eoHzeMINzmY1dAlLDkSE6eYzcI9dWo5E8cwA0EmqNUQoI-b9pubClsbYhQccNQM04VZ-rkHPAMYpLuANpoKhbe3e16IYJ0h3jhrPptcORw6nx7wVDoqXSRlIXiywvRRuHz5kvgjCYMnSwM3o77Jhrc27Hu0GMg34axUGvGGaoLLpUOGr7Xn255y2oni56t4oWhwLH5kQO7Gk5v68MSyTGhtI0cqbfiEo2jh18-pf"/>
+</div>
+<h3 class="font-bold text-lg text-carbon-dark">Dr. Elena Rodriguez</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-4">Robotics Lead</p>
+<div class="w-full space-y-3">
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Experience</span>
+<span>10 Yrs</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-carbon-dark w-[65%] rounded-full"></div>
+</div>
+<div class="flex items-center justify-between text-xs font-bold text-gray-400 uppercase">
+<span>Patient Rating</span>
+<span>5.0/5</span>
+</div>
+<div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[100%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Join Team CTA -->
+<div class="bg-carbon-dark p-4 rounded-xl shadow-md flex flex-col items-center justify-center text-center border border-gray-800 bg-carbon-pattern group cursor-pointer hover:bg-black transition-colors">
+<div class="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">add</span>
+</div>
+<h3 class="font-bold text-lg text-white mb-2">Join The Pit Crew</h3>
+<p class="text-xs text-gray-400 mb-6">We are always looking for top talent.</p>
+<span class="text-primary text-sm font-bold uppercase tracking-wider">Careers →</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-carbon-dark bg-carbon-pattern text-white border-t border-gray-800 pt-16 pb-8">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-carbon-dark">
+<span class="material-symbols-outlined">speed</span>
+</div>
+<span class="font-black text-xl italic uppercase">Peak Performance</span>
+</div>
+<p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Pioneering the intersection of high-performance technology and compassionate urological care.
+                    </p>
+<div class="flex gap-4">
+<a class="w-8 h-8 rounded bg-white/10 flex items-center justify-center hover:bg-primary hover:text-carbon-dark transition-colors" href="#">
+<span class="text-xs font-bold">X</span>
+</a>
+<a class="w-8 h-8 rounded bg-white/10 flex items-center justify-center hover:bg-primary hover:text-carbon-dark transition-colors" href="#">
+<span class="text-xs font-bold">in</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase tracking-widest text-xs mb-6">Services</h4>
+<ul class="space-y-4 text-sm text-gray-400">
+<li><a class="hover:text-white transition-colors" href="#">Diagnostic Imaging</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Robotic Surgery</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Hormone Therapy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Vasectomy Reversal</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase tracking-widest text-xs mb-6">Patients</h4>
+<ul class="space-y-4 text-sm text-gray-400">
+<li><a class="hover:text-white transition-colors" href="#">Portal Login</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Telehealth Setup</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Insurance Info</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-primary font-bold uppercase tracking-widest text-xs mb-6">Emergency</h4>
+<div class="bg-white/5 p-4 rounded border border-white/10">
+<p class="text-gray-400 text-xs mb-2">24/7 Nurse Hotline</p>
+<p class="text-xl font-black text-white">1-800-URO-CARE</p>
+</div>
+</div>
+</div>
+<div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-gray-500">© 2024 Peak Performance Urology. All rights reserved.</p>
+<div class="flex gap-6 text-xs text-gray-500 font-medium">
+<a class="hover:text-white" href="#">Privacy</a>
+<a class="hover:text-white" href="#">Terms</a>
+<a class="hover:text-white" href="#">Sitemap</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

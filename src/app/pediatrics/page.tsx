@@ -1,7 +1,5 @@
-"use client";
+import PediatricsLanding from "@/components/departments/PediatricsLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="pediatrics" />;
+export default function PediatricsPage() {
+    return <PediatricsLanding />;
 }

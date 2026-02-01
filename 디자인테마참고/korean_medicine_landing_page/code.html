@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Korean Medicine Department - Sanctuary of Balance</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "paper": "#fbf7f2",
+                        "ink": "#111816",
+                        "stone": "#e6e2dd",
+                        "stone-dark": "#4a4a4a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    backgroundImage: {
+                        'paper-texture': "linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(251, 247, 242, 0.8))",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for horizontal scrolling */
+        .horizontal-scroller::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroller::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        .horizontal-scroller::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        .horizontal-scroller::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+        
+        .writing-vertical {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        
+        /* Hide scrollbar for cleaner look if preferred, but keeping visible for usability is usually better on desktop */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-ink font-display antialiased overflow-hidden">
+<!-- Top Navigation (Fixed) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-paper/90 backdrop-blur-sm border-b border-stone/30 px-6 py-4 transition-all duration-300">
+<div class="flex items-center justify-between max-w-[1920px] mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-stone-dark flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">spa</span>
+</div>
+<div>
+<h2 class="text-ink text-lg font-bold tracking-tight">Korean Medicine Dept.</h2>
+<p class="text-stone-dark/60 text-xs uppercase tracking-widest">Holistic Center</p>
+</div>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-stone-dark text-sm font-medium hover:text-primary transition-colors" href="#hero">Sanctuary</a>
+<a class="text-stone-dark text-sm font-medium hover:text-primary transition-colors" href="#philosophy">Philosophy</a>
+<a class="text-stone-dark text-sm font-medium hover:text-primary transition-colors" href="#treatments">Therapies</a>
+<a class="text-stone-dark text-sm font-medium hover:text-primary transition-colors" href="#scanner">Energy Scanner</a>
+<a class="text-stone-dark text-sm font-medium hover:text-primary transition-colors" href="#specialists">Specialists</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center justify-center rounded-lg h-10 px-6 bg-primary/10 text-stone-dark hover:bg-primary hover:text-ink transition-all border border-primary/20 text-sm font-bold">
+<span>Book Consultation</span>
+</button>
+<button class="md:hidden p-2 text-stone-dark">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content: Horizontal Scrolling Container (Desktop) / Vertical (Mobile) -->
+<main class="horizontal-scroller flex flex-col md:flex-row h-screen w-full overflow-y-auto md:overflow-y-hidden md:overflow-x-auto md:snap-x md:snap-mandatory scroll-smooth bg-stone-100 dark:bg-background-dark">
+<!-- Panel 1: Hero Section -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start flex items-center justify-center bg-stone-200 overflow-hidden" id="hero">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center opacity-90" data-alt="Abstract slow motion ink diffusing in clear water, creating smoky patterns" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC_rlK3IpcqCZtP64MyQm8WNhKebVbnZqfEXfOUg8nry6FK98XutXLUFhXECdEzZ3ZresZJzUV1aFggDc9JS6oR1eistCBleoLzSCZejLMUOB-Qrx52JyV2aL12M8tpLT2QV2LXJpv45BTEm2i7febah1a18Dme2Tk5E0eMeA9ilE9NywJw21TCzM1oi7CdTMDjWi8DGGNFZ1fEQpsm2PCn-yPWoRxi2LUp-XRKlAZRVW4Wd5VV1mErsP1ZF-lmz-qt9ADVW08Zf54X');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-paper/90 via-paper/40 to-transparent"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl px-8 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center h-full pt-20">
+<div class="flex flex-col gap-8 md:pr-12">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-stone-400/30 bg-white/50 backdrop-blur-sm w-fit">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-xs font-semibold uppercase tracking-widest text-stone-600">Restorative Medicine</span>
+</div>
+<h1 class="text-5xl md:text-7xl font-light text-ink leading-[1.1] tracking-tight">
+                        Balance <br/>
+<span class="font-bold italic font-serif">Restored</span> by <br/>
+                        Nature.
+                    </h1>
+<p class="text-lg text-stone-700 max-w-md border-l-2 border-primary pl-6 py-2 bg-gradient-to-r from-white/40 to-transparent">
+                        Experience the healing art of Korean medicine in a sanctuary of calm. Where ancient wisdom meets modern pulse.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-4">
+<button class="flex items-center justify-center h-14 px-8 bg-primary text-ink text-base font-bold rounded-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all">
+                            Begin Journey
+                        </button>
+<button class="flex items-center justify-center h-14 px-8 bg-white/80 backdrop-blur text-stone-800 text-base font-medium rounded-lg hover:bg-white transition-all border border-stone-200">
+<span class="material-symbols-outlined mr-2">play_circle</span>
+                            Watch Film
+                        </button>
+</div>
+</div>
+<!-- Decorative Vertical Text Element -->
+<div class="hidden md:flex justify-end h-full max-h-[60vh] items-center opacity-80">
+<div class="writing-vertical text-8xl font-black text-stone-300 select-none tracking-widest uppercase opacity-40 mix-blend-multiply">
+                        Harmony   Qi   Spirit
+                    </div>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce opacity-50 md:hidden">
+<span class="text-xs uppercase tracking-widest">Scroll</span>
+<span class="material-symbols-outlined">keyboard_arrow_down</span>
+</div>
+<div class="absolute bottom-8 right-8 flex-row items-center gap-2 animate-pulse opacity-50 hidden md:flex">
+<span class="text-xs uppercase tracking-widest">Scroll Horizontal</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</section>
+<!-- Panel 2: Philosophy (Hanji Paper Texture) -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start flex flex-col md:flex-row bg-paper" id="philosophy">
+<!-- Left Side: Vertical Header -->
+<div class="w-full md:w-32 md:h-full bg-stone-200 border-r border-stone-300 flex md:flex-col items-center justify-center md:justify-between py-8 px-4 md:py-16 shrink-0">
+<div class="hidden md:block w-[1px] h-32 bg-stone-400"></div>
+<h2 class="text-2xl md:text-4xl font-bold uppercase tracking-widest md:writing-vertical text-stone-500">Philosophy</h2>
+<div class="hidden md:block text-stone-400 font-serif italic text-2xl">01</div>
+</div>
+<!-- Content Area -->
+<div class="flex-1 flex items-center justify-center p-8 md:p-20 relative overflow-hidden">
+<!-- Abstract BG Shape -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-stone-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+<div class="relative z-10 max-w-4xl w-full grid md:grid-cols-2 gap-16 items-center">
+<div class="space-y-8">
+<div class="w-16 h-1 bg-primary"></div>
+<h3 class="text-4xl md:text-5xl font-light text-ink leading-tight">
+                            The Art of <br/>
+<span class="font-serif italic font-medium text-stone-600">Slow Healing</span>
+</h3>
+<p class="text-lg text-stone-600 leading-relaxed">
+                            Our philosophy blends ancient wisdom with modern understanding. Like ink diffusing in water, true healing requires patience, balance, and the right energy flow. We treat the root cause, not just the symptoms.
+                        </p>
+<div class="grid grid-cols-2 gap-6 pt-4">
+<div class="p-4 bg-white rounded-lg shadow-sm border border-stone-100">
+<span class="material-symbols-outlined text-3xl text-primary mb-2">balance</span>
+<h4 class="font-bold text-ink">Yin &amp; Yang</h4>
+<p class="text-sm text-stone-500">Restoring internal equilibrium</p>
+</div>
+<div class="p-4 bg-white rounded-lg shadow-sm border border-stone-100">
+<span class="material-symbols-outlined text-3xl text-primary mb-2">eco</span>
+<h4 class="font-bold text-ink">Natural</h4>
+<p class="text-sm text-stone-500">100% Herbal remedies</p>
+</div>
+</div>
+</div>
+<!-- Image Card with Hanji effect -->
+<div class="relative group">
+<div class="absolute inset-0 bg-stone-800 translate-x-3 translate-y-3 rounded-lg opacity-10 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-500"></div>
+<div class="relative bg-white p-2 rounded-lg shadow-xl overflow-hidden aspect-[3/4] md:aspect-[4/5]">
+<div class="w-full h-full bg-cover bg-center rounded grayscale hover:grayscale-0 transition-all duration-700 ease-in-out" data-alt="Close up of traditional dried herbs and roots arranged on a wooden table" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8ZivkJWr0ZtXv1GTrxz-BhLoFpczu2E_FV8Bqx1SEUhWy2YIlUlelDApoWiURrvfRJXFX6y9gY-88sCJkBYKJassPfjkLAusSEtfgv62bcS064fk_coHV_x7VFYQvu-LyrmWjaAAPZIZHD2MRNT4dWHb9ktDiHiOHhD6rpW8dKBbaMXo9OC-itqou22Lgrl3mi3nIBTx5_vQXIynIEBY0hQFWXjNI4IJYkrXrQuZZVvZyJC1CxQAq9Rkb8dYzzkjYF37wMQR9abcg');">
+</div>
+<div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-sm p-4 rounded border border-stone-100 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+<p class="font-serif italic text-stone-800">"Nature does not hurry, yet everything is accomplished."</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel 3: Treatments (Byeongpung Folding Screen Style) -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start bg-stone-100 flex flex-col" id="treatments">
+<div class="px-8 py-12 md:px-20 md:py-16 flex-none">
+<div class="flex justify-between items-end mb-8 border-b border-stone-300 pb-4">
+<div>
+<span class="text-primary font-bold uppercase tracking-widest text-sm mb-2 block">Curated Therapies</span>
+<h2 class="text-3xl md:text-5xl font-light text-ink">Healing Modalities</h2>
+</div>
+<div class="hidden md:flex gap-4">
+<button class="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center hover:bg-white hover:border-primary transition-colors text-stone-600">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-stone-300 flex items-center justify-center hover:bg-white hover:border-primary transition-colors text-stone-600">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Horizontal Cards Scroll inside the panel -->
+<div class="flex-1 overflow-x-auto px-8 md:px-20 pb-12 flex items-center no-scrollbar">
+<div class="flex gap-6 md:gap-10 h-[60vh] min-h-[400px]">
+<!-- Card 1 -->
+<div class="w-[300px] md:w-[360px] flex-none relative group cursor-pointer perspective-1000">
+<div class="absolute inset-0 bg-paper rounded-lg shadow-lg border border-stone-200 transform transition-transform duration-500 group-hover:-translate-y-2 flex flex-col overflow-hidden">
+<div class="h-1/2 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Close up of acupuncture needles on skin with soft lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwM4r5DllpBeSqi-s0FJGlBXdMctXwac2vc5MT7Tr1ec4NpC2SOhUX-ME-A9dz_Qpcck3bilGORB-FVPwBE4kAYgTC7VuhGjnMMtSDieRm1T22CMdgkQ4e2Cyv6gP_5LgMlke-ZA_x2N0azCvDjE9slLkCR3eBPkS7WLvnyrtDiiJNG3ZDm0RhraiZqqfj7cHrNzZdeUadjiLCXiNg-2B_vNfI2HaKDB7KrOcfi4zh1g1Y_--oXp8tWZ34-RYCGyBvtYI1UHAoSZby');">
+</div>
+<div class="flex-1 p-8 flex flex-col relative bg-paper-texture">
+<div class="absolute top-0 right-8 w-8 h-16 bg-primary/20 backdrop-blur-md flex items-end justify-center pb-2 rounded-b-lg">
+<span class="material-symbols-outlined text-primary text-xl">pin</span>
+</div>
+<h3 class="text-2xl font-bold text-ink mb-2">Acupuncture</h3>
+<p class="text-stone-500 text-sm mb-6 flex-1">Stimulating specific points on the body to balance energy flow (Qi) and alleviate pain.</p>
+<div class="flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+<span>Learn more</span>
+<span class="material-symbols-outlined text-base">arrow_right_alt</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="w-[300px] md:w-[360px] flex-none relative group cursor-pointer perspective-1000">
+<div class="absolute inset-0 bg-paper rounded-lg shadow-lg border border-stone-200 transform transition-transform duration-500 group-hover:-translate-y-2 flex flex-col overflow-hidden">
+<div class="h-1/2 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Ceramic bowl with dark herbal medicine liquid and dried roots nearby" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkzxM4lRIaZrTYBDDjH-IoDWgWCVMJm4Dj0kffHXRXwT8oCnv0cSH_1vYDLj_IOHK_X6enkyQtQMtt_nNG7i2ezrYxpxeG0-Yx89i2HfH26lMI704PY4qqJgVWJaCkjDIlarGujMBu36-YvBYQkytpaOy2KMmAlQ2G01mv7orGk7zNEc--gek7KFljGrfraO4PEx0GfjOXEmVH3brUqZfctvMYro2HlQtfwWcdpMDv43-y6qjfRBFu1mI8RouqzgGFP4sH7XWr2S_-');">
+</div>
+<div class="flex-1 p-8 flex flex-col relative bg-paper-texture">
+<div class="absolute top-0 right-8 w-8 h-16 bg-primary/20 backdrop-blur-md flex items-end justify-center pb-2 rounded-b-lg">
+<span class="material-symbols-outlined text-primary text-xl">local_florist</span>
+</div>
+<h3 class="text-2xl font-bold text-ink mb-2">Herbal Medicine</h3>
+<p class="text-stone-500 text-sm mb-6 flex-1">Custom-blended natural formulas to restore internal organ function and vitality.</p>
+<div class="flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+<span>Learn more</span>
+<span class="material-symbols-outlined text-base">arrow_right_alt</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="w-[300px] md:w-[360px] flex-none relative group cursor-pointer perspective-1000">
+<div class="absolute inset-0 bg-paper rounded-lg shadow-lg border border-stone-200 transform transition-transform duration-500 group-hover:-translate-y-2 flex flex-col overflow-hidden">
+<div class="h-1/2 bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Moxibustion treatment with smoke rising from burning mugwort" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCWbBEZynWWZtiYPJkAgna5zvH5umDJubfdMmYkbuF2lAgwFgf_4WWIfOmw4jD8UzzT6qOXf2sRfv87KdKzfuMCr8H6nWWYnamQBRTTDsj0SpO4Ldln_EcKM-Lw3QXHwzvMSzcYNJoGLPlKN26nnv-RzUxiLnMqQbnU2McNYkdJtaVRqSKyfnCQP9Y-8qsfNOiUomIlkynJpBUd6X-KOue_b_Y3lY4LpUvaG6_RTMXhQWTIT_a7QVUf10VsRo6ecJpOsu7hs0u7b5Ba');">
+</div>
+<div class="flex-1 p-8 flex flex-col relative bg-paper-texture">
+<div class="absolute top-0 right-8 w-8 h-16 bg-primary/20 backdrop-blur-md flex items-end justify-center pb-2 rounded-b-lg">
+<span class="material-symbols-outlined text-primary text-xl">local_fire_department</span>
+</div>
+<h3 class="text-2xl font-bold text-ink mb-2">Moxibustion</h3>
+<p class="text-stone-500 text-sm mb-6 flex-1">Heat therapy using dried plant materials to invigorate the flow of Qi and blood.</p>
+<div class="flex items-center text-primary font-medium text-sm group-hover:gap-2 transition-all">
+<span>Learn more</span>
+<span class="material-symbols-outlined text-base">arrow_right_alt</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative End Card -->
+<div class="w-[100px] flex-none flex items-center justify-center opacity-30">
+<div class="writing-vertical text-xl font-bold text-stone-400 tracking-widest uppercase">View All Treatments</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel 4: Energy Scanner (Interactive) -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start flex items-center justify-center bg-stone-900 text-white overflow-hidden" id="scanner">
+<!-- Background Ink Effect -->
+<div class="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-primary/10 rounded-full blur-[120px] animate-pulse"></div>
+</div>
+<div class="relative z-10 w-full max-w-5xl px-8 flex flex-col md:flex-row gap-16 items-center">
+<!-- Scanner UI -->
+<div class="w-full md:w-1/2 flex flex-col gap-8">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 mb-6">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-semibold uppercase tracking-widest text-primary">Live Diagnostic</span>
+</div>
+<h2 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                            My Body <span class="text-primary">Energy</span> Scanner
+                        </h2>
+<p class="text-stone-400 text-lg">
+                            Input your current symptoms to visualize your Qi vitality levels through our digital pulse reading algorithm.
+                        </p>
+</div>
+<div class="bg-stone-800/50 p-6 rounded-xl border border-stone-700/50 backdrop-blur-md">
+<label class="block text-sm font-medium text-stone-300 mb-2">Describe symptoms</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-stone-900 border-stone-700 text-white rounded-lg focus:ring-primary focus:border-primary placeholder-stone-600" placeholder="e.g., Chronic fatigue, cold hands..." type="text"/>
+<button class="bg-primary hover:bg-primary/90 text-stone-900 px-6 py-2 rounded-lg font-bold transition-colors shadow-[0_0_15px_rgba(19,236,164,0.3)]">
+                                Analyze
+                            </button>
+</div>
+<div class="mt-4 flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-stone-700/50 rounded-full text-xs text-stone-400 hover:text-primary cursor-pointer transition-colors">Insomnia</span>
+<span class="px-3 py-1 bg-stone-700/50 rounded-full text-xs text-stone-400 hover:text-primary cursor-pointer transition-colors">Stress</span>
+<span class="px-3 py-1 bg-stone-700/50 rounded-full text-xs text-stone-400 hover:text-primary cursor-pointer transition-colors">Digestion</span>
+</div>
+</div>
+</div>
+<!-- Visualization Graphic -->
+<div class="w-full md:w-1/2 flex justify-center items-center">
+<div class="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
+<!-- Rings -->
+<div class="absolute inset-0 border border-stone-700 rounded-full opacity-30"></div>
+<div class="absolute inset-8 border border-stone-700 rounded-full opacity-40"></div>
+<div class="absolute inset-16 border border-stone-700 rounded-full opacity-50"></div>
+<!-- Center Core -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-stone-800 rounded-full flex items-center justify-center border border-primary shadow-[0_0_30px_rgba(19,236,164,0.2)] z-20">
+<div class="text-center">
+<span class="block text-3xl font-bold text-white">98<span class="text-sm text-stone-400">%</span></span>
+<span class="text-xs text-primary uppercase tracking-wider">Scanned</span>
+</div>
+</div>
+<!-- Orbiting Elements (Simulated with positioning) -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-3 w-3 h-3 bg-primary rounded-full shadow-[0_0_10px_#13eca4]"></div>
+<div class="absolute bottom-10 right-10 w-2 h-2 bg-stone-500 rounded-full"></div>
+<div class="absolute top-20 left-10 w-4 h-4 bg-stone-600 rounded-full opacity-50"></div>
+<!-- Data Points -->
+<div class="absolute top-10 right-0 bg-stone-800/80 px-3 py-1 rounded text-xs border border-stone-700">Heart Rate Variability</div>
+<div class="absolute bottom-20 left-0 bg-stone-800/80 px-3 py-1 rounded text-xs border border-stone-700">Thermal Balance</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel 5: Specialists (Grid) -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start bg-paper flex flex-col justify-center px-8 md:px-20 py-20" id="specialists">
+<div class="max-w-7xl mx-auto w-full h-full flex flex-col">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="text-4xl md:text-5xl font-light text-ink mb-2">Our Specialists</h2>
+<p class="text-stone-500">Masters of traditional healing arts</p>
+</div>
+<button class="hidden md:flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all">
+                        View All Doctors <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 flex-1 content-center">
+<!-- Doctor 1 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-stone-100 flex flex-col">
+<div class="h-64 bg-stone-200 bg-cover bg-top grayscale hover:grayscale-0 transition-all duration-500" data-alt="Portrait of Asian female doctor in white coat smiling gently" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_29DfKUJg1uU4J-r4-8V6Wq3blGpU36nB0cYFN8JKPZhp4Vfi7KB-nODTVM0bSnGHgpSn4vs5Ckssj6KvLzXbRbN642jSkda2LooVHYSViNez01WsYZ_BiotTGezNke6VdeQo6IzHoBqdk1Pzh--k_9ImcFWm5Xa37oz6PpkjfAH0wycIMycHmtPMEOi6HdvCnjY76rTdDngbqDozefw-OPv2DC6lyD_hUAtmQkpk6Y58Ma9_QH7fg_n_3RfNCHDcJ5Maek68pwhV');">
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-ink">Dr. Kim Min-ji</h3>
+<p class="text-primary text-sm font-medium mb-4">Acupuncture Specialist</p>
+<p class="text-stone-500 text-sm mb-6 flex-1 line-clamp-3">Specializing in chronic pain management and stress relief through precision meridian therapy.</p>
+<button class="w-full py-3 rounded border border-stone-200 text-stone-600 hover:bg-primary hover:border-primary hover:text-ink hover:font-bold transition-all text-sm">
+                                View Profile
+                            </button>
+</div>
+</div>
+<!-- Doctor 2 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-stone-100 flex flex-col">
+<div class="h-64 bg-stone-200 bg-cover bg-top grayscale hover:grayscale-0 transition-all duration-500" data-alt="Portrait of senior Asian male doctor with glasses looking professional" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsyAGeLdh5d1RKl6Inm5Kw0UWHMtmhcKphONqURRlttgQNw3szatngyA4_1dCOSySD7O9tlfZdUui-2nySh8Z4JzL9MLu8A1DxC68kFXUaaBMJXScUNM6D2HMCWMo56S2XR0tllScqNTxO73rObPBKTC7cRRLmWFfgfOH9Vma3aa8iTtRA5sfFRJS0e_DAu1bA0z_VaWCBpONlMW4ltsu-fyQSEloAevnVoMQ7e7dS44-uyZ-_j1T-EgwwWw3Yym7R18wLAhf6L00T');">
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-ink">Dr. Lee Sang-hoon</h3>
+<p class="text-primary text-sm font-medium mb-4">Herbal Medicine Master</p>
+<p class="text-stone-500 text-sm mb-6 flex-1 line-clamp-3">Over 30 years of experience in formulating Sasang constitutional medicine for internal balance.</p>
+<button class="w-full py-3 rounded border border-stone-200 text-stone-600 hover:bg-primary hover:border-primary hover:text-ink hover:font-bold transition-all text-sm">
+                                View Profile
+                            </button>
+</div>
+</div>
+<!-- Doctor 3 -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 border border-stone-100 flex flex-col">
+<div class="h-64 bg-stone-200 bg-cover bg-top grayscale hover:grayscale-0 transition-all duration-500" data-alt="Portrait of young Asian male doctor smiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8SjTPdjr5bJFT-YQ7j__P0LugQ2NT4owHqG2jkqyH-A6IOaf5cUWYUVreN3Jra10jIfXytOtAK_N9m1W5M-FHgcVP8i1lHw373I8RK7vOPXBsmDjiGdTJINWYkf5jdUn_y_4Ce9BIvNwJVY_qeeV2XPkV41pdVRYr4B6_MU1B6t6QJhYVvn_G3Ik9gqQ9FVjEnD7CvGiY-GWaa0BWQhqZDL2wgBZrXrV_Z9dOx2cgmvueA3eeWBcldDjZqIfg7-3XQbK4hEWrSr1r');">
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="text-xl font-bold text-ink">Dr. Park So-young</h3>
+<p class="text-primary text-sm font-medium mb-4">Rehabilitation Specialist</p>
+<p class="text-stone-500 text-sm mb-6 flex-1 line-clamp-3">Integrating Chuna manual therapy with modern physical therapy techniques for posture correction.</p>
+<button class="w-full py-3 rounded border border-stone-200 text-stone-600 hover:bg-primary hover:border-primary hover:text-ink hover:font-bold transition-all text-sm">
+                                View Profile
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Panel 6: Footer / Contact -->
+<section class="relative w-full md:min-w-[100vw] h-auto min-h-screen md:h-full snap-start bg-stone-900 text-stone-300 flex items-center justify-center p-8 md:p-20">
+<div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16">
+<!-- Contact Info -->
+<div class="flex flex-col justify-between h-full">
+<div>
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-xl">spa</span>
+</div>
+<span class="text-2xl font-bold text-white tracking-tight">Korean Medicine Dept.</span>
+</div>
+<div class="space-y-6 mb-12">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined mt-1 text-primary">location_on</span>
+<div>
+<h4 class="text-white font-bold mb-1">Visit Us</h4>
+<p class="text-stone-400">123 Healing Way, Gangnam-gu<br/>Seoul, South Korea 06000</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined mt-1 text-primary">schedule</span>
+<div>
+<h4 class="text-white font-bold mb-1">Hours</h4>
+<p class="text-stone-400">Mon-Fri: 09:00 - 18:00<br/>Sat: 09:00 - 13:00</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined mt-1 text-primary">call</span>
+<div>
+<h4 class="text-white font-bold mb-1">Contact</h4>
+<p class="text-stone-400">+82 2-123-4567<br/>koreanmed@hospital.com</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-ink transition-all" href="#">
+<span class="text-sm font-bold">IG</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-ink transition-all" href="#">
+<span class="text-sm font-bold">FB</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-stone-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-ink transition-all" href="#">
+<span class="text-sm font-bold">YT</span>
+</a>
+</div>
+</div>
+<!-- Booking Map / Form Area -->
+<div class="bg-stone-800 p-8 rounded-2xl border border-stone-700 flex flex-col items-center justify-center text-center">
+<h3 class="text-3xl font-light text-white mb-4">Restore Your Balance Today</h3>
+<p class="text-stone-400 mb-8 max-w-md">Book your initial consultation and pulse diagnosis session. Walk-ins welcome for herbal pharmacy.</p>
+<button class="w-full max-w-xs h-14 bg-primary text-ink text-lg font-bold rounded-lg hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(19,236,164,0.15)] mb-4">
+                        Book Appointment
+                    </button>
+<p class="text-xs text-stone-500">Fast track booking available for returning patients.</p>
+<!-- Pseudo Map -->
+<div class="w-full h-48 bg-stone-700 mt-8 rounded-lg overflow-hidden relative opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-full h-full bg-cover bg-center grayscale" data-alt="Map showing location in Seoul" data-location="Seoul, South Korea" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2COu2MMCzpL7vLT332fGagB7OzVc6sIB2UcwusoeJdA-LbGx5e1Uh6B9li8ePil0sYcC4HfnbRmTzdmoMrk-wH0wrHT2NqrMMyRgnHf6-n1Fa7DjEy_e7W23UPQmS1ERGZcKUVg_YAOHSXCn_ASRwULBaYW5LbOTaN7_bKfKcDzpH-wl8geOVoBX8Mnys8ad79qcM1BEGmqG3bzNcfL5hlc7497JpH2vCikHVhu4tHbr5rM4dqwb4dtVl-HpiDrVGGZzmyYGyYqms');">
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-black/20">
+<span class="bg-white text-ink px-3 py-1 rounded shadow text-xs font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                                We are here
+                            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Bottom -->
+<div class="absolute bottom-4 left-0 right-0 text-center">
+<p class="text-stone-600 text-xs">© 2023 Korean Medicine Department. All rights reserved.</p>
+</div>
+</section>
+</main>
+</body></html>

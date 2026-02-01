@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cancer Care &amp; Nursing - Hope Hospital</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "linen": "#F5F2ED",
+                        "stone-grey": "#EBE8E3",
+                        "stone-text": "#2D3633",
+                        "stone-light": "#636E69",
+                        "background-light": "#F5F2ED", // Overriding for this specific theme
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Linen Texture simulation */
+        .bg-linen-texture {
+            background-color: #F5F2ED;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(19, 236, 164, 0.3);
+            background: radial-gradient(circle, rgba(19, 236, 164, 0.1) 0%, rgba(19, 236, 164, 0) 70%);
+            animation: ripple 4s infinite linear;
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0.8); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-linen-texture text-stone-text font-display overflow-x-hidden antialiased">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 bg-[#F5F2ED]/90 backdrop-blur-md border-b border-[#E0DCD5]">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">healing</span>
+<h2 class="text-stone-text text-lg font-bold tracking-tight">Hope Hospital</h2>
+</div>
+<!-- Desktop Nav -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-stone-text text-sm font-medium hover:text-primary transition-colors" href="#">Departments</a>
+<a class="text-stone-text text-sm font-medium hover:text-primary transition-colors" href="#">Doctors</a>
+<a class="text-stone-text text-sm font-medium hover:text-primary transition-colors" href="#">Insurance</a>
+<a class="text-stone-text text-sm font-medium hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex items-center justify-center h-9 px-4 rounded-lg bg-[#EBE8E3] text-stone-text text-sm font-bold hover:bg-[#E0DCD5] transition-colors">
+                        Patient Portal
+                    </button>
+<button class="flex items-center justify-center h-9 px-4 rounded-lg bg-primary text-[#111816] text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm">
+                        Emergency
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[600px] flex items-center justify-center overflow-hidden">
+<!-- Background Image (Simulating calm video) -->
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center" data-alt="calm ocean waves gently lapping against the shore with soft sunlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6fQWDzT2Ta3wvBMozZQ-P4lC2XyO9tTZfkztKu-0KWweoV4-4IiFm1b3ZzQdneBS_kNE-0mmpPUJF6-CpLf0D4d9Y8GNWmg-37sIFAClnFY329OPmatgzbognDp22QRmfZ3Sk3QO6ClRcT9UGbp7LPmn-d90QotOl0ovgaRp2ntXtMUbolkeJAmTdPIYZZ6agbOLTnX5aVitMOcSgVUAohMxT3jKgr5DYGujbYuqYCAfGAuv9J6J0kgG_XSJtvv-PBeK06BraoV87');"></div>
+<div class="absolute inset-0 bg-stone-500/10 mix-blend-multiply"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#F5F2ED] via-transparent to-transparent"></div>
+</div>
+<!-- Content -->
+<div class="relative z-10 w-full max-w-[960px] px-6 text-center">
+<div class="glass-card p-8 md:p-12 rounded-2xl shadow-xl shadow-[#D8D4CC]/40 max-w-3xl mx-auto">
+<h1 class="text-stone-text text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight mb-4">
+                        Dignity in Every Step of Your Journey
+                    </h1>
+<p class="text-stone-light text-lg md:text-xl font-normal leading-relaxed mb-8 max-w-2xl mx-auto">
+                        Comprehensive cancer care centered around healing the whole person. Experience a peaceful path to recovery with our specialist team.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="flex items-center justify-center h-12 px-8 rounded-lg bg-primary text-[#111816] text-base font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 transform hover:-translate-y-0.5">
+                            Book Consultation
+                        </button>
+<button class="flex items-center justify-center h-12 px-8 rounded-lg bg-white text-stone-text border border-[#E0DCD5] text-base font-bold hover:bg-[#faf9f7] transition-all">
+                            View Treatments
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="py-12 px-4 md:px-8">
+<div class="max-w-[1280px] mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+<div class="flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-[#EBE8E3] transition-transform hover:scale-105 duration-300">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">person_check</span>
+<p class="text-3xl font-bold text-stone-text">12k+</p>
+<p class="text-sm text-stone-light font-medium">Recovered Patients</p>
+</div>
+<div class="flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-[#EBE8E3] transition-transform hover:scale-105 duration-300">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">medical_services</span>
+<p class="text-3xl font-bold text-stone-text">150+</p>
+<p class="text-sm text-stone-light font-medium">Specialized Doctors</p>
+</div>
+<div class="flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-[#EBE8E3] transition-transform hover:scale-105 duration-300">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">science</span>
+<p class="text-3xl font-bold text-stone-text">40</p>
+<p class="text-sm text-stone-light font-medium">Years of Research</p>
+</div>
+<div class="flex flex-col items-center p-6 bg-white rounded-xl shadow-sm border border-[#EBE8E3] transition-transform hover:scale-105 duration-300">
+<span class="material-symbols-outlined text-primary text-4xl mb-2">ward</span>
+<p class="text-3xl font-bold text-stone-text">11</p>
+<p class="text-sm text-stone-light font-medium">Care Units</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Masonry Grid Services -->
+<section class="py-16 px-4 md:px-8 bg-gradient-to-b from-[#F5F2ED] to-white">
+<div class="max-w-[1280px] mx-auto">
+<div class="flex flex-col gap-4 mb-12 text-center">
+<h2 class="text-3xl md:text-4xl font-bold text-stone-text tracking-tight">Holistic Care Pathways</h2>
+<p class="text-stone-light max-w-2xl mx-auto">Discover our departments tailored to treat not just the condition, but the human spirit.</p>
+</div>
+<div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+<!-- Card 1 -->
+<div class="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 border border-[#EBE8E3] group cursor-pointer hover:shadow-xl transition-all duration-300">
+<div class="relative h-64 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Microscopic view of cells glowing with blue light representing immunotherapy" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCmk3x9cE0lZI8cYHDOZdInYztGYeKTT1lJfwRFVbzBuAkUbrSfStO1XQrJXgLPPZUTo_uhs_kfLNUG6P0KeF0IT28zUnTcEDf0H4M38uZLvDak8Jw9vkBZCRIE2s-cxc1206dkRmWMdn0YPiT_nNhwwzyXPFdFRrYCYGZ22ha0VOmu2WK6Mh4hS-1V67wpshxfR4x-kPjde37-Ox9P5rnY0Ye-xwkc0H1T5-mhq8KrknRrxpI8BTbH99qhWyl25cfLlMcyaM4CPWmk');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-4 left-4 text-white">
+<span class="bg-primary text-[#111816] text-xs font-bold px-2 py-1 rounded mb-2 inline-block">Advanced</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-stone-text mb-2">Immunotherapy</h3>
+<p class="text-stone-light text-sm leading-relaxed">Harnessing the power of your own immune system to fight cancer with precision and care.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="break-inside-avoid bg-[#FAFAF8] rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 border border-[#EBE8E3] p-6 group cursor-pointer hover:border-primary/50 transition-all duration-300">
+<div class="flex items-start justify-between mb-4">
+<div class="p-3 bg-primary/10 rounded-full text-primary">
+<span class="material-symbols-outlined text-3xl">spa</span>
+</div>
+<span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Wellness</span>
+</div>
+<h3 class="text-xl font-bold text-stone-text mb-2">Palliative Care</h3>
+<p class="text-stone-light text-sm leading-relaxed mb-4">Compassionate pain management and support to improve quality of life at every stage.</p>
+<a class="text-primary font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all" href="#">
+                            Learn more <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3 -->
+<div class="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 border border-[#EBE8E3] group cursor-pointer hover:shadow-xl transition-all duration-300">
+<div class="relative h-80 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Fresh healthy food including avocados and greens on a table" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuByKfm9hcD2CpzK4s1T7Qwqyzyjlam7mUgmvAJNfrH6ExNmMLpVKjs8sQNFYk0V1uJ8vTIkon6cnJ5APTre9GVC-skdCgUl0mKPRWXkwW_ufE6h8e8vzrr6X3WObzUFI5HzTFz0CFrnCDdssmw8vku7UokN6kq8G_4eYrit7OOybLYAkMt4w-2bVZOb6v55MBj21WKgZif5r7i7tQteJ3lrM0YRCPEztEOC1PuVis5y5bo9Pz1c37bsA2aWmzolnV0fT1ATY205PVoP');"></div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-stone-text mb-2">Nutrition &amp; Wellness</h3>
+<p class="text-stone-light text-sm leading-relaxed">Holistic healing programs designed by expert nutritionists to support your body's recovery.</p>
+</div>
+</div>
+<!-- Card 4 (Quote) -->
+<div class="break-inside-avoid bg-stone-text rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 p-8 text-center text-white relative">
+<span class="material-symbols-outlined text-6xl text-white/10 absolute top-4 left-4">format_quote</span>
+<p class="relative z-10 text-lg font-medium italic mb-6">"The care I received wasn't just medical; it was human. I felt seen, heard, and held throughout my entire journey."</p>
+<div class="flex items-center justify-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover bg-center border-2 border-primary" data-alt="Portrait of a smiling older woman" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCVpuK0Qx4JOXcfWIVa_vuTP2CfzvGo_Ez0F_CwacIgSV1m0Wg1XqJZpNVqNAXe7uBu6MU0PualgNNel0QbGYEgn1aFrvfXkYTZpujo75172NLkCzp3VNLrePBL69OlvdfbzO5T7J3cm9Z7k_BZ7rNe4U0e7z4d2uZzgoDCNBaMZZQGNpKOr91Y-3pq2RIUinal2wh5-9tt4fgOm8U_2-o9_46W6e_BKSOXIn2rQ-6LyxZLnRnYT3nhGi-wyWIyqnIoH6DyttHGfQoy');"></div>
+<div class="text-left">
+<p class="text-sm font-bold text-white">Sarah Jenkins</p>
+<p class="text-xs text-white/60">Breast Cancer Survivor</p>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="break-inside-avoid bg-white rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 border border-[#EBE8E3] group cursor-pointer hover:shadow-xl transition-all duration-300">
+<div class="relative h-56 overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="Doctor holding patient's hand in a comforting manner" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDovF-aI74Zf2mXmjjiWij7YO5hS8Fnjng5Lol5Wqqd8pcRVt0hFr_OEHAvLSbxcLiltUUuqbwhxFmkO3179Pv58XLoJNqETaxjZABAgVbCITWRidtg9xzvEkt1W6XQPA2r9Ljrs226zyQ8H5wFkfPgXd0a2OF-DF-q-UEkpMuZEqst7fOKM7hmAt6VXjeSgEHOPtrRJRQZAc0Py2TM5W-8VOmga4wvnvIS_fLIcnXbMFj9DWkV8GscFfAv6mlHdM9c-lNikkrX_uka');"></div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-stone-text mb-2">Psychological Support</h3>
+<p class="text-stone-light text-sm leading-relaxed">Counseling and support groups to help you and your family navigate the emotional complexities.</p>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="break-inside-avoid bg-[#FAFAF8] rounded-2xl overflow-hidden shadow-lg shadow-[#D8D4CC]/20 border border-[#EBE8E3] p-6 group cursor-pointer hover:border-primary/50 transition-all duration-300">
+<div class="flex items-start justify-between mb-4">
+<div class="p-3 bg-primary/10 rounded-full text-primary">
+<span class="material-symbols-outlined text-3xl">monitor_heart</span>
+</div>
+<span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">Tech</span>
+</div>
+<h3 class="text-xl font-bold text-stone-text mb-2">Latest Clinical Trials</h3>
+<p class="text-stone-light text-sm leading-relaxed mb-4">Access to groundbreaking treatments and research protocols.</p>
+<a class="text-primary font-bold text-sm flex items-center gap-1 group-hover:gap-2 transition-all" href="#">
+                            View database <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Section: Immunity Shield Visualizer -->
+<section class="py-20 px-4 md:px-8 bg-stone-text relative overflow-hidden">
+<!-- Background effects -->
+<div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" data-alt="Abstract soft dark pattern" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
+<div class="max-w-[1280px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+<div class="flex flex-col gap-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 w-fit">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-white/80 text-xs font-medium tracking-wide">LIVE MONITORING</span>
+</div>
+<h2 class="text-3xl md:text-5xl font-black text-white leading-tight">
+                        Understanding Your <span class="text-primary">Immunity Shield</span>
+</h2>
+<p class="text-stone-300 text-lg leading-relaxed max-w-xl">
+                        Our unique Immunity Shield visualizer helps you understand your body's recovery process through gentle, data-driven visualizations. Track T-Cell activity and holistic wellness in real-time.
+                    </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+<div class="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">vital_signs</span>
+<h4 class="text-white font-bold">T-Cell Activity</h4>
+</div>
+<p class="text-stone-400 text-sm">Monitor your immune response strength.</p>
+</div>
+<div class="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary">self_improvement</span>
+<h4 class="text-white font-bold">Holistic Recovery</h4>
+</div>
+<p class="text-stone-400 text-sm">Track your overall wellness score.</p>
+</div>
+</div>
+</div>
+<!-- Interactive Visualizer Mockup -->
+<div class="relative h-[400px] md:h-[500px] w-full bg-gradient-to-br from-white/5 to-white/0 border border-white/10 rounded-3xl backdrop-blur-md flex items-center justify-center overflow-hidden">
+<!-- Ripples -->
+<div class="ripple-circle w-32 h-32" style="animation-delay: 0s;"></div>
+<div class="ripple-circle w-32 h-32" style="animation-delay: 1s;"></div>
+<div class="ripple-circle w-32 h-32" style="animation-delay: 2s;"></div>
+<div class="ripple-circle w-32 h-32" style="animation-delay: 3s;"></div>
+<!-- Center Shield -->
+<div class="relative z-10 w-24 h-24 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-xl border border-primary/30 shadow-[0_0_30px_rgba(19,236,164,0.2)]">
+<span class="material-symbols-outlined text-primary text-5xl">shield_moon</span>
+</div>
+<!-- Floating Data Points -->
+<div class="absolute top-1/4 left-1/4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs text-white animate-bounce" style="animation-duration: 3s;">
+                        Leukocytes: Normal
+                     </div>
+<div class="absolute bottom-1/3 right-1/4 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs text-white animate-bounce" style="animation-duration: 4s;">
+                        Recovery: 87%
+                     </div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Footer CTA -->
+<section class="py-16 px-4 md:px-8 bg-[#F5F2ED] border-t border-[#E0DCD5]">
+<div class="max-w-4xl mx-auto text-center">
+<h2 class="text-2xl md:text-3xl font-bold text-stone-text mb-4">Stay Connected with Hope</h2>
+<p class="text-stone-light mb-8">Receive gentle updates, wellness tips, and hospital news directly to your inbox.</p>
+<form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+<input class="flex-1 h-12 px-4 rounded-lg border border-[#E0DCD5] bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Enter your email address" type="email"/>
+<button class="h-12 px-6 bg-stone-text text-white font-bold rounded-lg hover:bg-stone-text/90 transition-colors" type="button">
+                        Subscribe
+                    </button>
+</form>
+</div>
+</section>
+</main>
+<footer class="bg-white border-t border-[#E0DCD5] py-12 px-4 md:px-8">
+<div class="max-w-[1280px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">healing</span>
+<span class="font-bold text-stone-text">Hope Hospital</span>
+</div>
+<div class="flex flex-col gap-2 text-sm text-stone-light">
+<p>123 Healing Way,</p>
+<p data-location="San Francisco">San Francisco, CA 94117</p>
+<p class="mt-2">+1 (555) 123-4567</p>
+<p>care@hopehospital.com</p>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-stone-text mb-4">Departments</h4>
+<ul class="flex flex-col gap-2 text-sm text-stone-light">
+<li><a class="hover:text-primary" href="#">Oncology</a></li>
+<li><a class="hover:text-primary" href="#">Cardiology</a></li>
+<li><a class="hover:text-primary" href="#">Neurology</a></li>
+<li><a class="hover:text-primary" href="#">Pediatrics</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-text mb-4">Patients</h4>
+<ul class="flex flex-col gap-2 text-sm text-stone-light">
+<li><a class="hover:text-primary" href="#">Patient Portal</a></li>
+<li><a class="hover:text-primary" href="#">Find a Doctor</a></li>
+<li><a class="hover:text-primary" href="#">Insurance Info</a></li>
+<li><a class="hover:text-primary" href="#">Bill Pay</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-text mb-4">Legal</h4>
+<ul class="flex flex-col gap-2 text-sm text-stone-light">
+<li><a class="hover:text-primary" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary" href="#">Accessibility</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-[1280px] mx-auto border-t border-[#E0DCD5] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-stone-light">© 2024 Hope Hospital. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="text-stone-light hover:text-primary" href="#"><span class="material-symbols-outlined text-lg">social_leaderboard</span></a>
+<a class="text-stone-light hover:text-primary" href="#"><span class="material-symbols-outlined text-lg">public</span></a> <!-- representing twitter/web -->
+<a class="text-stone-light hover:text-primary" href="#"><span class="material-symbols-outlined text-lg">photo_camera</span></a> <!-- representing instagram -->
+</div>
+</div>
+</footer>
+<!-- Floating Action Button -->
+<button class="fixed bottom-6 right-6 w-14 h-14 bg-primary text-[#111816] rounded-full shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 transition-transform z-50 group">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+<span class="absolute right-full mr-3 bg-white text-stone-text text-xs font-bold px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            Patient Support
+        </span>
+</button>
+</body></html>

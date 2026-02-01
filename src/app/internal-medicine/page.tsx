@@ -1,7 +1,5 @@
-"use client";
+import InternalMedicineLanding from "@/components/departments/InternalMedicineLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="internal-medicine" />;
+export default function InternalMedicinePage() {
+    return <InternalMedicineLanding />;
 }

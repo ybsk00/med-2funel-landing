@@ -36,15 +36,20 @@ export interface HospitalConfig {
         background: string;
         text: string;
         concept: string;
+        texture?: string; // NEW
+        font?: string; // NEW
+        sound?: string; // NEW
     };
 
     marketingName?: string;
+    catchphrase?: string; // NEW
     landingModules?: LandingModuleConfig[];
     hero?: {
         title: string;
         subtitle: string;
     };
     videoSource?: string;
+    video?: string; // NEW
 }
 
 export const HOSPITAL_CONFIG: HospitalConfig = {

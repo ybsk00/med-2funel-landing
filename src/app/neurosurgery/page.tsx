@@ -1,7 +1,5 @@
-"use client";
+import NeurosurgeryLanding from "@/components/departments/NeurosurgeryLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="neurosurgery" />;
+export default function NeurosurgeryPage() {
+    return <NeurosurgeryLanding />;
 }

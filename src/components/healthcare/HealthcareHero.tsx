@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface HealthcareHeroProps {
     config: HospitalConfig;
-    onOpenCamera: () => void;
+    onOpenCamera?: () => void;
 }
 
 export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroProps) {
@@ -17,7 +17,7 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
             {/* 영상 배경 */}
             <div className="absolute inset-0 z-0">
                 <video
-                    key={config.videoSource}
+                    key={config.video || config.videoSource} // Use config.video as primary, fallback to videoSource
                     autoPlay
                     loop
                     muted
@@ -25,7 +25,7 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                     preload="metadata"
                     className="absolute inset-0 w-full h-full object-cover"
                 >
-                    <source src={config.videoSource || "/2.mp4"} type="video/mp4" />
+                    <source src={config.video || config.videoSource || "/2.mp4"} type="video/mp4" />
                 </video>
                 {/* Overlays - Dynamic Background Based */}
                 <div
@@ -83,14 +83,16 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                     {/* CTA 3종 */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                         {/* Primary CTA - 사진으로 스타일 보기 */}
-                        <button
-                            onClick={onOpenCamera}
-                            className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
-                            style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
-                        >
-                            <Camera className="w-5 h-5" />
-                            사진으로 스타일 보기
-                        </button>
+                        {onOpenCamera && (
+                            <button
+                                onClick={onOpenCamera}
+                                className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                                style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
+                            >
+                                <Camera className="w-5 h-5" />
+                                사진으로 스타일 보기
+                            </button>
+                        )}
 
                         {/* Secondary CTA - 30초 체크 */}
                         <Link

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dermatology Center - Glass Aesthetic</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "primary-dark": "#0eb57d",
+                        "background-light": "#f0fdf9", /* Very pale mint/white */
+                        "background-dark": "#10221c",
+                        "glass-border": "rgba(255, 255, 255, 0.5)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.05)',
+                        'glass-hover': '0 8px 32px 0 rgba(19, 236, 164, 0.15)',
+                    },
+                    backgroundImage: {
+                        'hologram': 'linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%)',
+                        'subtle-rainbow': 'linear-gradient(45deg, rgba(19, 236, 164, 0.05) 0%, rgba(160, 210, 255, 0.05) 50%, rgba(220, 180, 255, 0.05) 100%)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Shimmer effect for hologram cards */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+    </style>
+</head>
+<body class="relative flex min-h-screen w-full flex-col bg-background-light text-[#111816] font-display overflow-x-hidden selection:bg-primary/30">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md bg-white/70 border-b border-white/50 shadow-sm">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<!-- Logo -->
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-8 rounded-full bg-primary/20 text-primary-dark">
+<span class="material-symbols-outlined text-[20px]">dermatology</span>
+</div>
+<h2 class="text-lg font-bold tracking-tight text-slate-800">LUMIÈRE <span class="font-light">DERMA</span></h2>
+</div>
+<!-- Navigation Links (Hidden on Mobile) -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-slate-600 hover:text-primary-dark transition-colors" href="#">진료과목</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary-dark transition-colors" href="#">의료진 소개</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary-dark transition-colors" href="#">예약하기</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary-dark transition-colors" href="#">병원 안내</a>
+</nav>
+<!-- CTA Buttons -->
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex items-center justify-center h-9 px-4 rounded-full bg-white/50 border border-slate-200 text-slate-700 text-xs font-bold uppercase tracking-wide hover:bg-white hover:shadow-md transition-all">
+                        Consultation
+                    </button>
+<button class="flex items-center justify-center h-9 px-4 rounded-full bg-primary text-slate-900 text-xs font-bold uppercase tracking-wide shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:bg-primary-dark/10 hover:text-primary-dark transition-all">
+                        Appointment
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Wrapper -->
+<main class="flex-grow pt-16">
+<!-- Hero Section -->
+<section class="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden">
+<!-- Background Image/Video Placeholder -->
+<div class="absolute inset-0 z-0">
+<div class="h-full w-full bg-cover bg-center" data-alt="Abstract bright clinical background with soft light refractions suggesting clean skin" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCQQghki2lVmFhoiVG0FSNhJ1ey4SeY-rh_W_KtxLrZEyo1cgY2KIUu3V92JgwynU_Ij1DX0tJegOwcXzBqmYg2G9CIU5yhxifTVbVC-XfZpu_6akDJO82_hhUs4UWqXDz4Yr7PBY6_Q_LMTLUq0b8cRVauXC4gtAS148BxOSaRm8jEF-CdWN-6hFoIhMlxO984X2OEoFP2abU9S8-bUVZsCawBQadrctlAyuqklWfaPAfmNlzLC0ZNwEIzhpZlMMIETz2chxQYbz_d");'>
+</div>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-background-light"></div>
+<div class="absolute inset-0 bg-white/20 backdrop-blur-[2px]"></div>
+</div>
+<div class="relative z-10 container mx-auto px-4 flex flex-col items-center text-center gap-8">
+<div class="inline-flex items-center rounded-full border border-primary/30 bg-white/40 px-3 py-1 text-sm font-medium text-primary-dark backdrop-blur-md">
+<span class="mr-2 h-2 w-2 rounded-full bg-primary animate-pulse"></span>
+                    Premium Dermatology Center
+                </div>
+<h1 class="max-w-4xl text-5xl font-black leading-tight tracking-tight text-slate-900 sm:text-6xl md:text-7xl drop-shadow-sm">
+                    당신의 피부,<br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-dark to-teal-600">빛나는 일상의 시작</span>
+</h1>
+<p class="max-w-2xl text-lg font-light text-slate-600 sm:text-xl">
+                    Advanced Dermatology Center — Where medical science meets aesthetic perfection. <br class="hidden sm:block"/>Experience the clarity of glass-like skin.
+                </p>
+<div class="flex flex-wrap items-center justify-center gap-4 mt-4">
+<button class="group relative flex h-12 min-w-[160px] items-center justify-center overflow-hidden rounded-full bg-slate-900 px-6 font-bold text-white shadow-xl transition-all hover:scale-105 hover:bg-slate-800">
+<span class="relative z-10 flex items-center gap-2">
+                            Book Consultation
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+<div class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+</button>
+<button class="flex h-12 min-w-[160px] items-center justify-center rounded-full border border-slate-300 bg-white/40 px-6 font-bold text-slate-800 backdrop-blur-sm transition-all hover:bg-white hover:shadow-lg">
+                        Learn More
+                    </button>
+</div>
+</div>
+</section>
+<!-- Service Section: Hologram Cards -->
+<section class="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+<!-- Decorative blobs -->
+<div class="absolute top-0 left-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]"></div>
+<div class="absolute bottom-0 right-0 -z-10 h-[500px] w-[500px] translate-x-1/3 translate-y-1/3 rounded-full bg-purple-200/20 blur-[100px]"></div>
+<div class="max-w-[1280px] mx-auto">
+<div class="mb-16 text-center">
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4">Premium Treatments</h2>
+<p class="text-slate-500 max-w-2xl mx-auto">Discover our specialized care designed to reveal your skin's natural radiance using state-of-the-art technology.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="group relative overflow-hidden rounded-2xl bg-white/40 border border-white/60 p-8 shadow-glass transition-all duration-500 hover:-translate-y-2 hover:shadow-glass-hover hover:bg-subtle-rainbow backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary-dark group-hover:bg-primary group-hover:text-slate-900 transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">light_mode</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 mb-1">Laser Toning</h3>
+<p class="text-xs font-semibold text-primary-dark uppercase tracking-wider mb-2">레이저 토닝</p>
+<p class="text-sm text-slate-600 leading-relaxed">Advanced laser technology to brighten skin tone and remove pigmentation effectively.</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative overflow-hidden rounded-2xl bg-white/40 border border-white/60 p-8 shadow-glass transition-all duration-500 hover:-translate-y-2 hover:shadow-glass-hover hover:bg-subtle-rainbow backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary-dark group-hover:bg-primary group-hover:text-slate-900 transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">water_drop</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 mb-1">Skin Scaling</h3>
+<p class="text-xs font-semibold text-primary-dark uppercase tracking-wider mb-2">스킨 스케일링</p>
+<p class="text-sm text-slate-600 leading-relaxed">Deep pore cleansing and exfoliation for a smoother, glass-like complexion.</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative overflow-hidden rounded-2xl bg-white/40 border border-white/60 p-8 shadow-glass transition-all duration-500 hover:-translate-y-2 hover:shadow-glass-hover hover:bg-subtle-rainbow backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary-dark group-hover:bg-primary group-hover:text-slate-900 transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">face_retouching_natural</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 mb-1">Anti-Aging</h3>
+<p class="text-xs font-semibold text-primary-dark uppercase tracking-wider mb-2">안티에이징</p>
+<p class="text-sm text-slate-600 leading-relaxed">Restore youthfulness and elasticity with our premium lifting protocols.</p>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative overflow-hidden rounded-2xl bg-white/40 border border-white/60 p-8 shadow-glass transition-all duration-500 hover:-translate-y-2 hover:shadow-glass-hover hover:bg-subtle-rainbow backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative z-10 flex flex-col gap-4">
+<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary-dark group-hover:bg-primary group-hover:text-slate-900 transition-colors duration-300">
+<span class="material-symbols-outlined text-[28px]">healing</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 mb-1">Acne Clinic</h3>
+<p class="text-xs font-semibold text-primary-dark uppercase tracking-wider mb-2">여드름 클리닉</p>
+<p class="text-sm text-slate-600 leading-relaxed">Comprehensive solutions for clear, healthy skin free from blemishes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Carousel: Medical Staff -->
+<section class="py-20 bg-white relative">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-2">Meet Our Specialists</h2>
+<p class="text-slate-500">Dedicated professionals committed to your skin health.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="flex overflow-x-auto gap-6 pb-8 no-scrollbar snap-x snap-mandatory">
+<!-- Doctor 1 -->
+<div class="min-w-[280px] md:min-w-[320px] snap-center">
+<div class="group h-full flex flex-col overflow-hidden rounded-2xl bg-background-light border border-slate-100 transition-all hover:shadow-lg">
+<div class="aspect-[4/5] w-full overflow-hidden bg-slate-100">
+<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Portrait of Dr. Kim Min-su, Chief Dermatologist, wearing a white coat and smiling professionally" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkWjIGYjJcnJalWQdHs3NP2aEWgP00XHBj6Nl6-H57PSfE4Wr8VdFlHYDnV7en5NcvW3g5kjkXadozU-jILLXwBqAhWybFC05Wu2-KAWo8bmzmcl6Q9ReV91uVCJoc0cNdfTzkgbjeB5Ntl6UTgXHLh7Dp9oPu0zQ7s12wrYUT98TQXkf1MDVdXwmN5DJkXOvddrg0Z1ooxNiBS4zzcQtFmyRhJ7xEHPQzyh_cv7z8fOxbEFiXqApXBJaSo5A91Qiknq5zzZJu3Iy1");'>
+</div>
+</div>
+<div class="flex flex-col p-5 bg-white">
+<h3 class="text-lg font-bold text-slate-900">Dr. Kim Min-su</h3>
+<p class="text-sm font-medium text-primary-dark">Chief Dermatologist</p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Laser</span>
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Botox</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Doctor 2 -->
+<div class="min-w-[280px] md:min-w-[320px] snap-center">
+<div class="group h-full flex flex-col overflow-hidden rounded-2xl bg-background-light border border-slate-100 transition-all hover:shadow-lg">
+<div class="aspect-[4/5] w-full overflow-hidden bg-slate-100">
+<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Portrait of Dr. Lee Ji-hyun, Laser Specialist, looking friendly in medical attire" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD1cpy1LS48oPOtnwhHuuNn5UKrWflNoZ4Bzbk25Ucz05uCjWid9bVndjOUpwNJYClwNFxGgPDEeUd7MVXdqp3LxrG5657mfqML013vmcQexj3KW80GpNEZQMzDpkwNfFGy1mpwrORWPptME7bOWT-4P3Qr3d__YtiHyS-6PThHJ3Fx9NYwEJndBadJVOsev_XYoH-QUafY1EZKvj0VMU74VH7Tuor96yWD20W2JywbEEhW0T6zOiZ8LO_NCot2UfosVV9_x3B6fbvz");'>
+</div>
+</div>
+<div class="flex flex-col p-5 bg-white">
+<h3 class="text-lg font-bold text-slate-900">Dr. Lee Ji-hyun</h3>
+<p class="text-sm font-medium text-primary-dark">Laser Specialist</p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Toning</span>
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Pigmentation</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Doctor 3 -->
+<div class="min-w-[280px] md:min-w-[320px] snap-center">
+<div class="group h-full flex flex-col overflow-hidden rounded-2xl bg-background-light border border-slate-100 transition-all hover:shadow-lg">
+<div class="aspect-[4/5] w-full overflow-hidden bg-slate-100">
+<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Portrait of Dr. Park Seo-joon, Anti-Aging Expert" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuApQj6h3imgKW79lUH9VQMPh-f6gJGzDgyw1cbJFMqvBP4vPHYJhTjMU2LO1TPZkInXDsamEZ3uBjcBqbnX68Ds-iQ0o6VB-ksHD19eFwHEJvE-_V7p6CpNrHT3h5AOwq01cKphb1-S50eVeWYRg997EvNbvo28IdyI_1j1nErcBb_BDtsl5q6VSibdh6Jwx2FwtUy9fGp66JJuxU6oZHIfb0bCcLnbMh6etCqE3nU2EGvFK5IVo_L8o6DqoUuW7vRN5K8Fdb1IowFY");'>
+</div>
+</div>
+<div class="flex flex-col p-5 bg-white">
+<h3 class="text-lg font-bold text-slate-900">Dr. Park Seo-joon</h3>
+<p class="text-sm font-medium text-primary-dark">Anti-Aging Expert</p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Lifting</span>
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Fillers</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Doctor 4 -->
+<div class="min-w-[280px] md:min-w-[320px] snap-center">
+<div class="group h-full flex flex-col overflow-hidden rounded-2xl bg-background-light border border-slate-100 transition-all hover:shadow-lg">
+<div class="aspect-[4/5] w-full overflow-hidden bg-slate-100">
+<div class="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Portrait of Dr. Choi Soo-jin, Acne Specialist" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfvWQ5aVMeF8aV_EeG8yt-BNX6nsklqIAxIU2u95CsPcol3Qyqgx0ixiIcblguI9VWxlBy6shYrWwOd67F3-YRVXH4GK9fxhgFB688D6BtBoawQcagqaIg2HLU4bRhwc8AQG_iIlmyKYgMiCxNDWJj1SvIC2bWSOxZ3DuJcAqa6vNDQHw_qi5CoG4rXmCSTyH1ATDj75cdHL63UdOoFmgKOHIvkw_WlAiNbyLDcH_B6_y0711ncYFq-CpujbmUI9EN6NELrh9pOe7l");'>
+</div>
+</div>
+<div class="flex flex-col p-5 bg-white">
+<h3 class="text-lg font-bold text-slate-900">Dr. Choi Soo-jin</h3>
+<p class="text-sm font-medium text-primary-dark">Acne Specialist</p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Acne</span>
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">Scars</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Feature Section: Why Choose Us -->
+<section class="py-24 bg-background-light relative overflow-hidden">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="flex flex-col gap-8">
+<div>
+<span class="text-primary-dark font-bold tracking-wider uppercase text-sm">Why Choose Us</span>
+<h2 class="text-4xl font-black tracking-tight text-slate-900 mt-2 mb-4">Science meets Artistry</h2>
+<p class="text-lg text-slate-600 leading-relaxed">
+                                We combine medical expertise with aesthetic perfection to deliver results that look natural and feel empowering.
+                            </p>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex items-start gap-4">
+<div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm text-primary-dark border border-slate-100">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900">State-of-the-art Equipment</h3>
+<p class="text-slate-600 mt-1">Utilizing the latest laser and diagnostic tools for precise treatments.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm text-primary-dark border border-slate-100">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900">Board Certified Dermatologists</h3>
+<p class="text-slate-600 mt-1">Highly experienced specialists dedicated to every skin type.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-white shadow-sm text-primary-dark border border-slate-100">
+<span class="material-symbols-outlined">spa</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900">Personalized Care</h3>
+<p class="text-slate-600 mt-1">Custom treatment plans tailored specifically to your unique needs.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<!-- Background decoration -->
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-purple-200/20 rounded-2xl blur-2xl transform rotate-3 scale-105"></div>
+<!-- Image Card -->
+<div class="relative overflow-hidden rounded-2xl shadow-2xl border border-white/50">
+<div class="aspect-[4/3] w-full bg-cover bg-center" data-alt="Modern high-tech dermatology clinic interior with clean white aesthetic and advanced laser equipment" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA9KSoyQTkG_qQmyN-TkIE3jwz1Tf4WEheTIPOSg3_OnCCuU_m-IRfHMdPj19dHW2AhMf5jkl6v3ct2LVslzUQDNLmmK6oauwtdenLd7OTtbfKmxueUh9LopTbTtC3OrFmK9Rpk0Kz8P4fcj_uKOV6Xa6M6nXN8fJeEeuoaN6pu6mm3UXR8TLnOfkzTzFRrYvhUs6BAE321HMrz_-qkUtqsx96IZ2LLK5qmK_Sy-A8atiCussFpKA4vB4UyvtsnUhccXgnW-9r9LVB-");'>
+</div>
+<!-- Glass overlay on image -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-8">
+<div class="text-white">
+<p class="font-bold text-xl">Gangnam Center</p>
+<p class="text-white/80 text-sm">Seoul, South Korea</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-100 py-12">
+<div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-2 mb-4">
+<div class="flex items-center justify-center size-6 rounded-full bg-primary/20 text-primary-dark">
+<span class="material-symbols-outlined text-[16px]">dermatology</span>
+</div>
+<span class="text-xl font-bold text-slate-900">LUMIÈRE DERMA</span>
+</div>
+<p class="text-slate-500 text-sm max-w-sm mb-6">
+                            Providing top-tier dermatological care with a focus on aesthetic enhancement and medical precision. Your skin's health is our priority.
+                        </p>
+<div class="flex gap-4">
+<a class="text-slate-400 hover:text-primary-dark transition-colors" href="#"><span class="sr-only">Facebook</span>FB</a>
+<a class="text-slate-400 hover:text-primary-dark transition-colors" href="#"><span class="sr-only">Instagram</span>IG</a>
+<a class="text-slate-400 hover:text-primary-dark transition-colors" href="#"><span class="sr-only">Twitter</span>TW</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 mb-4">Treatments</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary-dark" href="#">Laser Toning</a></li>
+<li><a class="hover:text-primary-dark" href="#">Skin Scaling</a></li>
+<li><a class="hover:text-primary-dark" href="#">Anti-Aging</a></li>
+<li><a class="hover:text-primary-dark" href="#">Acne Clinic</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 mb-4">Contact</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base mt-0.5">location_on</span>
+                                123 Gangnam-daero, Seoul
+                            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base">call</span>
+                                +82 2-1234-5678
+                            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base">mail</span>
+                                contact@lumierederma.com
+                            </li>
+</ul>
+</div>
+</div>
+<div class="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+<p>© 2024 Lumière Dermatology Center. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-slate-600" href="#">Privacy Policy</a>
+<a class="hover:text-slate-600" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+</main>
+<!-- Floating Action Button -->
+<a class="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-slate-900 shadow-xl hover:scale-110 hover:shadow-2xl hover:bg-white hover:text-primary transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined text-3xl group-hover:animate-pulse">calendar_month</span>
+</a>
+</body></html>

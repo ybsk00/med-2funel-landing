@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Internal Medicine Landing Page</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "leaf-dark": "#1e3a2f",
+                        "leaf-medium": "#61897c",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden text-leaf-dark dark:text-white">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md dark:bg-background-dark/90 border-b border-gray-100 dark:border-gray-800">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-2">
+<div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+<div class="flex items-center justify-between whitespace-nowrap py-3">
+<div class="flex items-center gap-4 text-leaf-dark dark:text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-4xl">eco</span>
+</div>
+<h2 class="text-leaf-dark dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">MediGrow Internal Medicine</h2>
+</div>
+<div class="hidden lg:flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-leaf-dark dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors" href="#">Services</a>
+<a class="text-leaf-dark dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors" href="#">Doctors</a>
+<a class="text-leaf-dark dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors" href="#">Screening</a>
+<a class="text-leaf-dark dark:text-gray-200 text-sm font-medium hover:text-primary transition-colors" href="#">Research</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-leaf-dark text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Book Appointment</span>
+</button>
+</div>
+</div>
+<!-- Mobile Menu Icon -->
+<button class="lg:hidden text-leaf-dark dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- HeroSection -->
+<div class="w-full">
+<div class="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32">
+<div class="absolute inset-0 -z-10 h-full w-full bg-cover bg-center" data-alt="Macro photography of green leaf veins showcasing natural structure" style="background-image: linear-gradient(rgba(16, 34, 28, 0.6), rgba(16, 34, 28, 0.7)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuDyvS8J03HKmegrO91nesoHrvGnu255mzr36SntigNVHGvRPII-sT8mpJ8UMvm3nWthK-w2-H_mHRupSzbGSevlpUX1OMPa4JDQrTgtKafJ1vU8oHehxzQW7Uc0yVv8NUlJtEkHkMcYaSqhvCdmN2iOJluKn8_lR4mKirNhXsXqepvY-LP6kJTYIxMR_252lo3zaRsE9GnWqPxAjaL56Gn7dTN5Nd932ho_jLnw2u9_XX95OPkzJBcCe6bCxJY6EQSGlK2_YSM7eb_X');"></div>
+<div class="mx-auto max-w-7xl px-6 lg:px-8">
+<div class="mx-auto max-w-2xl text-center">
+<div class="mb-8 flex justify-center">
+<div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-300 ring-1 ring-white/10 hover:ring-white/20">
+                                Pioneering Natural Scientific Healing. <a class="font-semibold text-primary" href="#"><span aria-hidden="true" class="absolute inset-0"></span>Read our manifest <span aria-hidden="true">→</span></a>
+</div>
+</div>
+<h1 class="text-4xl font-bold tracking-tight text-white sm:text-6xl font-display">
+                            Cultivating Your <br/> <span class="text-primary">Long-Term Health</span>
+</h1>
+<p class="mt-6 text-lg leading-8 text-gray-300 font-light">
+                            Internal Medicine focused on preventative care and holistic diagnosis. Experience a natural approach to scientific healing, rooted in data and grown with care.
+                        </p>
+<div class="mt-10 flex items-center justify-center gap-x-6">
+<button class="rounded-lg bg-primary px-6 py-3 text-sm font-bold text-leaf-dark shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all">
+                                Schedule Check-up
+                            </button>
+<button class="text-sm font-semibold leading-6 text-white flex items-center gap-2 group">
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span> Learn more
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Stats Dashboard -->
+<section class="bg-white dark:bg-background-dark py-12 border-b border-gray-100 dark:border-gray-800">
+<div class="max-w-7xl mx-auto px-6 lg:px-8">
+<dl class="grid grid-cols-2 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
+<div class="mx-auto flex max-w-xs flex-col gap-y-2">
+<dt class="text-base leading-7 text-leaf-medium dark:text-gray-400">Active Patients</dt>
+<dd class="order-first text-3xl font-semibold tracking-tight text-leaf-dark dark:text-white">12k+</dd>
+</div>
+<div class="mx-auto flex max-w-xs flex-col gap-y-2">
+<dt class="text-base leading-7 text-leaf-medium dark:text-gray-400">Specialists</dt>
+<dd class="order-first text-3xl font-semibold tracking-tight text-leaf-dark dark:text-white">45</dd>
+</div>
+<div class="mx-auto flex max-w-xs flex-col gap-y-2">
+<dt class="text-base leading-7 text-leaf-medium dark:text-gray-400">Research Papers</dt>
+<dd class="order-first text-3xl font-semibold tracking-tight text-leaf-dark dark:text-white">180+</dd>
+</div>
+<div class="mx-auto flex max-w-xs flex-col gap-y-2">
+<dt class="text-base leading-7 text-leaf-medium dark:text-gray-400">Patient Satisfaction</dt>
+<dd class="order-first text-3xl font-semibold tracking-tight text-leaf-dark dark:text-white">99.8%</dd>
+</div>
+</dl>
+</div>
+</section>
+<!-- Department Services Header -->
+<div class="layout-container flex flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-5 mt-10">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">spa</span>
+<span class="text-primary font-bold uppercase tracking-wider text-sm">Our Expertise</span>
+</div>
+<h2 class="text-leaf-dark dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em] pb-3">Department Services</h2>
+<p class="text-leaf-medium dark:text-gray-400 max-w-2xl">
+                        Explore our specialized branches of internal medicine, designed to treat the whole person through precise scientific diagnostics and organic care plans.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Botanic Cards Section -->
+<div class="layout-container flex flex-col pb-10">
+<div class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1 gap-6">
+<!-- Card 1: Metabolic -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#152e26] shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-800">
+<div class="flex flex-col md:flex-row h-full">
+<div class="relative w-full md:w-1/3 min-h-[200px] md:min-h-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Abstract botanical representation of cells and metabolism" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA_6bKs6XdM5sHOSdPT8SQw7yW9r3-Ulku6oKjgZqf5aWS_M_VYYprstUNjLOQ55uLZAArsUKwSTFQh8Aj-AHNQ6iOSh5YO0PyR_MwbtPMRMKSo-uGPaJo_Xicaf2H90isvQcSXiKrDXdHhlS9Ce4vCkZb-5PGLGxU3b75yOR5UjKYWPt2CSrNU2MZWiRaPqMNWXwAreWi1R5Jqlui58r7CkDOkBI6d87dil-xxZh2teyv35w8HP1blSUrIXsmyDi6sfSd1r8Ge3GRs');"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between p-6 md:p-8">
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold text-leaf-dark dark:text-white">Metabolic Health</h3>
+<span class="material-symbols-outlined text-primary">science</span>
+</div>
+<p class="text-leaf-medium dark:text-gray-300 text-sm mb-4">
+                                        Specialized care for Diabetes, Thyroid, and Hormonal balance. We focus on long-term stability and lifestyle integration using bio-identical treatments.
+                                    </p>
+<div class="grid grid-cols-2 gap-4 text-xs text-leaf-dark dark:text-gray-400 mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Wait time: &lt; 2 days</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>4 Specialists</span>
+</div>
+</div>
+</div>
+<button class="self-start text-sm font-bold text-leaf-dark dark:text-primary flex items-center gap-1 group/btn">
+                                    Learn More <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Cardiopulmonary -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#152e26] shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-800">
+<div class="flex flex-col md:flex-row h-full">
+<div class="relative w-full md:w-1/3 min-h-[200px] md:min-h-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Clean minimal shot of a stethoscope on a green plant leaf" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADDcu9CfcayL2JrjrevnsklmUlg4oBRyHjJQc5FgK8hZQdbE5vAUgksyFRR_j0t1ImMXcMraTAx7-hEoVfoWwMpEjLBVP6vv2qBEVpaZssN4IvVuVXRLOkwzuJdhaP1Fr7_9HJk6EONEg5nMaI-RXqTh7v21Dw0qYk7Pc4vSpJO0mw9dGSOpg6hiVS8FiYom0qALThVs2RN1gKPWtJuVYj1ajDOyWkxtd-KSYmXUjVt3LoE0P3b0aJgfbNcT-FBp-sHmoq_mb7awyA');"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between p-6 md:p-8">
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold text-leaf-dark dark:text-white">Cardiopulmonary Wellness</h3>
+<span class="material-symbols-outlined text-primary">cardiology</span>
+</div>
+<p class="text-leaf-medium dark:text-gray-300 text-sm mb-4">
+                                        Comprehensive heart and lung screening using non-invasive technology. Protecting the rhythm of your life with advanced monitoring.
+                                    </p>
+<div class="grid grid-cols-2 gap-4 text-xs text-leaf-dark dark:text-gray-400 mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Wait time: Same day</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>6 Specialists</span>
+</div>
+</div>
+</div>
+<button class="self-start text-sm font-bold text-leaf-dark dark:text-primary flex items-center gap-1 group/btn">
+                                    Learn More <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Digestive -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#152e26] shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-800">
+<div class="flex flex-col md:flex-row h-full">
+<div class="relative w-full md:w-1/3 min-h-[200px] md:min-h-full overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Fresh vegetables and healthy food arranged clinically" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAA9zmew6S_Cub5kaHa-0VIcm5EImwARvmT7mPkBxCz3y4lCzyZdeA9ePEvZGk96U-sHqgq2j_OThI5hWbj2sfSXrj8clbJCZoFhhwafPNi_50deHuf_DIMC-WbUbcPvQS16Yo7q7MhX9DtL6kYi4uhwIhH7PxTBDnWd_dsHDWQEWgGbLJa-VFthktDd-zsvT-vbmpnDZuG0EKE6YC_GRNJqMqerP1Zm0aXY_LTqzAMcsRMSZKqJgAoaPkrJ70YLpf75qeEuSuPyDB0');"></div>
+</div>
+<div class="flex flex-1 flex-col justify-between p-6 md:p-8">
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-xl font-bold text-leaf-dark dark:text-white">Digestive Health &amp; Nutrition</h3>
+<span class="material-symbols-outlined text-primary">nutrition</span>
+</div>
+<p class="text-leaf-medium dark:text-gray-300 text-sm mb-4">
+                                        Gut health is the root of immunity. We combine gastroenterology with nutritional science to restore your body's natural balance.
+                                    </p>
+<div class="grid grid-cols-2 gap-4 text-xs text-leaf-dark dark:text-gray-400 mb-6">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Wait time: &lt; 3 days</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span>3 Specialists</span>
+</div>
+</div>
+</div>
+<button class="self-start text-sm font-bold text-leaf-dark dark:text-primary flex items-center gap-1 group/btn">
+                                    Learn More <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Preventative Care Timeline -->
+<section class="bg-[#e8f5f1] dark:bg-[#152e26]/50 py-16">
+<div class="max-w-7xl mx-auto px-6 lg:px-8">
+<div class="text-center mb-12">
+<h2 class="text-2xl font-bold text-leaf-dark dark:text-white mb-4">Your Path to Wellness</h2>
+<p class="text-leaf-medium dark:text-gray-400">A seamless journey from consultation to long-term health monitoring.</p>
+</div>
+<div class="relative">
+<!-- Connecting Line -->
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-700 -translate-y-1/2 hidden md:block z-0"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+<!-- Step 1 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-16 h-16 rounded-full bg-white dark:bg-[#1e3a2f] border-2 border-primary flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
+<span class="material-symbols-outlined text-primary text-3xl">potted_plant</span>
+</div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-2">Initial Consultation</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400">Deep dive into your history and lifestyle analysis.</p>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-16 h-16 rounded-full bg-white dark:bg-[#1e3a2f] border-2 border-primary flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
+<span class="material-symbols-outlined text-primary text-3xl">science</span>
+</div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-2">Scientific Diagnosis</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400">Advanced screening and lab work for precise data.</p>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-16 h-16 rounded-full bg-white dark:bg-[#1e3a2f] border-2 border-primary flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
+<span class="material-symbols-outlined text-primary text-3xl">healing</span>
+</div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-2">Personalized Plan</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400">Tailored treatment utilizing natural &amp; medical aids.</p>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-16 h-16 rounded-full bg-white dark:bg-[#1e3a2f] border-2 border-primary flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md transition-all group-hover:scale-110">
+<span class="material-symbols-outlined text-primary text-3xl">monitor_heart</span>
+</div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-2">Recovery &amp; Growth</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400">Ongoing monitoring to ensure sustainable health.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Screening Packages -->
+<section class="py-16 px-4 md:px-10 lg:px-40">
+<div class="max-w-[960px] mx-auto">
+<div class="text-center mb-10">
+<h2 class="text-2xl font-bold text-leaf-dark dark:text-white">Health Screening Packages</h2>
+<p class="text-leaf-medium dark:text-gray-400 mt-2">Invest in your future with our tiered preventative care options.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Basic -->
+<div class="bg-white dark:bg-[#152e26] border border-gray-100 dark:border-gray-700 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col">
+<div class="mb-4">
+<span class="bg-gray-100 dark:bg-white/10 text-leaf-dark dark:text-white text-xs font-bold px-2 py-1 rounded">BASIC</span>
+</div>
+<h3 class="text-3xl font-bold text-leaf-dark dark:text-white mb-2">$149</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400 mb-6">Essential check-up for annual monitoring.</p>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> General Physical
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Basic Blood Work
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> BP &amp; BMI Check
+                            </li>
+</ul>
+<button class="w-full py-2 border-2 border-leaf-dark dark:border-primary text-leaf-dark dark:text-primary font-bold rounded-lg hover:bg-leaf-dark hover:text-white dark:hover:bg-primary dark:hover:text-leaf-dark transition-colors">Select Plan</button>
+</div>
+<!-- Standard -->
+<div class="bg-white dark:bg-[#152e26] border-2 border-primary rounded-xl p-6 shadow-md relative flex flex-col">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-leaf-dark text-xs font-bold px-3 py-1 rounded-full">RECOMMENDED</div>
+<div class="mb-4 mt-2">
+<span class="bg-primary/20 text-leaf-dark dark:text-primary text-xs font-bold px-2 py-1 rounded">STANDARD</span>
+</div>
+<h3 class="text-3xl font-bold text-leaf-dark dark:text-white mb-2">$299</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400 mb-6">Comprehensive analysis for active lifestyles.</p>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Everything in Basic
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Thyroid Profile
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> ECG &amp; Lung Function
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Vitamin Deficiency Test
+                            </li>
+</ul>
+<button class="w-full py-2 bg-primary text-leaf-dark font-bold rounded-lg hover:bg-primary/90 transition-colors">Select Plan</button>
+</div>
+<!-- Comprehensive -->
+<div class="bg-white dark:bg-[#152e26] border border-gray-100 dark:border-gray-700 rounded-xl p-6 hover:shadow-lg transition-shadow flex flex-col">
+<div class="mb-4">
+<span class="bg-gray-100 dark:bg-white/10 text-leaf-dark dark:text-white text-xs font-bold px-2 py-1 rounded">PREMIUM</span>
+</div>
+<h3 class="text-3xl font-bold text-leaf-dark dark:text-white mb-2">$549</h3>
+<p class="text-sm text-leaf-medium dark:text-gray-400 mb-6">Total body scan and genetic insights.</p>
+<ul class="space-y-3 mb-8 flex-1">
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Everything in Standard
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Full Body MRI
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> Genetic Screening
+                            </li>
+<li class="flex items-center gap-2 text-sm text-leaf-dark dark:text-gray-300">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span> 1-on-1 Nutritionist
+                            </li>
+</ul>
+<button class="w-full py-2 border-2 border-leaf-dark dark:border-primary text-leaf-dark dark:text-primary font-bold rounded-lg hover:bg-leaf-dark hover:text-white dark:hover:bg-primary dark:hover:text-leaf-dark transition-colors">Select Plan</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800">
+<div class="layout-container flex flex-col">
+<div class="px-4 md:px-10 lg:px-40 py-12">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="col-span-1 md:col-span-2">
+<div class="flex items-center gap-3 text-leaf-dark dark:text-white mb-4">
+<div class="size-6 text-primary">
+<span class="material-symbols-outlined text-2xl">eco</span>
+</div>
+<h2 class="text-lg font-bold">MediGrow Internal Medicine</h2>
+</div>
+<p class="text-leaf-medium dark:text-gray-400 text-sm leading-relaxed max-w-xs">
+                                MediGrow Hospital<br/>
+                                1234 Wellness Ave, Suite 100<br/>
+                                Science Park, CA 90210
+                            </p>
+<div class="mt-4 flex gap-4">
+<a class="text-leaf-medium dark:text-gray-400 hover:text-primary" href="#"><span class="material-symbols-outlined">call</span></a>
+<a class="text-leaf-medium dark:text-gray-400 hover:text-primary" href="#"><span class="material-symbols-outlined">mail</span></a>
+<a class="text-leaf-medium dark:text-gray-400 hover:text-primary" href="#"><span class="material-symbols-outlined">location_on</span></a>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-4">Department</h3>
+<ul class="space-y-2 text-sm text-leaf-medium dark:text-gray-400">
+<li><a class="hover:text-primary" href="#">About Us</a></li>
+<li><a class="hover:text-primary" href="#">Our Specialists</a></li>
+<li><a class="hover:text-primary" href="#">Research Labs</a></li>
+<li><a class="hover:text-primary" href="#">Careers</a></li>
+</ul>
+</div>
+<div>
+<h3 class="font-bold text-leaf-dark dark:text-white mb-4">Patient Portal</h3>
+<ul class="space-y-2 text-sm text-leaf-medium dark:text-gray-400">
+<li><a class="hover:text-primary" href="#">Log In</a></li>
+<li><a class="hover:text-primary" href="#">Book Appointment</a></li>
+<li><a class="hover:text-primary" href="#">View Results</a></li>
+<li><a class="hover:text-primary" href="#">Insurance Info</a></li>
+</ul>
+</div>
+</div>
+<div class="border-t border-gray-100 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs text-leaf-medium dark:text-gray-500">© 2023 MediGrow Internal Medicine. All rights reserved.</p>
+<div class="flex gap-6 text-xs text-leaf-medium dark:text-gray-500">
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,7 +1,5 @@
-"use client";
+import KoreanMedicineLanding from "@/components/departments/KoreanMedicineLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="korean-medicine" />;
+export default function KoreanMedicinePage() {
+    return <KoreanMedicineLanding />;
 }

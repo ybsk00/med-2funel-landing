@@ -1,7 +1,5 @@
-"use client";
+import PlasticSurgeryLanding from "@/components/departments/PlasticSurgeryLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="plastic-surgery" />;
+export default function PlasticSurgeryPage() {
+    return <PlasticSurgeryLanding />;
 }

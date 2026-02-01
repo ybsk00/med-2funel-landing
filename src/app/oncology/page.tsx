@@ -1,7 +1,5 @@
-"use client";
+import OncologyLanding from "@/components/departments/OncologyLanding";
 
-import GenericDepartmentPage from "@/components/healthcare/GenericDepartmentPage";
-
-export default function Page() {
-    return <GenericDepartmentPage id="oncology" />;
+export default function OncologyPage() {
+    return <OncologyLanding />;
 }

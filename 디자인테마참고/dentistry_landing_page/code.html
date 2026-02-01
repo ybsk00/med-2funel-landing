@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumina Dentistry - Glass &amp; Gloss</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#13eca4",
+              "primary-dark": "#0ebc82",
+              "background-light": "#f6f8f7",
+              "background-dark": "#10221c",
+              "glass-border": "rgba(255, 255, 255, 0.6)",
+              "glass-bg": "rgba(255, 255, 255, 0.4)",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"],
+              "sans": ["Inter", "sans-serif"],
+            },
+            backgroundImage: {
+                'gloss-gradient': 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.1) 100%)',
+                'ice-gradient': 'linear-gradient(180deg, #F0F9FF 0%, #E0F2FE 100%)',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(148, 163, 184, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(19, 236, 164, 0.15);
+            border-color: #13eca4;
+        }
+
+        .gloss-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gloss-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #13eca4;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            cursor: pointer;
+            margin-top: -10px; 
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e2e8f0;
+            border-radius: 2px;
+        }
+
+        body {
+            background-color: #f0f8ff;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(19, 236, 164, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(14, 165, 233, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(19, 236, 164, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="font-display text-slate-800 antialiased selection:bg-primary selection:text-white">
+<!-- Navigation -->
+<nav class="sticky top-0 z-50 w-full glass-panel border-b-0">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-10 lg:px-40 flex justify-center py-4">
+<div class="layout-content-container flex w-full max-w-[1200px] items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 rounded-xl bg-gradient-to-br from-primary/20 to-white border border-white shadow-sm text-primary">
+<span class="material-symbols-outlined text-[28px]">dentistry</span>
+</div>
+<h2 class="text-slate-900 text-xl font-bold tracking-tight">Lumina Dentistry</h2>
+</div>
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Treatments</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Technology</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Results</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">Consultation</a>
+</div>
+<button class="gloss-shine flex items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-[#10221c] text-sm font-bold shadow-[0_4px_14px_0_rgba(19,236,164,0.39)] hover:bg-primary-dark transition-all transform hover:scale-105">
+<span class="truncate">Book Appointment</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
+<!-- Abstract Background mimicking water/diamond reflection -->
+<div class="absolute inset-0 z-0 bg-cover bg-center" data-alt="Abstract sparkling crystal water texture with light refractions" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBr4rxqK03SaSsn6jiox3svpr6OZRuyVkOm7xaO_MpA3x3w9x-x7a0ZQjod9VTr_BFmzd1kTQ5ig8sr_bUU0k5aLzEOkmZ_M8wwccKZ15TTWMYFphF4HNAX0xYHjr2oIQmJdWkLM2DOiKKNICdD5DDuyfsHbnYIz0DHgS1VeJfvXFqGoi4G-9O-sOt2CIFkmn1pFBxHT6tsFmT_QhV-jxXox8qc-I83O1uUbkiax8QoKSOEQMmHx7ogH-rdWKluYstilftUCZjd3_le");'>
+<div class="absolute inset-0 bg-white/30 mix-blend-overlay"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/80"></div>
+</div>
+<div class="relative z-10 px-4 md:px-10 lg:px-40 py-20 w-full max-w-[1200px]">
+<div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl backdrop-blur-2xl border border-white/60 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)]">
+<div class="flex flex-col gap-6">
+<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50/50 border border-blue-100 w-fit">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">New Era of Dentistry</span>
+</span>
+<h1 class="text-slate-900 text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] tracking-tight">
+                        Radiance <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-teal-400">Revealed</span>
+</h1>
+<p class="text-slate-600 text-lg md:text-xl font-normal leading-relaxed max-w-[500px]">
+                        Experience crystal clear care with our advanced cosmetic and restorative treatments designed for clarity, health, and perfection.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-2">
+<button class="gloss-shine flex h-14 items-center justify-center rounded-xl px-8 bg-slate-900 text-white text-base font-bold shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all">
+                            Schedule Your Visit
+                        </button>
+<button class="flex h-14 items-center justify-center rounded-xl px-8 bg-white/50 text-slate-900 border border-white/60 text-base font-bold hover:bg-white transition-colors">
+<span class="material-symbols-outlined mr-2">play_circle</span>
+                            View Our Process
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Feature Section -->
+<section class="relative w-full py-24 px-4 md:px-10 lg:px-40">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-16">
+<div class="text-center flex flex-col gap-4 items-center">
+<h2 class="text-slate-900 text-4xl md:text-5xl font-bold tracking-tight">Crystal Clear Services</h2>
+<p class="text-slate-500 text-lg max-w-[600px]">Advanced treatments utilizing gloss-finish technology for the perfect smile.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col gap-4 group">
+<div class="size-14 rounded-xl bg-gradient-to-br from-white to-blue-50 border border-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[32px]">clean_hands</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold mb-2">Teeth Whitening</h3>
+<p class="text-slate-500 text-sm leading-relaxed">Professional grade whitening for a radiant, glass-like smile finish.</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col gap-4 group">
+<div class="size-14 rounded-xl bg-gradient-to-br from-white to-blue-50 border border-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[32px]">sentiment_very_satisfied</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold mb-2">Invisible Aligners</h3>
+<p class="text-slate-500 text-sm leading-relaxed">Clear correction for perfect alignment using almost invisible materials.</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col gap-4 group">
+<div class="size-14 rounded-xl bg-gradient-to-br from-white to-blue-50 border border-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[32px]">dentistry</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold mb-2">Porcelain Veneers</h3>
+<p class="text-slate-500 text-sm leading-relaxed">Custom-crafted thin shells for a flawless, movie-star look.</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="glass-card rounded-2xl p-6 flex flex-col gap-4 group">
+<div class="size-14 rounded-xl bg-gradient-to-br from-white to-blue-50 border border-white shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-[32px]">flash_on</span>
+</div>
+<div>
+<h3 class="text-slate-900 text-lg font-bold mb-2">Laser Gum Therapy</h3>
+<p class="text-slate-500 text-sm leading-relaxed">Painless and precise gum contouring with high-tech lasers.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Snow White Simulator Section -->
+<section class="relative w-full py-20 px-4 md:px-10 lg:px-40 overflow-hidden">
+<!-- Background Elements -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-blue-100/40 via-transparent to-primary/10 rounded-full blur-3xl -z-10"></div>
+<div class="max-w-[1200px] mx-auto">
+<div class="glass-panel rounded-[32px] overflow-hidden shadow-2xl border border-white">
+<div class="grid lg:grid-cols-2 gap-0">
+<!-- Simulator Interface -->
+<div class="p-8 md:p-12 flex flex-col justify-center relative">
+<!-- Decorative gloss reflection on top left -->
+<div class="absolute top-0 left-0 w-64 h-64 bg-gradient-to-br from-white/40 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">auto_fix_high</span>
+<span class="text-slate-400 text-sm font-semibold tracking-widest uppercase">AI Simulation</span>
+</div>
+<h2 class="text-slate-900 text-3xl md:text-4xl font-bold mb-4">Snow White Simulator</h2>
+<p class="text-slate-500 text-lg mb-10">Visualize your perfect smile instantly. Adjust the slider to see the difference our 'Snow White' treatment can make.</p>
+<!-- Interactive Slider Mockup -->
+<div class="bg-white/50 rounded-2xl p-6 border border-white/60 shadow-inner mb-8">
+<div class="flex justify-between mb-2">
+<span class="text-xs font-bold text-slate-400 uppercase">Natural</span>
+<span class="text-xs font-bold text-primary uppercase">Snow White</span>
+</div>
+<div class="relative h-6 flex items-center">
+<!-- Track background -->
+<div class="absolute w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-slate-300 to-primary w-[75%]"></div>
+</div>
+<!-- Thumb -->
+<div class="absolute left-[75%] -translate-x-1/2 w-8 h-8 bg-white rounded-full shadow-lg border-2 border-primary cursor-pointer hover:scale-110 transition-transform flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="mt-4 flex justify-between items-center text-sm text-slate-500">
+<span>Current Shade: A3</span>
+<span class="font-bold text-primary">Target Shade: BL1</span>
+</div>
+</div>
+<button class="w-full sm:w-auto gloss-shine flex items-center justify-center rounded-xl h-12 px-8 bg-primary text-[#111816] text-sm font-bold shadow-lg hover:shadow-primary/30 transition-all">
+                                Try Live Simulation
+                            </button>
+</div>
+</div>
+<!-- Visual Output -->
+<div class="relative h-[400px] lg:h-auto bg-slate-100 overflow-hidden group">
+<img alt="Close up of a bright confident smile with perfectly white teeth" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1hbnAvofxoqyAXoF2NzhkOeqtqW2JlYaJqNef7fUx7ap2mYLtx1tw4DbfiyvVBnTqUf0S-Rcz06bY9ChJsZjrKyxU31ZKkXgMnxDxjvU0uPxPmekOOJl_8BNwmR0GgFJLIk3_o55uFmC6KJji3BP3Kj07n0-VsLTsRkZu5RXTbvBTiyF24HgurBST08X-K7_eBhd0tZU-b41856epS95Q77rKhjBsaAJRIGW3Ud-mH-AAJgWscOmphJbgZfj7KGGUjiGzMRuwV-rS"/>
+<!-- Before/After Split Line Mockup -->
+<div class="absolute inset-0 flex">
+<div class="w-1/4 h-full bg-black/20 backdrop-grayscale relative border-r-2 border-white/50">
+<span class="absolute bottom-4 left-4 text-white text-xs font-bold bg-black/30 px-2 py-1 rounded backdrop-blur-md">BEFORE</span>
+</div>
+</div>
+<!-- Gloss Overlay -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Stats / Trust -->
+<section class="py-16 border-t border-white/40 bg-white/30 backdrop-blur-sm">
+<div class="max-w-[1200px] mx-auto px-4 md:px-10 lg:px-40">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+<div class="flex flex-col gap-1">
+<span class="text-4xl font-black text-slate-900">10k+</span>
+<span class="text-sm font-medium text-slate-500 uppercase tracking-wide">Smiles Brightened</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-4xl font-black text-slate-900">15+</span>
+<span class="text-sm font-medium text-slate-500 uppercase tracking-wide">Years Experience</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-4xl font-black text-slate-900">100%</span>
+<span class="text-sm font-medium text-slate-500 uppercase tracking-wide">Satisfaction Rate</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-4xl font-black text-slate-900">24/7</span>
+<span class="text-sm font-medium text-slate-500 uppercase tracking-wide">Emergency Care</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-gradient-to-t from-white to-transparent pt-10 pb-8">
+<div class="max-w-[1200px] mx-auto px-4 md:px-10 lg:px-40">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-2xl">dentistry</span>
+<span class="font-bold text-slate-900">Lumina Dentistry</span>
+</div>
+<div class="flex gap-6 text-sm text-slate-500 font-medium">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="text-xs text-slate-400">
+                    © 2024 Lumina Dentistry. All rights reserved.
+                </div>
+</div>
+</div>
+</footer>
+</body></html>
