@@ -30,17 +30,50 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
     const isThemeDark = isColorDark(config.theme.background);
     const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
 
-    // Visibility Logic: Prefer theme text color but ensure contrast against media
-    const heroTitleColor = config.theme.text || (isThemeDark ? "#FFFFFF" : "#111111");
-    const heroSubtitleColor = isThemeDark ? "#FFFFFF" : "#333333";
+    // helper: ensure visibility while following user's specific contrast policy
+    const ensureVisibility = (hex: string, backgroundIsDark: boolean) => {
+        if (!hex) return backgroundIsDark ? "#FFFFFF" : "#000000";
 
-    // Primary CTA Button: Use primary theme color, text depends on how bright that color is
+        // Convert to luminance
+        let h = hex.replace('#', '');
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const r = parseInt(h.substring(0, 2), 16);
+        const g = parseInt(h.substring(2, 4), 16);
+        const b = parseInt(h.substring(4, 6), 16);
+        const colorLuminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+        // CASE 1: DARK BACKGROUND -> Use White (as requested)
+        if (backgroundIsDark) {
+            return "#FFFFFF";
+        }
+
+        // CASE 2: LIGHT BACKGROUND -> Use Theme Color (Must be dark enough, NO WHITE)
+        if (!backgroundIsDark) {
+            // If theme color is too light -> Darken it significantly
+            if (colorLuminance > 0.5) {
+                const nr = Math.floor(r * 0.35).toString(16).padStart(2, '0');
+                const ng = Math.floor(g * 0.35).toString(16).padStart(2, '0');
+                const nb = Math.floor(b * 0.35).toString(16).padStart(2, '0');
+                return `#${nr}${ng}${nb}`;
+            }
+            return hex; // Already dark enough branded color
+        }
+
+        return hex;
+    };
+
+    // Auto-detect based on background
+    const heroTitleColor = ensureVisibility(config.theme.accent || config.theme.primary, isThemeDark);
+    const heroSubtitleColor = ensureVisibility(config.theme.secondary || config.theme.primary, isThemeDark);
+    const eyebrowColor = ensureVisibility(config.theme.primary, isThemeDark);
+
+    // Primary CTA Button: Contrast logic
     const primaryButtonBg = config.theme.primary || "#000000";
     const primaryButtonText = isPrimaryBright ? "text-slate-900" : "text-white";
     const primaryButtonBorder = isPrimaryBright ? "border-slate-900/10" : "border-white/20";
 
-    // Secondary CTA Button: Glass effect but high visibility
-    const secondaryButtonText = isThemeDark ? "text-white" : "text-slate-800";
+    // Secondary CTA Button: No absolute white on light themes
+    const secondaryButtonText = ensureVisibility(config.theme.secondary, isThemeDark);
     const secondaryButtonBorder = isThemeDark ? "border-white/30" : "border-slate-800/30";
 
     return (
@@ -83,10 +116,10 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
             {/* Hero Content - 1컬럼 중앙 정렬 */}
             <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
                 <div className="space-y-6 animate-fade-in">
-                    {/* Eyebrow */}
+                    {/* Eyebrow: Specialized Theme Color (Brighter on dark, Branded on light) */}
                     <p
-                        className="font-semibold tracking-[0.15em] uppercase text-xs"
-                        style={{ color: config.theme.secondary }}
+                        className="font-black tracking-[0.25em] uppercase text-xs"
+                        style={{ color: eyebrowColor }}
                     >
                         PREMIUM AI HEALTHCARE
                     </p>
@@ -110,10 +143,10 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         </span>
                     </h1>
 
-                    {/* Body: Enhanced for Background Contrast */}
+                    {/* Body: Conditional Contrast */}
                     <p
-                        className="text-lg md:text-xl leading-relaxed max-w-xl mx-auto drop-shadow-md font-medium px-4"
-                        style={{ color: heroSubtitleColor, opacity: 0.85 }}
+                        className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto drop-shadow-md font-bold px-4 ${isThemeDark ? 'text-white/80' : ''}`}
+                        style={{ color: isThemeDark ? undefined : heroSubtitleColor, opacity: 0.95 }}
                     >
                         {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                     </p>
@@ -141,12 +174,13 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         {/* Secondary CTA - 30초 체크 */}
                         <Link
                             href="healthcare/chat?topic=glow-booster"
-                            className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl ${secondaryButtonText} text-base font-bold rounded-2xl hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center gap-2 shadow-xl`}
+                            className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105 active:scale-95 text-base font-bold rounded-2xl`}
                             style={{
+                                color: secondaryButtonText,
                                 backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
                             }}
                         >
-                            <Sparkles className="w-5 h-5 text-skin-primary animate-pulse" />
+                            <Sparkles className="w-5 h-5 animate-pulse" style={{ color: config.theme.primary }} />
                             30초 체크 시작
                         </Link>
                     </div>
