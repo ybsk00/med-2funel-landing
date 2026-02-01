@@ -13,6 +13,7 @@ import { MagneticInteraction, ParallaxLayer } from "@/components/ui/ThreeDIntera
 import { DentistryMorphing } from "@/components/healthcare/specialized/DentistryMorphing";
 import { NeuralAttentionFlow } from "@/components/healthcare/specialized/NeuralAttentionFlow";
 import { FluidBotanic } from "@/components/healthcare/specialized/FluidBotanic";
+import HealthcareContent from "@/components/healthcare/HealthcareContent";
 
 // Icon Map for Dynamic Loading
 const ICON_MAP: Record<string, any> = {
@@ -316,6 +317,11 @@ export default function HealthcareLanding() {
                         <DentistryMorphing />
                     </section>
                 )}
+
+                {/* NEW: Healthcare Content Reinforcement (Sessions A-D) */}
+                <section className="py-12 bg-skin-bg relative z-20">
+                    <HealthcareContent config={config} />
+                </section>
 
                 {/* Modules Grid */}
                 <section className="relative py-32 overflow-hidden z-10">
