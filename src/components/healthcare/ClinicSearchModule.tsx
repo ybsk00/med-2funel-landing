@@ -67,15 +67,26 @@ const THEME_STYLES = {
 };
 
 const THEME_CLASSES = {
-    border: "border-skin-primary/30",
+    // 테두리: 테마 텍스트 색상의 20% + 테마 프라이머리 색상의 30% 혼합하여 가시성 확보
+    border: "border-skin-text/20 hover:border-skin-primary/50",
+
+    // 텍스트: 무조건 테마 텍스트 색상 사용
     textMuted: "text-skin-text/60",
-    input: "bg-skin-surface border-skin-primary/10 text-skin-text focus:border-skin-primary/50 focus:ring-1 focus:ring-skin-primary/50 transition-all duration-300 shadow-inner",
+
+    // 입력 필드: 배경을 옅은 테마 배경색(가시성 확보) + 텍스트는 테마 텍스트
+    input: "bg-skin-text/[0.03] border-skin-text/20 text-skin-text font-bold focus:border-skin-primary focus:ring-1 focus:ring-skin-primary transition-all duration-300 shadow-sm placeholder:text-skin-text/30",
+
+    // 칩 (버튼): 활성 시 프라이머리, 비활성 시 투명+테두리
     chip: {
-        active: "bg-skin-primary text-white shadow-lg shadow-skin-primary/30 border-skin-primary",
-        inactive: "bg-skin-surface/50 text-skin-text/60 border-skin-primary/10 hover:border-skin-primary/40 hover:text-skin-text hover:bg-skin-surface transition-all"
+        active: "bg-skin-primary text-white shadow-md shadow-skin-primary/20 border-skin-primary",
+        inactive: "bg-transparent text-skin-text/70 border-skin-text/20 hover:border-skin-primary hover:text-skin-primary hover:bg-skin-primary/5 transition-all shadow-sm"
     },
-    card: "bg-skin-surface/40 backdrop-blur-2xl border border-skin-primary/10 hover:border-skin-primary/30 transition-all duration-500 shadow-xl",
-    button: "bg-gradient-to-r from-skin-primary to-skin-accent text-white shadow-xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-black tracking-tight"
+
+    // 카드: 배경을 반투명하게 깔아서 텍스트 가독성 확보 (Glassmorphism + Card)
+    card: "bg-skin-surface/80 backdrop-blur-xl border border-skin-text/10 hover:border-skin-primary/50 transition-all duration-500 shadow-lg",
+
+    // 메인 버튼
+    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-black tracking-tight border border-white/10"
 };
 
 // 오늘 요일 계산 (1=월 ~ 7=일)
@@ -250,7 +261,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             <div className="w-full space-y-6">
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
-                        <label className="text-[9px] font-black text-skin-text uppercase tracking-[0.2em] absolute -top-5 left-1 opacity-40">Location / City</label>
+                        <label className="text-xs font-black text-skin-text uppercase tracking-widest absolute -top-5 left-1 opacity-90">Location / City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
@@ -267,7 +278,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
                     <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
-                        <label className="text-[9px] font-black text-skin-text uppercase tracking-[0.2em] absolute -top-5 left-1 opacity-40">Area / District</label>
+                        <label className="text-xs font-black text-skin-text uppercase tracking-widest absolute -top-5 left-1 opacity-90">Area / District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
@@ -333,7 +344,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     className={`transition-all duration-700 ${searchState !== "idle" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
                 >
                     {searchState !== "idle" && (
-                        <div className="bg-black/20 backdrop-blur-3xl rounded-[2rem] border border-white/10 p-6 md:p-8 mt-12 max-h-[70vh] overflow-y-auto shadow-2xl custom-scrollbar">
+                        <div className={`rounded-[2rem] p-6 md:p-8 mt-12 max-h-[70vh] overflow-y-auto custom-scrollbar ${THEME_CLASSES.card}`}>
                             {/* 초기화 버튼 */}
                             <div className="flex justify-end mb-3">
                                 <button
@@ -341,7 +352,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                         setSearchState("idle");
                                         setClinics([]);
                                     }}
-                                    className="text-xs text-skin-subtext hover:text-white transition-colors flex items-center gap-1"
+                                    className="text-xs text-skin-subtext hover:text-skin-primary transition-colors flex items-center gap-1 font-bold"
                                 >
                                     ✕ 닫기
                                 </button>
