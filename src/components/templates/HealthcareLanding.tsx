@@ -79,7 +79,38 @@ export default function HealthcareLanding() {
 
                 {/* Hero Section */}
                 <header className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-[85vh] flex flex-col justify-center">
-                    {/* ... (video and overlays remain same) */}
+                    {/* Video Background */}
+                    <div className="absolute inset-0 z-0">
+                        <video
+                            key={config.videoSource}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="metadata"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        >
+                            <source src={config.videoSource || "/2.mp4"} type="video/mp4" />
+                        </video>
+                        {/* Overlays */}
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(to right, ${config.theme.background}E6, ${config.theme.background}B3, ${config.theme.background}66)`
+                            }}
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(to bottom, ${config.theme.background}4D, transparent, ${config.theme.background}CC)`
+                            }}
+                        />
+
+                        {/* Specialized 3D Layers */}
+                        {config.id === 'neurosurgery' && <NeuralAttentionFlow />}
+                        {config.id && ['internal-medicine', 'pediatrics', 'obgyn'].includes(config.id) && <FluidBotanic />}
+                    </div>
+
                     {/* Hero Content */}
                     <div className="relative z-10 max-w-3xl mx-auto w-full text-center">
                         <div className="space-y-6 animate-fade-in">
@@ -112,12 +143,55 @@ export default function HealthcareLanding() {
                                 {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                             </p>
 
-                            {/* ... (CTA Buttons remain same) */}
+                            {/* CTA Buttons */}
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                                <MagneticInteraction distance={80} strength={0.3}>
+                                    <Link
+                                        href={config.marketing?.cta?.link || "healthcare/chat"}
+                                        className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                                        style={{ backgroundColor: config.theme.primary, opacity: 0.95 }}
+                                    >
+                                        <CtaIcon className="w-5 h-5" />
+                                        {config.marketing?.cta?.buttonText || "AI 진단 시작"}
+                                    </Link>
+                                </MagneticInteraction>
+
+                                <MagneticInteraction distance={60} strength={0.2}>
+                                    <button
+                                        onClick={() => setIsPhotoSlideOverOpen(true)}
+                                        className="px-6 py-3 border-2 backdrop-blur-sm text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
+                                        style={{
+                                            borderColor: config.theme.primary,
+                                            color: config.theme.primary
+                                        }}
+                                    >
+                                        <Camera className="w-4 h-4" />
+                                        사진으로 스타일 보기
+                                    </button>
+                                </MagneticInteraction>
+                            </div>
+
+                            {/* Clinic Search Link */}
+                            <div className="pt-2">
+                                <a
+                                    href="#clinic-search"
+                                    className="hover:opacity-80 text-sm font-medium inline-flex items-center gap-1 transition-opacity"
+                                    style={{ color: config.theme.text }}
+                                >
+                                    {config.marketing?.searchKeyword || "유명한 의원 찾기"}
+                                    <ChevronRight className="w-4 h-4" />
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </header>
 
-                {/* ... (Photo SlideOver, How It Works remain same) */}
+                <PhotoSlideOver
+                    isOpen={isPhotoSlideOverOpen}
+                    onClose={() => setIsPhotoSlideOverOpen(false)}
+                />
+
+                <HowItWorksCards className="bg-skin-bg" />
 
                 {/* Clinic Search Section */}
                 <section id="clinic-search" className="relative py-16">
@@ -136,26 +210,33 @@ export default function HealthcareLanding() {
                     </div>
                 </section>
 
-                {/* Features Section */}
-                <section className="relative py-20 px-6 overflow-hidden z-10">
-                    <div className="relative z-10 max-w-5xl mx-auto">
-                        <div className="text-center mb-12 space-y-3">
-                            <h2 className="text-3xl md:text-4xl font-bold font-sans tracking-tight" style={{ color: config.theme.text }}>
-                                {config.marketing?.cta?.title || "맞춤형 헬스케어 체크"}
-                            </h2>
-                            <p className="max-w-lg mx-auto text-sm font-medium opacity-70" style={{ color: config.theme.text }}>
-                                간단한 질문으로 관리 습관을 점검하고, 요약을 받아보세요.
-                            </p>
-                        </div>
-                        {/* ... (Feature cards grid) */}
-                    </div>
-                </section>
+                {/* Specialized Evidence Section */}
+                {config.id === 'dentistry' && (
+                    <section className="px-6 py-20 max-w-7xl mx-auto relative z-10">
+                        <DentistryMorphing />
+                    </section>
+                )}
 
-                {/* ... (Specialized Evidence, Healthcare Content Sessions) */}
+                {/* Healthcare Content reinforcing Sessions A-D */}
+                <section className="py-12 bg-skin-bg relative z-20">
+                    <HealthcareContent config={config} />
+                </section>
 
                 {/* Modules Grid */}
                 <section className="relative py-32 overflow-hidden z-10">
-                    {/* ... (video background remains same) */}
+                    <div className="absolute inset-0 z-0">
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover object-[75%_35%] md:object-center scale-[0.8] md:scale-100 origin-center"
+                        >
+                            <source src="/1.mp4" type="video/mp4" />
+                        </video>
+                        <div className="absolute inset-0 bg-black/45" />
+                    </div>
+
                     <div className="relative z-10 max-w-7xl mx-auto px-6">
                         <div className="text-center mb-16">
                             <span className="text-skin-primary font-bold tracking-widest uppercase text-sm mb-2 block">My Health Check</span>
@@ -166,9 +247,6 @@ export default function HealthcareLanding() {
                                 아래 모듈을 선택해 정밀한 자가 진단을 시작하고 나만의 요약 리포트를 받아보세요.
                             </p>
                         </div>
-                        {/* ... (Modules list) */}
-                    </div>
-                </section>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-center">
                             {(config.landingModules || []).map((module: any) => {
@@ -211,10 +289,8 @@ export default function HealthcareLanding() {
                     </div>
                 </section>
 
-                {/* Footer */}
                 <Footer mode="healthcare" />
 
-                {/* Floating Chat Button */}
                 <div className="fixed bottom-8 right-8 z-50">
                     <MagneticInteraction distance={50} strength={0.5}>
                         <Link href={config.marketing?.cta?.link || "healthcare/chat"} className="w-16 h-16 bg-skin-primary rounded-full flex items-center justify-center text-white shadow-xl shadow-skin-primary/40 hover:bg-skin-accent transition-all duration-300 hover:scale-110 border-2 border-white/20">
@@ -222,7 +298,7 @@ export default function HealthcareLanding() {
                         </Link>
                     </MagneticInteraction>
                 </div>
-            </div >
-        </TrackF1View >
+            </div>
+        </TrackF1View>
     );
 }
