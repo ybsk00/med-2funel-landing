@@ -17,20 +17,36 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
             className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-screen flex flex-col justify-center"
             style={{ backgroundColor: config.theme.background }}
         >
-            {/* 영상 배경 */}
+            {/* 배경 (영상 또는 이미지) */}
             <div className="absolute inset-0 z-0">
-                <video
-                    key={config.video || config.videoSource} // Use config.video as primary, fallback to videoSource
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="absolute inset-0 w-full h-full object-cover"
-                >
-                    <source src={config.video || config.videoSource || "/2.mp4"} type="video/mp4" />
-                </video>
-                {/* Overlays - Dynamic Background Based - REMOVED for visibility */}
+                {(() => {
+                    const source = config.video || config.videoSource || "/2.mp4";
+                    const isImage = source.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+
+                    if (isImage) {
+                        return (
+                            <img
+                                src={source}
+                                alt="Background"
+                                className="absolute inset-0 w-full h-full object-cover"
+                            />
+                        );
+                    }
+
+                    return (
+                        <video
+                            key={source}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            preload="metadata"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        >
+                            <source src={source} type="video/mp4" />
+                        </video>
+                    );
+                })()}
             </div>
 
             {/* Hero Content - 1컬럼 중앙 정렬 */}
