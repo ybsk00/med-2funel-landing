@@ -66,27 +66,26 @@ const THEME_STYLES = {
     }
 };
 
-const THEME_CLASSES = {
-    // 테두리: 2px 두께, 선명한 색상(#111/20) 적용
-    border: "border-gray-900/20 hover:border-skin-primary",
+// 테두리: 2px 두께
+border: "border-gray-900/20 hover:border-skin-primary",
 
-    // 텍스트: 무조건 진한 회색(#1f2937) 적용 (흰색 방지)
+    // 텍스트
     textMuted: "text-gray-800 font-medium",
 
-    // 입력 필드: 흰색 배경(또는 아주 밝은 Surface), 진한 텍스트(#111) 강제
-    input: "bg-white/80 border-2 border-gray-900/10 text-gray-900 font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-gray-500",
+        // 입력 필드: 흰색 배경 강제
+        input: "bg-white border-2 border-gray-900/10 text-gray-900 font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-gray-500",
 
-    // 칩 (버튼): 비활성 상태일 때 배경 있음 + 진한 글씨(#4b5563)
-    chip: {
-        active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary font-bold",
-        inactive: "bg-white/90 text-gray-600 border-2 border-gray-200 hover:border-skin-primary hover:text-skin-primary hover:bg-white transition-all font-semibold"
-    },
+            // 칩 (버튼): 호버 시 명확한 피드백 (배경색 변경 및 테두리 강조)
+            chip: {
+    active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary font-bold hover:brightness-110 active:scale-95 transition-transform duration-200",
+        inactive: "bg-white text-gray-600 border-2 border-gray-200 hover:border-skin-primary hover:text-skin-primary hover:bg-white/50 transition-all duration-200 font-semibold active:scale-95"
+},
 
-    // 카드: 배경 불투명도 95% 이상 + 진한 텍스트 context
-    card: "bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-2xl text-gray-900",
+// 카드
+card: "bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-2xl text-gray-900",
 
-    // 메인 버튼
-    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all font-black border-2 border-transparent"
+    // 메인 버튼: 호버 시 확대 보다는 명확한 색상 변화/그림자 강조
+    button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent"
 };
 
 // 오늘 요일 계산 (1=월 ~ 7=일)
@@ -270,10 +269,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                 if (city === "서울") setSelectedRegion("강남구");
                                 else if (city === "경기도") setSelectedRegion("의정부시");
                             }}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white/80 text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
+                            style={{ color: "#111111", backgroundColor: "#ffffff" }}
                         >
-                            <option value="서울" className="text-gray-900 bg-white">서울</option>
-                            <option value="경기도" className="text-gray-900 bg-white">경기도</option>
+                            <option value="서울" style={{ color: "#111111", backgroundColor: "#ffffff" }}>서울</option>
+                            <option value="경기도" style={{ color: "#111111", backgroundColor: "#ffffff" }}>경기도</option>
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
@@ -282,10 +282,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white/80 text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
+                            style={{ color: "#111111", backgroundColor: "#ffffff" }}
                         >
                             {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
-                                <option key={region} value={region} className="text-gray-900 bg-white">{region}</option>
+                                <option key={region} value={region} style={{ color: "#111111", backgroundColor: "#ffffff" }}>{region}</option>
                             ))}
                         </select>
                         <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
