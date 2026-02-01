@@ -9,20 +9,21 @@ import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
 
 export default function OncologyLanding() {
-    const config = getDepartmentConfig("oncology"); // Assuming 'cancer_center' is key, or 'oncology' if mapped
+    const config = getDepartmentConfig("oncology");
     const [opened, { open, close }] = useDisclosure(false);
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Oncology (Linen/Warm)
+    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
     const linenConfig = {
         ...config,
         theme: {
             ...config.theme,
-            primary: "#13eca4", // Brand Primary
-            secondary: "#EBE8E3", // Stone Grey
-            background: "#F5F2ED", // Linen
-            text: "#2D3633", // Stone Text
+            primary: "#13eca4", // Brand
+            secondary: "#EBE8E3", // Stone
+            background: "#F5F2ED",
+            text: "#2D3633", // Dark Stone (Hard Coded for Visibility)
+            accent: "#1c2522", // Dark Charcoal for accents
             font: "display",
             texture: "paper"
         }
@@ -57,17 +58,16 @@ export default function OncologyLanding() {
                 <HealthcareNavigation config={linenConfig} />
 
                 <main className="relative bg-linen-texture pt-20">
-                    {/* Hero Section */}
-                    <div className="relative z-10 p-4 md:p-8">
-                        <div className="max-w-[1440px] mx-auto rounded-3xl overflow-hidden relative shadow-xl border border-white/50">
+                    {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
+                    <div className="relative z-10">
+                        {/* Removed p-4/rounded constraints for edge-to-edge look */}
+                        <div className="w-full relative overflow-hidden shadow-sm border-b border-[#EBE8E3]">
                             <HealthcareHero config={linenConfig} onOpenCamera={open} />
-                            {/* Warm Overlay - REMOVED */}
-                            {/* <div className="absolute inset-0 bg-[#F5F2ED]/20 pointer-events-none z-20 mix-blend-overlay"></div> */}
                         </div>
                     </div>
 
                     {/* Modules Section */}
-                    <section className="pb-16 px-4 md:px-8">
+                    <section className="pb-16 px-4 md:px-8 mt-12">
                         <div className="max-w-[1440px] mx-auto">
                             <div className="text-center mb-12">
                                 <span className="material-symbols-outlined text-[#13eca4] text-4xl mb-4">healing</span>

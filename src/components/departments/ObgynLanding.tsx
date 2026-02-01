@@ -14,18 +14,18 @@ export default function ObgynLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for ObGyn (Organic Flow)
-    // Concept: Soft, Curves, Peach/Coral, Elegant
+    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
     const obgynConfig = {
         ...config,
         theme: {
             ...config.theme,
-            primary: "#FF9EAA", // Soft Coral/Pink for this specific dept
-            secondary: "#FFF0F1", // Very light pink background
-            background: "#FFFBFB", // Warm White
-            text: "#4A4A4A", // Soft charcoal
-            font: "serif", // Elegant serif
-            texture: "silk" // Smooth
+            primary: "#FF9EAA", // Soft Coral
+            secondary: "#FFF0F1",
+            background: "#FFFBFB",
+            text: "#4A4A4A", // Dark Grey (Hard Coded for Visibility)
+            accent: "#d63384", // Deep Pink for contrast
+            font: "serif",
+            texture: "silk"
         }
     };
 
@@ -52,17 +52,16 @@ export default function ObgynLanding() {
                 <HealthcareNavigation config={obgynConfig} />
 
                 <main className="relative bg-organic-curve pt-20">
-                    {/* Hero Section */}
-                    <div className="relative z-10 p-4 md:p-8">
-                        <div className="max-w-[1440px] mx-auto rounded-[2rem] overflow-hidden relative shadow-2xl shadow-rose-100">
+                    {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
+                    <div className="relative z-10">
+                        {/* Removed p-4 constraints */}
+                        <div className="w-full relative shadow-xl shadow-rose-100/50">
                             <HealthcareHero config={obgynConfig} onOpenCamera={open} />
-                            {/* Soft Pink Overlay - REMOVED */}
-                            {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FFF0F1]/40 to-transparent pointer-events-none z-20 mix-blend-overlay"></div> */}
                         </div>
                     </div>
 
                     {/* Modules Section */}
-                    <section className="pb-16 px-4 md:px-8">
+                    <section className="pb-16 px-4 md:px-8 mt-12">
                         <div className="max-w-[1440px] mx-auto">
                             <div className="flex flex-col items-center justify-center text-center mb-12 mt-8">
                                 <span className="material-symbols-outlined text-[#FF9EAA] text-4xl mb-2">female</span>

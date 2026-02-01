@@ -14,16 +14,17 @@ export default function OrthopedicsLanding() {
 
     if (!config) return <div>Department Not Found</div>;
 
-    // Custom theme config for Orthopedics (Blueprint/Grid)
+    // HARD-CODED CONFIGURATION FOR VISUAL OVERHAUL
     const blueprintConfig = {
         ...config,
         theme: {
             ...config.theme,
-            primary: "#13eca4",
+            primary: "#13eca4", // Vibrant Green
             secondary: "#e2e8f0",
             background: "#f6f8f7",
-            text: "#0f172a", // Navy
-            font: "mono", // Using mono for technical feel
+            text: "#0f172a", // Dark Navy (Verified High Contrast)
+            accent: "#00b894", // Darker Green for Gradients
+            font: "mono",
             texture: "grid"
         }
     };
@@ -74,17 +75,17 @@ export default function OrthopedicsLanding() {
                 <HealthcareNavigation config={blueprintConfig} />
 
                 <main className="relative bg-grid-pattern pt-20">
-                    {/* Hero Section */}
-                    <div className="relative z-10 p-4 md:p-8">
-                        <div className="max-w-[1440px] mx-auto rounded-2xl overflow-hidden relative">
+                    {/* Hero Section - FULL WIDTH (Hard Coded Unwrap) */}
+                    <div className="relative z-10">
+                        {/* Removed p-4 md:p-8 and max-w constraints */}
+                        <div className="w-full relative overflow-hidden shadow-xl border-b border-slate-200">
+                            {/* Hard-coded Glassmorphism Logic Injection via Config is tricky, so we rely on the clean wrapper + config overrides */}
                             <HealthcareHero config={blueprintConfig} onOpenCamera={open} />
-                            {/* Grid Overlay on Hero - REMOVED */}
-                            {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwdi41aDM5LjV2MzlIMHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==')] pointer-events-none z-20"></div> */}
                         </div>
                     </div>
 
                     {/* Schematics / Modules Section */}
-                    <section className="pb-16 px-4 md:px-8">
+                    <section className="pb-16 px-4 md:px-8 mt-12">
                         <div className="max-w-[1440px] mx-auto">
                             <div className="flex items-center justify-between mb-8 mt-4">
                                 <h2 className="text-2xl font-bold flex items-center gap-2">
