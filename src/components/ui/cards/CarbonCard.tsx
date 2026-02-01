@@ -21,7 +21,7 @@ export default function CarbonCard({ id, title, description, icon: Icon, color, 
     });
 
     const Container = onClick ? 'div' : Link;
-    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left", onMouseEnter: handleHover, onClick: handleClick };
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full w-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full w-full transform skew-x-[-6deg] hover:skew-x-0 transition-transform duration-300 origin-bottom-left", onMouseEnter: handleHover, onClick: handleClick };
 
     return (
         <Container

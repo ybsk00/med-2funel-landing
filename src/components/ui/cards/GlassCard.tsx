@@ -25,7 +25,7 @@ export default function GlassCard({ id, title, description, icon: Icon, color, s
     const Container = 'div';
     const props = {
         onClick: (e: any) => { handleClick(); onClick?.(); },
-        className: "group relative block h-full cursor-pointer"
+        className: "group relative block h-full w-full cursor-pointer"
     };
 
     // Text color logic based on theme
@@ -38,7 +38,7 @@ export default function GlassCard({ id, title, description, icon: Icon, color, s
         <Container
             {...props as any}
         >
-            <TiltInteraction intensity={10} damping={25} className="h-full">
+            <TiltInteraction intensity={10} damping={25} className="h-full w-full">
                 <div className={`h-full ${isDark ? 'bg-white/5 border-white/10' : 'bg-white/40 border-white/60'} backdrop-blur-xl rounded-2xl p-6 border shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] hover:shadow-[0_8px_32px_0_rgba(6,182,212,0.15)] hover:border-cyan-200/50 transition-all duration-300`}>
                     <div className="relative z-10 flex flex-col h-full">
                         <div className="flex items-center justify-between mb-4">

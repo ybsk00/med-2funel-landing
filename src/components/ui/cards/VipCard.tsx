@@ -23,14 +23,14 @@ export default function VipCard({ id, title, description, icon: Icon, color, onC
     const Container = 'div';
     const props = {
         onClick: (e: any) => { handleClick(); onClick?.(); },
-        className: "group relative block h-full cursor-pointer"
+        className: "group relative block h-full w-full cursor-pointer"
     };
 
     return (
         <Container
             {...props as any}
         >
-            <TiltInteraction intensity={12} damping={30} className="h-full">
+            <TiltInteraction intensity={12} damping={30} className="h-full w-full">
                 <div className="h-full bg-black/80 backdrop-blur-md rounded-xl p-8 border border-white/10 hover:border-[#D4AF37]/50 transition-all duration-500 shadow-2xl hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]">
                     {/* Gold Frame Effect */}
                     <div className="absolute inset-0 rounded-xl border border-[#D4AF37]/20 pointer-events-none group-hover:border-[#D4AF37]/60 transition-colors duration-500"></div>

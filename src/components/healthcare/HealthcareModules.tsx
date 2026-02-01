@@ -172,7 +172,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                         const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
                         return (
-                            <div key={module.id} className="flex h-full">
+                            <div key={module.id} className="flex h-full w-full">
                                 <CardComponent
                                     id={module.id}
                                     title={module.title}

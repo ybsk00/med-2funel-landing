@@ -20,7 +20,7 @@ export default function FlowerCard({ id, title, description, icon: Icon, color, 
     });
 
     const Container = onClick ? 'div' : Link;
-    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full", onMouseEnter: handleHover, onClick: handleClick };
+    const props = onClick ? { onClick: (e: any) => { handleClick(); onClick(); }, className: "group relative block h-full w-full cursor-pointer" } : { href: `healthcare/chat?topic=${id}`, className: "group relative block h-full w-full", onMouseEnter: handleHover, onClick: handleClick };
 
     return (
         <Container

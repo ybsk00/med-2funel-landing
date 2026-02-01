@@ -23,14 +23,14 @@ export default function HanjiCard({ id, title, description, icon: Icon, color, s
     const Container = 'div';
     const props = {
         onClick: (e: any) => { handleClick(); onClick?.(); },
-        className: "group relative block h-full cursor-pointer"
+        className: "group relative block h-full w-full cursor-pointer"
     };
 
     return (
         <Container
             {...props as any}
         >
-            <TiltInteraction intensity={8} damping={40} stiffness={100} glare={false} className="h-full">
+            <TiltInteraction intensity={8} damping={40} stiffness={100} glare={false} className="h-full w-full">
                 <div className="h-full bg-[#FAFAF9] rounded-lg p-8 relative overflow-hidden transition-all duration-500 hover:shadow-lg border border-stone-200 hover:border-stone-400">
                     {/* Paper Texture Overlay */}
                     <div className="absolute inset-0 opacity-50 bg-[url('/textures/hanji.png')] mix-blend-multiply pointer-events-none"></div>
