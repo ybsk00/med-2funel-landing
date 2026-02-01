@@ -27,10 +27,10 @@ export const DentistryMorphing = () => {
     ];
 
     return (
-        <div ref={containerRef} className="relative py-20 overflow-hidden bg-white/50 backdrop-blur-sm rounded-3xl border border-white/60 shadow-inner">
+        <div ref={containerRef} className="relative py-20 overflow-hidden bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]">
             <div className="max-w-md mx-auto text-center">
-                <h3 className="text-2xl font-bold mb-8 text-slate-800">
-                    AI가 예측하는 <span className="text-cyan-600">완벽한 미소</span>
+                <h3 className="text-2xl font-bold mb-8 text-white drop-shadow-md">
+                    AI가 예측하는 <span className="text-cyan-400">완벽한 미소</span>
                 </h3>
 
                 <div className="relative h-32 flex items-center justify-center gap-2">
@@ -42,9 +42,9 @@ export const DentistryMorphing = () => {
                                 y: useTransform(scrollYProgress, [0.3, 0.6], [tooth.initial.y, tooth.target.y]),
                                 rotate: useTransform(scrollYProgress, [0.3, 0.6], [tooth.initial.rotate, tooth.target.rotate]),
                             }}
-                            className="w-8 h-12 bg-white rounded-t-xl rounded-b-md shadow-md border-b-4 border-slate-100 flex items-end justify-center pb-1"
+                            className="w-8 h-12 bg-white rounded-t-xl rounded-b-md shadow-lg border-b-4 border-slate-200 flex items-end justify-center pb-1"
                         >
-                            <div className="w-4 h-1 bg-cyan-100 rounded-full mb-2 opacity-50" />
+                            <div className="w-4 h-1 bg-cyan-200 rounded-full mb-2 opacity-50" />
                         </motion.div>
                     ))}
 
@@ -63,7 +63,7 @@ export const DentistryMorphing = () => {
                         opacity: useTransform(scrollYProgress, [0.4, 0.6], [0.5, 1]),
                         y: useTransform(scrollYProgress, [0.4, 0.6], [10, 0]),
                     }}
-                    className="mt-12 text-slate-500 font-medium"
+                    className="mt-12 text-white/70 font-bold tracking-tight drop-shadow-sm"
                 >
                     스크롤을 내려 <br />정밀 교정 후의 변화를 확인하세요
                 </motion.p>
