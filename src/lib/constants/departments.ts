@@ -62,8 +62,8 @@ export const DEPARTMENTS: Department[] = [
             primary: "#000000",
             secondary: "#B76E79",
             accent: "#D4AF37",
-            background: "#121212",
-            text: "#FFFFFF",
+            background: "#F9F9F9", // Off-white for better contrast
+            text: "#1F2937", // Dark Gray
             concept: "High-End Luxury",
             texture: "silk",
             font: "serif",
@@ -103,8 +103,8 @@ export const DEPARTMENTS: Department[] = [
             primary: "#FFC0CB",
             secondary: "#E0E0E0",
             accent: "#FF69B4",
-            background: "#F5F5F5",
-            text: "#333333",
+            background: "#FAFAFA", // Slight grey tint
+            text: "#333333", // Dark Gray
             concept: "Holographic Gloss",
             texture: "hologram",
             font: "sans",
@@ -144,8 +144,8 @@ export const DEPARTMENTS: Department[] = [
             primary: "#4A5D23",
             secondary: "#8D8D8D",
             accent: "#8B4513",
-            background: "#F0F0F0",
-            text: "#2F4F4F",
+            background: "#F5F5F4", // Warm Stone Gray (Hanji)
+            text: "#1C1917", // Very Dark Warm Gray
             concept: "Modern Tradition",
             texture: "hanji",
             font: "serif",
@@ -182,11 +182,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#00FFFF",
-            secondary: "#FFFFFF",
-            accent: "#00CED1",
-            background: "#FFFFFF",
-            text: "#000000",
+            primary: "#0EA5E9", // Slightly darker Sky Blue
+            secondary: "#38BDF8",
+            accent: "#0284C7",
+            background: "#F0F9FF", // Very Light Sky Blue
+            text: "#0C4A6E", // Dark Sky Blue
             concept: "Super Clean Lab",
             texture: "glass",
             font: "sans",
@@ -206,7 +206,7 @@ export const DEPARTMENTS: Department[] = [
         label: "정형외과",
         virtualName: "Bone Balance",
         catchphrase: "무너진 중심을 바로 세우는 공학적 리셋",
-        video: "/히어로세션/%EC%A0%95%ED%98%95%EC%99%B8%EA%B3%BC.mp4",
+        video: "/히어로세션/정형외과.mp4",
         hero: {
             title: "일상의 균형을 되찾다",
             subtitle: "무너진 중심을 바로 세우는 정밀 설계, 통증 없는 일상의 균형을 되찾아 드립니다."
@@ -223,11 +223,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#000080",
+            primary: "#1E40AF", // Darker Navy
             secondary: "#FF4500",
             accent: "#1E90FF",
-            background: "#E6E6FA",
-            text: "#000080",
+            background: "#F8FAFC", // Very Light Slate
+            text: "#1E3A8A", // Dark Blue
             concept: "Engineering Blueprint",
             texture: "blueprint",
             font: "mono",
@@ -305,11 +305,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#FFD700",
+            primary: "#FBBF24", // Amber
             secondary: "#87CEEB",
-            accent: "#FFA500",
-            background: "#FFFFE0",
-            text: "#4B0082",
+            accent: "#F59E0B",
+            background: "#FFFBEB", // Very Light Amber
+            text: "#78350F", // Dark Amber
             concept: "Soft Playroom",
             texture: "jelly",
             font: "round",
@@ -329,7 +329,7 @@ export const DEPARTMENTS: Department[] = [
         label: "산부인과",
         virtualName: "Maman Care",
         catchphrase: "따뜻한 물결처럼 흐르는 당신만의 리듬",
-        video: "/히어로세션/%EC%82%B0%EB%B6%80%EC%9D%B8%EA%B3%BC.mp4",
+        video: "/히어로세션/산부인과.mp4",
         hero: {
             title: "당신만의 리듬을 지키다",
             subtitle: "당신의 가장 소중한 순간, 따뜻하고 섬세한 케어로 내 몸의 리듬을 지킵니다."
@@ -346,11 +346,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#FF7F50",
+            primary: "#BE123C", // Darker Pink/Rose
             secondary: "#FFDAB9",
-            accent: "#FA8072",
-            background: "#FFF5EE",
-            text: "#8B4513",
+            accent: "#9F1239",
+            background: "#FFF1F2", // Very Light Rose
+            text: "#881337", // Dark Rose
             concept: "Organic Flow",
             texture: "flower",
             font: "serif",
@@ -370,7 +370,7 @@ export const DEPARTMENTS: Department[] = [
         label: "내과",
         virtualName: "Inner Wellness",
         catchphrase: "몸속 정원을 가꾸는 내면의 활력 케어",
-        video: "/히어로세션/%EB%82%B4%EA%B3%BC.mp4",
+        video: "/히어로세션/내과.mp4",
         hero: {
             title: "내면의 활력을 깨우다",
             subtitle: "몸속 정원, 오늘 당신의 컨디션은 어떤가요? 보이지 않는 곳의 활력까지 케어합니다."
@@ -387,11 +387,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#8FBC8F",
+            primary: "#047857", // Darker Emerald
             secondary: "#D2B48C",
-            accent: "#556B2F",
-            background: "#F0FFF0",
-            text: "#2F4F4F",
+            accent: "#065F46",
+            background: "#F0FDF4", // Very Light Green
+            text: "#064E3B", // Dark Emerald
             concept: "Botanic Garden",
             texture: "botanic",
             font: "sans",
@@ -411,7 +411,7 @@ export const DEPARTMENTS: Department[] = [
         label: "암요양병원",
         virtualName: "Care For You",
         catchphrase: "면역의 요새를 쌓는 희망의 아침 햇살",
-        video: "/히어로세션/%EC%95%94%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90.mp4",
+        video: "/히어로세션/암요양병원.mp4",
         hero: {
             title: "희망의 아침을 맞이하다",
             subtitle: "다시 시작하는 삶, 면역의 요새를 쌓아 어제보다 더 건강한 오늘을 약속합니다."
@@ -428,11 +428,11 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#FFBF00",
+            primary: "#B45309", // Darker Amber
             secondary: "#FAF0E6",
-            accent: "#DAA520",
-            background: "#FDF5E6",
-            text: "#8B4513",
+            accent: "#92400E",
+            background: "#FFFCF5", // Very Light Warm
+            text: "#451A03", // Dark Brown
             concept: "Morning Sun",
             texture: "linen",
             font: "serif",
