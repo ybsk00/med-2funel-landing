@@ -142,13 +142,16 @@ export async function GET(req: Request) {
         // 단일 항목일 경우 배열로 변환
         const itemArray = Array.isArray(items) ? items : [items];
 
-        // 피부과 검색 키워드
+        // 피부과 검색 키워드 (일반 검색시에만 적용)
         const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
         // 정규화된 클리닉 데이터 생성
         const clinics: Clinic[] = itemArray
             .filter((item: Record<string, unknown>) => {
-                // 피부과 관련 키워드 필터링
+                // 키워드 검색(qn)이 있으면 필터링하지 않고 API 결과를 그대로 신뢰
+                if (qn) return true;
+
+                // 일반 목록 조회일 때는 피부과 관련 키워드로 필터링
                 const name = String(item.dutyName || "").toLowerCase();
                 return SKIN_KEYWORDS.some(kw => name.includes(kw.toLowerCase()));
             })

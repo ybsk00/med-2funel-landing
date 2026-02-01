@@ -66,25 +66,7 @@ const THEME_STYLES = {
     }
 };
 
-// 테두리: 2px 두께
-border: "border-gray-900/20 hover:border-skin-primary",
-
-    // 텍스트
-    textMuted: "text-gray-800 font-medium",
-
-        // 입력 필드: 흰색 배경 강제
-        input: "bg-white border-2 border-gray-900/10 text-gray-900 font-bold focus:border-skin-primary focus:ring-0 transition-all duration-300 shadow-sm placeholder:text-gray-500",
-
-            // 칩 (버튼): 호버 시 명확한 피드백 (배경색 변경 및 테두리 강조)
-            chip: {
-    active: "bg-skin-primary text-white shadow-md border-2 border-skin-primary font-bold hover:brightness-110 active:scale-95 transition-transform duration-200",
-        inactive: "bg-white text-gray-600 border-2 border-gray-200 hover:border-skin-primary hover:text-skin-primary hover:bg-white/50 transition-all duration-200 font-semibold active:scale-95"
-},
-
-// 카드
-card: "bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-2xl text-gray-900",
-
-    // 메인 버튼: 호버 시 확대 보다는 명확한 색상 변화/그림자 강조
+const THEME_CLASSES = {
     button: "bg-skin-primary text-white shadow-xl shadow-skin-primary/30 hover:bg-skin-accent hover:shadow-2xl hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black border-2 border-transparent"
 };
 
