@@ -68,32 +68,30 @@ interface ClinicSearchModuleProps {
 export default function ClinicSearchModule({ department = "dermatology", searchKeyword = "", theme }: ClinicSearchModuleProps) {
     const config = useHospital();
 
-    // 배경색 기반 다크모드 감지 유틸리티
-    const isColorDark = (hex: string) => {
-        if (!hex || hex.length < 4) return false;
-        const h = hex.replace('#', '');
+    // 배경색 기반 다크모드 감지 유틸리티 (Re-refined)
+    const isColorDark = (hex?: string) => {
+        if (!hex) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
         const r = parseInt(h.substring(0, 2), 16);
         const g = parseInt(h.substring(2, 4), 16);
         const b = parseInt(h.substring(4, 6), 16);
-        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+        // Using Standard Relative Luminance formula
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance < 0.5;
     };
 
-    // 실제 테마 모드 결정 (설정 또는 override 기반)
-    const isThemeDark = () => {
-        if (theme === "dark") return true;
-        if (theme === "light" || theme === "hanji" || theme === "modern") return false;
-        if (config?.theme?.background) return isColorDark(config.theme.background);
-        return false; // 기본값 Light
-    };
+    const isThemeDark = config?.theme?.background ? isColorDark(config.theme.background) : false;
+    const isLight = !isThemeDark;
 
-    const isLight = !isThemeDark();
-    // const currentTheme = isLight ? "light" : "dark"; // Not really needed for logic below, isLight is key
-
-    // 밝은 Primary 컬러를 사용하는 진료과인지 확인 (White Text 가독성 문제 해결)
-    // 성형외과(#13eca4), 피부과(#FFC0CB), 소아과(#FBBF24), 치과(#2DD4BF) 등 밝은 배경일 때 텍스트를 어둡게
-    // 단, Dark Mode일 때는 Primary Color가 어두울 수 있으므로(혹은 배경이 어두우므로) White Text 유지
-    const isBrightPrimary = ["plastic-surgery", "dermatology", "pediatrics", "dentistry"].includes(department);
-    const buttonTextColor = (isBrightPrimary && isLight) ? "text-slate-900 font-extrabold" : "text-white";
+    // Primary 컬러 가독성 체크 - 텍스트 색상 결정
+    const isPrimaryBright = config?.theme?.primary ? !isColorDark(config.theme.primary) : false;
+    // 만약 밝은 테마인데(isLight), 프라이머리 색상이 밝다면(isPrimaryBright) -> 어두운 글씨
+    // 그 외(다크 테마거나 프라이머리 색상이 어둡다면) -> 흰색 글씨
+    const buttonTextColor = (isPrimaryBright && isLight) ? "text-slate-900 font-extrabold" : "text-white";
 
     // 테마별 스타일 정의 (동적 적용)
     const getThemeStyles = () => {
@@ -147,10 +145,14 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
     // Dynamic Button Class (Main Search Button)
     const themeButtonClass = isLight
-        ? `bg-skin-primary ${buttonTextColor} shadow-xl shadow-skin-primary/30 hover:bg-skin-accent`
+        ? `${buttonTextColor} shadow-xl shadow-skin-primary/30`
         : `bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-2xl hover:bg-white/20`;
 
-    const finalButtonClass = `${themeButtonClass} hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black px-10 py-5 text-lg rounded-2xl`;
+    const finalButtonStyle = isLight ? {
+        backgroundColor: config.theme.primary,
+    } : {};
+
+    const finalButtonClass = `${themeButtonClass} hover:brightness-110 hover:-translate-y-1 active:scale-95 active:translate-y-0 transition-all duration-200 font-black px-10 py-5 text-lg rounded-2xl`;
 
     // 추천 병원 로드 (동적 로딩)
     const [recommendedClinic, setRecommendedClinic] = useState<any>(null);
@@ -348,6 +350,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 ? styles.chip.active
                 : styles.chip.inactive
                 }`}
+            style={active && isLight ? { backgroundColor: config.theme.primary } : {}}
         >
             {icon}
             {label}
@@ -418,12 +421,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     />
                 </div>
 
-                {/* Row 3: 검색 버튼 (Primary - 글로우 허용) */}
                 <div className="flex justify-center pt-4">
                     <button
                         onClick={() => handleSearch(false)}
                         disabled={searchState === "loading"}
                         className={`${finalButtonClass} disabled:opacity-70 disabled:cursor-not-allowed`}
+                        style={finalButtonStyle}
                     >
                         {searchState === "loading" ? (
                             <>
@@ -542,8 +545,8 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                         <button
                                                             onClick={handleConnect}
                                                             className={`w-full py-5 px-8 rounded-2xl font-black transition-all duration-300 text-lg active:scale-95 ${isLight
-                                                                    ? "bg-skin-primary text-white shadow-[0_10px_30px_-10px_rgba(var(--skin-primary-rgb),0.5)] hover:bg-skin-accent"
-                                                                    : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 shadow-2xl"
+                                                                ? "bg-skin-primary text-white shadow-[0_10px_30px_-10px_rgba(var(--skin-primary-rgb),0.5)] hover:bg-skin-accent"
+                                                                : "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 shadow-2xl"
                                                                 }`}
                                                         >
                                                             비대면 상담예약

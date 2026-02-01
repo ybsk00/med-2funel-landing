@@ -12,18 +12,24 @@ interface HealthcareHeroProps {
 export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroProps) {
     if (!config.theme) return null;
 
-    // Theme Darkness Check
-    const isThemeDark = () => {
-        const hex = config.theme.background;
-        if (!hex || hex.length < 4) return false;
-        const h = hex.replace('#', '');
+    // Unified Darkness Check (Re-refined)
+    const isColorDark = (hex?: string) => {
+        if (!hex) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
         const r = parseInt(h.substring(0, 2), 16);
         const g = parseInt(h.substring(2, 4), 16);
         const b = parseInt(h.substring(4, 6), 16);
-        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance < 0.5;
     };
 
-    const isDark = isThemeDark();
+    const isThemeDark = isColorDark(config.theme.background);
+    const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
+    const buttonTextColor = (isPrimaryBright && !isThemeDark) ? "text-slate-900 font-extrabold" : "text-white";
 
     return (
         <header
@@ -106,10 +112,10 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         {onOpenCamera && (
                             <button
                                 onClick={onOpenCamera}
-                                className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10"
+                                className={`px-8 py-4 ${buttonTextColor} text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10`}
                                 style={{
-                                    backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : config.theme.primary,
-                                    backdropFilter: isDark ? 'blur(12px)' : 'none'
+                                    backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary,
+                                    backdropFilter: isThemeDark ? 'blur(12px)' : 'none'
                                 }}
                             >
                                 <Sparkles className="w-5 h-5" />
@@ -120,11 +126,11 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         {/* Secondary CTA - 30초 체크 */}
                         <Link
                             href="healthcare/chat?topic=glow-booster"
-                            className="px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
+                            className={`px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2`}
                             style={{
-                                borderColor: isDark ? 'rgba(255,255,255,0.2)' : config.theme.primary,
-                                color: isDark ? '#FFFFFF' : config.theme.primary,
-                                backgroundColor: isDark ? 'rgba(255,255,255,0.05)' : 'transparent'
+                                borderColor: isThemeDark ? 'rgba(255,255,255,0.2)' : config.theme.primary,
+                                color: isThemeDark ? '#FFFFFF' : config.theme.primary,
+                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'transparent'
                             }}
                         >
                             <Sparkles className="w-4 h-4" />

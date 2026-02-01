@@ -47,16 +47,24 @@ export default function HealthcareLanding() {
     const config = useHospital();
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
 
-    // Theme Darkness Check
-    const isThemeDark = () => {
-        const hex = config.theme.background;
-        if (!hex || hex.length < 4) return false;
-        const h = hex.replace('#', '');
+    // Unified Darkness Check (Re-refined)
+    const isColorDark = (hex?: string) => {
+        if (!hex) return false;
+        let h = hex.replace('#', '');
+        if (h.length === 3) {
+            h = h.split('').map(c => c + c).join('');
+        }
+        if (h.length !== 6) return false;
         const r = parseInt(h.substring(0, 2), 16);
         const g = parseInt(h.substring(2, 4), 16);
         const b = parseInt(h.substring(4, 6), 16);
-        return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance < 0.5;
     };
+
+    const isThemeDark = isColorDark(config.theme.background);
+    const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
+    const buttonTextColor = (isPrimaryBright && !isThemeDark) ? "text-slate-900 font-extrabold" : "text-white";
 
     // Dynamic Icon for CTA
     const CtaIcon = ICON_MAP[config.marketing?.cta?.icon as string] || Sparkles;
@@ -182,10 +190,10 @@ export default function HealthcareLanding() {
                                 <MagneticInteraction distance={80} strength={0.3}>
                                     <Link
                                         href={config.marketing?.cta?.link || "healthcare/chat"}
-                                        className="px-8 py-4 text-white text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10"
+                                        className={`px-8 py-4 ${buttonTextColor} text-base font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 border border-white/10`}
                                         style={{
-                                            backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.1)' : config.theme.primary,
-                                            backdropFilter: isThemeDark() ? 'blur(12px)' : 'none'
+                                            backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary,
+                                            backdropFilter: isThemeDark ? 'blur(12px)' : 'none'
                                         }}
                                     >
                                         <CtaIcon className="w-5 h-5" />
@@ -198,9 +206,9 @@ export default function HealthcareLanding() {
                                         onClick={() => setIsPhotoSlideOverOpen(true)}
                                         className="px-6 py-3 border-2 backdrop-blur-md text-sm font-semibold rounded-xl hover:bg-white/10 transition-all duration-300 flex items-center gap-2"
                                         style={{
-                                            borderColor: isThemeDark() ? 'rgba(255,255,255,0.2)' : config.theme.primary,
-                                            color: isThemeDark() ? '#FFFFFF' : config.theme.primary,
-                                            backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.05)' : 'transparent'
+                                            borderColor: isThemeDark ? 'rgba(255,255,255,0.2)' : config.theme.primary,
+                                            color: isThemeDark ? '#FFFFFF' : config.theme.primary,
+                                            backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'transparent'
                                         }}
                                     >
                                         <Camera className="w-4 h-4" />
@@ -335,7 +343,7 @@ export default function HealthcareLanding() {
                             href={config.marketing?.cta?.link || "healthcare/chat"}
                             className="w-16 h-16 rounded-full flex items-center justify-center text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-md"
                             style={{
-                                backgroundColor: isThemeDark() ? 'rgba(255,255,255,0.1)' : config.theme.primary
+                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary
                             }}
                         >
                             <CtaIcon className="w-8 h-8" />
