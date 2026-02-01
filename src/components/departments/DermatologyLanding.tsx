@@ -1,14 +1,15 @@
 "use client";
 
 import { HospitalProvider } from "@/components/common/HospitalProvider";
+import ClinicSearchModule from '@/components/healthcare/ClinicSearchModule';
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
-import { getDepartmentConfig } from "@/lib/config/factory";
-import { useState } from "react";
-import PrivacyScreen from "@/components/ui/PrivacyScreen";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
+import PrivacyScreen from "@/components/ui/PrivacyScreen";
+import { getDepartmentConfig } from "@/lib/config/factory";
 import { useDisclosure } from "@mantine/hooks";
+import { useState } from "react";
 
 export default function DermatologyLanding() {
     const config = getDepartmentConfig("dermatology");
@@ -80,7 +81,11 @@ export default function DermatologyLanding() {
                             config={luxuryConfig}
                             onOpenCamera={open}
                         />
-                        {/* Overlay removed as requested */}
+                        <ClinicSearchModule
+                            department="dermatology"
+                            searchKeyword="피부과 전문의 추천"
+                            theme="glass"
+                        />        {/* Overlay removed as requested */}
                     </div>
 
                     {/* Modules Section - VIP Card Style */}

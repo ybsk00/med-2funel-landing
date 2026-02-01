@@ -104,13 +104,74 @@ import { getRecommendedClinic } from "@/lib/config/marketing";
 interface ClinicSearchModuleProps {
     department?: string; // 부서 ID 추가
     searchKeyword?: string; // 검색 키워드 추가
+    theme?: "glass" | "silk" | "hanji" | "modern" | "dark" | "light"; // 테마 모드 추가
 }
 
-export default function ClinicSearchModule({ department = "dermatology", searchKeyword = "" }: ClinicSearchModuleProps) {
+export default function ClinicSearchModule({ department = "dermatology", searchKeyword = "", theme }: ClinicSearchModuleProps) {
     const config = useHospital();
+
+    // 부서별 기본 테마 매핑
+    const getThemeMode = () => {
+        if (theme) return theme;
+        // 한의원, 내과, 소아과, 산부인과, 암요양병원 = Light Theme (Hanji/Modern)
+        if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics"].includes(department)) {
+            return "light";
+        }
+        // 성형/피부/치과/비뇨/신경 = Dark Theme (Glass/Silk)
+        return "dark";
+    };
+
+    const currentTheme = getThemeMode();
+
+    // 테마별 스타일 정의 (동적 적용)
+    const getThemeStyles = () => {
+        const isLight = currentTheme === "light" || currentTheme === "hanji" || currentTheme === "modern";
+
+        return {
+            // 컨테이너 배경
+            container: isLight
+                ? "bg-white/60 backdrop-blur-xl border-gray-200 shadow-sm"
+                : "bg-black/30 backdrop-blur-xl border-white/10",
+
+            // 텍스트 기본 색상
+            textPrimary: isLight ? "text-gray-900" : "text-white",
+            textSecondary: isLight ? "text-gray-600" : "text-white/60",
+            textAccent: isLight ? "text-skin-primary" : "text-skin-primary",
+
+            // 입력 필드 (배경색/테두리/텍스트)
+            input: isLight
+                ? "bg-white border-2 border-gray-200 text-gray-900 focus:border-skin-primary placeholder:text-gray-400"
+                : "bg-white/10 border-2 border-white/10 text-white focus:border-skin-primary placeholder:text-white/40",
+
+            // 선택창 옵션
+            select: {
+                bg: isLight ? "#ffffff" : "#1a1a1a",
+                text: isLight ? "#111111" : "#ffffff"
+            },
+
+            // 칩 (버튼)
+            chip: {
+                active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
+                inactive: isLight
+                    ? "bg-white border-gray-200 text-gray-600 hover:border-skin-primary hover:text-skin-primary"
+                    : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white hover:border-white/30"
+            },
+
+            // 결과 카드
+            card: isLight
+                ? "bg-white border-gray-100 shadow-xl text-gray-900"
+                : "bg-gray-900/80 backdrop-blur-md border-white/10 text-white",
+
+            // 구분선
+            divider: isLight ? "bg-gray-200" : "bg-white/10"
+        };
+    };
+
+    const styles = getThemeStyles();
 
     // 추천 병원 로드
     const recommendedClinic = getRecommendedClinic(department, config);
+
     // 지역 선택
     const [selectedCity, setSelectedCity] = useState("서울");
     const [selectedRegion, setSelectedRegion] = useState("강남구");
@@ -245,8 +306,8 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             aria-pressed={active}
             aria-label={ariaLabel}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${active
-                ? THEME_CLASSES.chip.active
-                : THEME_CLASSES.chip.inactive
+                ? styles.chip.active
+                : styles.chip.inactive
                 }`}
         >
             {icon}
@@ -260,7 +321,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             <div className="w-full space-y-6">
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
-                        <label className="text-xs font-black text-gray-800 uppercase tracking-widest absolute -top-5 left-1 opacity-90">Location / City</label>
+                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.textPrimary}`}>Location / City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
@@ -269,27 +330,27 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                 if (city === "서울") setSelectedRegion("강남구");
                                 else if (city === "경기도") setSelectedRegion("의정부시");
                             }}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
-                            style={{ color: "#111111", backgroundColor: "#ffffff" }}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 shadow-sm ${styles.input}`}
+                            style={{ color: styles.select.text, backgroundColor: styles.select.bg }}
                         >
-                            <option value="서울" style={{ color: "#111111", backgroundColor: "#ffffff" }}>서울</option>
-                            <option value="경기도" style={{ color: "#111111", backgroundColor: "#ffffff" }}>경기도</option>
+                            <option value="서울" style={{ color: styles.select.text, backgroundColor: styles.select.bg }}>서울</option>
+                            <option value="경기도" style={{ color: styles.select.text, backgroundColor: styles.select.bg }}>경기도</option>
                         </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
+                        <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${styles.textAccent}`} />
                     </div>
                     <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
-                        <label className="text-xs font-black text-gray-800 uppercase tracking-widest absolute -top-5 left-1 opacity-90">Area / District</label>
+                        <label className={`text-xs font-black uppercase tracking-widest absolute -top-5 left-1 opacity-90 ${styles.textPrimary}`}>Area / District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer border-2 border-gray-900/10 bg-white text-gray-900 shadow-sm placeholder:text-gray-500 hover:border-skin-primary transition-all duration-300`}
-                            style={{ color: "#111111", backgroundColor: "#ffffff" }}
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer transition-all duration-300 shadow-sm ${styles.input}`}
+                            style={{ color: styles.select.text, backgroundColor: styles.select.bg }}
                         >
                             {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
-                                <option key={region} value={region} style={{ color: "#111111", backgroundColor: "#ffffff" }}>{region}</option>
+                                <option key={region} value={region} style={{ color: styles.select.text, backgroundColor: styles.select.bg }}>{region}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
+                        <ChevronDown className={`absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none ${styles.textAccent}`} />
                     </div>
                 </div>
 
@@ -345,7 +406,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                     className={`transition-all duration-700 ${searchState !== "idle" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
                 >
                     {searchState !== "idle" && (
-                        <div className={`rounded-[2rem] p-6 md:p-8 mt-12 max-h-[70vh] overflow-y-auto custom-scrollbar ${THEME_CLASSES.card}`}>
+                        <div className={`rounded-[2rem] p-6 md:p-8 mt-12 max-h-[70vh] overflow-y-auto custom-scrollbar border ${styles.card}`}>
                             {/* 초기화 버튼 */}
                             <div className="flex justify-end mb-3">
                                 <button
@@ -353,7 +414,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                         setSearchState("idle");
                                         setClinics([]);
                                     }}
-                                    className="text-xs text-skin-subtext hover:text-skin-primary transition-colors flex items-center gap-1 font-bold"
+                                    className={`text-xs hover:text-skin-primary transition-colors flex items-center gap-1 font-bold ${styles.textSecondary}`}
                                 >
                                     ✕ 닫기
                                 </button>
@@ -377,7 +438,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                             {searchState === "error" && (
                                 <div className="text-center py-8 space-y-4">
                                     <AlertCircle className="w-12 h-12 text-red-400 mx-auto" />
-                                    <p className="text-skin-subtext">{errorMessage}</p>
+                                    <p className={styles.textSecondary}>{errorMessage}</p>
                                     <button
                                         onClick={() => handleSearch(false)}
                                         className="inline-flex items-center gap-2 px-4 py-2 bg-skin-primary text-white rounded-lg hover:bg-skin-accent transition-colors"
@@ -391,7 +452,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                             {/* 빈 결과 */}
                             {searchState === "empty" && (
                                 <div className="text-center py-8">
-                                    <p className="text-skin-subtext">
+                                    <p className={styles.textSecondary}>
                                         선택한 조건에 맞는 결과가 없습니다.
                                         <br />
                                         다른 지역을 선택해보세요.
@@ -459,29 +520,29 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                     ))}
 
                                     {/* 변동 고지 문구 */}
-                                    <p className="text-xs text-skin-subtext/70 text-center bg-white/5 rounded-lg py-2">
+                                    <p className={`text-xs text-center rounded-lg py-2 ${styles.textSecondary} bg-black/5`}>
                                         ⚠️ 운영정보는 변동될 수 있어요. 방문 전 확인이 필요합니다.
                                     </p>
 
                                     {/* 검색 결과 목록 */}
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between px-2 mb-2">
-                                            <h4 className="text-xl font-black text-gray-800 tracking-tight">
+                                            <h4 className={`text-xl font-black tracking-tight ${styles.textPrimary}`}>
                                                 검색 결과 <span className="text-skin-primary ml-1 opacity-100">({clinics.length}개)</span>
                                             </h4>
-                                            <div className="h-[1px] flex-1 mx-6 bg-white/10"></div>
+                                            <div className={`h-[1px] flex-1 mx-6 ${styles.divider}`}></div>
                                         </div>
 
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                                             {clinics.filter(c => !c.isRecommended).slice(0, 10).map((clinic, idx) => (
                                                 <div
                                                     key={idx}
-                                                    className={`group p-6 rounded-[1.5rem] transition-all duration-500 border relative overflow-hidden ${THEME_CLASSES.card} hover:-translate-y-1`}
+                                                    className={`group p-6 rounded-[1.5rem] transition-all duration-500 border relative overflow-hidden ${styles.card} hover:-translate-y-1`}
                                                 >
                                                     <div className="flex items-start justify-between gap-6">
                                                         <div className="flex-1 min-w-0">
                                                             <div className="flex items-center gap-3 mb-2">
-                                                                <h4 className="text-xl font-bold text-white group-hover:text-skin-primary transition-colors truncate">
+                                                                <h4 className={`text-xl font-bold group-hover:text-skin-primary transition-colors truncate ${styles.textPrimary}`}>
                                                                     {clinic.name}
                                                                 </h4>
                                                                 {clinic.night && (
@@ -490,12 +551,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <p className="text-white/40 text-sm mb-4 truncate flex items-center gap-2 font-medium">
-                                                                <MapPin size={16} className="text-white/20 group-hover:text-skin-primary/40 transition-colors" />
+                                                            <p className={`text-sm mb-4 truncate flex items-center gap-2 font-medium ${styles.textSecondary}`}>
+                                                                <MapPin size={16} className={`opacity-50 group-hover:text-skin-primary transition-colors`} />
                                                                 {clinic.addr}
                                                             </p>
                                                             {clinic.closeTime && (
-                                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/5 text-white/40 text-[11px] font-bold">
+                                                                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-[11px] font-bold ${styles.textSecondary} bg-black/5 border-black/5`}>
                                                                     <Clock size={14} className="opacity-50" />
                                                                     {clinic.closeTime.substring(0, 2)}:{clinic.closeTime.substring(2, 4)} 종료
                                                                 </div>
@@ -504,7 +565,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                                                         {clinic.tel && (
                                                             <a
                                                                 href={`tel:${clinic.tel}`}
-                                                                className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-white/5 rounded-2xl hover:bg-skin-primary hover:text-white transition-all duration-300 border border-white/5 group-hover:border-skin-primary/30 active:scale-90"
+                                                                className={`flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl hover:bg-skin-primary hover:text-white transition-all duration-300 border active:scale-90 ${styles.chip.inactive}`}
                                                                 aria-label={`${clinic.name} 전화하기`}
                                                             >
                                                                 <Phone size={24} className="text-skin-primary group-hover:text-white" />

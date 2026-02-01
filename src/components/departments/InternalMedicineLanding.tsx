@@ -1,8 +1,11 @@
 "use client";
 
 import { HospitalProvider } from "@/components/common/HospitalProvider";
+import { motion } from 'framer-motion';
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
-import HealthcareModules from "@/components/healthcare/HealthcareModules";
+import HealthcareModules from '@/components/healthcare/HealthcareModules';
+import ClinicSearchModule from '@/components/healthcare/ClinicSearchModule';
+import { Activity, Droplet, Zap, Sparkles, HeartPulse, Stethoscope } from 'lucide-react';
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
@@ -33,6 +36,11 @@ export default function InternalMedicineLanding() {
         <HospitalProvider initialConfig={botanicConfig}>
             <div className="min-h-screen bg-[#f6f8f7] text-[#1e3a2f] font-sans selection:bg-[#13eca4]/30">
                 {/* Custom Theme Injection for Internal Medicine */}
+                <ClinicSearchModule
+                    department="internal-medicine"
+                    searchKeyword="건강검진 내과"
+                    theme="modern"
+                />
                 <style jsx global>{`
                     /* Leaf Pattern Background */
                     .bg-leaf-pattern {

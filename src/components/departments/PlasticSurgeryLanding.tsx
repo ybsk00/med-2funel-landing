@@ -3,6 +3,7 @@
 import { HospitalProvider } from "@/components/common/HospitalProvider";
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
+import ClinicSearchModule from '@/components/healthcare/ClinicSearchModule';
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import { useDisclosure } from "@mantine/hooks";
@@ -92,6 +93,11 @@ export default function PlasticSurgeryLanding() {
                                     <span className="mr-2 h-2 w-2 rounded-full bg-[#13eca4] animate-pulse"></span>
                                     Plastic Surgery
                                 </div>
+                                <ClinicSearchModule
+                                    department="plastic-surgery"
+                                    searchKeyword="강남 성형외과 추천"
+                                    theme="silk"
+                                />
                                 <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 mb-4">
                                     AESTHETICA <span className="text-[#13eca4] font-light">PLASTIC</span>
                                 </h2>

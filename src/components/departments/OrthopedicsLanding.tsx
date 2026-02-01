@@ -3,6 +3,7 @@
 import { HospitalProvider } from "@/components/common/HospitalProvider";
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareModules from "@/components/healthcare/HealthcareModules";
+import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule"; // Added this import
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import { getDepartmentConfig } from "@/lib/config/factory";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
@@ -96,6 +97,13 @@ export default function OrthopedicsLanding() {
                                     SYSTEM ONLINE // V.4.0.2
                                 </div>
                             </div>
+
+                            {/* Clinic Search Module */}
+                            <ClinicSearchModule
+                                department="orthopedics"
+                                searchKeyword="도수치료 정형외과"
+                                theme="modern"
+                            />
 
                             <HealthcareModules config={blueprintConfig} />
                         </div>
