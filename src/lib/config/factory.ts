@@ -68,7 +68,7 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
         tel: "02-1234-5678",
         fax: "02-1234-5679",
         businessNumber: "123-45-67890",
-        naverSearchKeyword: `${dept.label} 추천`,
+        naverSearchKeyword: dept.marketing?.searchKeyword || `${dept.label} 추천`,
         catchphrase: dept.catchphrase, // Map catchphrase
 
         personas: {
@@ -91,10 +91,11 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
         // Pass Hero Content
         hero: dept.hero,
         videoSource: dept.video,
+        marketing: dept.marketing,
 
         theme: dept.theme,
 
         // Generate distinct modules for this department
-        landingModules: generateModules(dept)
+        landingModules: dept.modules || generateModules(dept)
     };
 }

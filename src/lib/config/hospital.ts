@@ -50,6 +50,16 @@ export interface HospitalConfig {
         title: string;
         subtitle: string;
     };
+    marketing?: {
+        searchKeyword: string;
+        cta: {
+            title: string;
+            buttonText: string;
+            icon: string;
+            link: string;
+            defaultTopic: string;
+        }
+    };
     videoSource?: string;
     video?: string; // NEW
 }

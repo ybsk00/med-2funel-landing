@@ -1,7 +1,7 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
-import { User, ArrowUp, Paperclip, Sparkles, Droplet, Shield, ArrowUpRight, Heart, ChevronDown, Info } from "lucide-react";
+import { User, ArrowUp, Paperclip, Sparkles, Droplet, Shield, ArrowUpRight, Heart, ChevronDown, Info, Camera, Calendar, Zap, Moon, Brain, Battery } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams, redirect } from "next/navigation";
@@ -13,6 +13,7 @@ import MedicationModal from "@/components/medical/MedicationModal";
 import SafetyBadge from "@/components/medical/SafetyBadge";
 import { useMarketingTracker } from "@/hooks/useMarketingTracker";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic, sanitizeTopic, DEFAULT_TOPIC } from "@/lib/constants/topics";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 type Message = {
     role: "user" | "ai";
@@ -32,16 +33,56 @@ type ChatInterfaceProps = {
     topic?: string; // NEW: Inline topic override
 };
 
-// 모듈 아이콘/컬러 매핑
-const MODULE_CONFIG: Record<Topic, { icon: typeof Sparkles; color: string }> = {
+// 모듈 아이콘/컬러 매핑 (확장)
+const MODULE_CONFIG: Record<string, { icon: any; color: string }> = {
+    // 피부과
     'glow-booster': { icon: Sparkles, color: 'pink' },
     'makeup-killer': { icon: Droplet, color: 'rose' },
     'barrier-reset': { icon: Shield, color: 'teal' },
     'lifting-check': { icon: ArrowUpRight, color: 'purple' },
     'skin-concierge': { icon: Heart, color: 'fuchsia' },
-};
+    
+    // 성형외과
+    'face-ratio': { icon: Camera, color: 'rose' },
+    'trend-check': { icon: Sparkles, color: 'gold' },
+    'virtual-plastic': { icon: User, color: 'indigo' },
 
-import { useHospital } from "@/components/common/HospitalProvider";
+    // 한의원
+    'body-type': { icon: User, color: 'stone' },
+    'detox': { icon: Droplet, color: 'amber' },
+
+    // 치과
+    'smile-design': { icon: Heart, color: 'cyan' },
+    'whitening-check': { icon: Sparkles, color: 'blue' },
+
+    // 정형외과
+    'posture-check': { icon: ArrowUpRight, color: 'blue' },
+    'spine-reset': { icon: Sparkles, color: 'orange' },
+
+    // 비뇨기과
+    'vitality-check': { icon: Sparkles, color: 'yellow' },
+    'private-counsel': { icon: Shield, color: 'indigo' },
+
+    // 소아과
+    'growth-check': { icon: ArrowUp, color: 'yellow' },
+    'fever-guide': { icon: Heart, color: 'red' },
+
+    // 산부인과
+    'cycle-check': { icon: Calendar, color: 'pink' },
+    'pregnancy-guide': { icon: Heart, color: 'rose' },
+
+    // 내과
+    'fatigue-reset': { icon: Droplet, color: 'blue' },
+    'digestive-check': { icon: Sparkles, color: 'green' },
+
+    // 암요양
+    'immunity-up': { icon: Shield, color: 'amber' },
+    'nutrition-plan': { icon: Heart, color: 'orange' },
+
+    // 신경외과
+    'headache-check': { icon: Sparkles, color: 'indigo' },
+    'spine-balance': { icon: ArrowUpRight, color: 'violet' }
+};
 
 export default function ChatInterface(props: ChatInterfaceProps) {
     const config = useHospital();
@@ -53,7 +94,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     // 잘못된 topic이면 리다이렉트
     useEffect(() => {
         if (rawTopic && !VALID_TOPICS.includes(rawTopic as Topic)) {
-            window.location.href = `/healthcare/chat?topic=${DEFAULT_TOPIC}`;
+            // window.location.href = `/healthcare/chat?topic=${DEFAULT_TOPIC}`;
+            // Client-side redirect without full reload if possible, but href is safe
         }
     }, [rawTopic]);
 
@@ -83,12 +125,54 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
     // 초기 질문 맵
-    const initialQuestionMap: Record<Topic, string> = {
+    const initialQuestionMap: Record<string, string> = {
+        // 피부과
         'glow-booster': '하루 수분 섭취량은 어느 정도인가요?',
         'makeup-killer': '메이크업이 보통 몇 시간 정도 지속되나요?',
         'barrier-reset': '하루 세안 횟수는 몇 번인가요?',
         'lifting-check': '탄력이 가장 신경 쓰이는 부위는 어디인가요?',
         'skin-concierge': '본인의 피부 타입은 어떻다고 생각하시나요?',
+
+        // 성형외과
+        'face-ratio': '가장 개선하고 싶은 얼굴 부위는 어디인가요?',
+        'trend-check': '선호하는 연예인이나 스타일이 있으신가요?',
+        'virtual-plastic': '어떤 시술 효과를 미리 보고 싶으신가요?',
+
+        // 한의원
+        'body-type': '평소 추위를 많이 타시나요, 더위를 많이 타시나요?',
+        'detox': '최근 소화불량이나 더부룩함을 자주 느끼시나요?',
+
+        // 치과
+        'smile-design': '웃을 때 가장 신경 쓰이는 부분은 무엇인가요?',
+        'whitening-check': '평소 커피나 차를 자주 드시나요?',
+
+        // 정형외과
+        'posture-check': '하루 중 앉아있는 시간은 대략 몇 시간인가요?',
+        'spine-reset': '허리 통증이 주로 언제 발생하나요?',
+
+        // 비뇨기과
+        'vitality-check': '최근 피로감이 급격히 늘었다고 느끼시나요?',
+        'private-counsel': '어떤 증상에 대해 상담받고 싶으신가요?',
+
+        // 소아과
+        'growth-check': '아이의 현재 키와 몸무게를 알고 계신가요?',
+        'fever-guide': '현재 아이의 체온은 몇 도인가요?',
+
+        // 산부인과
+        'cycle-check': '마지막 생리 시작일은 언제인가요?',
+        'pregnancy-guide': '현재 임신 몇 주차이신가요?',
+
+        // 내과
+        'fatigue-reset': '하루 평균 수면 시간은 몇 시간인가요?',
+        'digestive-check': '식사 후 속이 자주 불편하신가요?',
+
+        // 암요양
+        'immunity-up': '최근 감기에 걸리거나 몸이 자주 아프신가요?',
+        'nutrition-plan': '현재 식사량은 평소와 비교해 어떤가요?',
+
+        // 신경외과
+        'headache-check': '두통이 주로 머리의 어느 부위에서 느껴지나요?',
+        'spine-balance': '손이나 발이 저린 증상이 있나요?'
     };
 
     // 초기 메시지 설정
@@ -101,8 +185,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
             }]);
         } else {
             const persona = config.personas.healthcare;
-            const topicLabel = TOPIC_LABELS[topic];
-            const initialQuestion = initialQuestionMap[topic];
+            const topicLabel = TOPIC_LABELS[topic] || '상담';
+            const initialQuestion = initialQuestionMap[topic] || '무엇을 도와드릴까요?';
 
             setMessages([{
                 role: "ai",
@@ -363,9 +447,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             {/* Module Tabs */}
                             <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 scrollbar-hide">
                                 {VALID_TOPICS.map((t) => {
-                                    const config = MODULE_CONFIG[t];
+                                    const config = MODULE_CONFIG[t] || MODULE_CONFIG['glow-booster'];
                                     const IconComponent = config.icon;
-                                    const colors = colorClasses[config.color];
+                                    const colors = colorClasses[config.color] || colorClasses['pink'];
                                     const isActive = topic === t;
 
                                     return (
@@ -430,10 +514,10 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 <div
                                     className={`px-6 py-4 rounded-2xl text-sm leading-relaxed shadow-sm whitespace-pre-line ${msg.role === "ai"
                                         ? "bg-skin-surface text-white border border-white/10 rounded-tl-none"
-                                        : "bg-skin-primary text-white rounded-tr-none shadow-md"
+                                        : "bg-skin-primary text-white rounded-tr-none shadow-md" 
                                         }`}
                                 >
-                                    {msg.content.replace(/\[\[ACTION:RESERVATION_MODAL\]\]/g, '').trim()}
+                                    {msg.content.replace(/[[ACTION:RESERVATION_MODAL]]/g, '').trim()}
                                 </div>
                             </div>
                         </div>
@@ -556,4 +640,3 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         </div>
     );
 }
-

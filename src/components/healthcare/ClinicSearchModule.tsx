@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useCallback } from "react";
-import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown } from "lucide-react";
+import { Search, Sun, Moon, Calendar, Loader2, MapPin, Phone, Clock, AlertCircle, RefreshCw, ArrowRight, ChevronDown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { useHospital } from "@/components/common/HospitalProvider";
@@ -44,6 +44,40 @@ const TARGET_REGIONS = ["강남구", "서초구", "송파구", "용산구", "성
 // 피부과 검색 키워드
 const SKIN_KEYWORDS = ["피부과", "피부의원", "피부클리닉", "더마", "derma"];
 
+// Theme-compatible UI colors and styles
+const THEME_STYLES = {
+    glass: {
+        container: "bg-white/10 backdrop-blur-xl border-white/20",
+        input: "bg-white/10 border-white/20 text-white focus:border-white/50",
+        chipActive: "bg-white text-slate-900 border-white shadow-lg shadow-white/10",
+        chipInactive: "bg-white/5 text-white/60 border-white/10 hover:border-white/30 hover:text-white"
+    },
+    silk: {
+        container: "bg-black/40 backdrop-blur-xl border-white/10",
+        input: "bg-white/5 border-white/10 text-white focus:border-[#D4AF37]/50",
+        chipActive: "bg-[#D4AF37] text-black border-[#D4AF37] shadow-lg shadow-[#D4AF37]/20",
+        chipInactive: "bg-white/5 text-white/50 border-white/10 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
+    },
+    hanji: {
+        container: "bg-[#FAFAF9] border-stone-200 shadow-sm",
+        input: "bg-stone-50 border-stone-200 text-stone-800 focus:border-stone-400",
+        chipActive: "bg-stone-800 text-stone-50 border-stone-800 shadow-lg shadow-stone-200",
+        chipInactive: "bg-stone-50 text-stone-500 border-stone-200 hover:border-stone-400 hover:text-stone-800"
+    }
+};
+
+const THEME_CLASSES = {
+    border: "border-skin-primary/30",
+    textMuted: "text-skin-text/60",
+    input: "bg-skin-bg/50 border-skin-primary/20 text-skin-text focus:border-skin-primary/50 focus:ring-1 focus:ring-skin-primary/50 transition-all duration-300",
+    chip: {
+        active: "bg-skin-primary text-white shadow-xl shadow-skin-primary/20 border-skin-primary",
+        inactive: "bg-white/5 text-skin-text/60 border-skin-primary/10 hover:border-skin-primary/40 hover:text-skin-text"
+    },
+    card: "bg-white/[0.02] backdrop-blur-xl border border-skin-primary/10 hover:border-skin-primary/30 transition-all duration-500",
+    button: "bg-gradient-to-r from-skin-primary to-skin-accent text-white shadow-2xl shadow-skin-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+};
+
 // 오늘 요일 계산 (1=월 ~ 7=일)
 function getTodayQt(): string {
     const day = new Date().getDay();
@@ -59,9 +93,10 @@ import { getRecommendedClinic } from "@/lib/config/marketing";
 
 interface ClinicSearchModuleProps {
     department?: string; // 부서 ID 추가
+    searchKeyword?: string; // 검색 키워드 추가
 }
 
-export default function ClinicSearchModule({ department = "dermatology" }: ClinicSearchModuleProps) {
+export default function ClinicSearchModule({ department = "dermatology", searchKeyword = "" }: ClinicSearchModuleProps) {
     const config = useHospital();
 
     // 추천 병원 로드
@@ -97,7 +132,7 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
             }
 
             // 키워드 조합 (피부과 관련)
-            const qn = "피부과";
+            const qn = searchKeyword || "피부과";
 
             const params = new URLSearchParams({
                 q0: selectedCity,
@@ -199,9 +234,9 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
             onClick={onChange}
             aria-pressed={active}
             aria-label={ariaLabel}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${active
-                ? "bg-pink-500 text-white shadow-md shadow-pink-500/20"
-                : "bg-transparent text-skin-subtext border border-white/20 hover:border-white/40"
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${active
+                ? THEME_CLASSES.chip.active
+                : THEME_CLASSES.chip.inactive
                 }`}
         >
             {icon}
@@ -214,35 +249,36 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
             {/* 조회 모듈 - Row 기반 레이아웃 */}
             <div className="w-full space-y-6">
                 {/* Row 1: 지역 드롭다운 */}
-                <div className="flex justify-center gap-3">
-                    <div className="relative">
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <div className="relative flex-1 max-w-[200px] mx-auto sm:mx-0">
+                        <label className="text-[10px] font-bold text-skin-primary/60 uppercase tracking-widest absolute -top-5 left-1">City</label>
                         <select
                             value={selectedCity}
                             onChange={(e) => {
                                 const city = e.target.value;
                                 setSelectedCity(city);
-                                // 도시 변경 시 기본 지역 설정
                                 if (city === "서울") setSelectedRegion("강남구");
                                 else if (city === "경기도") setSelectedRegion("의정부시");
                             }}
-                            className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer ${THEME_CLASSES.input}`}
                         >
                             <option value="서울">서울</option>
                             <option value="경기도">경기도</option>
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-subtext pointer-events-none" />
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
-                    <div className="relative">
+                    <div className="relative flex-1 max-w-[240px] mx-auto sm:mx-0">
+                        <label className="text-[10px] font-bold text-skin-primary/60 uppercase tracking-widest absolute -top-5 left-1">District</label>
                         <select
                             value={selectedRegion}
                             onChange={(e) => setSelectedRegion(e.target.value)}
-                            className="appearance-none bg-skin-bg border border-white/20 rounded-xl px-4 py-3 pr-10 text-skin-text text-sm font-medium focus:outline-none focus:border-skin-primary cursor-pointer"
+                            className={`w-full appearance-none rounded-2xl px-5 py-4 pr-12 text-sm font-semibold focus:outline-none cursor-pointer ${THEME_CLASSES.input}`}
                         >
                             {(selectedCity === "서울" ? SEOUL_REGIONS : GYEONGGI_REGIONS).map((region) => (
                                 <option key={region} value={region}>{region}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-subtext pointer-events-none" />
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-skin-primary/50 pointer-events-none" />
                     </div>
                 </div>
 
@@ -272,21 +308,21 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
                 </div>
 
                 {/* Row 3: 검색 버튼 (Primary - 글로우 허용) */}
-                <div className="flex justify-center">
+                <div className="flex justify-center pt-4">
                     <button
                         onClick={() => handleSearch(false)}
                         disabled={searchState === "loading"}
-                        className="inline-flex items-center justify-center px-8 py-4 bg-pink-500 text-white text-base font-bold rounded-2xl shadow-lg shadow-pink-500/30 hover:bg-pink-600 hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className={`inline-flex items-center justify-center px-10 py-5 text-lg font-black rounded-2xl ${THEME_CLASSES.button} disabled:opacity-70 disabled:cursor-not-allowed`}
                     >
                         {searchState === "loading" ? (
                             <>
-                                <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                                조회 중...
+                                <Loader2 className="w-6 h-6 animate-spin mr-3" />
+                                최적의 병원 탐색 중...
                             </>
                         ) : (
                             <>
-                                <Search className="w-5 h-5 mr-2" />
-                                오늘 운영 피부과 확인
+                                <Search className="w-6 h-6 mr-3" />
+                                오늘 운영 {department === "dermatology" ? "피부과" : "전문의"} 확인
                             </>
                         )}
                     </button>
@@ -295,10 +331,10 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
                 {/* 검색 결과 영역 */}
                 <div
                     aria-live="polite"
-                    className={`transition-all duration-500 ${searchState !== "idle" ? "opacity-100" : "opacity-0"}`}
+                    className={`transition-all duration-700 ${searchState !== "idle" ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
                 >
                     {searchState !== "idle" && (
-                        <div className="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 p-4 mt-4 max-h-[60vh] overflow-y-auto">
+                        <div className="bg-black/20 backdrop-blur-3xl rounded-[2rem] border border-white/10 p-6 md:p-8 mt-12 max-h-[70vh] overflow-y-auto shadow-2xl custom-scrollbar">
                             {/* 초기화 버튼 */}
                             <div className="flex justify-end mb-3">
                                 <button
@@ -357,46 +393,55 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
                                 <div className="space-y-4">
                                     {/* 추천 병원 카드 (isRecommended 플래그 기반) */}
                                     {clinics.filter(c => c.isRecommended).map((recClinic, idx) => (
-                                        <div key={`rec-${idx}`} className="relative bg-gradient-to-r from-skin-primary/20 to-skin-accent/20 rounded-xl p-4 border border-skin-primary/30 mb-4 h-full">
-                                            <span className="absolute -top-3 left-4 px-3 py-1 bg-pink-500 text-white text-xs font-bold rounded-full shadow-lg z-10 border border-skin-bg">
-                                                적합 의원
-                                            </span>
+                                        <div key={`rec-${idx}`} className={`relative overflow-hidden rounded-3xl p-6 md:p-10 border-2 border-skin-primary/40 bg-gradient-to-br from-skin-primary/20 via-white/[0.03] to-skin-accent/20 shadow-2xl group/card transition-all duration-700 hover:border-skin-primary mb-8 animate-in zoom-in-95 duration-500`}>
+                                            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover/card:opacity-[0.08] transition-opacity pointer-events-none">
+                                                <Sparkles className="w-32 h-32 text-skin-primary" />
+                                            </div>
 
-                                            <div className="pt-2">
-                                                <div className="flex items-start justify-between gap-4">
+                                            <div className="absolute top-6 right-6">
+                                                <span className="px-4 py-1.5 bg-skin-primary text-white text-[10px] font-black rounded-full shadow-lg z-10 border border-white/20 tracking-widest uppercase flex items-center gap-2">
+                                                    <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                                                    Premium Network
+                                                </span>
+                                            </div>
+
+                                            <div className="relative z-10">
+                                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                                     <div className="flex-1">
-                                                        <h3 className="text-lg font-bold text-white">
+                                                        <h3 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">
                                                             {recClinic.name}
                                                         </h3>
-                                                        <div className="flex flex-wrap gap-2 mt-2">
-                                                            <span className="px-2 py-0.5 bg-skin-secondary/30 text-skin-secondary text-xs font-medium rounded-full">
-                                                                공공 포털 인증
+                                                        <div className="flex flex-wrap gap-2 mb-6">
+                                                            <span className="px-3.5 py-1.5 bg-skin-primary/20 text-skin-primary text-[11px] font-black rounded-xl border border-skin-primary/30 uppercase tracking-tighter">
+                                                                오늘 진료 가능
                                                             </span>
-                                                            <span className="px-2 py-0.5 bg-skin-primary/30 text-skin-primary text-xs font-medium rounded-full">
-                                                                오늘 운영
+                                                            <span className="px-3.5 py-1.5 bg-white/5 text-white/50 text-[11px] font-bold rounded-xl border border-white/10 uppercase tracking-tighter">
+                                                                보건복지부 인증
                                                             </span>
                                                         </div>
-                                                        <p className="text-skin-subtext text-sm mt-2 flex items-center gap-1">
-                                                            <MapPin size={14} />
+                                                        <p className="text-white/60 text-lg md:text-xl flex items-center gap-3 font-light">
+                                                            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                                                <MapPin size={20} className="text-skin-primary" />
+                                                            </div>
                                                             {recClinic.addr}
                                                         </p>
                                                     </div>
-                                                </div>
 
-                                                <div className="flex gap-2 mt-4">
-                                                    <button
-                                                        onClick={handleConnect}
-                                                        className="flex-1 py-2.5 bg-skin-primary text-white rounded-lg font-medium hover:bg-skin-accent transition-colors text-sm"
-                                                    >
-                                                        상담 예약
-                                                    </button>
-                                                    <a
-                                                        href={`tel:${recClinic.tel}`}
-                                                        className="flex items-center justify-center gap-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-medium hover:bg-white/20 transition-colors text-sm"
-                                                    >
-                                                        <Phone size={16} />
-                                                        전화
-                                                    </a>
+                                                    <div className="flex flex-col gap-3 min-w-[180px]">
+                                                        <button
+                                                            onClick={handleConnect}
+                                                            className="w-full py-5 px-8 bg-skin-primary text-white rounded-2xl font-black hover:bg-skin-accent transition-all duration-300 text-lg shadow-[0_10px_30px_-10px_rgba(var(--skin-primary-rgb),0.5)] active:scale-95"
+                                                        >
+                                                            비대면 상담예약
+                                                        </button>
+                                                        <a
+                                                            href={`tel:${recClinic.tel}`}
+                                                            className="w-full flex items-center justify-center gap-3 px-8 py-4 bg-white/5 text-white rounded-2xl font-black hover:bg-white/10 transition-all duration-300 text-base border border-white/10 active:scale-95"
+                                                        >
+                                                            <Phone size={20} />
+                                                            직통 전화
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -408,50 +453,56 @@ export default function ClinicSearchModule({ department = "dermatology" }: Clini
                                     </p>
 
                                     {/* 검색 결과 목록 */}
-                                    <div className="space-y-2">
-                                        <h4 className="text-sm font-medium text-skin-subtext px-1">
-                                            검색 결과 ({clinics.length}개)
-                                        </h4>
-                                        {clinics.slice(0, 10).map((clinic, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/20 transition-colors"
-                                            >
-                                                <div className="flex items-start justify-between gap-4">
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center gap-2">
-                                                            <h4 className="text-white font-medium truncate">
-                                                                {clinic.name}
-                                                            </h4>
-                                                            {clinic.night && (
-                                                                <span className="flex-shrink-0 px-1.5 py-0.5 bg-amber-500/30 text-amber-400 text-[10px] font-medium rounded">
-                                                                    야간
-                                                                </span>
+                                    <div className="space-y-6">
+                                        <div className="flex items-center justify-between px-2 mb-2">
+                                            <h4 className="text-xl font-black text-white/80 tracking-tight">
+                                                검색 결과 <span className="text-skin-primary ml-1 opacity-80">({clinics.length}개)</span>
+                                            </h4>
+                                            <div className="h-[1px] flex-1 mx-6 bg-white/10"></div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                                            {clinics.filter(c => !c.isRecommended).slice(0, 10).map((clinic, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className={`group p-6 rounded-[1.5rem] transition-all duration-500 border relative overflow-hidden ${THEME_CLASSES.card} hover:-translate-y-1`}
+                                                >
+                                                    <div className="flex items-start justify-between gap-6">
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center gap-3 mb-2">
+                                                                <h4 className="text-xl font-bold text-white group-hover:text-skin-primary transition-colors truncate">
+                                                                    {clinic.name}
+                                                                </h4>
+                                                                {clinic.night && (
+                                                                    <span className="flex-shrink-0 px-2.5 py-1 bg-amber-500/20 text-amber-400 text-[10px] font-black rounded-lg border border-amber-500/20 uppercase">
+                                                                        야간
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <p className="text-white/40 text-sm mb-4 truncate flex items-center gap-2 font-medium">
+                                                                <MapPin size={16} className="text-white/20 group-hover:text-skin-primary/40 transition-colors" />
+                                                                {clinic.addr}
+                                                            </p>
+                                                            {clinic.closeTime && (
+                                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/5 text-white/40 text-[11px] font-bold">
+                                                                    <Clock size={14} className="opacity-50" />
+                                                                    {clinic.closeTime.substring(0, 2)}:{clinic.closeTime.substring(2, 4)} 종료
+                                                                </div>
                                                             )}
                                                         </div>
-                                                        <p className="text-skin-subtext text-xs mt-1 truncate flex items-center gap-1">
-                                                            <MapPin size={12} />
-                                                            {clinic.addr}
-                                                        </p>
-                                                        {clinic.closeTime && (
-                                                            <p className="text-skin-subtext/60 text-xs mt-1 flex items-center gap-1">
-                                                                <Clock size={12} />
-                                                                종료 {clinic.closeTime.substring(0, 2)}:{clinic.closeTime.substring(2, 4)}
-                                                            </p>
+                                                        {clinic.tel && (
+                                                            <a
+                                                                href={`tel:${clinic.tel}`}
+                                                                className="flex-shrink-0 w-14 h-14 flex items-center justify-center bg-white/5 rounded-2xl hover:bg-skin-primary hover:text-white transition-all duration-300 border border-white/5 group-hover:border-skin-primary/30 active:scale-90"
+                                                                aria-label={`${clinic.name} 전화하기`}
+                                                            >
+                                                                <Phone size={24} />
+                                                            </a>
                                                         )}
                                                     </div>
-                                                    {clinic.tel && (
-                                                        <a
-                                                            href={`tel:${clinic.tel}`}
-                                                            className="flex-shrink-0 p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
-                                                            aria-label={`${clinic.name} 전화하기`}
-                                                        >
-                                                            <Phone size={16} className="text-skin-subtext" />
-                                                        </a>
-                                                    )}
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
 
                                     {clinics.length > 10 && (
