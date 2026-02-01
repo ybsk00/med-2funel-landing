@@ -72,8 +72,12 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
     // 부서별 기본 테마 매핑
     const getThemeMode = () => {
         if (theme) return theme;
-        // 모든 진료과 기본값을 Light로 변경 (사용자 테마 변경 반영)
-        return "light";
+        // 한의원, 내과, 소아과, 산부인과, 암요양병원, 정형외과, 치과, 성형외과 = Light Theme (Hanji/Modern)
+        if (["korean-medicine", "internal-medicine", "pediatrics", "obgyn", "oncology", "orthopedics", "dentistry", "plastic-surgery"].includes(department)) {
+            return "light";
+        }
+        // 피부/비뇨/신경 = Dark Theme (Glass/Silk)
+        return "dark";
     };
 
     const currentTheme = getThemeMode();
@@ -89,16 +93,16 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 : "bg-black/40 backdrop-blur-xl border-white/10",
 
             // 텍스트 기본 색상
-            textPrimary: isLight ? "text-stone-900" : "text-gray-100",
-            textSecondary: isLight ? "text-stone-600" : "text-gray-400",
+            textPrimary: isLight ? "!text-stone-900" : "!text-gray-100", // 완전 화이트(#FFF) 대신 부드러운 화이트
+            textSecondary: isLight ? "!text-stone-600" : "!text-gray-400",
             textAccent: "text-skin-primary",
 
             // 라벨 (입력폼 위)
-            label: isLight ? "text-stone-700 font-bold" : "text-skin-primary/80 font-bold",
+            label: isLight ? "!text-stone-600 font-bold" : "text-skin-primary/80 font-bold",
 
             // 입력 필드 (배경색/테두리/텍스트)
             input: isLight
-                ? "bg-white border-2 text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm"
+                ? "bg-white border !text-stone-900 border-stone-300 focus:border-skin-primary placeholder:text-stone-400 font-medium shadow-sm" // 보더 색상 강화
                 : "bg-white/5 border border-white/10 text-gray-200 focus:border-skin-primary placeholder:text-gray-600",
 
             // 선택창 옵션
@@ -107,11 +111,11 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
                 text: isLight ? "#111111" : "#e5e5e5"
             },
 
-            // 칩 (버튼) - Inactive 상태 가독성 확실하게 수정
+            // 칩 (버튼) - Inactive 상태 가독성 개선
             chip: {
                 active: "bg-skin-primary text-white border-skin-primary shadow-md font-bold",
                 inactive: isLight
-                    ? "bg-stone-200/50 border-stone-400 text-stone-800 hover:border-skin-primary hover:text-skin-primary hover:bg-white transition-colors"
+                    ? "bg-stone-100 border-stone-300 !text-stone-800 hover:border-skin-primary hover:text-skin-primary hover:bg-white" // 배경 회색조 추가
                     : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10 hover:text-white hover:border-white/30"
             },
 
@@ -186,7 +190,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
 
     const targetKeyword = searchKeyword || DEPARTMENT_KEYWORDS[department] || "피부과"; // 키워드 자동 매핑
     const [searchTerm, setSearchTerm] = useState(targetKeyword);
-    const debouncedSearch = searchTerm;
+    const debouncedSearch = searchTerm; 
 
     const [searchState, setSearchState] = useState<SearchState>("idle");
     const [clinics, setClinics] = useState<Clinic[]>([]);

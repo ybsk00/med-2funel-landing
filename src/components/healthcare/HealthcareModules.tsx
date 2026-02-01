@@ -141,7 +141,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
                         {/* Decorative Background Glow */}
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-skin-primary/5 rounded-full blur-[80px] pointer-events-none transition-transform duration-700 group-hover:scale-110"></div>
 
-                        <ClinicSearchModule department={config.id} theme="modern" />
+                        <ClinicSearchModule department={config.id} />
                     </div>
                 </div>
 
