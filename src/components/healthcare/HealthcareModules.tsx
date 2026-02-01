@@ -14,7 +14,6 @@ import BotanicCard from "@/components/ui/cards/BotanicCard";
 import LinenCard from "@/components/ui/cards/LinenCard";
 import HologramCard from "@/components/ui/cards/HologramCard";
 import ChatInterface from "@/components/chat/ChatInterface";
-import ChatInterface from "@/components/chat/ChatInterface";
 
 interface HealthcareModulesProps {
     config: HospitalConfig;
@@ -141,75 +140,75 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
     return (
         <section className="relative z-20 min-h-screen flex flex-col">
             <div className="flex-1">
-                <div className="flex-1">
-                    {/* Module Header (Chat Menu Section) */}
-                    <div className="text-center mb-12 mt-24 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 pt-24 border-t border-skin-text/5">
-                        <span className="px-3 py-1 rounded-full bg-skin-primary/5 text-skin-primary text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/10 mb-4 inline-block">
-                            Smart Check
-                        </span>
-                        <h3 className="text-2xl md:text-4xl font-black text-skin-text mb-4 leading-tight">
-                            {moduleHeader.title}
-                        </h3>
-                        <p className="text-skin-text/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-                            {moduleHeader.subtitle1} <br className="hidden md:block" />
-                            {moduleHeader.subtitle2}
-                        </p>
-                    </div>
+                {/* Module Header (Chat Menu Section) */}
+                <div className="text-center mb-12 mt-24 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 pt-24 border-t border-skin-text/5">
+                    <span className="px-3 py-1 rounded-full bg-skin-primary/5 text-skin-primary text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase border border-skin-primary/10 mb-4 inline-block">
+                        Smart Check
+                    </span>
+                    <h3 className="text-2xl md:text-4xl font-black text-skin-text mb-4 leading-tight">
+                        {moduleHeader.title}
+                    </h3>
+                    <p className="text-skin-text/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                        {moduleHeader.subtitle1} <br className="hidden md:block" />
+                        {moduleHeader.subtitle2}
+                    </p>
+                </div>
 
-                    {/* Module Grid: Consistent Height & Branded Style */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 items-stretch">
-                        {config.landingModules.map((module: any) => {
-                            const ICON_MAP: any = {
-                                'Sparkles': Sparkles,
-                                'Droplet': Droplet,
-                                'Shield': Shield,
-                                'ArrowUpRight': ArrowUpRight,
-                                'Heart': Heart,
-                                'User': User,
-                                'Activity': Activity,
-                                'Sun': Sun,
-                                'Camera': Camera,
-                                'Thermometer': ArrowUpRight,
-                                'Zap': Zap,
-                                'Lock': Lock,
-                                'Calendar': Calendar,
-                                'Beaker': Droplet,
-                                'BarChart': BarChart2,
-                                'Moon': Moon,
-                                'Leaf': Leaf
-                            };
-                            const IconComponent = ICON_MAP[module.icon] || Sparkles;
+                {/* Module Grid: Consistent Height & Branded Style */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 items-stretch">
+                    {config.landingModules.map((module: any) => {
+                        const ICON_MAP: any = {
+                            'Sparkles': Sparkles,
+                            'Droplet': Droplet,
+                            'Shield': Shield,
+                            'ArrowUpRight': ArrowUpRight,
+                            'Heart': Heart,
+                            'User': User,
+                            'Activity': Activity,
+                            'Sun': Sun,
+                            'Camera': Camera,
+                            'Thermometer': ArrowUpRight,
+                            'Zap': Zap,
+                            'Lock': Lock,
+                            'Calendar': Calendar,
+                            'Beaker': Droplet,
+                            'BarChart': BarChart2,
+                            'Moon': Moon,
+                            'Leaf': Leaf
+                        };
+                        const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
-                            return (
-                                <div key={module.id} className="flex h-full">
-                                    <CardComponent
-                                        id={module.id}
-                                        title={module.title}
-                                        description={module.description}
-                                        icon={IconComponent}
-                                        color={module.color}
-                                        sound={sound}
-                                        onClick={() => handleModuleClick(module.id)}
-                                        isDark={isThemeDark}
-                                    />
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                    {/* Inline Chat Area */}
-                    {selectedTopic && (
-                        <div id="healthcare-chat-area" className="w-full mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-white/5 backdrop-blur-sm">
-                                <ChatInterface
-                                    mode="healthcare"
-                                    isEmbedded={true}
-                                    topic={selectedTopic}
+                        return (
+                            <div key={module.id} className="flex h-full">
+                                <CardComponent
+                                    id={module.id}
+                                    title={module.title}
+                                    description={module.description}
+                                    icon={IconComponent}
+                                    color={module.color}
+                                    sound={sound}
+                                    onClick={() => handleModuleClick(module.id)}
+                                    isDark={isThemeDark}
                                 />
                             </div>
-                        </div>
-                    )}
+                        );
+                    })}
                 </div>
+
+                {/* Inline Chat Area */}
+                {selectedTopic && (
+                    <div id="healthcare-chat-area" className="w-full mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-white/5 backdrop-blur-sm">
+                            <ChatInterface
+                                mode="healthcare"
+                                isEmbedded={true}
+                                topic={selectedTopic}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
         </section >
     );
 }
