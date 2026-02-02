@@ -41,8 +41,8 @@ export const urologyDefaults: Partial<HospitalConfig> = {
         subheadline: '여유증 수술의 변화 방향과 회복 흐름을 먼저 확인하세요.',
         media: {
           type: 'video',
-          src: '/videos/urology-hero.mp4',
-          poster: '/images/urology-hero-poster.jpg',
+          src: '/히어로세션/비뇨기과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

@@ -41,8 +41,8 @@ export const dentistryDefaults: Partial<HospitalConfig> = {
         subheadline: '쉐이드를 측정하고, 자연스러운 미백 방향을 확인하세요.',
         media: {
           type: 'video',
-          src: '/videos/dental-hero.mp4',
-          poster: '/images/dental-hero-poster.jpg',
+          src: '/히어로세션/치과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

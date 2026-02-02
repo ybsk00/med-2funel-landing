@@ -41,8 +41,8 @@ export const pediatricsDefaults: Partial<HospitalConfig> = {
         subheadline: '열·기침·식사·수면을 정리해 빠르게 진료받으세요.',
         media: {
           type: 'video',
-          src: '/videos/peds-hero.mp4',
-          poster: '/images/peds-hero-poster.jpg',
+          src: '/히어로세션/소아과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

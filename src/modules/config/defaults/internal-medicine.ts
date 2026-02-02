@@ -41,8 +41,8 @@ export const internalMedicineDefaults: Partial<HospitalConfig> = {
         subheadline: '증상·검사·생활 습관을 정리해 정확도를 높이세요.',
         media: {
           type: 'video',
-          src: '/videos/internal-hero.mp4',
-          poster: '/images/internal-hero-poster.jpg',
+          src: '/히어로세션/내과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

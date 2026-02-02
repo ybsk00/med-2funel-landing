@@ -43,8 +43,8 @@ export const dermatologyDefaults: Partial<HospitalConfig> = {
         subheadline: '톤·결·탄력을 한 번에 점검하고, 내 피부 루틴을 설계하세요.',
         media: {
           type: 'video',
-          src: '/videos/hero.mp4',
-          poster: '/images/hero-poster.jpg',
+          src: '/히어로세션/피부과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

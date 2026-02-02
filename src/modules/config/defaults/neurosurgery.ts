@@ -41,8 +41,8 @@ export const neurosurgeryDefaults: Partial<HospitalConfig> = {
         subheadline: '두통/저림/어지럼 패턴을 정리해 진료 효율을 높이세요.',
         media: {
           type: 'video',
-          src: '/videos/neuro-hero.mp4',
-          poster: '/images/neuro-hero-poster.jpg',
+          src: '/히어로세션/신경외과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

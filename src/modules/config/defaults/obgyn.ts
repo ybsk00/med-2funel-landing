@@ -41,8 +41,8 @@ export const obgynDefaults: Partial<HospitalConfig> = {
         subheadline: '주기·증상·검사 이력을 정리해 상담을 편하게 만드세요.',
         media: {
           type: 'video',
-          src: '/videos/obgyn-hero.mp4',
-          poster: '/images/obgyn-hero-poster.jpg',
+          src: '/히어로세션/산부인과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

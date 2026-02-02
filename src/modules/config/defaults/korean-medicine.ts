@@ -40,9 +40,9 @@ export const koreanMedicineDefaults: Partial<HospitalConfig> = {
         headline: '몸의 균형을\n\'패턴\'으로 봅니다',
         subheadline: '수면·피로·소화·스트레스 흐름을 정리해 상담을 돕습니다.',
         media: {
-          type: 'image',
-          src: '/images/korean-hero.jpg',
-          poster: '/images/korean-hero.jpg',
+          type: 'video',
+          src: '/히어로세션/한방병원.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

@@ -41,8 +41,8 @@ export const orthopedicsDefaults: Partial<HospitalConfig> = {
         subheadline: '증상 패턴을 정리하고, 진료 효율을 높이세요.',
         media: {
           type: 'video',
-          src: '/videos/ortho-hero.mp4',
-          poster: '/images/ortho-hero-poster.jpg',
+          src: '/히어로세션/정형외과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

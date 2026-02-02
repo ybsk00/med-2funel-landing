@@ -41,8 +41,8 @@ export const plasticSurgeryDefaults: Partial<HospitalConfig> = {
         subheadline: '라인 변화의 방향을 확인하고, 안전한 선택지를 좁히세요.',
         media: {
           type: 'video',
-          src: '/videos/plastic-hero.mp4',
-          poster: '/images/plastic-hero-poster.jpg',
+          src: '/히어로세션/성형외과.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },

@@ -40,9 +40,9 @@ export const oncologyDefaults: Partial<HospitalConfig> = {
         headline: '치료의 시간,\n회복의 시스템',
         subheadline: '회복 목표와 생활 루틴을 정리해 더 안전하게 준비하세요.',
         media: {
-          type: 'image',
-          src: '/images/oncology-hero.jpg',
-          poster: '/images/oncology-hero.jpg',
+          type: 'video',
+          src: '/히어로세션/암요양병원.mp4',
+          poster: '/히어로세션/dentistry_hero.jpg',
         },
       },
     },
