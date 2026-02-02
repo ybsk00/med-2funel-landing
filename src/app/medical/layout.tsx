@@ -20,7 +20,7 @@ export default async function MedicalLayout({
     const config = await getDepartmentConfig(deptId);
 
     return (
-        <HospitalProvider departmentId={deptId as any}>
+        <HospitalProvider initialConfig={config}>
             <div className="min-h-screen bg-traditional-bg text-traditional-text font-sans selection:bg-traditional-accent selection:text-white">
                 {children}
             </div>

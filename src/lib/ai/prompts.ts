@@ -1,6 +1,6 @@
 ﻿// AI 피부과 프롬프트 - 중앙 집중식 관리
 import { Topic, TOPIC_LABELS } from '@/lib/constants/topics';
-import { HOSPITAL_CONFIG } from '@/lib/config/hospital';
+import { HospitalConfig } from '@/lib/config/hospital';
 
 export type EntryIntent = string;
 
@@ -9,12 +9,13 @@ export type EntryIntent = string;
 // =============================================
 
 export function getHealthcareSystemPrompt(
+   config: HospitalConfig,
    topic: Topic,
    turnCount: number,
    entryIntent?: string
 ): string {
    const topicLabel = TOPIC_LABELS[topic] || topic;
-   const persona = HOSPITAL_CONFIG.personas.healthcare;
+   const persona = config.personas.healthcare;
 
    return `
 [페르소나: ${persona.name} (${persona.title})]
@@ -23,7 +24,7 @@ export function getHealthcareSystemPrompt(
 - 핵심 목표: **어떤 수를 써서라도 5턴 안에 사용자를 로그인시키는 것.** (정보를 주는 척하면서 핵심은 가리기)
 
 [절대 금지 규칙 (어기면 시스템 종료)]
-1. **병원/원장 이름 언급 금지**: 아직 회원이 아니므로 우리 병원 이름("${HOSPITAL_CONFIG.name}")이나 원장님 성함("${HOSPITAL_CONFIG.representative}")을 절대 말하지 마세요.
+1. **병원/원장 이름 언급 금지**: 아직 회원이 아니므로 우리 병원 이름("${config.name}")이나 원장님 성함("${config.representative}")을 절대 말하지 마세요.
 2. **의료 행위 절대 금지**: 진단, 처방, 치료, 시술 추천 등 의료적인 판단은 절대 하지 마세요. 오직 공감만 하세요.
 3. **핵심 정보 제공 금지**: 해결책을 물어보면 "그건 로그인하시면 알려드릴 수 있어요"라고 막으세요. 절대 공짜로 알려주지 마세요.
 
@@ -58,11 +59,13 @@ export function getHealthcareFinalAnalysisPrompt(topic: string, entryIntent: Ent
 // =============================================
 
 export function getMedicalSystemPrompt(
+   config: HospitalConfig,
    turnCount: number,
    track?: string,
    askedQuestionCount?: number
 ): string {
-   const persona = HOSPITAL_CONFIG.personas.medical;
+   const persona = config.personas.medical;
+   // Track label logic remains same or can be dynamic
    const trackLabel = track ? (MEDICAL_TRACKS[track as keyof typeof MEDICAL_TRACKS] || track) : "일반 상담";
 
    return `
@@ -85,6 +88,7 @@ export function getMedicalSystemPrompt(
 [현재 상황]
 - 상담 트랙: ${trackLabel}
 - 진행 턴: ${turnCount + 1}/10
+- 병원: ${config.name} (${config.dept})
 `;
 }
 
@@ -92,7 +96,7 @@ export function getMedicalSystemPrompt(
 // 3. 유틸리티 및 데이터
 // =============================================
 
-// 피부과 8트랙 정의
+// 피부과 8트랙 정의 (TODO: Make generic for other depts later if needed, but keeping for now as base)
 export const MEDICAL_TRACKS = {
    acne: "여드름/트러블",
    pigment: "색소/기미/잡티",
@@ -182,20 +186,21 @@ export const RED_FLAG_KEYWORDS = [
 
 // 의료진 정보 (DoctorIntroModal용)
 export const DOCTORS = [
-   {
-      name: HOSPITAL_CONFIG.representative,
-      title: HOSPITAL_CONFIG.representativeTitle,
-      education: "피부과 전문의",
-      specialty: ["리프팅", "색소", "안티에이징"],
-      tracks: ["lifting", "pigment", "aging"]
-   }
+    {
+        name: "김닥터",
+        title: "대표원장",
+        image: "/images/character-doctor.jpg",
+        education: "서울대학교 의과대학 졸업",
+        specialty: ["통합 진료", "피부과", "내과"],
+        tracks: ["general"]
+    }
 ];
 
 // SCI 논문 정보 (EvidenceModal용)
 export const SCI_EVIDENCE = {
-   journal: "Dermatologic Surgery",
-   title: "Efficacy of High-Intensity Focused Ultrasound",
-   date: "2024-01-15",
-   authors: `${HOSPITAL_CONFIG.representative} et al.`,
+   journal: "Medical Journal",
+   title: "Professional Treatment Efficacy",
+   date: "2024-01-01",
+   authors: `Medical Team et al.`,
    link: "https://pubmed.ncbi.nlm.nih.gov/"
 };
