@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
             sub2: sanitize(body.sub2),
             // click_ids: body.click_ids || null,
             user_agent: userAgent.substring(0, 1000),
-            device_type: deviceType,
+            // device_type: deviceType,
             login_source: sanitize(body.login_source),
             prompt_version_id: sanitize(body.prompt_version_id),
             flow_version_id: sanitize(body.flow_version_id),
@@ -94,7 +94,12 @@ export async function POST(request: NextRequest) {
         });
 
         if (error) {
-            console.error('Marketing track error:', error);
+            console.error('Marketing track error details:', {
+                code: error.code,
+                message: error.message,
+                details: error.details,
+                hint: error.hint
+            });
             // Silent fail - return success to not break user experience
             return NextResponse.json({ success: true, silent_error: true });
         }

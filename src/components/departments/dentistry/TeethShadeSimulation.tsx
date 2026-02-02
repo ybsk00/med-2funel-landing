@@ -71,7 +71,7 @@ export default function TeethShadeSimulation() {
                         >
                             <div className="relative aspect-[4/5] w-full rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl mx-auto">
                                 <Image
-                                    src="/dentistry_assets/original.png"
+                                    src="/images/dentistry_original.png"
                                     alt="Original Teeth"
                                     fill
                                     className="object-cover"
@@ -143,7 +143,7 @@ export default function TeethShadeSimulation() {
                                     {/* Right Image (After) - Underneath */}
                                     <div className="absolute inset-0 w-full h-full">
                                         <Image
-                                            src="/dentistry_assets/original.png"
+                                            src="/images/dentistry_original.png"
                                             alt="After"
                                             fill
                                             className="object-cover scale-[2.0] object-center"
@@ -174,7 +174,7 @@ export default function TeethShadeSimulation() {
                                         </div>
                                         {/* Re-implementing Left Image Correctly */}
                                         <Image
-                                            src="/dentistry_assets/original.png"
+                                            src="/images/dentistry_original.png"
                                             alt="Before"
                                             fill
                                             className="object-cover scale-[2.0] object-center max-w-none"
@@ -197,7 +197,7 @@ export default function TeethShadeSimulation() {
                                             */}
                                             <div style={{ width: `${10000 / Math.max(sliderPosition, 0.1)}%`, height: '100%', position: 'relative' }}>
                                                 <Image
-                                                    src="/dentistry_assets/original.png"
+                                                    src="/images/dentistry_original.png"
                                                     alt="Before"
                                                     fill
                                                     className="object-cover scale-[2.0] object-center"
