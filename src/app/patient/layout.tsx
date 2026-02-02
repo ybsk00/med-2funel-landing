@@ -2,12 +2,12 @@ import PatientBottomNav from "@/components/patient/PatientBottomNav";
 import { HospitalProvider } from '@/components/common/HospitalProvider';
 import { getDepartmentConfig } from '@/lib/config/factory';
 
-export default function PatientLayout({
+export default async function PatientLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const config = getDepartmentConfig("dermatology");
+    const config = await getDepartmentConfig("dermatology");
     return (
         <HospitalProvider initialConfig={config}>
             <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#0a0f1a" }}>

@@ -21,7 +21,7 @@ export default function IntroPage() {
             playsInline
             className="w-full h-full object-cover animate-fade-in"
           >
-            <source src={DEPARTMENTS.find(d => d.id === hoveredDept)?.video || "/2.mp4"} type="video/mp4" />
+            <source src={DEPARTMENTS[hoveredDept]?.video || "/2.mp4"} type="video/mp4" />
           </video>
         ) : (
           <video
@@ -57,7 +57,7 @@ export default function IntroPage() {
 
         {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 w-full max-w-6xl mx-auto px-4">
-          {DEPARTMENTS.map((dept) => (
+          {Object.values(DEPARTMENTS).map((dept) => (
             <Link
               key={dept.id}
               href={`/${dept.id}`}

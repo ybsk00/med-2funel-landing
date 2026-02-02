@@ -8,12 +8,12 @@ export const metadata: Metadata = {
     description: "의료진 전용 대시보드",
 };
 
-export default function MedicalLayout({
+export default async function MedicalLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const config = getDepartmentConfig("dermatology");
+    const config = await getDepartmentConfig("dermatology");
     return (
         <HospitalProvider initialConfig={config}>
             <div className="min-h-screen bg-traditional-bg text-traditional-text font-sans selection:bg-traditional-accent selection:text-white">

@@ -40,8 +40,11 @@ import {
     Stethoscope,
     ClipboardCheck,
     Bell,
-    Send
+    Send,
+    Settings // Add Settings icon
 } from 'lucide-react';
+import { getDepartments, updateDepartment } from '@/lib/data/departments';
+import { Department } from '@/lib/constants/departments';
 
 // Message template types (inline)
 type MessageRuleType = 'appointment_reminder' | 'medication_refill' | 'follow_up_needed' | 'regular_checkup';
@@ -152,9 +155,79 @@ export default function SettingsPage() {
     const [previewModalOpened, { open: openPreviewModal, close: closePreviewModal }] = useDisclosure(false);
     const [previewType, setPreviewType] = useState<MessageRuleType | null>(null);
 
+    // Hospital Config State
+    const [departments, setDepartments] = useState<Department[]>([]);
+    const [selectedDeptId, setSelectedDeptId] = useState<string | null>(null);
+    const [deptConfigJSON, setDeptConfigJSON] = useState<any>(null); // For raw JSON editing if needed or simply specific fields
+    const [configLoading, setConfigLoading] = useState(false);
+
+    // Form fields for easy editing
+    const [editName, setEditName] = useState('');
+    const [editRepresentative, setEditRepresentative] = useState('');
+    const [editSlogan, setEditSlogan] = useState('');
+    const [editIcon, setEditIcon] = useState('');
+    const [editColor, setEditColor] = useState('');
+
+
     useEffect(() => {
         fetchAdminUsers();
     }, []);
+
+    useEffect(() => {
+        // Fetch departments on load
+        loadDepartments();
+    }, []);
+
+    async function loadDepartments() {
+        setConfigLoading(true);
+        try {
+            const depts = await getDepartments();
+            setDepartments(depts);
+            if (depts.length > 0 && !selectedDeptId) {
+                // Select first one by default
+                handleSelectDepartment(depts[0].id, depts);
+            }
+        } catch (error) {
+            console.error(error);
+            setError('병원 정보를 불러오는데 실패했습니다.');
+        } finally {
+            setConfigLoading(false);
+        }
+    }
+
+    function handleSelectDepartment(id: string, depts = departments) {
+        setSelectedDeptId(id);
+        const dept = depts.find(d => d.id === id);
+        if (dept) {
+            setEditName(dept.branding?.name || dept.virtualName || '');
+            setEditRepresentative(dept.branding?.representative || '');
+            setEditSlogan(dept.branding?.slogan || '');
+            setEditIcon(dept.branding?.logoParams.icon || 'Sparkles');
+            setEditColor(dept.branding?.logoParams.color || 'pink');
+        }
+    }
+
+    async function handleSaveConfig() {
+        if (!selectedDeptId) return;
+
+        setConfigLoading(true);
+        try {
+            await updateDepartment(selectedDeptId, {
+                virtual_name: editName,
+                representative: editRepresentative,
+                slogan: editSlogan,
+                logo_icon: editIcon,
+                logo_color: editColor
+            });
+
+            setSuccess('병원 설정이 저장되었습니다.');
+            loadDepartments(); // Reload to refresh data
+        } catch (e: any) {
+            setError(e.message || '저장에 실패했습니다.');
+        } finally {
+            setConfigLoading(false);
+        }
+    }
 
     async function fetchAdminUsers() {
         setLoading(true);
@@ -338,6 +411,9 @@ export default function SettingsPage() {
                     <Tabs.Tab value="accounts" leftSection={<Shield size={16} />}>
                         관리자 계정
                     </Tabs.Tab>
+                    <Tabs.Tab value="hospital" leftSection={<Settings size={16} />}>
+                        병원 관리
+                    </Tabs.Tab>
                     <Tabs.Tab value="messages" leftSection={<MessageSquare size={16} />}>
                         메세지 규칙
                     </Tabs.Tab>
@@ -403,7 +479,89 @@ export default function SettingsPage() {
                     </Paper>
                 </Tabs.Panel>
 
-                {/* 메세지 규칙 탭 */}
+                {/* 병원 관리 탭 패널 */}
+                <Tabs.Panel value="hospital">
+                    <Paper shadow="sm" p="lg" radius="md" bg="dark.6" pos="relative">
+                        <LoadingOverlay visible={configLoading} />
+
+                        <Group align="flex-start" mb="lg">
+                            <ThemeIcon size="xl" radius="md" variant="light" color="blue">
+                                <Settings size={20} />
+                            </ThemeIcon>
+                            <div>
+                                <Text size="lg" fw={500} c="white">병원 브랜딩 설정</Text>
+                                <Text size="sm" c="dimmed">각 진료과별 병원 이름, 대표자, 로고 등을 설정합니다.</Text>
+                            </div>
+                        </Group>
+
+                        <Divider my="lg" color="dark.4" />
+
+                        <Group align="flex-start" grow>
+                            <Stack>
+                                <Select
+                                    label="진료과 선택"
+                                    data={departments.map(d => ({ value: d.id, label: d.label }))}
+                                    value={selectedDeptId}
+                                    onChange={(val) => val && handleSelectDepartment(val)}
+                                    allowDeselect={false}
+                                />
+
+                                <TextInput
+                                    label="병원명 (가상 브랜드)"
+                                    description="헤더와 메인 화면에 표시될 병원 이름입니다. 예: 에버피부과"
+                                    value={editName}
+                                    onChange={(e) => setEditName(e.currentTarget.value)}
+                                />
+
+                                <TextInput
+                                    label="대표 원장"
+                                    value={editRepresentative}
+                                    onChange={(e) => setEditRepresentative(e.currentTarget.value)}
+                                />
+
+                                <TextInput
+                                    label="슬로건"
+                                    description="병원 로고 옆이나 하단에 표시될 문구입니다."
+                                    value={editSlogan}
+                                    onChange={(e) => setEditSlogan(e.currentTarget.value)}
+                                />
+                            </Stack>
+
+                            <Stack>
+                                <Select
+                                    label="로고 아이콘"
+                                    data={[
+                                        'Sparkles', 'Heart', 'Shield', 'Activity', 'Brain', 'Bone', 'Stethoscope',
+                                        'Cross', 'Sun', 'Zap', 'Droplet', 'Moon', 'Smile'
+                                    ]}
+                                    value={editIcon}
+                                    onChange={(val) => setEditIcon(val || 'Sparkles')}
+                                    leftSection={(() => {
+                                        // Dynamic Icon Render (Simplified)
+                                        return <Settings size={14} />;
+                                    })()}
+                                />
+
+                                <Select
+                                    label="브랜드 컬러"
+                                    data={[
+                                        'pink', 'rose', 'teal', 'purple', 'fuchsia', 'cyan', 'emerald', 'amber',
+                                        'blue', 'indigo', 'sky', 'orange', 'yellow', 'green', 'red', 'violet'
+                                    ]}
+                                    value={editColor}
+                                    onChange={(val) => setEditColor(val || 'pink')}
+                                />
+
+                                <Group justify="flex-end" mt="xl">
+                                    <Button onClick={handleSaveConfig} color="blue" loading={configLoading}>
+                                        변경사항 저장
+                                    </Button>
+                                </Group>
+                            </Stack>
+                        </Group>
+                    </Paper>
+                </Tabs.Panel>
+
                 <Tabs.Panel value="messages">
                     <Paper shadow="sm" p="lg" radius="md" bg="dark.6">
                         <Group justify="space-between" mb="lg">

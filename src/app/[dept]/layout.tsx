@@ -5,7 +5,7 @@ import { DEPARTMENTS } from "@/lib/constants/departments";
 
 // Generate static params for all defined departments
 export function generateStaticParams() {
-    return DEPARTMENTS.map((dept) => ({
+    return Object.values(DEPARTMENTS).map((dept) => ({
         dept: dept.id,
     }));
 }
@@ -18,7 +18,7 @@ export default async function DepartmentLayout({
     params: Promise<{ dept: string }>;
 }) {
     const { dept } = await params;
-    const config = getDepartmentConfig(dept);
+    const config = await getDepartmentConfig(dept);
 
     return (
         <HospitalProvider initialConfig={config}>

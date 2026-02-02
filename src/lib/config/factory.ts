@@ -1,6 +1,6 @@
 
 import { HospitalConfig, LandingModuleConfig } from './hospital';
-import { getDepartment } from '@/lib/constants/departments';
+import { getDepartment } from '@/lib/data/departments';
 
 // Helper to generate generic modules based on department keywords
 function generateModules(dept: any): LandingModuleConfig[] {
@@ -16,8 +16,8 @@ function generateModules(dept: any): LandingModuleConfig[] {
     }));
 }
 
-export function getDepartmentConfig(deptId: string): HospitalConfig {
-    const dept = getDepartment(deptId);
+export async function getDepartmentConfig(deptId: string): Promise<HospitalConfig> {
+    const dept = await getDepartment(deptId);
 
     // Default Fallback
     if (!dept) {

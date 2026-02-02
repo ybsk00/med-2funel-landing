@@ -4,8 +4,8 @@ import { getDepartmentConfig } from "@/lib/config/factory";
 import { ThemeProvider } from "@/modules/theme/ThemeProvider";
 import { getDepartmentV2Config } from "@/modules/config";
 
-export default function Page() {
-    const config = getDepartmentConfig("dermatology");
+export default async function Page() {
+    const config = await getDepartmentConfig("dermatology");
     const v2Config = getDepartmentV2Config("dermatology");
     return (
         <ThemeProvider initialConfig={v2Config}>

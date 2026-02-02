@@ -15,6 +15,8 @@
     "@mantine/core": "^8.3.10",
     "@mantine/dates": "^8.3.10",
     "@mantine/hooks": "^8.3.10",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.86.2",
     "clsx": "^2.1.1",
@@ -29,7 +31,9 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-markdown": "^10.1.0",
+    "recharts": "^3.7.0",
     "tailwind-merge": "^3.4.0",
+    "three": "^0.182.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
