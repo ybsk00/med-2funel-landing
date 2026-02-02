@@ -15,6 +15,13 @@ export interface LandingModuleConfig {
 }
 
 export interface HospitalConfig {
+    officeHours?: {
+        start: string; // "09:00"
+        end: string;   // "18:00"
+        lunchStart?: string;
+        lunchEnd?: string;
+        closedDays?: number[]; // 0: Sunday, 6: Saturday
+    };
     name: string;
     virtualName?: string; // NEW: Added to support virtual brand names
     representative: string;

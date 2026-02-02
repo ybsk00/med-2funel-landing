@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { Calendar, Clock, X, CheckCircle2, AlertCircle, User, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { createClient } from "@/lib/supabase/client";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 type ReservationModalProps = {
     isOpen: boolean;
@@ -14,6 +14,7 @@ type ReservationModalProps = {
 };
 
 export default function ReservationModal({ isOpen, onClose, initialTab = "book" }: ReservationModalProps) {
+    const config = useHospital();
     const [activeTab, setActiveTab] = useState<"book" | "reschedule" | "cancel">(initialTab);
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,16 +30,15 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
     const [name, setName] = useState("");
     const [doctor, setDoctor] = useState("");
     const [date, setDate] = useState("");
-    const [hour, setHour] = useState("09");
+    const [hour, setHour] = useState(config.officeHours?.start.split(':')[0] || "10");
     const [minute, setMinute] = useState("00");
 
     const supabase = createClient();
 
-    // 의료진 목록 (HOSPITAL_CONFIG 또는 기본값 사용)
+    // 의료진 목록 (Hospital Config 기반 동적 생성)
     const doctors = [
-        HOSPITAL_CONFIG.representative,
-        "이미혜 원장",
-        "김지은 원장"
+        config.representative,
+        ...(config.id === 'dermatology' ? ["이미혜 원장", "김지은 원장"] : [])
     ].filter((v, i, a) => a.indexOf(v) === i); // 중복 제거
 
     useEffect(() => {
@@ -116,9 +116,10 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                             .from('appointments')
                             .update({
                                 scheduled_at: scheduledAt,
-                                notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`,
+                                notes: `${config.name} 진료 (${doctor})`,
                                 user_id: userId,
-                                naver_user_id: naverUserId
+                                naver_user_id: naverUserId,
+                                department_id: config.id
                             })
                             .eq('id', existingReservation.id);
                         if (error) throw error;
@@ -140,10 +141,11 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                         .from('appointments')
                         .insert({
                             scheduled_at: scheduledAt,
-                            notes: `${HOSPITAL_CONFIG.name} 진료 (${doctor})`,
+                            notes: `${config.name} 진료 (${doctor})`,
                             status: 'pending',
                             user_id: userId,
-                            naver_user_id: naverUserId
+                            naver_user_id: naverUserId,
+                            department_id: config.id
                         });
                     if (error) throw error;
                 }
@@ -162,17 +164,30 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
         setStep(1);
         setActiveTab("book");
         setDate("");
-        setHour("09");
+        setHour(config.officeHours?.start.split(':')[0] || "10");
         setMinute("00");
         onClose();
     };
 
-    const hours = Array.from({ length: 9 }, (_, i) => (9 + i).toString().padStart(2, '0'));
+    const startHour = parseInt(config.officeHours?.start.split(':')[0] || "10");
+    const endHour = parseInt(config.officeHours?.end.split(':')[0] || "19");
+    const hours = Array.from({ length: endHour - startHour + 1 }, (_, i) => (startHour + i).toString().padStart(2, '0'));
     const minutes = ["00", "30"];
 
     const isTimeAvailable = (h: string, m: string) => {
-        if (availableSlots.length === 0) return true;
         const timeStr = `${h}:${m}`;
+
+        // 1. 운영 시간 체크
+        if (config.officeHours) {
+            if (timeStr < config.officeHours.start || timeStr >= config.officeHours.end) return false;
+
+            // 2. 점심 시간 체크
+            if (config.officeHours.lunchStart && config.officeHours.lunchEnd) {
+                if (timeStr >= config.officeHours.lunchStart && timeStr < config.officeHours.lunchEnd) return false;
+            }
+        }
+
+        if (availableSlots.length === 0) return true;
         return availableSlots.includes(timeStr);
     };
 
@@ -187,7 +202,7 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                 <div className="bg-gray-800 p-4 flex justify-between items-center border-b border-gray-700">
                     <h3 className="font-bold text-lg text-white flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-pink-500" />
-                        {HOSPITAL_CONFIG.name} 예약 관리
+                        {config.name} 예약 관리
                     </h3>
                     <button onClick={resetAndClose} className="text-gray-400 hover:text-white">
                         <X size={20} />
