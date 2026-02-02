@@ -37,8 +37,8 @@ export const koreanMedicineDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '전통의 지혜로 찾는\n몸의 균형',
-        subheadline: '지금 내 체질을 진단하고, 맞춤 한방 케어를 알아보세요.',
+        headline: '몸의 균형을\n\'패턴\'으로 봅니다',
+        subheadline: '수면·피로·소화·스트레스 흐름을 정리해 상담을 돕습니다.',
         media: {
           type: 'image',
           src: '/images/korean-hero.jpg',

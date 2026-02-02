@@ -25,20 +25,20 @@ export const orthopedicsDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#10B981',    // 에메랄드
-        secondary: '#3B82F6',  // 블루
-        accent: '#F59E0B',     // 앰버
-        background: '#0F172A', // 슬레이트 900
-        text: '#F8FAFC',       // 슬레이트 50
+        primary: '#64748B',    // 티타늄 실버 (퍼포먼스)
+        secondary: '#10B981',  // 에메랄드 (액센트)
+        accent: '#F59E0B',     // 앰버 (속도감)
+        background: '#0A0E14', // 카본 블랙
+        text: '#E2E8F0',       // 슬레이트 200
       },
       design: {
-        texture: 'glass',
+        texture: 'carbon',
         font: 'font-sans',
       },
       hero: {
         type: 'motion-effect',
-        headline: '움직임의 자유를 되찾다\n건강한 관절 라이프',
-        subheadline: '지금 내 관절/근육 상태를 체크하고, 통증 없는 일상을 준비하세요.',
+        headline: '통증의 원인은 \'부위\'보다\n\'패턴\'입니다',
+        subheadline: '증상 패턴을 정리하고, 진료 효율을 높이세요.',
         media: {
           type: 'video',
           src: '/videos/ortho-hero.mp4',

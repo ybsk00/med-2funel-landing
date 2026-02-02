@@ -2,7 +2,8 @@
 
 import { useState, useRef, useCallback } from "react";
 import { X, ArrowLeft, Camera, ImageIcon, Shield } from "lucide-react";
-import BrushCanvas, { TREATMENT_VARIANTS, TreatmentKey } from "@/components/common/BrushCanvas";
+import BrushCanvas from "@/components/common/BrushCanvas";
+import { DEFAULT_SIMULATION } from "@/lib/constants/simulations";
 
 type Step = "consent" | "photo" | "experience";
 
@@ -37,7 +38,8 @@ const SAMPLE_IMAGE = "/base.png";
 export default function FaceSimulationModal({ isOpen, onClose, isMobile = false }: FaceSimulationModalProps) {
     const [step, setStep] = useState<Step>("consent");
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
-    const [selectedTreatment, setSelectedTreatment] = useState<TreatmentKey>("skinbooster");
+    // Default to the first treatment option (usually index 1, as 0 is 'natural')
+    const [selectedTreatment, setSelectedTreatment] = useState<string>(DEFAULT_SIMULATION.variants[1]?.key || "skinbooster");
     const [imageUrl, setImageUrl] = useState<string>(SAMPLE_IMAGE);
     const [isUsingOwnPhoto, setIsUsingOwnPhoto] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -272,6 +274,8 @@ export default function FaceSimulationModal({ isOpen, onClose, isMobile = false 
                     {step === "experience" && (
                         <BrushCanvas
                             imageUrl={imageUrl}
+                            // Pass the unified variants from constants
+                            variants={DEFAULT_SIMULATION.variants}
                             selectedTreatment={selectedTreatment}
                             onTreatmentChange={setSelectedTreatment}
                             showControls={true}

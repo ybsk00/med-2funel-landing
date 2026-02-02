@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { format, startOfDay, endOfDay, addDays } from 'date-fns'
 import { ko } from 'date-fns/locale'
@@ -19,17 +19,15 @@ import {
     Center,
     Box,
     ScrollArea,
-    ActionIcon,
-    TextInput,
     Select,
     Alert,
     Pagination,
     SegmentedControl,
+    TextInput,
 } from '@mantine/core'
-import { DatePickerInput } from '@mantine/dates'
 import '@mantine/dates/styles.css'
 import { useDisclosure } from '@mantine/hooks'
-import { X, MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle, Edit, Plus, Trash2, Calendar } from 'lucide-react'
+import { MessageSquare, User, Bot, CalendarPlus, CheckCircle, AlertCircle, Edit, Plus, Trash2 } from 'lucide-react'
 import { Textarea } from '@mantine/core'
 
 type Appointment = {
@@ -114,12 +112,7 @@ export default function AppointmentsPage() {
 
     const supabase = createClient()
 
-    useEffect(() => {
-        fetchAppointments()
-        fetchPatients()
-    }, [dateFilter, customDateFrom, customDateTo, currentPage])
-
-    const fetchPatients = async () => {
+    const fetchPatients = useCallback(async () => {
         const { data } = await supabase
             .from('patients')
             .select('id, name, phone')
@@ -131,9 +124,9 @@ export default function AppointmentsPage() {
                 label: `${p.name} (${p.phone || '연락처 없음'})`
             })))
         }
-    }
+    }, [supabase])
 
-    const fetchAppointments = async () => {
+    const fetchAppointments = useCallback(async () => {
         setLoading(true)
 
         // 날짜 범위 계산
@@ -188,7 +181,12 @@ export default function AppointmentsPage() {
             setAppointments(data as Appointment[])
         }
         setLoading(false)
-    }
+    }, [dateFilter, customDateFrom, customDateTo, currentPage, supabase])
+
+    useEffect(() => {
+        fetchAppointments()
+        fetchPatients()
+    }, [fetchAppointments, fetchPatients])
 
     const handleViewChat = async (appt: Appointment) => {
         const patientName = appt.patient?.name || '환자'
@@ -196,7 +194,7 @@ export default function AppointmentsPage() {
         open()
         setLoadingChat(true)
 
-        let sessions: any[] | null = null
+        let sessions: Partial<IntakeSession>[] | null = null
 
         // user_id가 있으면 Medical 채팅 (user_id로 조회)
         if (appt.user_id) {
@@ -223,12 +221,14 @@ export default function AppointmentsPage() {
                 const { data: messages } = await supabase
                     .from('intake_messages')
                     .select('*')
-                    .eq('session_id', session.id)
+                    .eq('session_id', session.id as string)
                     .order('created_at', { ascending: true })
 
                 sessionsWithMessages.push({
-                    ...session,
-                    messages: messages || []
+                    id: session.id as string,
+                    status: session.status as string,
+                    created_at: session.created_at as string,
+                    messages: (messages as IntakeMessage[]) || []
                 })
             }
             setChatSessions(sessionsWithMessages)
@@ -299,9 +299,9 @@ export default function AppointmentsPage() {
                 closeEdit()
                 setEditSuccess(null)
             }, 1500)
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error updating appointment:', err)
-            setEditError(err.message || '예약 수정 중 오류가 발생했습니다.')
+            setEditError(err instanceof Error ? err.message : '예약 수정 중 오류가 발생했습니다.')
         } finally {
             setEditLoading(false)
         }
@@ -323,9 +323,9 @@ export default function AppointmentsPage() {
 
             fetchAppointments()
             closeEdit()
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error deleting appointment:', err)
-            setEditError(err.message || '예약 삭제 중 오류가 발생했습니다.')
+            setEditError(err instanceof Error ? err.message : '예약 삭제 중 오류가 발생했습니다.')
         } finally {
             setEditLoading(false)
         }
@@ -365,7 +365,7 @@ export default function AppointmentsPage() {
             setChatSessions([])
             setManualNote('')
             alert('메모가 저장되었습니다. 다시 증상보기를 클릭하면 확인할 수 있습니다.')
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error saving manual note:', err)
             alert('메모 저장 중 오류가 발생했습니다.')
         } finally {
@@ -431,9 +431,9 @@ export default function AppointmentsPage() {
                 setNewAppointment({ patientId: '', scheduledDate: '', scheduledTime: '', department: '', memo: '' })
                 setCreateSuccess(null)
             }, 1500)
-        } catch (err: any) {
+        } catch (err) {
             console.error('Error creating appointment:', err)
-            setCreateError(err.message || '예약 생성 중 오류가 발생했습니다.')
+            setCreateError(err instanceof Error ? err.message : '예약 생성 중 오류가 발생했습니다.')
         } finally {
             setCreateLoading(false)
         }

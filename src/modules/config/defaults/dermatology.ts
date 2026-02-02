@@ -26,11 +26,11 @@ export const dermatologyDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#E91E8C',    // 핑크
-        secondary: '#14B8A6',  // 틸
-        accent: '#C026D3',     // 퍼플
-        background: '#0A1A2A', // 다크 블루
-        text: '#F8F9FA',       // 화이트
+        primary: '#F0A0C8',    // 펄 핑크 (글로우 스킨)
+        secondary: '#B8D8E8',  // 펄 틸 (진주 톤)
+        accent: '#D8A0E0',     // 소프트 라벤더
+        background: '#0A1220', // 다크 블루
+        text: '#F8F0FA',       // 펄 화이트
       },
       design: {
         texture: 'hologram',
@@ -39,8 +39,8 @@ export const dermatologyDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'glow-effect',
-        headline: '베이스가 달라지는\n광채 루틴 리셋',
-        subheadline: '지금 내 상태를 빠르게 체크하고, 오늘부터 적용할 루틴 포인트를 정리필보세요.',
+        headline: '피부는 \'관리\'가 아니라\n\'시스템\'입니다',
+        subheadline: '톤·결·탄력을 한 번에 점검하고, 내 피부 루틴을 설계하세요.',
         media: {
           type: 'video',
           src: '/videos/hero.mp4',

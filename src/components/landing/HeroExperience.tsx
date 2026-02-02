@@ -32,7 +32,7 @@ export default function HeroExperience({ className = "", department = "dermatolo
         // AI Analysis Animation Sequence
         setIsAnalyzing(true);
         // Keep showing original during analysis, switch later
-        
+
         // 1. Analyzing Phase (Blur) - 1.5s
         setTimeout(() => {
             setIsAnalyzing(false);
@@ -43,18 +43,22 @@ export default function HeroExperience({ className = "", department = "dermatolo
         }, 1500);
     };
 
-    // Define DRAMATIC filters for effects
+    // Define filters filters based on Single Source of Truth
     const getFilterStyle = (currentMode: EffectMode) => {
-        switch (currentMode) {
-            case 'glow':
-                // 물광: 밝기/대비/채도 대폭 증가 + 블러로 광택 효과 시뮬레이션
-                return 'brightness(1.15) contrast(1.2) saturate(1.3) blur(0.5px) drop-shadow(0 0 8px rgba(255,255,255,0.6))';
-            case 'whitening':
-                // 미백: 밝기 대폭 증가 + 채도 대폭 감소(붉은기 제거) + 약간의 쿨톤 보정
-                return 'brightness(1.35) contrast(0.9) saturate(0.4) hue-rotate(-5deg)';
-            default:
-                return 'none';
-        }
+        // Map UI modes to Simulation Config Keys
+        const variantKeyMap: Record<string, string> = {
+            'glow': 'water-glow',
+            'whitening': 'toning'
+        };
+
+        const targetKey = variantKeyMap[currentMode];
+        if (!targetKey) return 'none';
+
+        const variant = config.variants.find(v => v.key === targetKey);
+        // Note: HeroExperience only applies CSS filters for now. 
+        // Overlay properties (overlayColor, etc.) are not used here to keep it simple,
+        // but the base filter will be consistent.
+        return variant ? variant.filter : 'none';
     };
 
     return (
@@ -65,18 +69,18 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     {department === 'plastic-surgery' ? 'AI 가상 성형' : 'AI 피부 시뮬레이션'}
                 </h3>
                 <p className="text-sm text-skin-subtext mt-1">
-                    {mode === 'original' 
-                        ? '원하는 효과를 선택하여 시뮬레이션을 시작하세요.' 
+                    {mode === 'original'
+                        ? '원하는 효과를 선택하여 시뮬레이션을 시작하세요.'
                         : '왼쪽(Before)과 오른쪽(After)을 비교해보세요.'}
                 </p>
             </div>
 
             {/* Main Viewport */}
             <div className="relative w-full aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/20 bg-skin-bgSecondary group">
-                
+
                 {/* 1. Content Layer */}
                 <div className={`absolute inset-0 transition-all duration-700 ${isAnalyzing ? 'blur-xl scale-105 opacity-80' : 'blur-0 scale-100 opacity-100'}`}>
-                    
+
                     {mode === 'original' || isAnalyzing ? (
                         // Single Full Image (Original)
                         <div className="relative w-full h-full">
@@ -129,8 +133,8 @@ export default function HeroExperience({ className = "", department = "dermatolo
                                         alt="Effect Right"
                                         fill
                                         className="object-cover transition-all duration-700"
-                                        style={{ 
-                                            filter: getFilterStyle(mode) 
+                                        style={{
+                                            filter: getFilterStyle(mode)
                                         }}
                                     />
                                     {/* Vignette Mask */}
@@ -180,11 +184,10 @@ export default function HeroExperience({ className = "", department = "dermatolo
                 <button
                     onClick={() => handleModeChange('glow')}
                     disabled={isAnalyzing}
-                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${
-                        mode === 'glow' 
-                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]' 
-                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
-                    }`}
+                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${mode === 'glow'
+                            ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
+                            : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
+                        }`}
                 >
                     <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'glow' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
                         <Droplet className={`w-6 h-6 ${mode === 'glow' ? 'text-white' : 'text-skin-primary'}`} />
@@ -195,8 +198,8 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     </div>
                     {mode === 'glow' && !isAnalyzing && (
                         <span className="absolute top-3 right-3 flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                         </span>
                     )}
                 </button>
@@ -204,11 +207,10 @@ export default function HeroExperience({ className = "", department = "dermatolo
                 <button
                     onClick={() => handleModeChange('whitening')}
                     disabled={isAnalyzing}
-                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${
-                        mode === 'whitening' 
-                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]' 
-                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
-                    }`}
+                    className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${mode === 'whitening'
+                            ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
+                            : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
+                        }`}
                 >
                     <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'whitening' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
                         <Sun className={`w-6 h-6 ${mode === 'whitening' ? 'text-white' : 'text-skin-primary'}`} />
@@ -219,8 +221,8 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     </div>
                     {mode === 'whitening' && !isAnalyzing && (
                         <span className="absolute top-3 right-3 flex h-3 w-3">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
                         </span>
                     )}
                 </button>

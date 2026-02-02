@@ -25,11 +25,11 @@ export const plasticSurgeryDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#D946EF',    // 퓨샤 500
-        secondary: '#EC4899',  // 핑크 500
-        accent: '#8B5CF6',     // 바이올렛 500
-        background: '#0F0A1A', // 딥 퍼플 블랙
-        text: '#FAF5FF',       // 퍼플 화이트
+        primary: '#C0A080',    // 로즈골드 (프리미엄 메탈)
+        secondary: '#A0A8B8',  // 실버 (메탈릭)
+        accent: '#D4A0C0',     // 소프트 로즈
+        background: '#0C0A12', // 딥 블랙 (고급 광택 배경)
+        text: '#F0ECF4',       // 크림 화이트
       },
       design: {
         texture: 'silk',
@@ -37,8 +37,8 @@ export const plasticSurgeryDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'glow-effect',
-        headline: '나만의 아름다움을\n깨우다',
-        subheadline: '당신에게 맞는 맞춤 컨설팅, 지금 시작하세요.',
+        headline: '결정 전에\n\'예측\'부터',
+        subheadline: '라인 변화의 방향을 확인하고, 안전한 선택지를 좁히세요.',
         media: {
           type: 'video',
           src: '/videos/plastic-hero.mp4',

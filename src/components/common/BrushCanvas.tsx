@@ -2,52 +2,28 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { RotateCcw, ZoomIn } from "lucide-react";
+import { RotateCcw, ZoomIn, Bug } from "lucide-react";
+import { SimulationVariant } from "@/lib/constants/simulations";
 
-// 치료 메뉴별 필터 및 설정
-export const TREATMENT_VARIANTS = [
+// Default fallback if no variants provided
+const DEFAULT_VARIANTS: SimulationVariant[] = [
     {
         key: "natural",
         label: "원본",
         description: "필터 없음",
         filter: "none",
         opacity: 1,
-    },
-    {
-        key: "skinbooster",
-        label: "물광주사",
-        description: "혈색/생기 강조",
-        // 채도와 밝기를 높여 물광 느낌 강화, 붉은기 살짝 추가
-        filter: "saturate(1.4) hue-rotate(-5deg) brightness(1.12) contrast(1.05)",
-        opacity: 0.9,
-    },
-    {
-        key: "brightening",
-        label: "미백/화이트닝",
-        description: "밝기 강조",
-        // 밝기를 대폭 올리고 대비를 낮춰 뽀얀 느낌 구현
-        filter: "brightness(1.25) contrast(0.95) saturate(0.9)",
-        opacity: 0.95,
-    },
-    {
-        key: "lifting",
-        label: "리프팅",
-        description: "탄력/윤곽 강조",
-        // 대비를 높여 윤곽을 뚜렷하게
-        filter: "contrast(1.25) saturate(1.1) brightness(1.05)",
-        opacity: 0.9,
-    },
-] as const;
-
-export type TreatmentKey = (typeof TREATMENT_VARIANTS)[number]["key"];
+    }
+];
 
 interface BrushCanvasProps {
-    imageUrl: string;                    // 베이스 이미지 URL (샘플 또는 업로드된 사진)
-    selectedTreatment: TreatmentKey;     // 선택된 치료 타입
-    onTreatmentChange?: (treatment: TreatmentKey) => void;
+    imageUrl: string;
+    variants?: SimulationVariant[]; // Allow passing specific variants
+    selectedTreatment: string;
+    onTreatmentChange?: (treatment: string) => void;
     className?: string;
-    showControls?: boolean;              // 컨트롤 버튼 표시 여부
-    aspectRatio?: string;                // 이미지 비율 (예: "3/4")
+    showControls?: boolean;
+    aspectRatio?: string;
 }
 
 const BRUSH_SIZE = 35;
@@ -56,6 +32,7 @@ const MAX_ZOOM = 2;
 
 export default function BrushCanvas({
     imageUrl,
+    variants = DEFAULT_VARIANTS,
     selectedTreatment,
     onTreatmentChange,
     className = "",
@@ -66,17 +43,20 @@ export default function BrushCanvas({
     const [hasPainted, setHasPainted] = useState(false);
     const [maskUrl, setMaskUrl] = useState<string | null>(null);
     const [zoomLevel, setZoomLevel] = useState(1);
-    const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
     const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
+    const [debugMode, setDebugMode] = useState(false); // Dev Debug Mode
+
+    // Touch handling state
+    const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const lastPosRef = useRef<{ x: number; y: number } | null>(null);
     const rafRef = useRef<number | null>(null);
 
-    const currentTreatment = TREATMENT_VARIANTS.find(v => v.key === selectedTreatment) || TREATMENT_VARIANTS[0];
+    const currentTreatment = variants.find(v => v.key === selectedTreatment) || variants[0];
 
-    // Canvas 초기화
+    // Canvas Initialize
     const initCanvas = useCallback(() => {
         const canvas = canvasRef.current;
         const container = containerRef.current;
@@ -100,14 +80,14 @@ export default function BrushCanvas({
         return () => window.removeEventListener("resize", initCanvas);
     }, [initCanvas]);
 
-    // 마스크 URL 업데이트
+    // Update Mask URL
     const updateMaskUrl = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         setMaskUrl(canvas.toDataURL("image/png"));
     }, []);
 
-    // 브러시 페인팅
+    // Paint Logic
     const paintAt = useCallback((x: number, y: number) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -116,19 +96,20 @@ export default function BrushCanvas({
         if (!ctx) return;
 
         const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
+        // Soft brush edge for smooth blending
         gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-        gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)");
+        gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.5)");
         gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
         ctx.fillStyle = gradient;
 
-        // 얼굴 영역(중앙 타원형)으로 클리핑
+        // Clip to face area (Oval)
         ctx.save();
         ctx.beginPath();
         const centerX = canvas.width / 2;
-        const centerY = canvas.height * 0.45; // 얼굴 중심이 약간 위쪽에 있음
-        const radiusX = canvas.width * 0.35; // 가로 반경
-        const radiusY = canvas.height * 0.4; // 세로 반경
+        const centerY = canvas.height * 0.45;
+        const radiusX = canvas.width * 0.35;
+        const radiusY = canvas.height * 0.4;
         ctx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
         ctx.clip();
 
@@ -143,7 +124,7 @@ export default function BrushCanvas({
         rafRef.current = requestAnimationFrame(updateMaskUrl);
     }, [updateMaskUrl]);
 
-    // 선 그리기
+    // Line Painting (Interpolation)
     const paintLine = useCallback((fromX: number, fromY: number, toX: number, toY: number) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -152,7 +133,7 @@ export default function BrushCanvas({
         if (!ctx) return;
 
         const distance = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
-        const steps = Math.max(1, Math.floor(distance / 3));
+        const steps = Math.max(1, Math.floor(distance / 5)); // Optimize steps
 
         for (let i = 0; i <= steps; i++) {
             const t = i / steps;
@@ -161,12 +142,11 @@ export default function BrushCanvas({
 
             const gradient = ctx.createRadialGradient(x, y, 0, x, y, BRUSH_SIZE);
             gradient.addColorStop(0, "rgba(255, 255, 255, 1)");
-            gradient.addColorStop(0.4, "rgba(255, 255, 255, 0.3)");
+            gradient.addColorStop(0.5, "rgba(255, 255, 255, 0.5)");
             gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
             ctx.fillStyle = gradient;
 
-            // 얼굴 영역(중앙 타원형)으로 클리핑
             ctx.save();
             ctx.beginPath();
             const centerX = canvas.width / 2;
@@ -188,7 +168,7 @@ export default function BrushCanvas({
         rafRef.current = requestAnimationFrame(updateMaskUrl);
     }, [updateMaskUrl]);
 
-    // 좌표 계산
+    // Coordinate Helper
     const getCanvasCoords = useCallback((clientX: number, clientY: number) => {
         const container = containerRef.current;
         if (!container) return null;
@@ -200,7 +180,7 @@ export default function BrushCanvas({
         };
     }, []);
 
-    // 마우스 이벤트
+    // Mouse Events
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
         const coords = getCanvasCoords(e.clientX, e.clientY);
@@ -213,9 +193,7 @@ export default function BrushCanvas({
 
     const handleMouseMove = (e: React.MouseEvent) => {
         const coords = getCanvasCoords(e.clientX, e.clientY);
-        if (coords) {
-            setCursorPos(coords);
-        }
+        if (coords) setCursorPos(coords);
 
         if (!isPainting || !coords) return;
 
@@ -238,7 +216,7 @@ export default function BrushCanvas({
         setCursorPos(null);
     };
 
-    // 터치 이벤트
+    // Touch Events
     const getTouchDistance = (touches: React.TouchList) => {
         const dx = touches[0].clientX - touches[1].clientX;
         const dy = touches[0].clientY - touches[1].clientY;
@@ -247,7 +225,6 @@ export default function BrushCanvas({
 
     const handleTouchStart = (e: React.TouchEvent) => {
         e.preventDefault();
-
         if (e.touches.length === 2) {
             const distance = getTouchDistance(e.touches);
             setInitialPinchDistance(distance);
@@ -263,7 +240,6 @@ export default function BrushCanvas({
 
     const handleTouchMove = (e: React.TouchEvent) => {
         e.preventDefault();
-
         if (e.touches.length === 2 && initialPinchDistance !== null) {
             const currentDistance = getTouchDistance(e.touches);
             const scale = currentDistance / initialPinchDistance;
@@ -288,37 +264,35 @@ export default function BrushCanvas({
         lastPosRef.current = null;
     };
 
-    // 리셋
     const handleReset = () => {
         initCanvas();
         setZoomLevel(1);
     };
 
-    // 정리
-    useEffect(() => {
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        };
-    }, []);
-
-    // 터치 스크롤 방지
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
-
         const preventDefault = (e: TouchEvent) => {
             if (e.touches.length >= 2 || isPainting) {
                 e.preventDefault();
             }
         };
-
         container.addEventListener("touchmove", preventDefault, { passive: false });
         return () => container.removeEventListener("touchmove", preventDefault);
     }, [isPainting]);
 
+    // --- Render Logic Helpers ---
+    const renderMaskStyle = (maskUrl: string) => ({
+        maskImage: `url(${maskUrl})`,
+        WebkitMaskImage: `url(${maskUrl})`,
+        maskSize: "100% 100%",
+        WebkitMaskSize: "100% 100%",
+        maskRepeat: "no-repeat",
+        WebkitMaskRepeat: "no-repeat",
+    });
+
     return (
         <div className={`relative ${className}`}>
-            {/* 이미지 영역 */}
             <div
                 ref={containerRef}
                 className="relative w-full overflow-hidden rounded-2xl bg-gray-800 touch-none select-none"
@@ -335,50 +309,97 @@ export default function BrushCanvas({
                     className="absolute inset-0 origin-center transition-transform duration-200"
                     style={{ transform: `scale(${zoomLevel})` }}
                 >
-                    {/* 베이스 이미지 */}
-                    <Image
-                        src={imageUrl}
-                        alt="베이스 이미지"
-                        fill
-                        className="object-cover object-top pointer-events-none"
-                        priority
-                        unoptimized
-                    />
+                    {/* 0. Base Image */}
+                    <div className="absolute inset-0 w-full h-full">
+                        <Image
+                            src={imageUrl}
+                            alt="Base"
+                            fill
+                            className="object-cover object-top pointer-events-none"
+                            priority
+                            unoptimized
+                        />
+                    </div>
 
-                    {/* 효과 적용 이미지 (마스크) */}
-                    {selectedTreatment !== "natural" && maskUrl && (
+                    {/* Rendering Stack (Only when mask exists) */}
+                    {currentTreatment.key !== "natural" && maskUrl && (
+                        <>
+                            {/* Layer 1: Base Correction (Filter & Blur) */}
+                            <div
+                                className="absolute inset-0 pointer-events-none transition-all duration-300"
+                                style={{
+                                    ...renderMaskStyle(maskUrl),
+                                    filter: `${currentTreatment.filter} ${currentTreatment.blurPx ? `blur(${currentTreatment.blurPx}px)` : ""}`,
+                                    opacity: currentTreatment.opacity,
+                                }}
+                            >
+                                <Image
+                                    src={imageUrl}
+                                    alt="Filter Layer"
+                                    fill
+                                    className="object-cover object-top"
+                                    unoptimized
+                                />
+                            </div>
+
+                            {/* Layer 2: Specular Highlight (Advanced Mulgwang) */}
+                            {currentTreatment.specular?.enabled && (
+                                <div
+                                    className="absolute inset-0 pointer-events-none"
+                                    style={{
+                                        ...renderMaskStyle(maskUrl),
+                                        filter: `brightness(${currentTreatment.specular.intensity}) contrast(${currentTreatment.specular.threshold || 1.2}) grayscale(100%) blur(${currentTreatment.specular.blurPx}px)`,
+                                        mixBlendMode: currentTreatment.specular.blendMode as any,
+                                        opacity: 0.8,
+                                    }}
+                                >
+                                    <Image
+                                        src={imageUrl}
+                                        alt="Specular Layer"
+                                        fill
+                                        className="object-cover object-top"
+                                        unoptimized
+                                    />
+                                </div>
+                            )}
+
+                            {/* Layer 3: Overlay (Color/Texture) */}
+                            {currentTreatment.overlayColor && (
+                                <div
+                                    className="absolute inset-0 pointer-events-none transition-all duration-300"
+                                    style={{
+                                        ...renderMaskStyle(maskUrl),
+                                        backgroundColor: currentTreatment.overlayColor,
+                                        mixBlendMode: currentTreatment.mixBlendMode as any,
+                                        opacity: currentTreatment.overlayOpacity ?? 0.5,
+                                    }}
+                                />
+                            )}
+                        </>
+                    )}
+
+                    {/* DEBUG LAYER: Show Red Mask if Enabled */}
+                    {debugMode && maskUrl && (
                         <div
-                            className="absolute inset-0 pointer-events-none transition-opacity duration-500"
+                            className="absolute inset-0 pointer-events-none z-50 border-2 border-red-500"
                             style={{
-                                maskImage: `url(${maskUrl})`,
-                                WebkitMaskImage: `url(${maskUrl})`,
-                                maskSize: "100% 100%",
-                                WebkitMaskSize: "100% 100%",
-                                filter: currentTreatment.filter,
-                                opacity: currentTreatment.opacity,
+                                ...renderMaskStyle(maskUrl),
+                                backgroundColor: "rgba(255, 0, 0, 0.5)",
                             }}
-                        >
-                            <Image
-                                src={imageUrl}
-                                alt="효과 적용"
-                                fill
-                                className="object-cover object-top"
-                                unoptimized
-                            />
-                        </div>
+                        />
                     )}
                 </div>
 
-                {/* Hidden Canvas */}
+                {/* Hidden Logic Canvas */}
                 <canvas
                     ref={canvasRef}
                     className="absolute inset-0 pointer-events-none opacity-0"
                 />
 
-                {/* 커서 */}
+                {/* Cursor */}
                 {cursorPos && (
                     <div
-                        className="absolute pointer-events-none border-2 border-white/50 rounded-full"
+                        className="absolute pointer-events-none border-2 border-white/50 rounded-full shadow-sm"
                         style={{
                             width: BRUSH_SIZE * 2,
                             height: BRUSH_SIZE * 2,
@@ -388,27 +409,27 @@ export default function BrushCanvas({
                     />
                 )}
 
-                {/* 안내 문구 */}
+                {/* Initial Guide */}
                 {!hasPainted && (
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <div className="px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm">
+                        <div className="px-4 py-2 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm animate-pulse">
                             👆 볼 부위를 문질러보세요
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* 컨트롤 */}
+            {/* Controls */}
             {showControls && (
                 <div className="flex items-center justify-between mt-4">
-                    {/* 치료 선택 */}
-                    <div className="flex gap-2">
-                        {TREATMENT_VARIANTS.filter(v => v.key !== "natural").map((variant) => (
+                    {/* Treatments */}
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                        {variants.filter(v => v.key !== "natural").map((variant) => (
                             <button
                                 key={variant.key}
                                 onClick={() => onTreatmentChange?.(variant.key)}
-                                className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${selectedTreatment === variant.key
-                                    ? "bg-pink-500 text-white"
+                                className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-all ${selectedTreatment === variant.key
+                                    ? "bg-pink-500 text-white shadow-lg shadow-pink-500/30"
                                     : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                     }`}
                             >
@@ -417,8 +438,17 @@ export default function BrushCanvas({
                         ))}
                     </div>
 
-                    {/* 리셋 & 줌 */}
-                    <div className="flex gap-2">
+                    {/* Utility Buttons */}
+                    <div className="flex gap-2 shrink-0 ml-2">
+                        {/* DEBUG TOGGLE */}
+                        <button
+                            onClick={() => setDebugMode(!debugMode)}
+                            className={`p-2 rounded-full transition-colors ${debugMode ? "bg-red-500 text-white" : "bg-gray-700/80 text-gray-400 hover:text-white"}`}
+                            title="Debug Mask"
+                        >
+                            <Bug className="w-4 h-4" />
+                        </button>
+
                         <button
                             onClick={handleReset}
                             className="p-2 bg-gray-700/80 hover:bg-gray-600 rounded-full text-white transition-colors"
@@ -426,7 +456,7 @@ export default function BrushCanvas({
                         >
                             <RotateCcw className="w-4 h-4" />
                         </button>
-                        <div className="flex items-center gap-1 px-2 py-1 bg-gray-700/80 rounded-full text-white text-xs">
+                        <div className="hidden sm:flex items-center gap-1 px-2 py-1 bg-gray-700/80 rounded-full text-white text-xs">
                             <ZoomIn className="w-3 h-3" />
                             <span>{Math.round(zoomLevel * 100)}%</span>
                         </div>

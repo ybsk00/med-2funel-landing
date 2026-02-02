@@ -25,20 +25,20 @@ export const neurosurgeryDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#06B6D4',    // 시안 500 (신경)
-        secondary: '#6366F1',  // 인디고 500
-        accent: '#14B8A6',     // 틸 500
-        background: '#0F172A', // 슬레이트 900
-        text: '#F1F5F9',       // 슬레이트 100
+        primary: '#818CF8',    // 인디고 400 (정밀 테크)
+        secondary: '#06B6D4',  // 시안 (신경)
+        accent: '#6366F1',     // 인디고 500
+        background: '#080C18', // 딥 블루블랙 (고정밀)
+        text: '#E0E7FF',       // 인디고 100
       },
       design: {
-        texture: 'hologram',
+        texture: 'circuit',
         font: 'font-sans',
       },
       hero: {
         type: 'motion-effect',
-        headline: '정확한 진단으로\n건강한 삶을',
-        subheadline: '신경계 증상을 체크하고, 전문적인 상담을 받아보세요.',
+        headline: '정밀한 증상 정리가\n치료의 시작입니다',
+        subheadline: '두통/저림/어지럼 패턴을 정리해 진료 효율을 높이세요.',
         media: {
           type: 'video',
           src: '/videos/neuro-hero.mp4',

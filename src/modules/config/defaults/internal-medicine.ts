@@ -37,8 +37,8 @@ export const internalMedicineDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '건강의 시작은\n정확한 체크업에서',
-        subheadline: '지금 내 몸 상태를 점검하고, 맞춤형 건강 관리를 시작하세요.',
+        headline: '건강은 감이 아니라\n데이터입니다',
+        subheadline: '증상·검사·생활 습관을 정리해 정확도를 높이세요.',
         media: {
           type: 'video',
           src: '/videos/internal-hero.mp4',

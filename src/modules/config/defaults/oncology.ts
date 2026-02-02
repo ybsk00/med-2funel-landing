@@ -25,11 +25,11 @@ export const oncologyDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#EC4899',    // 핑크 (희망의 색)
-        secondary: '#8B5CF6',  // 바이올렛
+        primary: '#10B981',    // 딥 그린 (희망/회복)
+        secondary: '#6EE7B7',  // 에메랄드 라이트
         accent: '#F59E0B',     // 앰버 (따뜻함)
-        background: '#1E1B4B', // 딥 인디고
-        text: '#FDF4FF',       // 라벤더 화이트
+        background: '#0A1A14', // 딥 그린 블랙
+        text: '#F0FDF4',       // 그린 화이트 (오프화이트)
       },
       design: {
         texture: 'linen',
@@ -37,8 +37,8 @@ export const oncologyDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '희망의 순간을 함께\n따뜻한 케어',
-        subheadline: '환자와 가족을 위한 전문 케어 정보를 확인필보세요.',
+        headline: '치료의 시간,\n회복의 시스템',
+        subheadline: '회복 목표와 생활 루틴을 정리해 더 안전하게 준비하세요.',
         media: {
           type: 'image',
           src: '/images/oncology-hero.jpg',

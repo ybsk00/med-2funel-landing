@@ -1,11 +1,10 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Search, X, MessageSquare, CheckCircle2, Clock, User, Calendar, Users, CalendarDays, UserPlus, Trash2, Edit } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { format, startOfDay, endOfDay, addDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { format, addDays } from 'date-fns';
 import {
     Title,
     Text,
@@ -25,13 +24,10 @@ import {
     Box,
     SimpleGrid,
     Card,
-    rem,
     Pagination,
     SegmentedControl,
-    Select,
-    Alert
+    Select
 } from "@mantine/core";
-import { DatePickerInput } from '@mantine/dates';
 import '@mantine/dates/styles.css';
 import { useDisclosure } from "@mantine/hooks";
 
@@ -75,34 +71,7 @@ export default function AdminDashboard() {
 
     const filters = ["전체", "대기", "완료"];
 
-    useEffect(() => {
-        fetchPatients();
-    }, [dateFilter, customDateFrom, customDateTo, currentPage, activeFilter]);
-
-    useEffect(() => {
-        // Realtime subscription
-        const channel = supabase
-            .channel('patients-changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'patients'
-                },
-                (payload) => {
-                    console.log('Change received!', payload);
-                    fetchPatients();
-                }
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, []);
-
-    const fetchPatients = async () => {
+    const fetchPatients = useCallback(async () => {
         // 날짜 범위 계산
         const now = new Date();
         const todayStr = format(now, 'yyyy-MM-dd');
@@ -181,7 +150,34 @@ export default function AdminDashboard() {
                 newPatients: patientData.filter(p => p.type === '초진').length
             });
         }
-    };
+    }, [activeFilter, currentPage, customDateFrom, customDateTo, dateFilter, supabase]);
+
+    useEffect(() => {
+        fetchPatients();
+    }, [fetchPatients]);
+
+    useEffect(() => {
+        // Realtime subscription
+        const channel = supabase
+            .channel('patients-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'patients'
+                },
+                (payload) => {
+                    console.log('Change received!', payload);
+                    fetchPatients();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [fetchPatients, supabase]);
 
     const handleStatusClick = async (patient: Patient) => {
         if (patient.status === "completed") {

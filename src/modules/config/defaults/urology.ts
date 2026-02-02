@@ -37,8 +37,8 @@ export const urologyDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '당신의 건강한 하루를 위해\n프라이빗 헬스케어',
-        subheadline: '민감한 고민도 편안하게, 지금 바로 체크필보세요.',
+        headline: '남성 체형 인상,\n\'가슴 라인\'에서 결정됩니다',
+        subheadline: '여유증 수술의 변화 방향과 회복 흐름을 먼저 확인하세요.',
         media: {
           type: 'video',
           src: '/videos/urology-hero.mp4',

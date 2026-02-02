@@ -29,6 +29,12 @@ export const ColorSchemeSchema = z.object({
   text: z.string().regex(/^#[0-9A-Fa-f]{6}$/),
 });
 
+export const DesignThemeSchema = z.object({
+  texture: z.enum(['glass', 'silk', 'hanji', 'blueprint', 'carbon', 'jelly', 'flower', 'botanic', 'linen', 'hologram', 'circuit']).default('glass'),
+  font: z.string().default('font-sans'),
+  sound: z.string().optional(),
+});
+
 export const HeroConfigSchema = z.object({
   type: z.enum(['glow-effect', 'smile-effect', 'motion-effect', 'clean-effect']),
   headline: z.string(),
@@ -95,10 +101,12 @@ export const HospitalConfigSchema = z.object({
   theme: z.object({
     healthcare: z.object({
       colors: ColorSchemeSchema,
+      design: DesignThemeSchema,
       hero: HeroConfigSchema,
     }),
     medical: z.object({
       colors: ColorSchemeSchema,
+      design: DesignThemeSchema,
     }),
     admin: z.object({
       theme: z.enum(['dark', 'light']),

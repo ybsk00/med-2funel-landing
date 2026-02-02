@@ -59,12 +59,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#000000",
-            secondary: "#B76E79",
-            accent: "#D4AF37",
-            background: "#F9F9F9", // Off-white for better contrast
-            text: "#1F2937", // Dark Gray
-            concept: "High-End Luxury",
+            primary: "#C0A080",    // 로즈골드 (프리미엄 메탈)
+            secondary: "#A0A8B8",  // 실버 (메탈릭)
+            accent: "#D4A0C0",     // 소프트 로즈
+            background: "#0C0A12", // 딥 블랙
+            text: "#F0ECF4",       // 크림 화이트
+            concept: "Premium Metal",
             texture: "silk",
             font: "serif",
             sound: "/sounds/tick.mp3"
@@ -100,12 +100,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#13eca4", // Vibrant Emerald Green
-            secondary: "#00e5ff", // Cyan Blue
-            accent: "#7cfc00", // Lawn Green
-            background: "#0B1215", // Deep Dark Greenish Charcoal
-            text: "#E5E7EB", // Light Gray
-            concept: "Blanc de Skin - Emerald Dark",
+            primary: "#F0A0C8",    // 펄 핑크 (글로우 스킨)
+            secondary: "#B8D8E8",  // 펄 틸 (진주 톤)
+            accent: "#D8A0E0",     // 소프트 라벤더
+            background: "#0A1220", // 다크 블루
+            text: "#F8F0FA",       // 펄 화이트
+            concept: "Glow Skin",
             texture: "hologram",
             font: "sans",
             sound: "/sounds/sparkle.mp3"
@@ -141,13 +141,13 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#D4A373", // Ocher Gold
-            secondary: "#F5E6D3",
-            accent: "#A0522D", // Sienna Accent
-            background: "#2D241E", // Deep Ocher Dark
-            text: "#F5F5F4", // Stone White
-            concept: "Premium Dark Heritage",
-            texture: "glass",
+            primary: "#B45309",    // 앰버 700 (전통적)
+            secondary: "#166534",  // 그린 700 (자연)
+            accent: "#DC2626",     // 레드 600 (기)
+            background: "#292524", // 스톤 800 (한지 느낌)
+            text: "#FAF7F5",       // 스톤 50
+            concept: "Natural Balance",
+            texture: "hanji",
             font: "serif",
             sound: "/sounds/gong.mp3"
         },
@@ -182,12 +182,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#0EA5E9",
-            secondary: "#38BDF8",
-            accent: "#00CED1",
-            background: "#020617", // Oceanic Black
-            text: "#F0F9FF", // Ice White
-            concept: "Premium Dark Lab",
+            primary: "#60A5FA",    // 블루 400 (클린 블루)
+            secondary: "#93C5FD",  // 블루 300 (위생감)
+            accent: "#38BDF8",     // 스카이 400 (깨끗함)
+            background: "#0A1220", // 딥 네이비
+            text: "#F0F6FF",       // 블루 화이트
+            concept: "Clean White",
             texture: "glass",
             font: "sans",
             sound: "/sounds/crystal.mp3"
@@ -223,13 +223,13 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#1E40AF", // Darker Navy
-            secondary: "#FF4500",
-            accent: "#1E90FF",
-            background: "#F8FAFC", // Very Light Slate
-            text: "#1E3A8A", // Dark Blue
-            concept: "Engineering Balance",
-            texture: "glass",
+            primary: "#64748B",    // 티타늄 실버 (퍼포먼스)
+            secondary: "#10B981",  // 에메랄드 (액센트)
+            accent: "#F59E0B",     // 앰버 (속도감)
+            background: "#0A0E14", // 카본 블랙
+            text: "#E2E8F0",       // 슬레이트 200
+            concept: "Performance Carbon",
+            texture: "carbon",
             font: "sans",
             sound: "/sounds/ruler.mp3"
         },
@@ -264,12 +264,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#4B0082",
-            secondary: "#ADFF2F",
-            accent: "#9400D3",
-            background: "#000000",
-            text: "#FFFFFF",
-            concept: "Cyber Night",
+            primary: "#6366F1",    // 인디고 (맨즈 프라이버시)
+            secondary: "#14B8A6",  // 틸
+            accent: "#8B5CF6",     // 바이올렛
+            background: "#0F172A", // 딥 네이비
+            text: "#F8FAFC",       // 화이트
+            concept: "Men's Privacy",
             texture: "carbon",
             font: "sans",
             sound: "/sounds/engine.mp3"
@@ -305,12 +305,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#FBBF24", // Amber
-            secondary: "#87CEEB",
-            accent: "#F59E0B",
-            background: "#FFFBEB", // Very Light Amber
-            text: "#78350F", // Dark Amber
-            concept: "Soft Playroom",
+            primary: "#F59E0B",    // 앰버 500 (따뜻함)
+            secondary: "#10B981",  // 에메랄드 500 (생명)
+            accent: "#3B82F6",     // 블루 500 (신뢰)
+            background: "#1E293B", // 슬레이트 800
+            text: "#F8FAFC",       // 슬레이트 50
+            concept: "Soft Care",
             texture: "jelly",
             font: "round",
             sound: "/sounds/jelly.mp3"
@@ -346,12 +346,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#BE123C", // Darker Pink/Rose
-            secondary: "#FFDAB9",
-            accent: "#9F1239",
-            background: "#FFF1F2", // Very Light Rose
-            text: "#881337", // Dark Rose
-            concept: "Organic Flow",
+            primary: "#EC4899",    // 핑크 500 (여성성)
+            secondary: "#8B5CF6",  // 바이올렛 500
+            accent: "#F43F5E",     // 로즈 500 (생명)
+            background: "#2E1065", // 딥 퍼플
+            text: "#FDF2F8",       // 핑크 50
+            concept: "Warm Care",
             texture: "flower",
             font: "serif",
             sound: "/sounds/water.mp3"
@@ -387,12 +387,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#047857", // Darker Emerald
-            secondary: "#D2B48C",
-            accent: "#065F46",
-            background: "#F0FDF4", // Very Light Green
-            text: "#064E3B", // Dark Emerald
-            concept: "Botanic Garden",
+            primary: "#0EA5E9",    // 스카이블루 (데이터 기반)
+            secondary: "#10B981",  // 에메랄드
+            accent: "#F59E0B",     // 앰버
+            background: "#0F172A", // 딥 네이비
+            text: "#F8FAFC",       // 화이트
+            concept: "Data Wellness",
             texture: "botanic",
             font: "sans",
             sound: "/sounds/nature.mp3"
@@ -428,12 +428,12 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#B45309", // Darker Amber
-            secondary: "#FAF0E6",
-            accent: "#92400E",
-            background: "#FFFCF5", // Very Light Warm
-            text: "#451A03", // Dark Brown
-            concept: "Morning Sun",
+            primary: "#10B981",    // 딥 그린 (희망/회복)
+            secondary: "#6EE7B7",  // 에메랄드 라이트
+            accent: "#F59E0B",     // 앰버 (따뜻함)
+            background: "#0A1A14", // 딥 그린 블랙
+            text: "#F0FDF4",       // 그린 화이트
+            concept: "Hope & Recovery",
             texture: "linen",
             font: "serif",
             sound: "/sounds/morning.mp3"
@@ -469,13 +469,13 @@ export const DEPARTMENTS: Department[] = [
             }
         },
         theme: {
-            primary: "#4B0082",
-            secondary: "#7B68EE",
-            accent: "#8A2BE2",
-            background: "#0F172A",
-            text: "#E0FFFF",
-            concept: "Neuro Scan",
-            texture: "hologram",
+            primary: "#818CF8",    // 인디고 400 (정밀 테크)
+            secondary: "#06B6D4",  // 시안 (신경)
+            accent: "#6366F1",     // 인디고 500
+            background: "#080C18", // 딥 블루블랙 (고정밀)
+            text: "#E0E7FF",       // 인디고 100
+            concept: "Precision Tech",
+            texture: "circuit",
             font: "mono",
             sound: "/sounds/scan.mp3"
         },

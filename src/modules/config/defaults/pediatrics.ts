@@ -37,8 +37,8 @@ export const pediatricsDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '우리 아이 건강한 성장\n함께 지켜요',
-        subheadline: '아이의 건강 상태를 체크하고, 전문적인 케어 정보를 받아보세요.',
+        headline: '아이 진료는 \'기록\'이\n반입니다',
+        subheadline: '열·기침·식사·수면을 정리해 빠르게 진료받으세요.',
         media: {
           type: 'video',
           src: '/videos/peds-hero.mp4',

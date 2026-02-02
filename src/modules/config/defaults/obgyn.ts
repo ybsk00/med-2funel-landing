@@ -37,8 +37,8 @@ export const obgynDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'clean-effect',
-        headline: '여성의 건강한 삶을\n응원합니다',
-        subheadline: '지금 나의 건강 상태를 체크하고, 전문적인 케어를 받아보세요.',
+        headline: '민감한 질문,\n더 안전하게',
+        subheadline: '주기·증상·검사 이력을 정리해 상담을 편하게 만드세요.',
         media: {
           type: 'video',
           src: '/videos/obgyn-hero.mp4',

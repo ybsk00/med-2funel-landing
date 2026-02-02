@@ -25,11 +25,11 @@ export const dentistryDefaults: Partial<HospitalConfig> = {
   theme: {
     healthcare: {
       colors: {
-        primary: '#3B82F6',    // 블루
-        secondary: '#10B981',  // 에메랄드
-        accent: '#06B6D4',     // 시안
-        background: '#0A1628', // 딥 네이비
-        text: '#F8F9FA',       // 화이트
+        primary: '#60A5FA',    // 블루 400 (클린 블루)
+        secondary: '#93C5FD',  // 블루 300 (위생감)
+        accent: '#38BDF8',     // 스카이 400 (깨끗함)
+        background: '#0A1220', // 딥 네이비 (차분함)
+        text: '#F0F6FF',       // 블루 화이트 (오프화이트)
       },
       design: {
         texture: 'glass',
@@ -37,8 +37,8 @@ export const dentistryDefaults: Partial<HospitalConfig> = {
       },
       hero: {
         type: 'smile-effect',
-        headline: '자신감 있는 미소의 시작\n건강한 치아 관리',
-        subheadline: '지금 내 치아 상태를 빠르게 체크하고, 나에게 맞는 관리법을 알아보세요.',
+        headline: '치아 인상은 \'밝기\'보다\n\'균형\'입니다',
+        subheadline: '쉐이드를 측정하고, 자연스러운 미백 방향을 확인하세요.',
         media: {
           type: 'video',
           src: '/videos/dental-hero.mp4',
