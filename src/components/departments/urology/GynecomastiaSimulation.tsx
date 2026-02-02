@@ -107,7 +107,7 @@ export default function GynecomastiaSimulation() {
                 {/* Before */}
                 <div className="space-y-4">
                   <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
-                    <Image src="/images/urology_before_v2.jpg" alt="Before" fill className="object-cover" />
+                    <Image src="/비뇨기과/before.png" alt="Before" fill className="object-cover" />
                     <div className="absolute top-6 left-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl text-white font-black text-xs tracking-widest border border-white/20 uppercase">
                       수술 전
                     </div>
@@ -126,7 +126,7 @@ export default function GynecomastiaSimulation() {
                 {/* After */}
                 <div className="space-y-4">
                   <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden border-2 border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
-                    <Image src="/images/urology_after_v2.jpg" alt="After" fill className="object-cover" />
+                    <Image src="/비뇨기과/after.png" alt="After" fill className="object-cover" />
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}

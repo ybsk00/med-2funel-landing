@@ -83,7 +83,7 @@ export default function LoginPage() {
                 if (staffUser?.role === 'admin' || staffUser?.role === 'doctor' || staffUser?.role === 'staff') {
                     router.push("/admin");
                 } else {
-                    router.push("/patient");
+                    router.push("/medical/patient-dashboard");
                 }
             }
         } catch (error) {
@@ -122,7 +122,7 @@ export default function LoginPage() {
 
     const handleSocialLogin = async (provider: 'google' | 'kakao' | 'naver') => {
         if (provider === 'naver') {
-            await signIn('naver', { callbackUrl: '/patient' });
+            await signIn('naver', { callbackUrl: '/medical/patient-dashboard' });
             return;
         }
 

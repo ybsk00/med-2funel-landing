@@ -77,6 +77,7 @@ const DEPARTMENT_CTA: Record<string, { cta1: string; cta2: string }> = {
     "obgyn": { cta1: "유명한 산부인과 찾기", cta2: "시뮬레이션 해보기" },
     "oncology": { cta1: "유명한 암요양병원 찾기", cta2: "시뮬레이션 해보기" },
 };
+const TeethShadeSimulation = dynamic(() => import('@/components/departments/dentistry/TeethShadeSimulation'), { ssr: false });
 
 export default function HealthcareLanding() {
     const fullConfig = useHospitalConfig();
@@ -247,6 +248,8 @@ export default function HealthcareLanding() {
                         <SymptomTimelineSimulation />
                     ) : hospital.department === 'korean-medicine' ? (
                         <FourAxisBalanceSimulation />
+                    ) : hospital.department === 'dentistry' ? (
+                        <TeethShadeSimulation />
                     ) : (
                         <div className="max-w-5xl mx-auto px-6">                            <div className="text-center mb-14">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
