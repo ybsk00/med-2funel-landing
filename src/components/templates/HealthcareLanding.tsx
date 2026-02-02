@@ -104,6 +104,7 @@ export default function HealthcareLanding() {
                         ctaLabels={ctaLabels}
                         onScrollToClinic={() => scrollToSection("session-clinic-search")}
                         onScrollToSimulation={() => scrollToSection("session-simulation")}
+                        onScrollToChat={() => { setIsChatOpen(true); setTimeout(() => scrollToSection("chat-interface"), 100); }}
                     />
                 </main>
 
@@ -286,12 +287,13 @@ export default function HealthcareLanding() {
                             </h3>
                         </div>
 
-                        {/* FAQ Items */}
+                        {/* FAQ Items — 클릭 시 챗봇(로그인 전)으로 이동 */}
                         <div className="space-y-4 mb-16">
                             {(content?.trust?.faqs || content?.sessionD?.faqs || []).map((faq, idx) => (
-                                <div
+                                <button
                                     key={idx}
-                                    className={`p-6 md:p-8 rounded-2xl transition-all duration-300 ${isThemeDark ? 'bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/20' : 'bg-white/40 border border-skin-primary/10 hover:bg-white/60 hover:shadow-md backdrop-blur-sm'}`}
+                                    onClick={() => { setIsChatOpen(true); setTimeout(() => scrollToSection("chat-interface"), 100); }}
+                                    className={`w-full text-left p-6 md:p-8 rounded-2xl transition-all duration-300 cursor-pointer group ${isThemeDark ? 'bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/20' : 'bg-white/40 border border-skin-primary/10 hover:bg-white/60 hover:shadow-md backdrop-blur-sm'}`}
                                 >
                                     <h5 className="font-bold text-lg mb-3 flex items-start gap-3">
                                         <span className="text-skin-primary text-xl font-black">Q.</span>
@@ -300,7 +302,11 @@ export default function HealthcareLanding() {
                                     <p className={`pl-9 leading-relaxed ${isThemeDark ? 'text-white/60' : 'text-skin-text/60'}`}>
                                         {faq.answer}
                                     </p>
-                                </div>
+                                    <p className={`pl-9 mt-3 text-sm font-bold flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity ${isThemeDark ? 'text-skin-primary' : 'text-skin-primary'}`}>
+                                        <MessageCircle className="w-4 h-4" />
+                                        이 질문으로 상담하기
+                                    </p>
+                                </button>
                             ))}
                         </div>
 
@@ -320,18 +326,18 @@ export default function HealthcareLanding() {
                             ))}
                         </div>
 
-                        {/* Final CTA */}
+                        {/* Final CTA — 상담하기 → 챗 세션(로그인 전) */}
                         <div className="text-center mt-16 space-y-4">
                             <button
-                                onClick={() => scrollToSection("session-clinic-search")}
+                                onClick={() => { setIsChatOpen(true); setTimeout(() => scrollToSection("chat-interface"), 100); }}
                                 className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 ${buttonTextColor}`}
                                 style={{ backgroundColor: theme.healthcare.colors.primary }}
                             >
-                                <Search className="w-6 h-6" />
-                                {ctaLabels.cta1}
+                                <MessageCircle className="w-6 h-6" />
+                                상담하기
                             </button>
                             <p className={`text-sm ${isThemeDark ? 'text-white/30' : 'text-skin-text/30'}`}>
-                                또는 <button onClick={() => scrollToSection("session-simulation")} className="text-skin-primary underline font-bold">{ctaLabels.cta2}</button>
+                                또는 <button onClick={() => scrollToSection("session-clinic-search")} className="text-skin-primary underline font-bold">{ctaLabels.cta1}</button>
                             </p>
                         </div>
                     </div>

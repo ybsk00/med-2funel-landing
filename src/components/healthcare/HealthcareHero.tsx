@@ -1,7 +1,7 @@
 "use client";
 
 import { HospitalConfig } from "@/modules/config/schema";
-import { Camera, Search, Sparkles } from "lucide-react";
+import { Camera, MessageCircle, Search, Sparkles } from "lucide-react";
 import { isColorDark } from "@/lib/utils/theme";
 
 interface HealthcareHeroProps {
@@ -10,9 +10,10 @@ interface HealthcareHeroProps {
     ctaLabels?: { cta1: string; cta2: string };
     onScrollToClinic?: () => void;
     onScrollToSimulation?: () => void;
+    onScrollToChat?: () => void;
 }
 
-export default function HealthcareHero({ config, onOpenCamera, ctaLabels, onScrollToClinic, onScrollToSimulation }: HealthcareHeroProps) {
+export default function HealthcareHero({ config, onOpenCamera, ctaLabels, onScrollToClinic, onScrollToSimulation, onScrollToChat }: HealthcareHeroProps) {
     if (!config.theme) return null;
 
     const theme = config.theme.healthcare;
@@ -132,8 +133,8 @@ export default function HealthcareHero({ config, onOpenCamera, ctaLabels, onScro
                         {hero.subheadline || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                     </p>
 
-                    {/* CTA Section: 2 buttons per MD guide */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-8">
+                    {/* CTA Section: 3 buttons */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 flex-wrap">
                         {/* CTA1: 유명한 병원 찾기 → Session 2 스크롤 */}
                         <button
                             onClick={onScrollToClinic}
@@ -157,6 +158,19 @@ export default function HealthcareHero({ config, onOpenCamera, ctaLabels, onScro
                         >
                             <Camera className="w-5 h-5" style={{ color: theme.colors.primary }} />
                             {ctaLabels?.cta2 || "시뮬레이션 해보기"}
+                        </button>
+
+                        {/* CTA3: 상담하기 → Chat Session 스크롤 */}
+                        <button
+                            onClick={onScrollToChat}
+                            className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105 active:scale-95 text-base font-bold rounded-2xl`}
+                            style={{
+                                color: secondaryButtonText,
+                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
+                            }}
+                        >
+                            <MessageCircle className="w-5 h-5" style={{ color: theme.colors.primary }} />
+                            상담하기
                         </button>
                     </div>
                 </div>
