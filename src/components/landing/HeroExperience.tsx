@@ -44,23 +44,23 @@ export default function HeroExperience({ className = "", department = "dermatolo
         }, 1500);
     };
 
-    // Define filters filters based on Single Source of Truth
-    const getFilterStyle = (currentMode: EffectMode) => {
-        // Map UI modes to Simulation Config Keys
+    // Retrieve full variant config
+    const getVariantConfig = (currentMode: EffectMode) => {
         const variantKeyMap: Record<string, string> = {
             'glow': 'water-glow',
             'whitening': 'toning'
         };
-
         const targetKey = variantKeyMap[currentMode];
-        if (!targetKey) return 'none';
-
-        const variant = config.variants.find(v => v.key === targetKey);
-        // Note: HeroExperience only applies CSS filters for now. 
-        // Overlay properties (overlayColor, etc.) are not used here to keep it simple,
-        // but the base filter will be consistent.
-        return variant ? variant.filter : 'none';
+        return config.variants.find(v => v.key === targetKey);
     };
+
+    const currentVariant = getVariantConfig(mode);
+    const filterStyle = currentVariant ? currentVariant.filter : 'none';
+    const overlayStyle = currentVariant && currentVariant.overlayColor ? {
+        backgroundColor: currentVariant.overlayColor,
+        mixBlendMode: currentVariant.mixBlendMode as any,
+        opacity: currentVariant.overlayOpacity ?? 1
+    } : null;
 
     if (department === 'dentistry') {
         return (
@@ -79,6 +79,7 @@ export default function HeroExperience({ className = "", department = "dermatolo
     }
 
     return (
+        // ... (keeping structure)
         <div className={`relative ${className} w-full max-w-xl mx-auto`}>
             {/* Header */}
             <div className="text-center mb-6">
@@ -151,11 +152,20 @@ export default function HeroExperience({ className = "", department = "dermatolo
                                         fill
                                         className="object-cover transition-all duration-700"
                                         style={{
-                                            filter: getFilterStyle(mode)
+                                            filter: filterStyle
                                         }}
                                     />
+
+                                    {/* NEW: Overlay Effect Layer */}
+                                    {overlayStyle && (
+                                        <div
+                                            className="absolute inset-0 z-10 pointer-events-none transition-all duration-700"
+                                            style={overlayStyle}
+                                        />
+                                    )}
+
                                     {/* Vignette Mask */}
-                                    <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary"
+                                    <div className="absolute inset-0 pointer-events-none bg-skin-bgSecondary z-20"
                                         style={{
                                             maskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)',
                                             WebkitMaskImage: 'radial-gradient(circle at 50% 45%, transparent 40%, black 85%)'

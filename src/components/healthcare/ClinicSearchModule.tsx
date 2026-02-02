@@ -639,7 +639,7 @@ export default function ClinicSearchModule({ department = "dermatology", searchK
             <LoginRequiredModal
                 isOpen={isLoginModalOpen}
                 onClose={() => setIsLoginModalOpen(false)}
-                returnUrl="/medical/patient-dashboard"
+                returnUrl="/patient"
             />
         </>
     );

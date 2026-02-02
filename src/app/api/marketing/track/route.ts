@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
             utm_term: sanitize(body.utm_term),
             sub1: sanitize(body.sub1),
             sub2: sanitize(body.sub2),
-            click_ids: body.click_ids || null,
+            // click_ids: body.click_ids || null,
             user_agent: userAgent.substring(0, 1000),
             device_type: deviceType,
             login_source: sanitize(body.login_source),

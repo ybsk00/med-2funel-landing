@@ -54,8 +54,8 @@ export default function PatientHeader() {
             await nextAuthSignOut({ redirect: false });
         }
 
-        // 현재 경로가 메디컬 대시보드인 경우 메인으로, 그 외(환자 포털 등)는 환자 홈으로 이동
-        if (pathname?.includes('/medical/patient-dashboard')) {
+        // 현재 경로가 환자 대시보드인 경우 메인으로
+        if (pathname?.includes('/patient')) {
             router.push("/");
         } else {
             router.push("/patient/home");
@@ -75,7 +75,7 @@ export default function PatientHeader() {
 
     return (
         <header className="bg-dental-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-20 transition-all duration-300">
-            <Link href="/medical/dashboard" className="flex items-center gap-3 group">
+            <Link href="/patient" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-dental-primary/20 flex items-center justify-center">
                     <IconComponent className="w-6 h-6 text-dental-primary" />
                 </div>

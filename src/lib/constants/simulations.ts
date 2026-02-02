@@ -75,41 +75,41 @@ export const DEPARTMENT_SIMULATIONS: Record<string, DepartmentSimulationConfig> 
         id: "dermatology",
         label: "피부과",
         uiTheme: { primary: "#d4af37", text: "#ffffff" },
-        titles: { main: "LUMIÈRE SKIN", sub: "물광/토닝 시뮬레이션" },
+        titles: { main: "LUMIÈRE SKIN", sub: "물광/미백 시뮬레이션" },
         brushColor: "#d4af37",
         brushGlow: "rgba(212, 175, 55, 0.6)",
         variants: [
             {
                 key: "water-glow",
                 label: "물광 효과",
-                description: "이마/광대 스펙큘러 하이라이트",
-                // 1. Base: 약간의 블러로 피부결 정돈 + 밝기 증가
-                filter: "brightness(1.05) contrast(0.98) saturate(1.05) blur(0.5px)",
-                opacity: 0.9,
-                // 2. Overlay: 흰색 글로우 오버레이
-                overlayColor: "rgba(255, 255, 255, 0.3)",
+                description: "수분 가득한 유리알 광채",
+                // 1. Base: 밝고 선명하게 + 대비 증가로 광택 강조
+                filter: "brightness(1.2) contrast(1.1) saturate(1.1) blur(0.3px)",
+                opacity: 1,
+                // 2. Overlay: 하이라이트를 위한 강력한 오버레이
+                overlayColor: "rgba(255, 255, 255, 0.5)",
                 mixBlendMode: "overlay",
                 overlayOpacity: 0.7,
-                // 3. Specular: 하이라이트 레이어 활성화
+                // 3. Specular (Future use)
                 specular: {
                     enabled: true,
-                    intensity: 1.4,
-                    threshold: 1.2,
-                    blurPx: 3,
+                    intensity: 2.5,
+                    threshold: 0.9,
+                    blurPx: 4,
                     blendMode: "screen"
                 }
             },
             {
                 key: "toning",
-                label: "토닝 효과",
-                description: "붉은기 제거 및 맑은 톤업",
-                // 1. Base: 붉은기 제거를 위해 채도 조정, 밝기 증가 (회색화 방지)
-                filter: "brightness(1.12) contrast(1.05) saturate(0.9) sepia(0.05)",
+                label: "미백 효과",
+                description: "투명하고 뽀얀 백옥 피부",
+                // 1. Base: 즉각적인 톤업 (밝기 대폭 증가) + 붉은기 감소 (채도 감소)
+                filter: "brightness(1.3) contrast(1.05) saturate(0.8)",
                 opacity: 1,
-                // 2. Overlay: 핑크/진주빛 오버레이로 생기 부여
-                overlayColor: "rgba(255, 245, 250, 0.15)",
+                // 2. Overlay: 부드러운 우유빛 필터
+                overlayColor: "rgba(255, 255, 255, 0.45)",
                 mixBlendMode: "soft-light",
-                overlayOpacity: 0.8,
+                overlayOpacity: 0.9,
                 specular: {
                     enabled: false,
                     intensity: 1,

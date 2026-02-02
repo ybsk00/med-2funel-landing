@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+// Force rebuild timestamp: 2026-02-02-2
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function updateSession(request: NextRequest) {
@@ -74,7 +75,7 @@ export async function updateSession(request: NextRequest) {
         // If not staff/doctor, redirect to patient dashboard
         if (!staff || !['doctor', 'admin', 'staff'].includes(staff.role)) {
             const url = request.nextUrl.clone()
-            url.pathname = '/medical/patient-dashboard'
+            url.pathname = '/patient'
             return NextResponse.redirect(url)
         }
     }

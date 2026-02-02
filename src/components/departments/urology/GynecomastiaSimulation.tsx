@@ -40,7 +40,7 @@ export default function GynecomastiaSimulation() {
 
               <div className="relative group max-w-md w-full aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/10">
                 <Image
-                  src="/images/urology_before.jpg"
+                  src="/images/urology_before_v2.jpg"
                   alt="Before Gynecomastia"
                   fill
                   className="object-cover opacity-60 grayscale-[0.5] group-hover:scale-105 transition-transform duration-700"
@@ -107,7 +107,7 @@ export default function GynecomastiaSimulation() {
                 {/* Before */}
                 <div className="space-y-4">
                   <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl">
-                    <Image src="/images/urology_before.jpg" alt="Before" fill className="object-cover" />
+                    <Image src="/images/urology_before_v2.jpg" alt="Before" fill className="object-cover" />
                     <div className="absolute top-6 left-6 px-4 py-2 bg-black/60 backdrop-blur-md rounded-xl text-white font-black text-xs tracking-widest border border-white/20 uppercase">
                       수술 전
                     </div>
@@ -126,7 +126,7 @@ export default function GynecomastiaSimulation() {
                 {/* After */}
                 <div className="space-y-4">
                   <div className="relative aspect-[1/1] rounded-[2.5rem] overflow-hidden border-2 border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
-                    <Image src="/images/urology_after.jpg" alt="After" fill className="object-cover" />
+                    <Image src="/images/urology_after_v2.jpg" alt="After" fill className="object-cover" />
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -157,20 +157,7 @@ export default function GynecomastiaSimulation() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10 border-t border-white/10">
-                <a
-                  href="#session-clinic-search"
-                  className="p-6 bg-white/5 hover:bg-white/10 rounded-[2rem] border border-white/10 transition-all group flex flex-col gap-4 text-left"
-                >
-                  <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-                    <ArrowRight className="w-6 h-6 text-white group-hover:translate-x-1 transition-transform" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-white font-black">유명한 병원 찾기</h4>
-                    <p className="text-white/40 text-xs">수술 후기가 좋은 비뇨기과를 매칭해드립니다.</p>
-                  </div>
-                </a>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-10 border-t border-white/10">
                 <button
                   onClick={() => {
                     const el = document.getElementById('chat-interface');

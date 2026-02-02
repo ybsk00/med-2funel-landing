@@ -32,6 +32,10 @@ const OncologyBackground3D = dynamic(() => import("@/components/departments/onco
 const RecoveryRoadmapSimulation = dynamic(() => import("@/components/departments/oncology/RecoveryRoadmapSimulation"), { ssr: false });
 const NeurosurgeryBackground3D = dynamic(() => import("@/components/departments/neurosurgery/NeurosurgeryBackground3D"), { ssr: false });
 const NeuroTriageSimulation = dynamic(() => import("@/components/departments/neurosurgery/NeuroTriageSimulation"), { ssr: false });
+const PainPatternSimulation = dynamic(() => import("@/components/healthcare/specialized/PainPatternSimulation"), { ssr: false });
+const SymptomTimelineSimulation = dynamic(() => import("@/components/departments/pediatrics/SymptomTimelineSimulation"), { ssr: false });
+const FourAxisBalanceSimulation = dynamic(() => import("@/components/departments/korean-medicine/FourAxisBalanceSimulation"), { ssr: false });
+
 
 // 과별 배경 패턴 CSS (미세 노이즈/그리드/한지/회로 등)
 const DEPARTMENT_BG_PATTERNS: Record<string, string> = {
@@ -237,6 +241,12 @@ export default function HealthcareLanding() {
                         <RecoveryRoadmapSimulation />
                     ) : hospital.department === 'neurosurgery' ? (
                         <NeuroTriageSimulation />
+                    ) : hospital.department === 'orthopedics' ? (
+                        <PainPatternSimulation />
+                    ) : hospital.department === 'pediatrics' ? (
+                        <SymptomTimelineSimulation />
+                    ) : hospital.department === 'korean-medicine' ? (
+                        <FourAxisBalanceSimulation />
                     ) : (
                         <div className="max-w-5xl mx-auto px-6">                            <div className="text-center mb-14">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>

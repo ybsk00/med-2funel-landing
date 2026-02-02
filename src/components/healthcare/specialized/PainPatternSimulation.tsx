@@ -76,9 +76,10 @@ export default function PainPatternSimulation() {
                             <Sparkles className="w-10 h-10 text-cyan-400" />
                         </div>
                         <div className="space-y-4">
-                            <h2 className="text-3xl font-black text-white tracking-tight">1분 통증 패턴 기록</h2>
+                            <h2 className="text-3xl font-black text-white tracking-tight">내 통증, 패턴부터 정리해볼까요?</h2>
                             <p className="text-white/60 text-lg leading-relaxed">
-                                아픈 위치와 상황을 정리하면, <br />상담에서 필요한 질문이 자동으로 만들어집니다.
+                                아픈 부위·통증 강도·유발 동작을 입력하면<br />
+                                AI가 진료에 필요한 핵심 질문을 정리해드립니다.
                             </p>
                         </div>
                         <button
@@ -117,8 +118,8 @@ export default function PainPatternSimulation() {
                                     key={part.id}
                                     onClick={() => setSelectedPart(part.id)}
                                     className={`absolute w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all flex items-center justify-center text-[10px] font-bold ${selectedPart === part.id
-                                            ? 'bg-cyan-500 border-white scale-110 shadow-[0_0_15px_rgba(6,182,212,0.5)] text-white'
-                                            : 'bg-white/10 border-white/20 hover:bg-white/30 text-white/40'
+                                        ? 'bg-cyan-500 border-white scale-110 shadow-[0_0_15px_rgba(6,182,212,0.5)] text-white'
+                                        : 'bg-white/10 border-white/20 hover:bg-white/30 text-white/40'
                                         }`}
                                     style={{ left: `${part.x}%`, top: `${part.y}%` }}
                                 >
@@ -183,8 +184,8 @@ export default function PainPatternSimulation() {
                                             key={s}
                                             onClick={() => setSituation(s)}
                                             className={`py-3 px-2 rounded-xl text-xs font-bold border transition-all ${situation === s
-                                                    ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                                                    : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+                                                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                                                : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
                                                 }`}
                                         >
                                             {s}
@@ -202,8 +203,8 @@ export default function PainPatternSimulation() {
                                             key={p}
                                             onClick={() => setPeriod(p)}
                                             className={`py-3 px-2 rounded-xl text-xs font-bold border transition-all ${period === p
-                                                    ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
-                                                    : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
+                                                ? 'bg-cyan-500/20 border-cyan-500 text-cyan-400'
+                                                : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
                                                 }`}
                                         >
                                             {p}

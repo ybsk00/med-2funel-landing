@@ -12,7 +12,7 @@ interface LoginRequiredModalProps {
 export default function LoginRequiredModal({
     isOpen,
     onClose,
-    returnUrl = "/medical/patient-dashboard",
+    returnUrl = "/patient",
 }: LoginRequiredModalProps) {
     const router = useRouter();
 

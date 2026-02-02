@@ -445,7 +445,7 @@ export default function HospitalSearchPage() {
                         </div>
                         <div className="space-y-3">
                             <button
-                                onClick={() => window.location.href = '/login?returnTo=/medical/patient-dashboard'}
+                                onClick={() => window.location.href = '/login?returnTo=/patient'}
                                 className="w-full py-3 bg-dental-primary text-white font-medium rounded-xl hover:bg-dental-accent transition-colors"
                             >
                                 로그인하기
