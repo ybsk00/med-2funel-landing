@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { RotateCcw, ScanFace, Sparkles, Droplet, Sun, Loader2 } from "lucide-react";
 import { DEPARTMENT_SIMULATIONS, DEFAULT_SIMULATION } from "@/lib/constants/simulations";
+import DentistrySimulationSlider from "@/components/healthcare/specialized/DentistrySimulationSlider";
 
 interface HeroExperienceProps {
     className?: string;
@@ -60,6 +61,22 @@ export default function HeroExperience({ className = "", department = "dermatolo
         // but the base filter will be consistent.
         return variant ? variant.filter : 'none';
     };
+
+    if (department === 'dentistry') {
+        return (
+            <div className={`relative ${className} w-full max-w-xl mx-auto`}>
+                <div className="text-center mb-6">
+                    <h3 className="text-xl font-bold tracking-wider text-skin-text">
+                        AI 치아 미백 시뮬레이션
+                    </h3>
+                    <p className="text-sm text-skin-subtext mt-1">
+                        분석 버튼을 눌러 나의 예상 미백 결과를 확인하세요.
+                    </p>
+                </div>
+                <DentistrySimulationSlider baseImage={baseImage} />
+            </div>
+        );
+    }
 
     return (
         <div className={`relative ${className} w-full max-w-xl mx-auto`}>
@@ -185,8 +202,8 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     onClick={() => handleModeChange('glow')}
                     disabled={isAnalyzing}
                     className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${mode === 'glow'
-                            ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
-                            : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
+                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
+                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
                         }`}
                 >
                     <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'glow' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
@@ -208,8 +225,8 @@ export default function HeroExperience({ className = "", department = "dermatolo
                     onClick={() => handleModeChange('whitening')}
                     disabled={isAnalyzing}
                     className={`relative p-5 rounded-2xl border transition-all duration-300 flex flex-col items-center gap-3 group overflow-hidden ${mode === 'whitening'
-                            ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
-                            : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
+                        ? 'bg-skin-primary text-white border-skin-primary shadow-xl scale-[1.02]'
+                        : 'bg-white/5 border-skin-text/10 hover:bg-white/10 text-skin-text hover:border-skin-primary/50 hover:-translate-y-1'
                         }`}
                 >
                     <div className={`p-3 rounded-full transition-transform group-hover:scale-110 ${mode === 'whitening' ? 'bg-white/20' : 'bg-skin-surface shadow-sm'}`}>
@@ -241,5 +258,6 @@ export default function HeroExperience({ className = "", department = "dermatolo
                 </div>
             )}
         </div>
+
     );
 }

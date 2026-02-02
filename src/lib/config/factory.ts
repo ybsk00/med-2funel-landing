@@ -61,17 +61,19 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
     // Construct Config
     return {
         id: dept.id, // Department ID 주입 (HealthcareContent 매핑용)
-        name: `${dept.name} 클리닉`, // "Medical Area uses XX Clinic"
+        name: dept.branding?.name || `${dept.name} 클리닉`, // Use branding name if available
         virtualName: dept.virtualName, // Map virtualName
         marketingName: dept.virtualName, // Use Virtual Name
-        representative: "김닥터", // Placeholder
+        representative: dept.branding?.representative || "김닥터", // Use branding representative
         representativeTitle: "대표원장",
-        address: "서울특별시 강남구 테헤란로 123",
+        address: "서울특별시 강남구 테헤란로 123", // TODO: Add address to branding if needed
         tel: "02-1234-5678",
         fax: "02-1234-5679",
         businessNumber: "123-45-67890",
         naverSearchKeyword: dept.marketing?.searchKeyword || `${dept.label} 추천`,
         catchphrase: dept.catchphrase, // Map catchphrase
+
+        branding: dept.branding, // Pass branding object
 
         personas: {
             healthcare: {
@@ -96,7 +98,10 @@ export function getDepartmentConfig(deptId: string): HospitalConfig {
         video: dept.video,
         marketing: dept.marketing,
 
-        theme: dept.theme,
+        theme: {
+            ...dept.theme,
+            concept: dept.theme.concept || "Medical Care"
+        },
 
         // Generate distinct modules for this department
         landingModules: dept.modules || generateModules(dept)

@@ -1,17 +1,25 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { User } from "lucide-react";
+import { User, Sparkles, Droplet, Shield, ArrowUpRight, Heart, Activity, Brain, Bone, Stethoscope, Cross, Sun, Zap, Lock, BarChart, Thermometer, Calendar, Moon, Battery, Ruler, Camera, Smile, Search, Baby, ShieldCheck, HeartHandshake, Scroll, ShieldPlus, BrainCircuit, ScanFace } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
+
+// Icon mapping helper
+const IconMap: Record<string, any> = {
+    Sparkles, Droplet, Shield, ArrowUpRight, Heart, Activity, Brain, Bone, Stethoscope, Cross,
+    Sun, Zap, Lock, BarChart, Thermometer, Calendar, Moon, Battery, Ruler, Camera, Smile, Search,
+    Baby, ShieldCheck, HeartHandshake, Scroll, ShieldPlus, BrainCircuit, ScanFace
+};
 
 export default function PatientHeader() {
     const [userName, setUserName] = useState("환자님");
     const supabase = createClient();
     const router = useRouter();
+    const config = useHospital(); // Use dynamic config
 
     // NextAuth 세션 (네이버 로그인용)
     const { data: nextAuthSession } = useSession();
@@ -55,13 +63,23 @@ export default function PatientHeader() {
         router.refresh();
     };
 
+    // Determine Icon
+    const iconName = config.branding?.logoParams?.icon || 'Sparkles';
+    const IconComponent = IconMap[iconName] || Sparkles;
+    const logoColor = config.branding?.logoParams?.color || 'pink';
+
+    // Construct tailwind classes using template literal might be tricky if not safelisted, 
+    // but the `departments.ts` uses colors that match standard tailwind or custom 'dental-' vars.
+    // However, `dental-primary` is set via CSS vars in HospitalProvider.
+    // Let's use `text-dental-primary` for safety as it maps to the theme primary.
+
     return (
         <header className="bg-dental-bg/80 backdrop-blur-md border-b border-white/10 px-6 py-4 flex items-center justify-between sticky top-0 z-20 transition-all duration-300">
             <Link href="/medical/dashboard" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 rounded-full bg-dental-primary/20 flex items-center justify-center">
-                    <span className="text-xl">✨</span>
+                    <IconComponent className="w-6 h-6 text-dental-primary" />
                 </div>
-                <span className="text-xl font-bold text-white">{HOSPITAL_CONFIG.name}</span>
+                <span className="text-xl font-bold text-white">{config.name}</span>
             </Link>
 
             <div className="flex items-center gap-4">

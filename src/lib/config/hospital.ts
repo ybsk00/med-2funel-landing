@@ -62,6 +62,15 @@ export interface HospitalConfig {
             defaultTopic: string;
         }
     };
+    branding?: { // NEW: Branding information from departments.ts
+        name: string;
+        representative: string;
+        slogan?: string;
+        logoParams: {
+            icon: string;
+            color: string;
+        };
+    };
     videoSource?: string;
     video?: string; // NEW
 }

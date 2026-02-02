@@ -17,10 +17,11 @@ import { createClient } from "@/lib/supabase/client";
 import FaceSimulationModal from "@/components/face-style/FaceSimulationModal";
 import { useSession } from "next-auth/react";
 import { DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
 
 export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
+    const config = useHospital(); // Use dynamic config
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
     const [showAestheticModal, setShowAestheticModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
@@ -43,7 +44,7 @@ export default function PatientDashboardClient() {
 
     useEffect(() => {
         fetchLatestAppointment();
-    }, [isReservationModalOpen, nextAuthSession]); // Refresh when modal closes or session changes
+    }, [isReservationModalOpen, nextAuthSession, config]); // Include config in dependency
 
     const fetchLatestAppointment = async () => {
         try {
@@ -86,7 +87,7 @@ export default function PatientDashboardClient() {
                 finalData = {
                     time: `${scheduledDate.toISOString().split('T')[0]} ${scheduledDate.toTimeString().slice(0, 5)}`,
                     status: appointmentData.status === 'scheduled' ? 'pending' : appointmentData.status,
-                    complaint: appointmentData.notes || `${HOSPITAL_CONFIG.name} 진료`,
+                    complaint: appointmentData.notes || `${config.name} 진료`,
                     source: 'appointments'
                 };
             } else {
@@ -179,7 +180,7 @@ export default function PatientDashboardClient() {
                         date: displayDate,
                         time: displayTime,
                         type: finalData.complaint || "일반 진료",
-                        doctor: `${HOSPITAL_CONFIG.representative} ${HOSPITAL_CONFIG.representativeTitle}`
+                        doctor: `${config.representative} ${config.representativeTitle}`
                     });
                 }
             } else {
@@ -283,7 +284,7 @@ export default function PatientDashboardClient() {
                     <div className="relative w-full h-96 md:h-[500px]">
                         <Image
                             src="/BLINDS SHADOW.png"
-                            alt={`${HOSPITAL_CONFIG.name} 프리미엄 시술`}
+                            alt={`${config.name} 프리미엄 시술`}
                             fill
                             className="object-cover object-[center_25%]"
                             priority

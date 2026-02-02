@@ -122,7 +122,7 @@ export const DEPARTMENT_SIMULATIONS: Record<string, DepartmentSimulationConfig> 
     "dentistry": {
         id: "dentistry",
         label: "치과",
-        baseImage: "/히어로세션/dentistry_hero.jpg",
+        baseImage: "/images/dentistry_base.jpg",
         uiTheme: { primary: "#00CED1", text: "#0F172A" },
         titles: { main: "DENTI CREW", sub: "미소/치아 시뮬레이션" },
         brushColor: "#00CED1",

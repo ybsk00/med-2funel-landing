@@ -10,7 +10,7 @@ export default function PatientDashboardLayout({
             <div className="flex-grow">
                 {children}
             </div>
-            <Footer brandName="에버피부과" />
+            <Footer />
         </div>
     );
 }

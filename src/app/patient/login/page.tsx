@@ -17,6 +17,10 @@ function LoginContent() {
     const [isInAppBrowser, setIsInAppBrowser] = useState(false)
     const [showGoogleInAppWarning, setShowGoogleInAppWarning] = useState(false)
 
+    // Get callbackUrl from search params, default to /patient
+    // It's important to validate this if security is a concern, but here we trust next-auth or relative paths
+    const callbackUrl = searchParams.get('callbackUrl') || searchParams.get('next') || searchParams.get('redirect_to') || '/patient';
+
     useEffect(() => {
         const errorParam = searchParams.get('error')
         const messageParam = searchParams.get('message')
@@ -47,7 +51,7 @@ function LoginContent() {
         }
         setIsLoading(true)
         setError(null)
-        const result = await signInWithGoogle()
+        const result = await signInWithGoogle(callbackUrl)
         if (result.error) {
             setError(result.error)
             setIsLoading(false)
@@ -59,7 +63,7 @@ function LoginContent() {
     const handleKakaoLogin = async () => {
         setIsLoading(true)
         setError(null)
-        const result = await signInWithKakao()
+        const result = await signInWithKakao(callbackUrl)
         if (result.error) {
             setError(result.error)
             setIsLoading(false)
@@ -75,6 +79,10 @@ function LoginContent() {
         setMessage(null)
 
         const formData = new FormData(e.currentTarget)
+        // Ensure callbackUrl is included if not in hidden input (though it should be)
+        if (!formData.get('callbackUrl')) {
+            formData.append('callbackUrl', callbackUrl);
+        }
 
         if (activeTab === 'login') {
             const result = await patientLogin(formData)
@@ -209,6 +217,7 @@ function LoginContent() {
 
                         {/* Form */}
                         <form className="space-y-4" autoComplete="off" onSubmit={handleSubmit}>
+                            <input type="hidden" name="callbackUrl" value={callbackUrl} />
                             {activeTab === 'signup' && (
                                 <>
                                     <div>
@@ -340,7 +349,7 @@ function LoginContent() {
                                     setError(null)
                                     // NextAuth for Naver - completely separate from Supabase
                                     const { signIn } = await import('next-auth/react')
-                                    await signIn('naver', { callbackUrl: '/patient' })
+                                    await signIn('naver', { callbackUrl: callbackUrl })
                                 }}
                                 disabled={isLoading}
                                 className="w-full flex items-center justify-center gap-3 py-3 rounded-xl font-medium transition-all hover:opacity-90 disabled:opacity-50"

@@ -9,6 +9,7 @@ export async function patientLogin(formData: FormData): Promise<{ error?: string
 
     const email = formData.get('patient-email') as string
     const password = formData.get('patient-password') as string
+    const callbackUrl = formData.get('callbackUrl') as string || '/patient'
 
     if (!email || !password) {
         return { error: '이메일과 비밀번호를 입력해주세요.' }
@@ -31,7 +32,7 @@ export async function patientLogin(formData: FormData): Promise<{ error?: string
         redirect('/admin')
     }
 
-    redirect('/patient')
+    redirect(callbackUrl)
 }
 
 export async function patientSignup(formData: FormData): Promise<{ error?: string; message?: string }> {
@@ -41,6 +42,7 @@ export async function patientSignup(formData: FormData): Promise<{ error?: strin
     const password = formData.get('patient-password') as string
     const name = formData.get('name') as string || email.split('@')[0]
     const phone = formData.get('phone') as string
+    const callbackUrl = formData.get('callbackUrl') as string || '/patient'
 
     if (!email || !password) {
         return { error: '이메일과 비밀번호를 입력해주세요.' }
@@ -54,7 +56,7 @@ export async function patientSignup(formData: FormData): Promise<{ error?: strin
         email,
         password,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/auth/callback?next=/patient`,
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/auth/callback?next=${encodeURIComponent(callbackUrl)}`,
             data: {
                 role: 'patient',
                 name: name,
@@ -95,13 +97,14 @@ function getKoreanErrorMessage(message: string): string {
     return message
 }
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle(callbackUrl?: string) {
     const supabase = await createClient()
+    const next = callbackUrl || '/patient';
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=${encodeURIComponent(next)}`,
         },
     })
 
@@ -112,13 +115,14 @@ export async function signInWithGoogle() {
     return { url: data.url }
 }
 
-export async function signInWithKakao() {
+export async function signInWithKakao(callbackUrl?: string) {
     const supabase = await createClient()
+    const next = callbackUrl || '/patient';
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'kakao',
         options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=/patient`,
+            redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://www.widamcare.co.kr'}/auth/callback?next=${encodeURIComponent(next)}`,
         },
     })
 
