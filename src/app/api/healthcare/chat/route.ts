@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
 import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent, detectSkinConcern, getSkinConcernResponsePrompt } from "@/lib/ai/prompts";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { DEPARTMENT_CONFIGS, DEFAULT_DEPARTMENT } from "@/lib/config/departments";
 
 export async function POST(req: NextRequest) {
     try {
-        const { message, history, turnCount, topic, entryIntent } = await req.json();
+        const { message, history, turnCount, topic, entryIntent, departmentId } = await req.json();
+
+        const config = DEPARTMENT_CONFIGS[departmentId as keyof typeof DEPARTMENT_CONFIGS] || DEPARTMENT_CONFIGS[DEFAULT_DEPARTMENT];
 
         // 1. Guardrails Removed - Direct AI Chat
         // 의료 키워드 차단 및 피부 고민 감지 로직 제거하고 AI가 자유롭게 답변하도록 함.
@@ -21,7 +23,7 @@ export async function POST(req: NextRequest) {
 ${finalAnalysisPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : config.name}: ${msg.content}`).join("\n")}
 사용자: ${message}
 AI(분석 결과):
 `;
@@ -47,8 +49,9 @@ AI(분석 결과):
 
         // 4. 시스템 프롬프트 from prompts.ts (entryIntent 전달)
         const systemPrompt = getHealthcareSystemPrompt(
+            config,
             topic || "default",
-            turnCount,
+            Number(turnCount),
             entryIntent as EntryIntent
         );
 
@@ -56,7 +59,7 @@ AI(분석 결과):
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '사용자' : config.name}: ${msg.content}`).join("\n")}
 사용자: ${message}
 AI:
 `;
