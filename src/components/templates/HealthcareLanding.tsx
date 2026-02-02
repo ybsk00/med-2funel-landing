@@ -12,12 +12,26 @@ import { isColorDark } from "@/lib/utils/theme";
 import { HEALTHCARE_CONTENT } from "@/lib/constants/healthcare_content";
 import { useHospital } from "@/components/common/HospitalProvider";
 import dynamic from 'next/dynamic';
+import { motion } from "framer-motion";
 
 const MagneticInteraction = dynamic(() => import("@/components/ui/ThreeDInteraction").then(mod => mod.MagneticInteraction), { ssr: false });
 const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/PremiumBackground"), { ssr: false });
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import ChatInterface from "@/components/chat/ChatInterface";
+
+const PlasticSurgerySimulation = dynamic(() => import("@/components/departments/plastic-surgery/PlasticSurgerySimulation"), { ssr: false });
+const ContourRing3D = dynamic(() => import("@/components/departments/plastic-surgery/ContourRing3D"), { ssr: false });
+const UrologyBackground3D = dynamic(() => import("@/components/departments/urology/UrologyBackground3D"), { ssr: false });
+const GynecomastiaSimulation = dynamic(() => import("@/components/departments/urology/GynecomastiaSimulation"), { ssr: false });
+const ObgynBackground3D = dynamic(() => import("@/components/departments/obgyn/ObgynBackground3D"), { ssr: false });
+const VCareSimulation = dynamic(() => import("@/components/departments/obgyn/VCareSimulation"), { ssr: false });
+const InternalMedicineBackground3D = dynamic(() => import("@/components/departments/internal-medicine/InternalMedicineBackground3D"), { ssr: false });
+const HealthRiskSimulation = dynamic(() => import("@/components/departments/internal-medicine/HealthRiskSimulation"), { ssr: false });
+const OncologyBackground3D = dynamic(() => import("@/components/departments/oncology/OncologyBackground3D"), { ssr: false });
+const RecoveryRoadmapSimulation = dynamic(() => import("@/components/departments/oncology/RecoveryRoadmapSimulation"), { ssr: false });
+const NeurosurgeryBackground3D = dynamic(() => import("@/components/departments/neurosurgery/NeurosurgeryBackground3D"), { ssr: false });
+const NeuroTriageSimulation = dynamic(() => import("@/components/departments/neurosurgery/NeuroTriageSimulation"), { ssr: false });
 
 // 과별 배경 패턴 CSS (미세 노이즈/그리드/한지/회로 등)
 const DEPARTMENT_BG_PATTERNS: Record<string, string> = {
@@ -93,7 +107,16 @@ export default function HealthcareLanding() {
                 {/* 과별 미세 배경 패턴 */}
                 <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: bgPattern }} />
 
+                {hospital.department === 'plastic-surgery' && <ContourRing3D />}
+                {hospital.department === 'urology' && <UrologyBackground3D />}
+                {hospital.department === 'obgyn' && <ObgynBackground3D />}
+                {hospital.department === 'internal-medicine' && <InternalMedicineBackground3D />}
+                {hospital.department === 'oncology' && <OncologyBackground3D />}
+                {hospital.department === 'neurosurgery' && <NeurosurgeryBackground3D />}
+
                 <PremiumBackground colors={theme.healthcare.colors} intensity="subtle" />
+
+
                 <HealthcareNavigation config={fullConfig} />
 
                 {/* ═══════════ SESSION 1: HERO ═══════════ */}
@@ -114,7 +137,14 @@ export default function HealthcareLanding() {
                 />
 
                 {/* ═══════════ SESSION 2: 유명한 병원 찾기 (고정/필수) ═══════════ */}
-                <section id="session-clinic-search" className="relative py-28 z-20">
+                <motion.section
+                    id="session-clinic-search"
+                    className="relative py-28 z-20"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                >
                     <div className="w-full max-w-4xl px-6 mx-auto">
                         <div className="text-center mb-14 px-4">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block shadow-lg backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
@@ -136,12 +166,79 @@ export default function HealthcareLanding() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </motion.section>
+
+                {/* ═══════════ SESSION 2.5: 과별 필독 가이드 (카드 세션) ═══════════ */}
+                {content?.sessionB && (
+                    <section className="relative py-20 z-20">
+                        <div className="max-w-6xl mx-auto px-6">
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                className="text-center mb-16"
+                            >
+                                <h3 className={`text-2xl md:text-4xl font-black mb-4 ${isThemeDark ? 'text-white' : 'text-skin-text'}`}>
+                                    {content.sessionB.title}
+                                </h3>
+                                <div className="w-12 h-1 bg-skin-primary mx-auto rounded-full" />
+                            </motion.div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                                {content.sessionB.cards.map((card, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, y: 40 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: idx * 0.1, duration: 0.6 }}
+                                        whileHover={{ y: -10, transition: { duration: 0.3 } }}
+                                        className={`group relative p-10 rounded-[2.5rem] overflow-hidden transition-all duration-500 ${isThemeDark
+                                            ? 'bg-white/[0.05] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 shadow-2xl'
+                                            : 'bg-white/60 border border-skin-primary/10 hover:bg-white/80 shadow-lg hover:shadow-xl'
+                                            } backdrop-blur-xl`}
+                                    >
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-skin-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+                                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 ${isThemeDark ? 'bg-white/10' : 'bg-skin-primary/10'} group-hover:scale-110 transition-transform`}>
+                                            <Sparkles className={`w-7 h-7 ${isThemeDark ? 'text-white/60' : 'text-skin-primary'}`} />
+                                        </div>
+
+                                        <h4 className={`text-xl font-black mb-4 ${isThemeDark ? 'text-white' : 'text-slate-900'}`}>
+                                            {card.title}
+                                        </h4>
+                                        <p className={`leading-relaxed text-base font-medium ${isThemeDark ? 'text-white/50' : 'text-slate-500'}`}>
+                                            {card.description}
+                                        </p>
+
+                                        <div className="mt-8 pt-8 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span className="text-xs font-black uppercase tracking-widest text-skin-primary flex items-center gap-2">
+                                                View Detail <ArrowRight className="w-4 h-4" />
+                                            </span>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                )}
 
                 {/* ═══════════ SESSION 3: 시뮬레이션 (필수) ═══════════ */}
                 <section id="session-simulation" className="relative py-28 z-20 overflow-hidden">
-                    <div className="max-w-5xl mx-auto px-6">
-                        <div className="text-center mb-14">
+                    {hospital.department === 'plastic-surgery' ? (
+                        <PlasticSurgerySimulation />
+                    ) : hospital.department === 'urology' ? (
+                        <GynecomastiaSimulation />
+                    ) : hospital.department === 'obgyn' ? (
+                        <VCareSimulation />
+                    ) : hospital.department === 'internal-medicine' ? (
+                        <HealthRiskSimulation />
+                    ) : hospital.department === 'oncology' ? (
+                        <RecoveryRoadmapSimulation />
+                    ) : hospital.department === 'neurosurgery' ? (
+                        <NeuroTriageSimulation />
+                    ) : (
+                        <div className="max-w-5xl mx-auto px-6">                            <div className="text-center mb-14">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
                                 AI Simulation
                             </span>
@@ -153,46 +250,53 @@ export default function HealthcareLanding() {
                             </p>
                         </div>
 
-                        {/* Simulation Card */}
-                        <div className={`relative rounded-[2.5rem] overflow-hidden p-10 md:p-16 text-center group ${isThemeDark ? 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/15 shadow-2xl' : 'bg-gradient-to-br from-skin-primary/5 to-skin-accent/5 border border-skin-primary/10 shadow-xl'}`}>
-                            {/* Glow Effect */}
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                                <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-skin-primary/10 rounded-full blur-[120px]" />
-                                <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-skin-accent/10 rounded-full blur-[120px]" />
-                            </div>
-
-                            <div className="relative z-10 space-y-8">
-                                {/* Camera Icon */}
-                                <div className={`w-24 h-24 mx-auto rounded-3xl flex items-center justify-center ${isThemeDark ? 'bg-white/10 border border-white/20' : 'bg-skin-primary/10 border border-skin-primary/20'} group-hover:scale-110 transition-transform duration-500`}>
-                                    <Camera className={`w-12 h-12 ${isThemeDark ? 'text-white/80' : 'text-skin-primary'}`} />
+                            {/* Simulation Card */}
+                            <div className={`relative rounded-[2.5rem] overflow-hidden p-10 md:p-16 text-center group ${isThemeDark ? 'bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/15 shadow-2xl' : 'bg-gradient-to-br from-skin-primary/5 to-skin-accent/5 border border-skin-primary/10 shadow-xl'}`}>
+                                {/* Glow Effect */}
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-skin-primary/10 rounded-full blur-[120px]" />
+                                    <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-skin-accent/10 rounded-full blur-[120px]" />
                                 </div>
 
-                                <p className={`text-lg max-w-md mx-auto ${isThemeDark ? 'text-white/60' : 'text-skin-text/60'}`}>
-                                    사진을 업로드하면 AI가 분석하여 결과를 보여드립니다.
-                                    <br />
-                                    <span className="text-xs opacity-60">* 예시 이미지이며 실제 결과는 개인차가 있습니다.</span>
-                                </p>
+                                <div className="relative z-10 space-y-8">
+                                    {/* Camera Icon */}
+                                    <div className={`w-24 h-24 mx-auto rounded-3xl flex items-center justify-center ${isThemeDark ? 'bg-white/10 border border-white/20' : 'bg-skin-primary/10 border border-skin-primary/20'} group-hover:scale-110 transition-transform duration-500`}>
+                                        <Camera className={`w-12 h-12 ${isThemeDark ? 'text-white/80' : 'text-skin-primary'}`} />
+                                    </div>
 
-                                <button
-                                    onClick={() => setIsPhotoSlideOverOpen(true)}
-                                    className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 ${buttonTextColor} border border-white/20 overflow-hidden group/btn`}
-                                    style={{ backgroundColor: theme.healthcare.colors.primary }}
-                                >
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
-                                    <Camera className="w-6 h-6" />
-                                    <span className="relative z-10">{content?.simulation?.buttonLabel || "시뮬레이션 시작"}</span>
-                                </button>
+                                    <p className={`text-lg max-w-md mx-auto ${isThemeDark ? 'text-white/60' : 'text-skin-text/60'}`}>
+                                        사진을 업로드하면 AI가 분석하여 결과를 보여드립니다.
+                                        <br />
+                                        <span className="text-xs opacity-60">* 예시 이미지이며 실제 결과는 개인차가 있습니다.</span>
+                                    </p>
 
-                                <p className={`text-sm ${isThemeDark ? 'text-white/40' : 'text-skin-text/40'}`}>
-                                    결과 확인 후 → <span className="text-skin-primary font-bold">{content?.simulation?.resultCta || "상담 예약"}</span>
-                                </p>
+                                    <button
+                                        onClick={() => setIsPhotoSlideOverOpen(true)}
+                                        className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 ${buttonTextColor} border border-white/20 overflow-hidden group/btn`}
+                                        style={{ backgroundColor: theme.healthcare.colors.primary }}
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
+                                        <Camera className="w-6 h-6" />
+                                        <span className="relative z-10">{content?.simulation?.buttonLabel || "시뮬레이션 시작"}</span>
+                                    </button>
+
+                                    <p className={`text-sm ${isThemeDark ? 'text-white/40' : 'text-skin-text/40'}`}>
+                                        결과 확인 후 → <span className="text-skin-primary font-bold">{content?.simulation?.resultCta || "상담 예약"}</span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    )}                </section>
 
                 {/* ═══════════ SESSION 4: 챗 메뉴 (로그인 유도) ═══════════ */}
-                <section id="session-chat" className="relative py-28 z-20">
+                <motion.section
+                    id="session-chat"
+                    className="relative py-28 z-20"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                >
                     <div className="max-w-5xl mx-auto px-6">
                         <div className="text-center mb-14">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
@@ -273,10 +377,17 @@ export default function HealthcareLanding() {
                             )}
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 {/* ═══════════ SESSION 5: TRUST (FAQ + 안전고지 + CTA) ═══════════ */}
-                <section id="session-trust" className="relative py-28 z-20">
+                <motion.section
+                    id="session-trust"
+                    className="relative py-28 z-20"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                >
                     <div className="max-w-4xl mx-auto px-6">
                         <div className="text-center mb-14">
                             <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
@@ -328,20 +439,26 @@ export default function HealthcareLanding() {
 
                         {/* Final CTA — 상담하기 → 챗 세션(로그인 전) */}
                         <div className="text-center mt-16 space-y-4">
+                            <h4 className={`text-2xl font-bold mb-6 ${isThemeDark ? 'text-white' : 'text-skin-text'}`}>
+                                지금 헬스케어 챗봇과 바로 상담해보세요
+                            </h4>
                             <button
                                 onClick={() => { setIsChatOpen(true); setTimeout(() => scrollToSection("chat-interface"), 100); }}
-                                className={`inline-flex items-center gap-3 px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 ${buttonTextColor}`}
+                                className={`inline-flex items-center gap-3 px-12 py-6 rounded-2xl font-black text-xl transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 ${buttonTextColor}`}
                                 style={{ backgroundColor: theme.healthcare.colors.primary }}
                             >
                                 <MessageCircle className="w-6 h-6" />
-                                상담하기
+                                헬스케어 챗봇 시작
                             </button>
-                            <p className={`text-sm ${isThemeDark ? 'text-white/30' : 'text-skin-text/30'}`}>
+                            <p className={`text-sm font-medium ${isThemeDark ? 'text-white/50' : 'text-skin-text/50'}`}>
+                                * 상담 질문 저장/병원 매칭은 로그인 후 제공됩니다.
+                            </p>
+                            <p className={`text-sm mt-4 ${isThemeDark ? 'text-white/30' : 'text-skin-text/30'}`}>
                                 또는 <button onClick={() => scrollToSection("session-clinic-search")} className="text-skin-primary underline font-bold">{ctaLabels.cta1}</button>
                             </p>
                         </div>
                     </div>
-                </section>
+                </motion.section>
 
                 <Footer mode="healthcare" />
 
