@@ -160,18 +160,23 @@ export default function HealthcareHero({ config, onOpenCamera, ctaLabels, onScro
                             {ctaLabels?.cta2 || "시뮬레이션 해보기"}
                         </button>
 
-                        {/* CTA3: 상담하기 → Chat Session 스크롤 */}
-                        <button
-                            onClick={onScrollToChat}
-                            className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105 active:scale-95 text-base font-bold rounded-2xl`}
-                            style={{
-                                color: secondaryButtonText,
-                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
-                            }}
-                        >
-                            <MessageCircle className="w-5 h-5" style={{ color: theme.colors.primary }} />
-                            상담하기
-                        </button>
+                        {/* CTA3: 헬스케어 챗봇 상담 (Specific for Urology/General enhancement) */}
+                        <div className="flex flex-col items-center gap-2">
+                             <button
+                                onClick={onScrollToChat}
+                                className={`px-8 py-4 border-2 ${secondaryButtonBorder} backdrop-blur-xl transition-all duration-300 flex items-center gap-2 shadow-xl hover:scale-105 active:scale-95 text-base font-bold rounded-2xl`}
+                                style={{
+                                    color: secondaryButtonText,
+                                    backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
+                                }}
+                            >
+                                <MessageCircle className="w-5 h-5" style={{ color: theme.colors.primary }} />
+                                헬스케어 챗봇 상담
+                            </button>
+                            <span className={`text-[10px] font-medium tracking-wide ${isThemeDark ? 'text-white/60' : 'text-slate-600'}`}>
+                                * 1분 대화로 상담 질문/체크리스트 생성
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useHospital } from "@/components/common/HospitalProvider";
 import { isColorDark } from "@/lib/utils/theme";
 import { ArrowUpRight, BarChart2, Calendar, Droplet, Heart, Shield, Sparkles, Thermometer, User, Zap, Lock, Activity, Sun, Camera, Beaker, Moon, Leaf } from "lucide-react";
+import { motion } from "framer-motion";
 import VipCard from "@/components/ui/cards/VipCard";
 import HanjiCard from "@/components/ui/cards/HanjiCard";
 import GlassCard from "@/components/ui/cards/GlassCard";
@@ -134,7 +135,7 @@ export default function HealthcareModules() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 items-stretch">
-                    {config.landingModules.map((module: any) => {
+                    {config.landingModules.map((module: any, index: number) => {
                         const ICON_MAP: any = {
                             'Sparkles': Sparkles,
                             'Droplet': Droplet,
@@ -157,7 +158,14 @@ export default function HealthcareModules() {
                         const IconComponent = ICON_MAP[module.icon] || Sparkles;
 
                         return (
-                            <div key={module.id} className="flex h-full w-full">
+                            <motion.div
+                                key={module.id}
+                                className="flex h-full w-full"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
+                            >
                                 <CardComponent
                                     id={module.id}
                                     title={module.title}
@@ -168,7 +176,7 @@ export default function HealthcareModules() {
                                     onClick={() => handleModuleClick(module.id)}
                                     isDark={isThemeDark}
                                 />
-                            </div>
+                            </motion.div>
                         );
                     })}
                 </div>
