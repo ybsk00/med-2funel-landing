@@ -31,6 +31,10 @@ export const neurosurgeryDefaults: Partial<HospitalConfig> = {
         background: '#0F172A', // 슬레이트 900
         text: '#F1F5F9',       // 슬레이트 100
       },
+      design: {
+        texture: 'hologram',
+        font: 'font-sans',
+      },
       hero: {
         type: 'motion-effect',
         headline: '정확한 진단으로\n건강한 삶을',
@@ -49,6 +53,10 @@ export const neurosurgeryDefaults: Partial<HospitalConfig> = {
         accent: '#14B8A6',
         background: '#FFFFFF',
         text: '#0F172A',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

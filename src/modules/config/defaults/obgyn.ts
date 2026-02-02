@@ -31,6 +31,10 @@ export const obgynDefaults: Partial<HospitalConfig> = {
         background: '#2E1065', // 딥 퍼플
         text: '#FDF2F8',       // 핑크 50
       },
+      design: {
+        texture: 'flower',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '여성의 건강한 삶을\n응원합니다',
@@ -49,6 +53,10 @@ export const obgynDefaults: Partial<HospitalConfig> = {
         accent: '#F43F5E',
         background: '#FFF1F2',
         text: '#881337',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

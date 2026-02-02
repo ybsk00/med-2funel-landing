@@ -31,6 +31,10 @@ export const dentistryDefaults: Partial<HospitalConfig> = {
         background: '#0A1628', // 딥 네이비
         text: '#F8F9FA',       // 화이트
       },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
+      },
       hero: {
         type: 'smile-effect',
         headline: '자신감 있는 미소의 시작\n건강한 치아 관리',
@@ -49,6 +53,10 @@ export const dentistryDefaults: Partial<HospitalConfig> = {
         accent: '#06B6D4',
         background: '#FFFFFF',
         text: '#1F2937',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

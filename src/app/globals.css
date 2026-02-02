@@ -2,13 +2,16 @@
 
 
 :root {
-  --background: #0A1628;
-  --foreground: #F1F5F9;
-  --skin-primary: #E91E8C;
-  --skin-secondary: #14B8A6;
-  --skin-accent: #C026D3;
-  --skin-bg: #0A1A2A;
-  --skin-text: #F8F9FA;
+  /* 전역 기본값 제거 - 각 과별 HospitalProvider가 독립적으로 설정 */
+  --skin-primary: #666666;
+  --skin-secondary: #888888;
+  --skin-accent: #666666;
+  --skin-bg: transparent;
+  --skin-text: inherit;
+  --skin-bg-secondary: #F8FAFC;
+  --skin-surface: #FFFFFF;
+  --skin-subtext: #64748B;
+  --skin-muted: #E2E8F0;
   --dental-bg: var(--skin-bg);
   --dental-surface: #142640;
   --dental-primary: var(--skin-primary);
@@ -16,8 +19,7 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  /* color와 background를 body에서 제거 - 각 과별 Provider가 독립적으로 설정 */
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

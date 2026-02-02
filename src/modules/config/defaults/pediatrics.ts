@@ -31,6 +31,10 @@ export const pediatricsDefaults: Partial<HospitalConfig> = {
         background: '#1E293B', // 슬레이트 800
         text: '#F8FAFC',       // 슬레이트 50
       },
+      design: {
+        texture: 'jelly',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '우리 아이 건강한 성장\n함께 지켜요',
@@ -49,6 +53,10 @@ export const pediatricsDefaults: Partial<HospitalConfig> = {
         accent: '#3B82F6',
         background: '#FFFBEB',
         text: '#451A03',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

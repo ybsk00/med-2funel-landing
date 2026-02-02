@@ -183,24 +183,5 @@ function deepMerge<T>(target: T, source: Partial<T>): T {
   return result;
 }
 
-/**
- * 사용 가능한 과목 목록
- */
-export const AVAILABLE_DEPARTMENTS = Object.keys(DEPARTMENT_DEFAULTS);
-
-/**
- * 과목별 표시 이름
- */
-export const DEPARTMENT_LABELS: Record<string, string> = {
-  dermatology: '피부과',
-  dentistry: '치과',
-  orthopedics: '정형외과',
-  urology: '비뇨기과',
-  'internal-medicine': '내과',
-  oncology: '암요양병원',
-  'korean-medicine': '한의원',
-  'plastic-surgery': '성형외과',
-  pediatrics: '소아과',
-  neurosurgery: '신경외과',
-  obgyn: '산부인과',
-};
+// getDepartmentV2Config, AVAILABLE_DEPARTMENTS, DEPARTMENT_LABELS는
+// department-config.ts로 이동 (fs 의존성 없이 클라이언트에서도 사용 가능)

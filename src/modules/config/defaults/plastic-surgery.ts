@@ -31,6 +31,10 @@ export const plasticSurgeryDefaults: Partial<HospitalConfig> = {
         background: '#0F0A1A', // 딥 퍼플 블랙
         text: '#FAF5FF',       // 퍼플 화이트
       },
+      design: {
+        texture: 'silk',
+        font: 'font-sans',
+      },
       hero: {
         type: 'glow-effect',
         headline: '나만의 아름다움을\n깨우다',
@@ -49,6 +53,10 @@ export const plasticSurgeryDefaults: Partial<HospitalConfig> = {
         accent: '#8B5CF6',
         background: '#FFFFFF',
         text: '#2E1065',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

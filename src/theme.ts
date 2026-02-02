@@ -1,4 +1,4 @@
-import { createTheme, MantineColorsTuple, MantineTheme } from "@mantine/core";
+import { createTheme, MantineColorsTuple } from "@mantine/core";
 
 const sageGreen: MantineColorsTuple = [
     "#f1f5f3",
@@ -73,12 +73,7 @@ export const theme = createTheme({
                 shadow: "sm",
                 withBorder: true,
             },
-            styles: (theme: MantineTheme) => ({
-                root: {
-                    backgroundColor: theme.white,
-                    borderColor: theme.colors["warm-beige"][2],
-                },
-            }),
+            // backgroundColor/borderColor 강제 제거 - 각 카드 컴포넌트가 독립적으로 스타일 적용
         },
         Paper: {
             defaultProps: {

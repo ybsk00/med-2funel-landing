@@ -4,6 +4,7 @@
  */
 
 export { loadHospitalConfig, getHospitalConfig, getConfigValue, generateCSSVariables } from './loader';
+export { getDepartmentV2Config, AVAILABLE_DEPARTMENTS, DEPARTMENT_LABELS } from './department-config';
 export { HospitalConfigSchema } from './schema';
 export type { HospitalConfig, Contact, ColorScheme, HeroConfig, ModuleConfig, Persona, Track } from './schema';
 

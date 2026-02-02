@@ -31,6 +31,10 @@ export const orthopedicsDefaults: Partial<HospitalConfig> = {
         background: '#0F172A', // 슬레이트 900
         text: '#F8FAFC',       // 슬레이트 50
       },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
+      },
       hero: {
         type: 'motion-effect',
         headline: '움직임의 자유를 되찾다\n건강한 관절 라이프',
@@ -49,6 +53,10 @@ export const orthopedicsDefaults: Partial<HospitalConfig> = {
         accent: '#F59E0B',
         background: '#FFFFFF',
         text: '#1E293B',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

@@ -5,27 +5,13 @@ import { useHospital } from "@/components/common/HospitalProvider";
 import { HEALTHCARE_CONTENT } from "@/lib/constants/healthcare_content";
 import { Check, ArrowRight, Activity, Moon, Sun, ShieldCheck } from "lucide-react";
 import ChatInterface from "@/components/chat/ChatInterface";
+import { isColorDark } from "@/lib/utils/theme";
 
 export default function HealthcareContent() {
     const config = useHospital();
     const content = config.id ? HEALTHCARE_CONTENT[config.id as keyof typeof HEALTHCARE_CONTENT] : null;
     const [activeSession, setActiveSession] = useState<string | null>(null);
     const [isChatOpen, setIsChatOpen] = useState(false);
-
-    // Theme Darkness Check (Refined)
-    const isColorDark = (hex?: string) => {
-        if (!hex) return false;
-        let h = hex.replace('#', '');
-        if (h.length === 3) {
-            h = h.split('').map(c => c + c).join('');
-        }
-        if (h.length !== 6) return false;
-        const r = parseInt(h.substring(0, 2), 16);
-        const g = parseInt(h.substring(2, 4), 16);
-        const b = parseInt(h.substring(4, 6), 16);
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance < 0.5;
-    };
 
     const isThemeDark = config.theme ? isColorDark(config.theme.background) : false;
     const isLight = !isThemeDark;

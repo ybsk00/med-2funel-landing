@@ -31,6 +31,10 @@ export const oncologyDefaults: Partial<HospitalConfig> = {
         background: '#1E1B4B', // 딥 인디고
         text: '#FDF4FF',       // 라벤더 화이트
       },
+      design: {
+        texture: 'linen',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '희망의 순간을 함께\n따뜻한 케어',
@@ -49,6 +53,10 @@ export const oncologyDefaults: Partial<HospitalConfig> = {
         accent: '#F59E0B',
         background: '#FFFBFE', // 따뜻한 화이트
         text: '#4A044E',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

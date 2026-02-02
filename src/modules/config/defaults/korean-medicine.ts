@@ -31,6 +31,10 @@ export const koreanMedicineDefaults: Partial<HospitalConfig> = {
         background: '#292524', // 스톤 800 (한지 느낌)
         text: '#FAF7F5',       // 스톤 50
       },
+      design: {
+        texture: 'hanji',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '전통의 지혜로 찾는\n몸의 균형',
@@ -49,6 +53,10 @@ export const koreanMedicineDefaults: Partial<HospitalConfig> = {
         accent: '#DC2626',
         background: '#FFFCF8',
         text: '#44403C',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

@@ -32,6 +32,11 @@ export const dermatologyDefaults: Partial<HospitalConfig> = {
         background: '#0A1A2A', // 다크 블루
         text: '#F8F9FA',       // 화이트
       },
+      design: {
+        texture: 'hologram',
+        font: 'font-sans',
+        sound: '/sounds/dermatology-ambient.mp3',
+      },
       hero: {
         type: 'glow-effect',
         headline: '베이스가 달라지는\n광채 루틴 리셋',
@@ -50,6 +55,10 @@ export const dermatologyDefaults: Partial<HospitalConfig> = {
         accent: '#C026D3',
         background: '#FFFFFF',
         text: '#1F2937',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { HospitalConfig } from "@/lib/config/hospital";
+import { useHospital } from "@/components/common/HospitalProvider";
+import { isColorDark } from "@/lib/utils/theme";
 import { ArrowUpRight, BarChart2, Calendar, Droplet, Heart, Shield, Sparkles, Thermometer, User, Zap, Lock, Activity, Sun, Camera, Beaker, Moon, Leaf } from "lucide-react";
 import VipCard from "@/components/ui/cards/VipCard";
 import HanjiCard from "@/components/ui/cards/HanjiCard";
@@ -15,9 +16,7 @@ import LinenCard from "@/components/ui/cards/LinenCard";
 import HologramCard from "@/components/ui/cards/HologramCard";
 import ChatInterface from "@/components/chat/ChatInterface";
 
-interface HealthcareModulesProps {
-    config: HospitalConfig;
-}
+// config prop 제거 - HospitalProvider context에서 직접 가져옴
 
 const CARD_COMPONENTS: Record<string, any> = {
     silk: GlassCard, // User request: Design synergy. Silk was too detachment.
@@ -91,7 +90,8 @@ const DEPARTMENT_MODULE_HEADERS: Record<string, { title: string; subtitle1: stri
     }
 };
 
-export default function HealthcareModules({ config }: HealthcareModulesProps) {
+export default function HealthcareModules() {
+    const config = useHospital();
     const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
     if (!config.landingModules || !config.theme) return null;
@@ -99,22 +99,7 @@ export default function HealthcareModules({ config }: HealthcareModulesProps) {
     const texture = config.theme.texture || 'glass';
     const sound = config.theme.sound;
 
-    // Theme Darkness Check
-    const isColorDarkValue = (hex?: string) => {
-        if (!hex) return false;
-        let h = hex.replace('#', '');
-        if (h.length === 3) {
-            h = h.split('').map(c => c + c).join('');
-        }
-        if (h.length !== 6) return false;
-        const r = parseInt(h.substring(0, 2), 16);
-        const g = parseInt(h.substring(2, 4), 16);
-        const b = parseInt(h.substring(4, 6), 16);
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance < 0.5;
-    };
-
-    const isThemeDark = isColorDarkValue(config.theme.background);
+    const isThemeDark = isColorDark(config.theme.background);
     const CardComponent = CARD_COMPONENTS[texture] || GlassCard;
     const moduleHeader = (config.id && DEPARTMENT_MODULE_HEADERS[config.id]) || {
         title: "스마트 헬스케어 체크",

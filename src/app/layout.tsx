@@ -7,8 +7,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { ColorSchemeScript } from "@mantine/core";
 import MantineWrapper from "@/components/MantineWrapper";
 import NextAuthProvider from "@/components/NextAuthProvider";
-import { HospitalProvider } from "@/components/common/HospitalProvider";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+// ThemeProvider를 루트에서 제거 - 각 과별 페이지가 독립적으로 HospitalProvider 사용
 
 const notoSansKr = Noto_Sans_KR({
   subsets: ["latin"],
@@ -26,9 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 기본 설정 (인트로용)
-  const defaultConfig = HOSPITAL_CONFIG;
-
   return (
     <html lang="ko">
       <head>
@@ -36,14 +32,12 @@ export default function RootLayout({
       </head>
       <body className={`${notoSansKr.variable} font-sans antialiased`}>
         <NextAuthProvider>
-          <HospitalProvider initialConfig={defaultConfig}>
-            <MantineWrapper>
-              {process.env.NEXT_PUBLIC_GA_ID && (
-                <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-              )}
-              {children}
-            </MantineWrapper>
-          </HospitalProvider>
+          <MantineWrapper>
+            {process.env.NEXT_PUBLIC_GA_ID && (
+              <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+            )}
+            {children}
+          </MantineWrapper>
         </NextAuthProvider>
       </body>
     </html>

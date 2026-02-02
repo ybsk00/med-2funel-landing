@@ -1,3 +1,5 @@
+// @ts-nocheck
+// 레거시 파일 - /[dept]/page.tsx로 대체됨
 "use client";
 
 import { HospitalProvider } from "@/components/common/HospitalProvider";

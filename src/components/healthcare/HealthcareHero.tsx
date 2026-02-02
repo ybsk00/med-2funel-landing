@@ -1,8 +1,9 @@
 "use client";
 
-import { HospitalConfig } from "@/lib/config/hospital";
+import { HospitalConfig } from "@/modules/config/schema";
 import { Camera, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { isColorDark } from "@/lib/utils/theme";
 
 interface HealthcareHeroProps {
     config: HospitalConfig;
@@ -12,23 +13,11 @@ interface HealthcareHeroProps {
 export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroProps) {
     if (!config.theme) return null;
 
-    // Unified Darkness Check (Re-refined)
-    const isColorDark = (hex?: string) => {
-        if (!hex) return false;
-        let h = hex.replace('#', '');
-        if (h.length === 3) {
-            h = h.split('').map(c => c + c).join('');
-        }
-        if (h.length !== 6) return false;
-        const r = parseInt(h.substring(0, 2), 16);
-        const g = parseInt(h.substring(2, 4), 16);
-        const b = parseInt(h.substring(4, 6), 16);
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance < 0.5;
-    };
+    const theme = config.theme.healthcare;
+    const hero = theme.hero;
 
-    const isThemeDark = isColorDark(config.theme.background);
-    const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
+    const isThemeDark = isColorDark(theme.colors.background);
+    const isPrimaryBright = theme.colors.primary ? !isColorDark(theme.colors.primary) : false;
 
     // helper: ensure visibility while following user's specific contrast policy
     const ensureVisibility = (hex: string, backgroundIsDark: boolean) => {
@@ -63,34 +52,32 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
     };
 
     // Auto-detect based on background
-    const heroTitleColor = ensureVisibility(config.theme.accent || config.theme.primary, isThemeDark);
-    const heroSubtitleColor = ensureVisibility(config.theme.secondary || config.theme.primary, isThemeDark);
-    const eyebrowColor = ensureVisibility(config.theme.primary, isThemeDark);
+    const heroTitleColor = ensureVisibility(theme.colors.accent || theme.colors.primary, isThemeDark);
+    const heroSubtitleColor = ensureVisibility(theme.colors.secondary || theme.colors.primary, isThemeDark);
+    const eyebrowColor = ensureVisibility(theme.colors.primary, isThemeDark);
 
     // Primary CTA Button: Contrast logic
-    const primaryButtonBg = config.theme.primary || "#000000";
+    const primaryButtonBg = theme.colors.primary || "#000000";
     const primaryButtonText = isPrimaryBright ? "text-slate-900" : "text-white";
     const primaryButtonBorder = isPrimaryBright ? "border-slate-900/10" : "border-white/20";
 
     // Secondary CTA Button: No absolute white on light themes
-    const secondaryButtonText = ensureVisibility(config.theme.secondary, isThemeDark);
+    const secondaryButtonText = ensureVisibility(theme.colors.secondary, isThemeDark);
     const secondaryButtonBorder = isThemeDark ? "border-white/30" : "border-slate-800/30";
 
     return (
         <header
             className="relative px-6 pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden min-h-screen flex flex-col justify-center"
-            style={{ backgroundColor: config.theme.background }}
+            style={{ backgroundColor: theme.colors.background }}
         >
             {/* 배경 (영상 또는 이미지) */}
             <div className="absolute inset-0 z-0">
                 {(() => {
-                    const source = config.video || config.videoSource || "/2.mp4";
-                    const isImage = source.match(/\.(jpg|jpeg|png|gif|webp)$/i);
-
-                    if (isImage) {
+                    const media = hero.media;
+                    if (media.type === 'image') {
                         return (
                             <img
-                                src={source}
+                                src={media.src}
                                 alt="Background"
                                 className="absolute inset-0 w-full h-full object-cover"
                             />
@@ -99,15 +86,16 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
 
                     return (
                         <video
-                            key={source}
+                            key={media.src}
                             autoPlay
                             loop
                             muted
                             playsInline
                             preload="metadata"
+                            poster={media.poster}
                             className="absolute inset-0 w-full h-full object-cover"
                         >
-                            <source src={source} type="video/mp4" />
+                            <source src={media.src} type="video/mp4" />
                         </video>
                     );
                 })()}
@@ -129,17 +117,17 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         <span
                             className="bg-clip-text text-transparent drop-shadow-none block mb-1"
                             style={{
-                                backgroundImage: `linear-gradient(to right, ${config.theme.primary}, ${config.theme.accent})`,
+                                backgroundImage: `linear-gradient(to right, ${theme.colors.primary}, ${theme.colors.accent})`,
                                 WebkitBackgroundClip: 'text'
                             }}
                         >
-                            {config.hero?.title.split(',')[0] || config.marketingName}
+                            {hero.headline.split('\n')[0] || config.hospital.name}
                         </span>
                         <span
                             className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.08)] block"
                             style={{ color: heroTitleColor }}
                         >
-                            {config.hero?.title.split(',')[1] || "스마트 케어 솔루션"}
+                            {hero.headline.split('\n')[1] || "스마트 케어 솔루션"}
                         </span>
                     </h1>
 
@@ -148,7 +136,7 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                         className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto drop-shadow-md font-bold px-4 ${isThemeDark ? 'text-white/80' : ''}`}
                         style={{ color: isThemeDark ? undefined : heroSubtitleColor, opacity: 0.95 }}
                     >
-                        {config.hero?.subtitle || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
+                        {hero.subheadline || "지금 내 상태를 빠르게 체크하고, 맞춤형 솔루션을 확인해보세요."}
                     </p>
 
                     {/* CTA Section: High-Impact Buttons */}
@@ -180,7 +168,7 @@ export default function HealthcareHero({ config, onOpenCamera }: HealthcareHeroP
                                 backgroundColor: isThemeDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'
                             }}
                         >
-                            <Sparkles className="w-5 h-5 animate-pulse" style={{ color: config.theme.primary }} />
+                            <Sparkles className="w-5 h-5 animate-pulse" style={{ color: theme.colors.primary }} />
                             30초 체크 시작
                         </Link>
                     </div>

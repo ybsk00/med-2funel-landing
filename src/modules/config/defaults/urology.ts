@@ -31,6 +31,10 @@ export const urologyDefaults: Partial<HospitalConfig> = {
         background: '#0F172A', // 딥 네이비
         text: '#F8FAFC',       // 화이트
       },
+      design: {
+        texture: 'carbon',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '당신의 건강한 하루를 위해\n프라이빗 헬스케어',
@@ -49,6 +53,10 @@ export const urologyDefaults: Partial<HospitalConfig> = {
         accent: '#8B5CF6',
         background: '#FFFFFF',
         text: '#1E293B',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

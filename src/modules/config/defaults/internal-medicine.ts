@@ -31,6 +31,10 @@ export const internalMedicineDefaults: Partial<HospitalConfig> = {
         background: '#0F172A', // 딥 네이비
         text: '#F8FAFC',       // 화이트
       },
+      design: {
+        texture: 'botanic',
+        font: 'font-sans',
+      },
       hero: {
         type: 'clean-effect',
         headline: '건강의 시작은\n정확한 체크업에서',
@@ -49,6 +53,10 @@ export const internalMedicineDefaults: Partial<HospitalConfig> = {
         accent: '#F59E0B',
         background: '#FFFFFF',
         text: '#1E293B',
+      },
+      design: {
+        texture: 'glass',
+        font: 'font-sans',
       },
     },
     admin: {

@@ -12,9 +12,10 @@ interface CardProps {
     icon: any;
     color: string;
     onClick?: () => void;
+    isDark?: boolean;
 }
 
-export default function VipCard({ id, title, description, icon: Icon, color, onClick }: CardProps) {
+export default function VipCard({ id, title, description, icon: Icon, color, onClick, isDark }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: '/sounds/tick.mp3', // Example sound
         vibration: 'light'

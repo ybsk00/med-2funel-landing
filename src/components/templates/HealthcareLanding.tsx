@@ -8,7 +8,8 @@ import Footer from "@/components/common/Footer";
 import ClinicSearchModule from "@/components/healthcare/ClinicSearchModule";
 import PhotoSlideOver from "@/components/landing/PhotoSlideOver";
 import HowItWorksCards from "@/components/landing/HowItWorksCards";
-import { useHospital } from "@/components/common/HospitalProvider";
+import { useHospitalConfig, useHealthcareConfig, useHospitalInfo, useThemeConfig } from "@/modules/theme/ThemeProvider";
+import { isColorDark } from "@/lib/utils/theme";
 import dynamic from 'next/dynamic';
 
 const MagneticInteraction = dynamic(() => import("@/components/ui/ThreeDInteraction").then(mod => mod.MagneticInteraction), { ssr: false });
@@ -48,59 +49,48 @@ const ICON_MAP: Record<string, any> = {
 };
 
 export default function HealthcareLanding() {
-    const config = useHospital();
+    const fullConfig = useHospitalConfig();
+    const healthcare = useHealthcareConfig();
+    const hospital = useHospitalInfo();
+    const theme = useThemeConfig();
+    
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
-    const [isLocked, setIsLocked] = useState(config.id === 'dermatology');
+    const [isLocked, setIsLocked] = useState(hospital.department === 'dermatology');
 
-    // Unified Darkness Check (Re-refined)
-    const isColorDark = (hex?: string) => {
-        if (!hex) return false;
-        let h = hex.replace('#', '');
-        if (h.length === 3) {
-            h = h.split('').map(c => c + c).join('');
-        }
-        if (h.length !== 6) return false;
-        const r = parseInt(h.substring(0, 2), 16);
-        const g = parseInt(h.substring(2, 4), 16);
-        const b = parseInt(h.substring(4, 6), 16);
-        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-        return luminance < 0.5;
-    };
-
-    const isThemeDark = isColorDark(config.theme.background);
-    const isPrimaryBright = config.theme.primary ? !isColorDark(config.theme.primary) : false;
+    const isThemeDark = isColorDark(theme.healthcare.colors.background);
+    const isPrimaryBright = theme.healthcare.colors.primary ? !isColorDark(theme.healthcare.colors.primary) : false;
     const buttonTextColor = (isPrimaryBright && !isThemeDark) ? "text-slate-900 font-extrabold" : "text-white";
 
     // Dynamic Icon for CTA
-    const CtaIcon = ICON_MAP[config.marketing?.cta?.icon as string] || Sparkles;
+    // CTA info might be in a different place now or needs mapping
+    // In v2.0, hero and modules are more structured. 
+    // Let's use a default for now if CTA isn't explicitly in schema.
+    const CtaIcon = Sparkles; 
 
     return (
         <TrackF1View>
             <div
                 className={`min-h-screen font-sans selection:bg-skin-primary selection:text-white transition-colors duration-700 ${isLocked ? 'overflow-hidden h-screen' : ''}`}
                 style={{
-                    color: config.theme.text
+                    color: theme.healthcare.colors.text
                 }}
             >
-                {config.id === 'dermatology' && (
+                {hospital.department === 'dermatology' && (
                     <PrivacyScreen
                         isLocked={isLocked}
                         onUnlock={() => setIsLocked(false)}
-                        title={config.marketingName || "SECURE ACCESS"}
+                        title={healthcare.branding.logoText || "SECURE ACCESS"}
                         subtitle="VERIFYING VIP MEMBERSHIP..."
                     />
                 )}
 
-                <PremiumBackground colors={config.theme} intensity="subtle" />
+                <PremiumBackground colors={theme.healthcare.colors} intensity="subtle" />
 
-                <HealthcareNavigation config={config} />
-
-                {/* Navigation (Simplified to match departments) */}
-                {/* HealthcareNavigation is now used instead of this manual nav */}
+                <HealthcareNavigation config={fullConfig} />
 
                 <main className="relative">
                     {/* Centralized Hero */}
-                    <HealthcareHero config={config} onOpenCamera={() => setIsPhotoSlideOverOpen(true)} />
+                    <HealthcareHero config={fullConfig} onOpenCamera={() => setIsPhotoSlideOverOpen(true)} />
                 </main>
 
                 <PhotoSlideOver
@@ -112,14 +102,14 @@ export default function HealthcareLanding() {
                 <section id="clinic-search" className="relative py-24 z-20">
                     <div className="w-full max-w-4xl px-6 mx-auto">
                         <div className="text-center mb-12 px-4">
-                            <span className="px-5 py-2 rounded-full bg-white/10 text-white text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase border border-white/20 mb-8 inline-block shadow-lg backdrop-blur-md">
+                            <span className={`px-5 py-2 rounded-full text-[10px] sm:text-xs font-black tracking-[0.25em] uppercase mb-8 inline-block shadow-lg backdrop-blur-md border ${isThemeDark ? 'bg-white/10 text-white border-white/20' : 'bg-skin-primary/10 text-skin-primary border-skin-primary/20'}`}>
                                 Healthcare Network
                             </span>
-                            <h3 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-2xl">
-                                유명한 <span className="text-skin-primary">{config.name}</span> 찾기
+                            <h3 className={`text-4xl md:text-6xl font-black mb-6 leading-tight ${isThemeDark ? 'text-white drop-shadow-2xl' : 'text-skin-text'}`}>
+                                유명한 <span className="text-skin-primary">{hospital.name}</span> 찾기
                             </h3>
-                            <p className="text-white/70 max-w-xl mx-auto text-lg md:text-xl font-bold leading-relaxed drop-shadow-md">
-                                검증된 {config.name} 전문 병원을 찾아보세요. <br className="hidden md:block" />
+                            <p className={`max-w-xl mx-auto text-lg md:text-xl font-bold leading-relaxed ${isThemeDark ? 'text-white/70 drop-shadow-md' : 'text-skin-text/70'}`}>
+                                검증된 {hospital.name} 전문 병원을 찾아보세요. <br className="hidden md:block" />
                                 전문 의료진과 최첨단 장비를 갖춘 최적의 진료 환경을 약속합니다.
                             </p>
                         </div>
@@ -128,11 +118,11 @@ export default function HealthcareLanding() {
                             {/* Deep Glass Background */}
                             <div className="absolute -inset-2 bg-gradient-to-r from-skin-primary/30 to-skin-accent/30 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
 
-                            <div className="relative bg-white/[0.05] backdrop-blur-[60px] rounded-[3rem] p-10 md:p-16 border border-white/20 shadow-[0_32px_80px_rgba(0,0,0,0.5)] overflow-hidden">
+                            <div className={`relative backdrop-blur-[60px] rounded-[3rem] p-10 md:p-16 overflow-hidden ${isThemeDark ? 'bg-white/[0.05] border border-white/20 shadow-[0_32px_80px_rgba(0,0,0,0.5)]' : 'bg-skin-primary/5 border border-skin-primary/10 shadow-xl'}`}>
                                 {/* Decorative Glow */}
                                 <div className="absolute -top-32 -right-32 w-96 h-96 bg-skin-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
 
-                                <ClinicSearchModule department={config.id} searchKeyword={config.marketing?.searchKeyword} />
+                                <ClinicSearchModule department={hospital.department} searchKeyword={hospital.searchKeywords[0]} />
                             </div>
                         </div>
                     </div>
@@ -140,7 +130,7 @@ export default function HealthcareLanding() {
 
 
                 {/* Specialized Evidence Section */}
-                {config.id === 'dentistry' && (
+                {hospital.department === 'dentistry' && (
                     <section className="px-6 py-20 max-w-7xl mx-auto relative z-10">
                         <DentistryMorphing />
                     </section>
@@ -154,7 +144,7 @@ export default function HealthcareLanding() {
                 {/* Modules Grid (HealthcareModules) */}
                 <section className="relative py-32 overflow-hidden z-10">
                     <div className="max-w-7xl mx-auto px-6">
-                        <HealthcareModules config={config} />
+                        <HealthcareModules />
                     </div>
                 </section>
 
@@ -163,10 +153,10 @@ export default function HealthcareLanding() {
                 <div className="fixed bottom-8 right-8 z-50">
                     <MagneticInteraction distance={50} strength={0.5}>
                         <Link
-                            href={config.marketing?.cta?.link || "healthcare/chat"}
+                            href="healthcare/chat"
                             className={`w-16 h-16 rounded-full flex items-center justify-center ${buttonTextColor} shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 border border-white/20 backdrop-blur-md`}
                             style={{
-                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : config.theme.primary
+                                backgroundColor: isThemeDark ? 'rgba(255,255,255,0.1)' : theme.healthcare.colors.primary
                             }}
                         >
                             <CtaIcon className="w-8 h-8" />

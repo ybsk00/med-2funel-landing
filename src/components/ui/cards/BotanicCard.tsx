@@ -12,9 +12,10 @@ interface CardProps {
     color: string;
     sound?: string;
     onClick?: () => void;
+    isDark?: boolean;
 }
 
-export default function BotanicCard({ id, title, description, icon: Icon, color, sound, onClick }: CardProps) {
+export default function BotanicCard({ id, title, description, icon: Icon, color, sound, onClick, isDark }: CardProps) {
     const { handleHover, handleClick } = useSensoryInteraction({
         soundUrl: sound,
         vibration: 'light'
