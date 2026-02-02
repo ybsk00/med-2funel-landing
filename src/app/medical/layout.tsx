@@ -8,14 +8,19 @@ export const metadata: Metadata = {
     description: "의료진 전용 대시보드",
 };
 
+import { cookies } from "next/headers";
+
 export default async function MedicalLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const config = await getDepartmentConfig("dermatology");
+    const cookieStore = await cookies();
+    const deptId = cookieStore.get("active_dept")?.value || "dermatology";
+    const config = await getDepartmentConfig(deptId);
+
     return (
-        <HospitalProvider initialConfig={config}>
+        <HospitalProvider departmentId={deptId as any}>
             <div className="min-h-screen bg-traditional-bg text-traditional-text font-sans selection:bg-traditional-accent selection:text-white">
                 {children}
             </div>

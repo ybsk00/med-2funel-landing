@@ -16,7 +16,13 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const router = useRouter();
+    const [dept, setDept] = useState<string | null>(null);
     const supabase = createClient();
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        setDept(searchParams.get("dept"));
+    }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -83,7 +89,8 @@ export default function LoginPage() {
                 if (staffUser?.role === 'admin' || staffUser?.role === 'doctor' || staffUser?.role === 'staff') {
                     router.push("/admin");
                 } else {
-                    router.push("/medical/patient-dashboard");
+                    const redirectPath = dept ? `/${dept}/medical/patient-dashboard` : "/medical/patient-dashboard";
+                    router.push(redirectPath);
                 }
             }
         } catch (error) {
@@ -122,7 +129,8 @@ export default function LoginPage() {
 
     const handleSocialLogin = async (provider: 'google' | 'kakao' | 'naver') => {
         if (provider === 'naver') {
-            await signIn('naver', { callbackUrl: '/medical/patient-dashboard' });
+            const callbackUrl = dept ? `/${dept}/medical/patient-dashboard` : "/medical/patient-dashboard";
+            await signIn('naver', { callbackUrl });
             return;
         }
 

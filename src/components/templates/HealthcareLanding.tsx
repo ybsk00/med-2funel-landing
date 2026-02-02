@@ -13,6 +13,8 @@ import { HEALTHCARE_CONTENT } from "@/lib/constants/healthcare_content";
 import { useHospital } from "@/components/common/HospitalProvider";
 import dynamic from 'next/dynamic';
 import { motion } from "framer-motion";
+import DepartmentSync from "@/components/common/DepartmentSync";
+import { DepartmentId } from "@/lib/config/departments";
 
 const MagneticInteraction = dynamic(() => import("@/components/ui/ThreeDInteraction").then(mod => mod.MagneticInteraction), { ssr: false });
 const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/PremiumBackground"), { ssr: false });
@@ -110,6 +112,7 @@ export default function HealthcareLanding() {
                 style={{ color: theme.healthcare.colors.text }}
             >
                 {/* 과별 미세 배경 패턴 */}
+                <DepartmentSync deptId={v1Config.id as DepartmentId} />
                 <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: bgPattern }} />
 
                 {hospital.department === 'plastic-surgery' && <ContourRing3D />}
@@ -362,7 +365,7 @@ export default function HealthcareLanding() {
                                     ))}
                                 </ul>
                                 <Link
-                                    href="/login"
+                                    href={`/login?dept=${v1Config.id || 'dermatology'}`}
                                     className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${buttonTextColor} hover:shadow-lg active:scale-95`}
                                     style={{ backgroundColor: theme.healthcare.colors.primary }}
                                 >
