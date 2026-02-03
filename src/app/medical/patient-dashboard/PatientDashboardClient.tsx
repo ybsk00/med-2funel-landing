@@ -358,13 +358,14 @@ export default function PatientDashboardClient() {
                     {/* Main Video Banner */}
                     <div className="relative w-full h-96 md:h-[500px]">
                         <video
-                            src="/3.mp4"
                             autoPlay
                             loop
                             muted
                             playsInline
-                            className="w-full h-full object-cover object-[center_25%]"
-                        />
+                            className="w-full h-full object-cover object-center"
+                        >
+                            <source src="/3.mp4" type="video/mp4" />
+                        </video>
                     </div>
 
                     {/* Light Gradient Overlay - More transparent */}
