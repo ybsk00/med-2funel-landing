@@ -107,23 +107,30 @@ export function getMedicalSystemPrompt(
 // 3. 유틸리티 및 데이터
 // =============================================
 
-// Track label logic
-const tracks = config.medical?.tracks || [];
-const currentTrackObj = tracks.find(t => t.id === track);
-const trackLabel = currentTrackObj ? currentTrackObj.name : "일반 상담";
-
 // 트랙 감지 함수
 export function detectMedicalTrack(message: string, config: HospitalConfig): string {
    const lowerMessage = message.toLowerCase();
-   const tracks = config.medical?.tracks || [];
+   const tracks = (config as any).medical?.tracks || [];
 
-   for (const track of tracks) {
-      if (track.keywords.some(keyword => lowerMessage.includes(keyword))) {
+   for (const track of tracks as any[]) {
+      if (track.keywords.some((keyword: string) => lowerMessage.includes(keyword))) {
          return track.id;
       }
    }
    return "general";
 }
+
+// 의료진 기본 정보 (컴포넌트 폴백용)
+export const DOCTORS = [
+   {
+      id: "representative",
+      name: "대표원장",
+      role: "대표원장",
+      field: "전문의",
+      history: ["서울대학교 의과대학 졸업", "전문의 자격 취득", "풍부한 임상 경험"],
+      image: "/doctor-avatar.jpg"
+   }
+];
 
 export const MEDICAL_KEYWORDS = [
    "통증", "증상", "치료", "진단", "처방", "약", "수술", "시술", "부작용", "염증"
@@ -147,8 +154,8 @@ export function detectConcern(message: string, config: HospitalConfig): {
 
    // Optional: Track-based concern detection for healthcare
    const tracks = medicalConfig?.tracks || [];
-   for (const track of tracks) {
-      for (const keyword of (track as any).keywords) {
+   for (const track of tracks as any[]) {
+      for (const keyword of (track as any).keywords as string[]) {
          if (lowerMessage.includes(keyword)) {
             return { hasConcern: true, concernType: keyword, isMedicalTrigger: false };
          }
@@ -178,7 +185,7 @@ export const RED_FLAG_KEYWORDS = [
 
 // 의료진 정보 (DoctorIntroModal용) - Config에서 가져옴
 export function getDoctors(config: HospitalConfig) {
-   return config.medical?.reservation?.availableDoctors || [];
+   return (config as any).medical?.reservation?.availableDoctors || [];
 }
 
 // SCI 논문 정보 (EvidenceModal용)

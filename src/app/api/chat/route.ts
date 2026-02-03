@@ -78,10 +78,10 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. Track Detection (첫 턴에서 감지, 이후 유지)
-        const track = existingTrack || detectMedicalTrack(message);
+        const track = existingTrack || detectMedicalTrack(message, HOSPITAL_CONFIG);
 
         // 3. System Prompt with track and question count
-        const systemPrompt = getMedicalSystemPrompt(turnCount, track, askedQuestionCount);
+        const systemPrompt = getMedicalSystemPrompt(HOSPITAL_CONFIG, turnCount, track, askedQuestionCount);
 
         const fullPrompt = `
 ${systemPrompt}
