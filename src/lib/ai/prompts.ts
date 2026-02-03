@@ -64,9 +64,11 @@ export function getMedicalSystemPrompt(
    track?: string,
    askedQuestionCount?: number
 ): string {
+   const medicalConfig = (config as any).medical;
    const persona = config.personas.medical;
-   // Track label logic remains same or can be dynamic
-   const trackLabel = track ? (MEDICAL_TRACKS[track as keyof typeof MEDICAL_TRACKS] || track) : "일반 상담";
+   const tracks = medicalConfig?.tracks || [];
+   const currentTrackObj = tracks.find((t: any) => t.id === track);
+   const trackLabel = currentTrackObj ? currentTrackObj.name : "일반 상담";
 
 
    return `
@@ -105,85 +107,66 @@ export function getMedicalSystemPrompt(
 // 3. 유틸리티 및 데이터
 // =============================================
 
-// 피부과 8트랙 정의 (TODO: Make generic for other depts later if needed, but keeping for now as base)
-export const MEDICAL_TRACKS = {
-   acne: "여드름/트러블",
-   pigment: "색소/기미/잡티",
-   aging: "노화/주름/탄력",
-   lifting: "리프팅/윤곽",
-   laser: "레이저/광치료",
-   skincare: "피부관리/클렌징",
-   sensitivity: "민감성/장벽",
-   general: "일반상담/기타"
-};
-
-// 트랙 감지 키워드
-export const TRACK_KEYWORDS: { [key: string]: string[] } = {
-   acne: ["여드름", "트러블", "뾰루지", "피지", "블랙헤드"],
-   pigment: ["기미", "잡티", "색소", "점", "주근깨"],
-   aging: ["주름", "탄력", "처짐", "노화", "팔자"],
-   lifting: ["리프팅", "윤곽", "턱선", "울쎄라", "슈링크"],
-   laser: ["레이저", "토닝", "프락셀"],
-   skincare: ["관리", "모공", "각질", "수분"],
-   sensitivity: ["민감", "홍조", "따가움", "뒤집어"],
-   general: ["상담", "예약", "위치", "비용"],
-};
+// Track label logic
+const tracks = config.medical?.tracks || [];
+const currentTrackObj = tracks.find(t => t.id === track);
+const trackLabel = currentTrackObj ? currentTrackObj.name : "일반 상담";
 
 // 트랙 감지 함수
-export function detectMedicalTrack(message: string): string {
+export function detectMedicalTrack(message: string, config: HospitalConfig): string {
    const lowerMessage = message.toLowerCase();
-   for (const [track, keywords] of Object.entries(TRACK_KEYWORDS)) {
-      if (keywords.some(keyword => lowerMessage.includes(keyword))) {
-         return track;
+   const tracks = config.medical?.tracks || [];
+
+   for (const track of tracks) {
+      if (track.keywords.some(keyword => lowerMessage.includes(keyword))) {
+         return track.id;
       }
    }
    return "general";
 }
 
-// 헬스케어용: 피부 고민 감지 (로그인 유도용)
-export const SKIN_CONCERN_KEYWORDS = [
-   "주름", "여드름", "기미", "모공", "홍조", "흉터", "탄력", "색소"
-];
-
-export const PROCEDURE_KEYWORDS = [
-   "리프팅", "보톡스", "필러", "레이저", "시술", "주사"
-];
-
 export const MEDICAL_KEYWORDS = [
    "통증", "증상", "치료", "진단", "처방", "약", "수술", "시술", "부작용", "염증"
 ];
 
-export function detectSkinConcern(message: string): {
+export function detectConcern(message: string, config: HospitalConfig): {
    hasConcern: boolean;
    concernType: string;
-   isProcedure: boolean;
+   isMedicalTrigger: boolean;
 } {
    const lowerMessage = message.toLowerCase();
+   const healthcareConfig = (config as any).healthcare;
+   const medicalConfig = (config as any).medical;
+   const medicalKeywords = healthcareConfig?.conversion?.medicalKeywords || MEDICAL_KEYWORDS;
 
-   for (const keyword of PROCEDURE_KEYWORDS) {
+   for (const keyword of medicalKeywords) {
       if (lowerMessage.includes(keyword)) {
-         return { hasConcern: true, concernType: keyword, isProcedure: true };
+         return { hasConcern: true, concernType: keyword, isMedicalTrigger: true };
       }
    }
 
-   for (const keyword of SKIN_CONCERN_KEYWORDS) {
-      if (lowerMessage.includes(keyword)) {
-         return { hasConcern: true, concernType: keyword, isProcedure: false };
+   // Optional: Track-based concern detection for healthcare
+   const tracks = medicalConfig?.tracks || [];
+   for (const track of tracks) {
+      for (const keyword of (track as any).keywords) {
+         if (lowerMessage.includes(keyword)) {
+            return { hasConcern: true, concernType: keyword, isMedicalTrigger: false };
+         }
       }
    }
 
-   return { hasConcern: false, concernType: '', isProcedure: false };
+   return { hasConcern: false, concernType: '', isMedicalTrigger: false };
 }
 
-// 피부 고민 자유발화 응답 (로그인 유도)
-export function getSkinConcernResponsePrompt(concernType: string, isProcedure: boolean): string {
+// 고민 자유발화 응답 (로그인 유도)
+export function getConcernResponsePrompt(concernType: string, isMedicalTrigger: boolean): string {
    return `
 [상황] 사용자가 "${concernType}"에 대해 이야기했습니다.
 [지시]
-1. 공감해주세요 ("저런, 그것 때문에 속상하셨겠어요").
+1. 공감해주세요 ("그 부분에 대해 걱정이 많으시군요").
 2. 하지만 우린 여기서 자세한 상담을 할 수 없다는 뉘앙스를 풍기세요.
-3. "로그인하면 제가 원장님 몰래 꿀팁 알려드릴 수 있는데..."라며 재치 있게 로그인을 유도하세요.
-4. 절대 의학적 조언이나 시술 추천을 하지 마세요.
+3. "로그인하시면 제가 자세한 분석 리포트와 함께 꿀팁 정보를 알려드릴 수 있어요"라며 재치 있게 로그인을 유도하세요.
+4. 절대 의학적 조언이나 구체적인 솔루션을 제안하지 마세요.
 `;
 }
 
@@ -193,17 +176,10 @@ export const RED_FLAG_KEYWORDS = [
    "급성 알레르기", "아나필락시스"
 ];
 
-// 의료진 정보 (DoctorIntroModal용)
-export const DOCTORS = [
-   {
-      name: "김닥터",
-      title: "대표원장",
-      image: "/images/character-doctor.jpg",
-      education: "서울대학교 의과대학 졸업",
-      specialty: ["통합 진료", "피부과", "내과"],
-      tracks: ["general"]
-   }
-];
+// 의료진 정보 (DoctorIntroModal용) - Config에서 가져옴
+export function getDoctors(config: HospitalConfig) {
+   return config.medical?.reservation?.availableDoctors || [];
+}
 
 // SCI 논문 정보 (EvidenceModal용)
 export const SCI_EVIDENCE = {

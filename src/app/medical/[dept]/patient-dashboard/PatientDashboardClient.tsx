@@ -6,7 +6,7 @@ import Image from "next/image";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
-import AestheticCheckModal from "@/components/medical/AestheticCheckModal";
+import GenericCheckModal from "@/components/medical/GenericCheckModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import FileUploadModal from "@/components/medical/FileUploadModal";
 import MapModal from "@/components/medical/MapModal";
@@ -18,12 +18,14 @@ import FaceSimulationModal from "@/components/face-style/FaceSimulationModal";
 import { useSession } from "next-auth/react";
 import { DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
 import { useHospital } from "@/components/common/HospitalProvider";
+import { DEPARTMENT_CHECK_DATA } from "@/lib/data/department-check-data";
+import { getDepartmentChatTitle, getDepartmentHeroMedia, isSimulationEnabled } from "@/lib/data/department-ui";
 
 export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
     const config = useHospital(); // Use dynamic config
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-    const [showAestheticModal, setShowAestheticModal] = useState(false);
+    const [showCheckModal, setShowCheckModal] = useState(false);
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [showMapModal, setShowMapModal] = useState(false);
@@ -240,6 +242,14 @@ export default function PatientDashboardClient() {
         }
     };
 
+    const checkData = DEPARTMENT_CHECK_DATA[config.id as string];
+    const checkLabel = checkData?.title || "상담 신청";
+    const checkIconColor = checkData?.colorTheme?.iconColor || "text-white";
+    const checkIcon = <ClipboardList className={`w-4 h-4 md:w-5 md:h-5 ${checkIconColor}`} />;
+    const heroMedia = getDepartmentHeroMedia(config.id);
+    const chatTitle = getDepartmentChatTitle(config.id);
+    const showSimulation = isSimulationEnabled(config.id);
+
     return (
         <div className="min-h-screen bg-skin-bg font-sans selection:bg-skin-accent selection:text-white">
             <PatientHeader />
@@ -280,15 +290,18 @@ export default function PatientDashboardClient() {
                     }}
                 />
 
-                {/* Aesthetic Check Modal */}
-                <AestheticCheckModal
-                    isOpen={showAestheticModal}
-                    onClose={() => setShowAestheticModal(false)}
-                    onComplete={(summary) => {
-                        setSymptomSummary(summary);
-                        setShowAestheticModal(false);
-                    }}
-                />
+                {/* Department Check Modal */}
+                {checkData && (
+                    <GenericCheckModal
+                        isOpen={showCheckModal}
+                        onClose={() => setShowCheckModal(false)}
+                        config={checkData}
+                        onComplete={(summary) => {
+                            setSymptomSummary(summary);
+                            setShowCheckModal(false);
+                        }}
+                    />
+                )}
 
                 {/* Medication Modal */}
                 <MedicationModal
@@ -324,15 +337,27 @@ export default function PatientDashboardClient() {
 
                 {/* Video Section with Glassmorphism Quick Actions */}
                 <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
-                    {/* BLINDS SHADOW Image Banner */}
+                    {/* Department Hero Banner */}
                     <div className="relative w-full h-96 md:h-[500px]">
-                        <Image
-                            src="/BLINDS SHADOW.png"
-                            alt={`${config.name} 프리미엄 시술`}
-                            fill
-                            className="object-cover object-[center_25%]"
-                            priority
-                        />
+                        {heroMedia.type === "video" ? (
+                            <video
+                                src={heroMedia.src}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                poster={heroMedia.poster}
+                                className="w-full h-full object-cover object-[center_25%]"
+                            />
+                        ) : (
+                            <Image
+                                src={heroMedia.src}
+                                alt={`${config.name} 진료 안내`}
+                                fill
+                                className="object-cover object-[center_25%]"
+                                priority
+                            />
+                        )}
                     </div>
 
                     {/* Light Gradient Overlay - More transparent */}
@@ -341,7 +366,7 @@ export default function PatientDashboardClient() {
                     {/* Quick Actions Card - 6 buttons */}
                     <div className="absolute bottom-4 left-4 right-4">
                         <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-3 shadow-lg">
-                            <div className="grid grid-cols-7 gap-2">
+                            <div className={showSimulation ? "grid grid-cols-7 gap-2" : "grid grid-cols-6 gap-2"}>
                                 <button
                                     onClick={() => setIsReservationModalOpen(true)}
                                     className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
@@ -352,13 +377,13 @@ export default function PatientDashboardClient() {
                                     <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">예약하기</span>
                                 </button>
                                 <button
-                                    onClick={() => setShowAestheticModal(true)}
+                                    onClick={() => setShowCheckModal(true)}
                                     className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
                                     <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-emerald-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                        <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                        {checkIcon}
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">시술상담</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">{checkLabel}</span>
                                 </button>
                                 <button
                                     onClick={() => setShowMedicationModal(true)}
@@ -378,15 +403,17 @@ export default function PatientDashboardClient() {
                                     </div>
                                     <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">검사결과지</span>
                                 </button>
-                                <button
-                                    onClick={() => setShowFaceSimulationModal(true)}
-                                    className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
-                                >
-                                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-pink-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                        <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-white" />
-                                    </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">시뮬레이션</span>
-                                </button>
+                                {showSimulation && (
+                                    <button
+                                        onClick={() => setShowFaceSimulationModal(true)}
+                                        className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
+                                    >
+                                        <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-pink-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                                            <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                        </div>
+                                        <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">시뮬레이션</span>
+                                    </button>
+                                )}
                                 <button
                                     onClick={() => setShowReviewModal(true)}
                                     className={`flex flex-col items-center gap-1.5 p-2 rounded-xl transition-all duration-300 group ${highlightedTabs.includes('review')
@@ -420,10 +447,10 @@ export default function PatientDashboardClient() {
                 <div className="bg-[#1a2332] backdrop-blur-xl rounded-3xl shadow-xl border border-white/10 overflow-hidden h-[650px] flex flex-col">
                     <div className="p-5 border-b border-white/10 flex justify-between items-center bg-[#1a2332]">
                         <div>
-                            <h3 className="font-bold text-white text-lg">예진 상담 (Medical Chat)</h3>
+                            <h3 className="font-bold text-white text-lg">{chatTitle.title}</h3>
                             <p className="text-xs text-dental-primary font-medium flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 bg-dental-primary rounded-full animate-pulse"></span>
-                                전문의 감독 하에 운영
+                                {chatTitle.subtitle}
                             </p>
                         </div>
                         <button className="text-dental-subtext hover:text-white p-2 hover:bg-white/10 rounded-full transition-colors">
@@ -484,10 +511,12 @@ export default function PatientDashboardClient() {
             />
 
             {/* Face Simulation Modal */}
-            <FaceSimulationModal
-                isOpen={showFaceSimulationModal}
-                onClose={() => setShowFaceSimulationModal(false)}
-            />
+            {showSimulation && (
+                <FaceSimulationModal
+                    isOpen={showFaceSimulationModal}
+                    onClose={() => setShowFaceSimulationModal(false)}
+                />
+            )}
         </div>
     );
 }

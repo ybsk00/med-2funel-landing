@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
-import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, MEDICAL_KEYWORDS, EntryIntent, detectSkinConcern, getSkinConcernResponsePrompt } from "@/lib/ai/prompts";
+import { getHealthcareSystemPrompt, getHealthcareFinalAnalysisPrompt, EntryIntent, detectConcern, getConcernResponsePrompt } from "@/lib/ai/prompts";
 import { DEPARTMENT_CONFIGS, DEFAULT_DEPARTMENT } from "@/lib/config/departments";
 
 export async function POST(req: NextRequest) {

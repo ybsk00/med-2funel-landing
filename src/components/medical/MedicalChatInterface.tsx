@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Send, User, Bot, ArrowLeft, FileText, Plus, Calendar } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useHospital } from "@/components/common/HospitalProvider";
+import { getDepartmentMedicalIntro } from "@/lib/data/department-ui";
 
 type Message = {
     role: "user" | "ai";
@@ -33,6 +35,7 @@ function parseActionToken(content: string): { cleanContent: string; action: stri
 
 export default function MedicalChatInterface() {
     const router = useRouter();
+    const config = useHospital();
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +45,12 @@ export default function MedicalChatInterface() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        // Initial Medical Greeting - 에버피부과 AI 상담 + 운영정보
+        // Initial Medical Greeting (Config driven)
         setMessages([{
             role: "ai",
-            content: "안녕하세요, 에버피부과 AI 상담입니다.\n\n**📍 에버피부과**는 프리미엄 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n이 채팅은 **진단이나 처방이 아닌 생활 습관·웰니스 점검(참고용)** 입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요."
+            content: getDepartmentMedicalIntro(config)
         }]);
-    }, []);
+    }, [config]);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -153,7 +156,7 @@ export default function MedicalChatInterface() {
                         <ArrowLeft size={24} />
                     </Link>
                     <div className="ml-2">
-                        <h1 className="text-lg font-bold text-white">에버피부과 AI 상담</h1>
+                        <h1 className="text-lg font-bold text-white">{config.name} AI 상담</h1>
                         <p className="text-xs text-dental-primary flex items-center font-medium">
                             <span className="w-2 h-2 rounded-full bg-dental-primary mr-1"></span>
                             참고용 건강 점검 · 진단 대체 불가
@@ -191,7 +194,7 @@ export default function MedicalChatInterface() {
                         <div className="flex flex-col gap-1 max-w-[85%]">
                             {/* AI Label */}
                             {msg.role === "ai" && (
-                                <div className="text-xs text-dental-primary font-semibold">에버피부과</div>
+                                <div className="text-xs text-dental-primary font-semibold">{config.name}</div>
                             )}
                             <div
                                 className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "ai"

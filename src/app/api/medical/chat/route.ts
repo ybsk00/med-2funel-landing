@@ -77,12 +77,12 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // 2. Track Detection (첫 턴에서 감지, 이후 유지)
-        const track = existingTrack || detectMedicalTrack(message);
-
         // Department Config Loading
         const departmentId = reqDepartmentId || DEFAULT_DEPARTMENT;
         const config = DEPARTMENT_CONFIGS[departmentId as keyof typeof DEPARTMENT_CONFIGS] || DEPARTMENT_CONFIGS[DEFAULT_DEPARTMENT];
+
+        // 2. Track Detection (첫 턴에서 감지, 이후 유지)
+        const track = existingTrack || detectMedicalTrack(message, config);
 
         // 3. System Prompt with track and question count
         const systemPrompt = getMedicalSystemPrompt(config, turnCount, track, askedQuestionCount);

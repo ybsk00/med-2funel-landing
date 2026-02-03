@@ -14,6 +14,7 @@ import SafetyBadge from "@/components/medical/SafetyBadge";
 import { useMarketingTracker } from "@/hooks/useMarketingTracker";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic, sanitizeTopic, DEFAULT_TOPIC } from "@/lib/constants/topics";
 import { useHospital } from "@/components/common/HospitalProvider";
+import { getDepartmentMedicalIntro } from "@/lib/data/department-ui";
 
 type Message = {
     role: "user" | "ai";
@@ -113,7 +114,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [loginModalContent, setLoginModalContent] = useState({
         title: "상세한 상담이 필요하신가요?",
-        desc: "더 정확한 피부 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다."
+        desc: `더 정확한 ${config.dept} 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다.`
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showReservationModal, setShowReservationModal] = useState(false);
@@ -178,10 +179,9 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     // 초기 메시지 설정
     useEffect(() => {
         if (props.mode === 'medical') {
-            const persona = config.personas.medical;
             setMessages([{
                 role: "ai",
-                content: `안녕하세요, ${config.name} ${persona.name}입니다.\n\n**✨ ${config.name}**는 ${config.theme.concept} 피부 관리와 미용 시술을 전문으로 하는 피부과입니다.\n\n어떤 피부 고민이 있으신가요? 궁금하신 점을 편하게 질문해주세요.`
+                content: getDepartmentMedicalIntro(config)
             }]);
         } else {
             const persona = config.personas.healthcare;
@@ -258,7 +258,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         if (props.isLoggedIn) return;
         setLoginModalContent({
             title: "이미지 분석 기능",
-            desc: "이미지 분석을 통한 피부 상담은<br />로그인 후 이용 가능합니다."
+            desc: `이미지 분석을 통한 ${config.dept} 상담은<br />로그인 후 이용 가능합니다.`
         });
         setShowLoginModal(true);
     };
@@ -451,7 +451,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                     <h2 className="text-lg md:text-xl font-bold text-white drop-shadow-lg">
                                         {props.mode === 'medical' ? `${config.name} 프리미엄 스킨케어` : "프리미엄 스킨케어 루틴"}
                                     </h2>
-                                    <p className="text-sm text-white/80 drop-shadow">{config.theme.concept} 피부 관리의 시작</p>
+                                    <p className="text-sm text-white/80 drop-shadow">{config.theme.concept} 케어의 시작</p>
                                 </div>
                             </div>
                             {/* Module Tabs */}
@@ -565,7 +565,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="피부 고민이나 궁금한 점을 입력해주세요..."
+                            placeholder={`${config.dept} 관련 고민이나 궁금한 점을 입력해주세요...`}
                             className={`flex-1 bg-transparent border-none focus:ring-0 text-base ${isThemeDark ? 'text-white placeholder:text-skin-subtext/50' : 'text-slate-800 placeholder:text-stone-400'
                                 }`}
                             disabled={!props.isLoggedIn && turnCount >= 5}
