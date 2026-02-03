@@ -358,13 +358,15 @@ export default function PatientDashboardClient() {
                     {/* Main Video Banner */}
                     <div className="relative w-full h-96 md:h-[500px]">
                         <video
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
+                            autoPlay={true}
+                            loop={true}
+                            muted={true}
+                            playsInline={true}
+                            poster="/BLINDS SHADOW.png"
                             className="w-full h-full object-cover object-center"
                         >
-                            <source src="/3.mp4" type="video/mp4" />
+                            <source src="/dashboard-bg.mp4" type="video/mp4" />
+                            Your browser does not support the video tag.
                         </video>
                     </div>
 
