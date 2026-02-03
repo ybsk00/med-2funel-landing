@@ -39,12 +39,56 @@ export default function PatientDashboardClient() {
         type: "예정된 진료가 없습니다.",
         doctor: ""
     });
+    const [doctors, setDoctors] = useState<any[]>([]);
 
     const supabase = createClient();
 
     useEffect(() => {
         fetchLatestAppointment();
+        fetchDoctors();
     }, [isReservationModalOpen, nextAuthSession, config]); // Include config in dependency
+
+    const fetchDoctors = async () => {
+        try {
+            const res = await fetch('/api/doctors');
+            const data = await res.json();
+            if (data.doctors && data.doctors.length > 0) {
+                // Map API format to Modal format
+                setDoctors(data.doctors.map((d: any) => ({
+                    name: d.name,
+                    title: d.title,
+                    education: d.education,
+                    specialty: d.specialty || [],
+                    tracks: d.tracks || [],
+                    image: d.image_url
+                })));
+            } else {
+                // Fallback 1: Use config's representative
+                const representative = {
+                    name: config.representative,
+                    title: config.representativeTitle,
+                    education: `${config.dept || '전문의'}`,
+                    specialty: ["전문 진료", "상담", "치료"],
+                    tracks: [],
+                    image: "/images/character-doctor.jpg"
+                };
+
+                // Fallback 2: Use DOCTORS from prompts if available
+                if (DOCTORS && DOCTORS.length > 0) {
+                    setDoctors([...DOCTORS.map((d: any) => ({
+                        ...d,
+                        title: d.role, // role maps to title
+                        education: d.field, // field maps to education
+                        specialty: d.history // history maps to specialty or similar
+                    })), representative]);
+                } else {
+                    setDoctors([representative]);
+                }
+            }
+        } catch (error) {
+            console.error("Doctors fetch error", error);
+        }
+    };
 
     const fetchLatestAppointment = async () => {
         try {
@@ -425,7 +469,8 @@ export default function PatientDashboardClient() {
             <DoctorIntroModal
                 isOpen={showDoctorIntroModal}
                 onClose={() => setShowDoctorIntroModal(false)}
-                doctors={DOCTORS}
+                doctors={doctors.length > 0 ? doctors : []}
+                hospitalName={config.name}
                 onReservation={() => setIsReservationModalOpen(true)}
                 onReviewTabClick={() => setShowReviewModal(true)}
                 onMapTabClick={() => setShowMapModal(true)}

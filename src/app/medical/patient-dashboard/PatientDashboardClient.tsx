@@ -1,14 +1,15 @@
 ﻿"use client";
 
 import { useState, Suspense, useEffect } from "react";
-import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload, MessageSquare, MapPin, Users, FileText, Sparkles } from "lucide-react";
+import { Calendar, Clock, MoreHorizontal, Send, ClipboardList, Pill, Upload, MessageSquare, MapPin, Users, FileText, Sparkles, Stethoscope, Activity, Shield } from "lucide-react";
 import Image from "next/image";
 import ChatInterface from "@/components/chat/ChatInterface";
 import PatientHeader from "@/components/medical/PatientHeader";
 import ReservationModal from "@/components/medical/ReservationModal";
-import AestheticCheckModal from "@/components/medical/AestheticCheckModal";
+import GenericCheckModal from "@/components/medical/GenericCheckModal";
 import MedicationModal from "@/components/medical/MedicationModal";
 import FileUploadModal from "@/components/medical/FileUploadModal";
+import { DEPARTMENT_CHECK_DATA } from "@/lib/data/department-check-data";
 import MapModal from "@/components/medical/MapModal";
 import ReviewModal from "@/components/medical/ReviewModal";
 import DoctorIntroModal from "@/components/medical/DoctorIntroModal";
@@ -23,7 +24,7 @@ export default function PatientDashboardClient() {
     const { data: nextAuthSession } = useSession();
     const config = useHospital(); // Use dynamic config
     const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-    const [showAestheticModal, setShowAestheticModal] = useState(false);
+    const [isCheckModalOpen, setIsCheckModalOpen] = useState(false); // Generic state for check modal
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [showMapModal, setShowMapModal] = useState(false);
@@ -39,12 +40,56 @@ export default function PatientDashboardClient() {
         type: "예정된 진료가 없습니다.",
         doctor: ""
     });
+    const [doctors, setDoctors] = useState<any[]>([]);
 
     const supabase = createClient();
 
     useEffect(() => {
         fetchLatestAppointment();
+        fetchDoctors();
     }, [isReservationModalOpen, nextAuthSession, config]); // Include config in dependency
+
+    const fetchDoctors = async () => {
+        try {
+            const res = await fetch('/api/doctors');
+            const data = await res.json();
+            if (data.doctors && data.doctors.length > 0) {
+                // Map API format to Modal format
+                setDoctors(data.doctors.map((d: any) => ({
+                    name: d.name,
+                    title: d.title,
+                    education: d.education,
+                    specialty: d.specialty || [],
+                    tracks: d.tracks || [],
+                    image: d.image_url
+                })));
+            } else {
+                // Fallback 1: Use config's representative
+                const representative = {
+                    name: config.representative,
+                    title: config.representativeTitle,
+                    education: `${config.dept || '전문의'}`,
+                    specialty: ["전문 진료", "상담", "치료"],
+                    tracks: [],
+                    image: "/images/character-doctor.jpg"
+                };
+
+                // Fallback 2: Use DOCTORS from prompts if available
+                if (DOCTORS && DOCTORS.length > 0) {
+                    setDoctors([...DOCTORS.map((d: any) => ({
+                        ...d,
+                        title: d.role, // role maps to title
+                        education: d.field, // field maps to education
+                        specialty: d.history // history maps to specialty or similar
+                    })), representative]);
+                } else {
+                    setDoctors([representative]);
+                }
+            }
+        } catch (error) {
+            console.error("Doctors fetch error", error);
+        }
+    };
 
     const fetchLatestAppointment = async () => {
         try {
@@ -196,6 +241,33 @@ export default function PatientDashboardClient() {
         }
     };
 
+    const handleAIChatStart = (summary: string) => {
+        setSymptomSummary(summary);
+    };
+
+    // Dynamic Check Icon & Label based on Department
+    const getDepartmentCheckInfo = () => {
+        const checkData = DEPARTMENT_CHECK_DATA[config.id as string];
+        if (!checkData) {
+            // Fallback for unknown departments
+            return {
+                icon: <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />,
+                label: "상담 신청",
+                desc: "진료 전 상담을 신청하세요"
+            };
+        }
+
+        const iconColor = checkData.colorTheme?.iconColor || 'text-white';
+
+        return {
+            icon: <ClipboardList className={`w-4 h-4 md:w-5 md:h-5 ${iconColor}`} />,
+            label: checkData.title,
+            desc: checkData.description
+        };
+    };
+
+    const { icon: checkIcon, label: checkLabel, desc: checkDesc } = getDepartmentCheckInfo();
+
     return (
         <div className="min-h-screen bg-skin-bg font-sans selection:bg-skin-accent selection:text-white">
             <PatientHeader />
@@ -236,15 +308,18 @@ export default function PatientDashboardClient() {
                     }}
                 />
 
-                {/* Aesthetic Check Modal */}
-                <AestheticCheckModal
-                    isOpen={showAestheticModal}
-                    onClose={() => setShowAestheticModal(false)}
-                    onComplete={(summary) => {
-                        setSymptomSummary(summary);
-                        setShowAestheticModal(false);
-                    }}
-                />
+                {/* Generic Check Modal */}
+                {isCheckModalOpen && DEPARTMENT_CHECK_DATA[config.id as string] && (
+                    <GenericCheckModal
+                        isOpen={isCheckModalOpen}
+                        onClose={() => setIsCheckModalOpen(false)}
+                        config={DEPARTMENT_CHECK_DATA[config.id as string]}
+                        onComplete={(summary: string) => {
+                            handleAIChatStart(summary);
+                            setIsCheckModalOpen(false);
+                        }}
+                    />
+                )}
 
                 {/* Medication Modal */}
                 <MedicationModal
@@ -280,14 +355,15 @@ export default function PatientDashboardClient() {
 
                 {/* Video Section with Glassmorphism Quick Actions */}
                 <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-white/50 relative">
-                    {/* BLINDS SHADOW Image Banner */}
+                    {/* Main Video Banner */}
                     <div className="relative w-full h-96 md:h-[500px]">
-                        <Image
-                            src="/BLINDS SHADOW.png"
-                            alt={`${config.name} 프리미엄 시술`}
-                            fill
-                            className="object-cover object-[center_25%]"
-                            priority
+                        <video
+                            src="/3.mp4"
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-full object-cover object-[center_25%]"
                         />
                     </div>
 
@@ -308,13 +384,13 @@ export default function PatientDashboardClient() {
                                     <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">예약하기</span>
                                 </button>
                                 <button
-                                    onClick={() => setShowAestheticModal(true)}
+                                    onClick={() => setIsCheckModalOpen(true)}
                                     className="flex flex-col items-center gap-1.5 p-2 bg-white/5 hover:bg-white/20 rounded-xl transition-all duration-300 group"
                                 >
                                     <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-emerald-500/80 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                                        <ClipboardList className="w-4 h-4 md:w-5 md:h-5 text-white" />
+                                        {checkIcon}
                                     </div>
-                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">시술상담</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-white/90 whitespace-nowrap">{checkLabel}</span>
                                 </button>
                                 <button
                                     onClick={() => setShowMedicationModal(true)}
@@ -376,10 +452,10 @@ export default function PatientDashboardClient() {
                 <div className="bg-[#1a2332] backdrop-blur-xl rounded-3xl shadow-xl border border-white/10 overflow-hidden h-[650px] flex flex-col">
                     <div className="p-5 border-b border-white/10 flex justify-between items-center bg-[#1a2332]">
                         <div>
-                            <h3 className="font-bold text-white text-lg">예진 상담 (Medical Chat)</h3>
+                            <h3 className="font-bold text-white text-lg">{config.id === 'internal' ? '내과 AI 전문상담' : config.id === 'urology' ? '비뇨의학과 AI 상담' : 'AI 예진 상담'}</h3>
                             <p className="text-xs text-dental-primary font-medium flex items-center gap-1.5">
                                 <span className="w-1.5 h-1.5 bg-dental-primary rounded-full animate-pulse"></span>
-                                전문의 감독 하에 운영
+                                {config.representativeTitle} 감독 하에 운영
                             </p>
                         </div>
                         <button className="text-dental-subtext hover:text-white p-2 hover:bg-white/10 rounded-full transition-colors">
@@ -425,7 +501,8 @@ export default function PatientDashboardClient() {
             <DoctorIntroModal
                 isOpen={showDoctorIntroModal}
                 onClose={() => setShowDoctorIntroModal(false)}
-                doctors={DOCTORS}
+                doctors={doctors.length > 0 ? doctors : []}
+                hospitalName={config.name}
                 onReservation={() => setIsReservationModalOpen(true)}
                 onReviewTabClick={() => setShowReviewModal(true)}
                 onMapTabClick={() => setShowMapModal(true)}

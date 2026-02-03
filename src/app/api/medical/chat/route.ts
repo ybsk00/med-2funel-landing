@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateText } from "@/lib/ai/client";
 import { createClient } from "@/lib/supabase/server";
 import { logAction } from "@/lib/audit";
-import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, detectMedicalTrack, DOCTORS, SCI_EVIDENCE } from "@/lib/ai/prompts";
-import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
+import { getMedicalSystemPrompt, RED_FLAG_KEYWORDS, detectMedicalTrack, SCI_EVIDENCE } from "@/lib/ai/prompts";
+import { DEPARTMENT_CONFIGS, DEFAULT_DEPARTMENT } from "@/lib/config/departments";
 
 // 액션 토큰 타입
 type ActionType = 'RESERVATION_MODAL' | 'DOCTOR_INTRO_MODAL' | 'EVIDENCE_MODAL' | null;
@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
             history,
             turnCount = 0,
             track: existingTrack,
-            askedQuestionCount = 0
+            askedQuestionCount = 0,
+            departmentId: reqDepartmentId
         } = await req.json();
 
         // 1. Red Flag Detection
@@ -79,16 +80,20 @@ export async function POST(req: NextRequest) {
         // 2. Track Detection (첫 턴에서 감지, 이후 유지)
         const track = existingTrack || detectMedicalTrack(message);
 
+        // Department Config Loading
+        const departmentId = reqDepartmentId || DEFAULT_DEPARTMENT;
+        const config = DEPARTMENT_CONFIGS[departmentId as keyof typeof DEPARTMENT_CONFIGS] || DEPARTMENT_CONFIGS[DEFAULT_DEPARTMENT];
+
         // 3. System Prompt with track and question count
-        const systemPrompt = getMedicalSystemPrompt(turnCount, track, askedQuestionCount);
+        const systemPrompt = getMedicalSystemPrompt(config, turnCount, track, askedQuestionCount);
 
         const fullPrompt = `
 ${systemPrompt}
 
 [대화 내역]
-${history.map((msg: any) => `${msg.role === 'user' ? '환자' : HOSPITAL_CONFIG.name}: ${msg.content}`).join("\n")}
+${history.map((msg: any) => `${msg.role === 'user' ? '환자' : config.name}: ${msg.content}`).join("\n")}
 환자: ${message}
-${HOSPITAL_CONFIG.name}:
+${config.name}:
 `;
 
         // 4. Generate Response
@@ -119,6 +124,17 @@ ${HOSPITAL_CONFIG.name}:
             });
         }
 
+        // Dynamic Doctors Data based on config
+        const dynamicDoctors = [
+            {
+                name: config.representative,
+                title: config.representativeTitle,
+                education: `${config.dept} 전문의`,
+                specialty: ["전문 진료", "상담", "치료"],
+                tracks: [track]
+            }
+        ];
+
         // 9. Response with structured data
         return NextResponse.json({
             role: "ai",
@@ -129,7 +145,7 @@ ${HOSPITAL_CONFIG.name}:
             askedQuestionCount: newQuestionCount,
             turnCount: turnCount + 1,
             // 의료진/논문 데이터 (모달용)
-            doctorsData: action === 'DOCTOR_INTRO_MODAL' ? DOCTORS : undefined,
+            doctorsData: action === 'DOCTOR_INTRO_MODAL' ? dynamicDoctors : undefined,
             evidenceData: action === 'EVIDENCE_MODAL' ? SCI_EVIDENCE : undefined
         });
 

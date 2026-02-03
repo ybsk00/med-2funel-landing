@@ -7,29 +7,29 @@ import { Calendar, MapPin, Star, User, X } from 'lucide-react';
 interface Doctor {
     name: string;
     title: string;
-    education: string;
-    specialty: string[];
-    tracks: string[];
+    education?: string;
+    specialty?: string[];
+    tracks?: string[];
+    image?: string;
+    field?: string;
+    history?: string[];
 }
 
 interface DoctorIntroModalProps {
     isOpen: boolean;
     onClose: () => void;
     doctors: Doctor[];
+    hospitalName?: string;
     onReservation?: () => void;
     onReviewTabClick?: () => void;
     onMapTabClick?: () => void;
 }
 
-const doctorImages: Record<string, string> = {
-    '김민승': '/images/doctors/kim-minseung.jpg',
-    '조병옥': '/images/doctors/jo-byeongok.jpg',
-};
-
 export default function DoctorIntroModal({
     isOpen,
     onClose,
     doctors,
+    hospitalName = "의료진",
     onReservation,
     onReviewTabClick,
     onMapTabClick
@@ -73,7 +73,7 @@ export default function DoctorIntroModal({
                         <div className="w-8 h-8 bg-pink-500/20 rounded-full flex items-center justify-center">
                             <User className="w-4 h-4 text-pink-400" />
                         </div>
-                        <h3 className="font-bold text-white">에버피부과 의료진</h3>
+                        <h3 className="font-bold text-white">{hospitalName} 의료진</h3>
                     </div>
                     <button
                         onClick={onClose}
@@ -94,17 +94,17 @@ export default function DoctorIntroModal({
                     </div>
 
                     {/* 의료진 카드 목록 */}
-                    {doctors.map((doctor) => (
+                    {doctors.map((doctor, idx) => (
                         <div
-                            key={doctor.name}
+                            key={doctor.name + idx}
                             className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 hover:bg-gray-700/50 transition-colors"
                         >
                             <div className="flex gap-4">
                                 {/* 프로필 이미지 */}
                                 <div className="w-20 h-20 relative rounded-xl overflow-hidden bg-gray-700 flex-shrink-0 border-2 border-pink-500/20">
-                                    {doctorImages[doctor.name] ? (
+                                    {(doctor.image || doctor.tracks?.length === 0) ? (
                                         <Image
-                                            src={doctorImages[doctor.name]}
+                                            src={doctor.image || "/images/character-doctor.jpg"}
                                             alt={doctor.name}
                                             fill
                                             className="object-cover"
@@ -120,7 +120,7 @@ export default function DoctorIntroModal({
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                         <p className="font-bold text-lg text-white">{doctor.name}</p>
-                                        <span className={`px-2 py-0.5 text-xs rounded-full ${doctor.title === '이사장'
+                                        <span className={`px-2 py-0.5 text-xs rounded-full ${doctor.title.includes('원장')
                                             ? 'bg-yellow-500/20 text-yellow-400'
                                             : 'bg-gray-600 text-gray-300'
                                             }`}>
@@ -128,23 +128,33 @@ export default function DoctorIntroModal({
                                         </span>
                                     </div>
 
-                                    <p className="text-xs text-gray-400 mb-2">{doctor.education}</p>
+                                    {(doctor.education || doctor.field) && (
+                                        <p className="text-xs text-gray-400 mb-2">{doctor.education || doctor.field}</p>
+                                    )}
 
-                                    <div className="flex flex-wrap gap-1">
-                                        {doctor.specialty.slice(0, 5).map((spec) => (
-                                            <span
-                                                key={spec}
-                                                className="px-2 py-0.5 text-xs border border-green-500/50 text-green-400 rounded-full"
-                                            >
-                                                {spec}
-                                            </span>
-                                        ))}
-                                        {doctor.specialty.length > 5 && (
-                                            <span className="px-2 py-0.5 text-xs bg-gray-700 text-gray-400 rounded-full">
-                                                +{doctor.specialty.length - 5}
-                                            </span>
-                                        )}
-                                    </div>
+                                    {doctor.specialty && doctor.specialty.length > 0 ? (
+                                        <div className="flex flex-wrap gap-1">
+                                            {doctor.specialty.slice(0, 5).map((spec) => (
+                                                <span
+                                                    key={spec}
+                                                    className="px-2 py-0.5 text-xs border border-green-500/50 text-green-400 rounded-full"
+                                                >
+                                                    {spec}
+                                                </span>
+                                            ))}
+                                            {doctor.specialty.length > 5 && (
+                                                <span className="px-2 py-0.5 text-xs bg-gray-700 text-gray-400 rounded-full">
+                                                    +{doctor.specialty.length - 5}
+                                                </span>
+                                            )}
+                                        </div>
+                                    ) : doctor.history && (
+                                        <div className="space-y-0.5">
+                                            {doctor.history.slice(0, 2).map((h, i) => (
+                                                <p key={i} className="text-[10px] text-gray-400 leading-tight">· {h}</p>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

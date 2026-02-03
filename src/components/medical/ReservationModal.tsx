@@ -118,8 +118,8 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                                 scheduled_at: scheduledAt,
                                 notes: `${config.name} 진료 (${doctor})`,
                                 user_id: userId,
-                                naver_user_id: naverUserId,
-                                department_id: config.id
+                                naver_user_id: naverUserId
+                                // department_id removed due to schema limitation
                             })
                             .eq('id', existingReservation.id);
                         if (error) throw error;
@@ -144,8 +144,8 @@ export default function ReservationModal({ isOpen, onClose, initialTab = "book" 
                             notes: `${config.name} 진료 (${doctor})`,
                             status: 'pending',
                             user_id: userId,
-                            naver_user_id: naverUserId,
-                            department_id: config.id
+                            naver_user_id: naverUserId
+                            // department_id removed due to schema limitation
                         });
                     if (error) throw error;
                 }
