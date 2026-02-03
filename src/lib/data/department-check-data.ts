@@ -67,7 +67,7 @@ export const DEPARTMENT_CHECK_DATA: Record<string, DepartmentCheckConfig> = {
             ]
         }
     },
-    internal: {
+    'internal-medicine': {
         title: "내과 예진 작성",
         description: "빠르고 정확한 진료를 위한 기초 설문입니다.",
         colorTheme: { primary: "blue", iconColor: "text-blue-400" },
@@ -160,7 +160,7 @@ export const DEPARTMENT_CHECK_DATA: Record<string, DepartmentCheckConfig> = {
             { id: 'checkup', label: '정기 검진' }
         ]
     },
-    plastic: {
+    'plastic-surgery': {
         title: "성형외과 상담 신청",
         description: "원하시는 변화를 말씀해주세요.",
         colorTheme: { primary: "pink", iconColor: "text-pink-500" },
