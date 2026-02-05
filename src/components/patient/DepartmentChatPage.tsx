@@ -31,9 +31,8 @@ export default function DepartmentChatPage({ dept, config }: DepartmentChatPageP
     const defaultQuickReplies = ['상담 신청하고 싶어요', '진료 예약을 하고 싶어요', '위치를 알고 싶어요', '진료 시간을 알고 싶어요'];
     // IF we had department specific replies, we'd use them here. For now, sticking to the hardcoded ones from the original file but generalized if they were "Acne" etc.
     // The original had: '여드름이 심해요', '피부가 건조해요', '피부 트러블 상담', '홍조가 있어요'
-    // I will try to make them slightly generic if checkData doesn't exist, but maybe use checkData checklist if available?
-    // checkData.checklist is usually an array of strings.
-    const quickReplies = checkData?.checklist?.slice(0, 4) || defaultQuickReplies;
+    // I will try to make them slightly generic if checkData doesn't exist, but maybe use checkData categories if available?
+    const quickReplies = checkData?.categories?.map(c => c.label).slice(0, 4) || defaultQuickReplies;
 
     const [messages, setMessages] = useState<Message[]>([
         {
