@@ -80,10 +80,22 @@ export function getDepartmentChatTitle(rawId?: string) {
     return CHAT_TITLES[id];
 }
 
+/**
+ * 헬스케어 영역 (비로그인) 통일된 안내문구
+ * 형식: "헬스케어 상담실장 {이름}입니다."
+ */
+export function getDepartmentHealthcareIntro(config: HospitalConfig): string {
+    const persona = config.personas.healthcare;
+    return `안녕하세요! 헬스케어 상담실장 ${persona.name}입니다.\n\n${config.dept} 관련 궁금한 점이 있으시면 편하게 말씀해주세요. 😊`;
+}
+
+/**
+ * 메디컬 영역 (로그인 후) 통일된 안내문구
+ * 형식: "상담실장 {이름}입니다. 궁금하신 사항은 무엇이든지 물어보세요"
+ */
 export function getDepartmentMedicalIntro(config: HospitalConfig): string {
-    const id = resolveDepartmentId(config.id);
-    const intro = MEDICAL_INTRO[id];
-    return `안녕하세요, ${config.name} ${config.personas.medical.name}입니다.\n\n**${config.name}**는 ${intro}\n\n어떤 증상이나 궁금한 점이 있으신가요? 편하게 말씀해주세요.`;
+    const persona = config.personas.medical;
+    return `안녕하세요! 상담실장 ${persona.name}입니다.\n\n${config.dept} 관련 궁금하신 사항은 무엇이든지 물어보세요. 😊`;
 }
 
 export function isSimulationEnabled(rawId?: string): boolean {
