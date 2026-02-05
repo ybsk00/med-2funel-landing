@@ -86,7 +86,7 @@ export function getDepartmentChatTitle(rawId?: string) {
  */
 export function getDepartmentHealthcareIntro(config: HospitalConfig): string {
     const persona = config.personas.healthcare;
-    return `안녕하세요! 헬스케어 상담실장 ${persona.name}입니다.\n\n${config.dept} 관련 궁금한 점이 있으시면 편하게 말씀해주세요. 😊`;
+    return `안녕하세요! 헬스케어 상담실장 ${persona.name}입니다.\n\n궁금한 점이 있으시면 편하게 말씀해주세요. 😊`;
 }
 
 /**

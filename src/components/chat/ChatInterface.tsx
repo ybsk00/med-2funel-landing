@@ -496,7 +496,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                         ? isThemeDark
                                             ? "bg-stone-800/50 text-white border border-white/10 rounded-tl-none backdrop-blur-sm"
                                             : "bg-stone-50 text-slate-800 border border-stone-200 rounded-tl-none"
-                                        : `${isPrimaryDark ? 'text-white' : 'text-slate-900'} bg-skin-primary rounded-tr-none shadow-md`
+                                        : "text-[#FDE047] bg-skin-primary rounded-tr-none shadow-md font-bold"
                                         }`}
                                 >
                                     {msg.content.replace(/[[ACTION:RESERVATION_MODAL]]/g, '').trim()}

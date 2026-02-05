@@ -199,7 +199,7 @@ export default function MedicalChatInterface() {
                             <div
                                 className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "ai"
                                     ? "bg-[#1a2332] text-white border border-white/10 rounded-tl-none"
-                                    : "bg-dental-primary text-white rounded-tr-none"
+                                    : "bg-dental-primary text-[#FDE047] rounded-tr-none font-bold"
                                     }`}
                             >
                                 {msg.imageUrl && (
