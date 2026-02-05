@@ -14,7 +14,7 @@ import SafetyBadge from "@/components/medical/SafetyBadge";
 import { useMarketingTracker } from "@/hooks/useMarketingTracker";
 import { VALID_TOPICS, TOPIC_LABELS, TOPIC_DESCRIPTIONS, Topic, sanitizeTopic, DEFAULT_TOPIC } from "@/lib/constants/topics";
 import { useHospital } from "@/components/common/HospitalProvider";
-import { getDepartmentMedicalIntro } from "@/lib/data/department-ui";
+import { getDepartmentMedicalIntro, getDepartmentHealthcareIntro } from "@/lib/data/department-ui";
 
 type Message = {
     role: "user" | "ai";
@@ -117,6 +117,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         desc: `더 정확한 ${config.dept} 분석과 맞춤형 조언을 위해<br />로그인이 필요합니다.`
     });
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
     const [showReservationModal, setShowReservationModal] = useState(false);
     const [showBadgeExpanded, setShowBadgeExpanded] = useState(false);
 
@@ -125,7 +127,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const [showMedicationModal, setShowMedicationModal] = useState(false);
     const [showFileUploadModal, setShowFileUploadModal] = useState(false);
 
-    // 초기 질문 맵
+    // 초기 질문 맵 - 유지 (참고용)
     const initialQuestionMap: Record<string, string> = {
         // 피부과
         'glow-booster': '하루 수분 섭취량은 어느 정도인가요?',
@@ -133,47 +135,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
         'barrier-reset': '하루 세안 횟수는 몇 번인가요?',
         'lifting-check': '탄력이 가장 신경 쓰이는 부위는 어디인가요?',
         'skin-concierge': '본인의 피부 타입은 어떻다고 생각하시나요?',
-
-        // 성형외과
-        'face-ratio': '가장 개선하고 싶은 얼굴 부위는 어디인가요?',
-        'trend-check': '선호하는 연예인이나 스타일이 있으신가요?',
-        'virtual-plastic': '어떤 시술 효과를 미리 보고 싶으신가요?',
-
-        // 한의원
-        'body-type': '평소 추위를 많이 타시나요, 더위를 많이 타시나요?',
-        'detox': '최근 소화불량이나 더부룩함을 자주 느끼시나요?',
-
-        // 치과
-        'smile-design': '웃을 때 가장 신경 쓰이는 부분은 무엇인가요?',
-        'whitening-check': '평소 커피나 차를 자주 드시나요?',
-
-        // 정형외과
-        'posture-check': '하루 중 앉아있는 시간은 대략 몇 시간인가요?',
-        'spine-reset': '허리 통증이 주로 언제 발생하나요?',
-
-        // 비뇨기과
-        'vitality-check': '최근 피로감이 급격히 늘었다고 느끼시나요?',
-        'private-counsel': '어떤 증상에 대해 상담받고 싶으신가요?',
-
-        // 소아과
-        'growth-check': '아이의 현재 키와 몸무게를 알고 계신가요?',
-        'fever-guide': '현재 아이의 체온은 몇 도인가요?',
-
-        // 산부인과
-        'cycle-check': '마지막 생리 시작일은 언제인가요?',
-        'pregnancy-guide': '현재 임신 몇 주차이신가요?',
-
-        // 내과
-        'fatigue-reset': '하루 평균 수면 시간은 몇 시간인가요?',
-        'digestive-check': '식사 후 속이 자주 불편하신가요?',
-
-        // 암요양
-        'immunity-up': '최근 감기에 걸리거나 몸이 자주 아프신가요?',
-        'nutrition-plan': '현재 식사량은 평소와 비교해 어떤가요?',
-
-        // 신경외과
-        'headache-check': '두통이 주로 머리의 어느 부위에서 느껴지나요?',
-        'spine-balance': '손이나 발이 저린 증상이 있나요?'
+        // ... (나머지 생략 가능하지만 구조 유지를 위해 이전 값들 사용하는 로직이 없으므로 일단 둠)
     };
 
     // 초기 메시지 설정
@@ -184,20 +146,22 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 content: getDepartmentMedicalIntro(config)
             }]);
         } else {
-            const persona = config.personas.healthcare;
-            const topicLabel = TOPIC_LABELS[topic] || '상담';
-            const initialQuestion = initialQuestionMap[topic] || '무엇을 도와드릴까요?';
-
+            // Unified Healthcare Intro using Department UI helper
             setMessages([{
                 role: "ai",
-                content: `안녕하세요! **${topicLabel}** 상담을 도와드릴 ${persona.name}입니다. ✨\n\n이 대화는 **진단이 아닌 참고용 안내**입니다.\n\n${initialQuestion}`
+                content: getDepartmentHealthcareIntro(config)
             }]);
         }
         setTurnCount(0);
     }, [topic, props.mode, config]);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTo({
+                top: scrollContainerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     useEffect(() => {
@@ -481,10 +445,13 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                 )}
 
                 {/* Chat Area */}
-                <div className={`backdrop-blur-xl rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded
-                    ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none"
-                    : `${isThemeDark ? 'bg-skin-surface border-white/10' : 'bg-white border-stone-200'} border min-h-[500px]`
-                    }`}>
+                <div
+                    ref={scrollContainerRef}
+                    className={`backdrop-blur-xl rounded-3xl p-6 space-y-8 shadow-xl ${props.isEmbedded
+                        ? "flex-1 overflow-y-auto rounded-none border-x-0 border-t-0 bg-transparent shadow-none scrollbar-hide"
+                        : `${isThemeDark ? 'bg-skin-surface border-white/10' : 'bg-white border-stone-200'} border min-h-[500px] max-h-[600px] overflow-y-auto`
+                        }`}
+                >
                     {/* Safety Badge (logged in only) */}
                     {props.isLoggedIn && <SafetyBadge />}
 
@@ -551,7 +518,6 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             </div>
                         </div>
                     )}
-                    <div ref={messagesEndRef} />
                 </div>
             </main>
 
@@ -565,9 +531,8 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder={`${config.dept} 관련 고민이나 궁금한 점을 입력해주세요...`}
-                            className={`flex-1 bg-transparent border-none focus:ring-0 text-base ${isThemeDark ? 'text-white placeholder:text-skin-subtext/50' : 'text-slate-800 placeholder:text-stone-400'
-                                }`}
+                            placeholder="고민이나 궁금한 점을 입력해주세요..."
+                            className={`flex-1 bg-transparent border-none focus:ring-0 text-base text-white placeholder:text-white/50`}
                             disabled={!props.isLoggedIn && turnCount >= 5}
                         />
                         <button

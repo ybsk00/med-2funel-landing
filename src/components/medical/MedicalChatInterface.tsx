@@ -249,7 +249,7 @@ export default function MedicalChatInterface() {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="증상을 상세히 입력하세요..."
+                        placeholder="고민이나 궁금한 점을 입력해주세요..."
                         className="w-full pl-4 pr-12 py-3 bg-[#0d1420] border border-white/10 rounded-xl text-white placeholder:text-dental-subtext/50 focus:outline-none focus:border-dental-primary focus:ring-1 focus:ring-dental-primary transition-all"
                     />
                     <button
