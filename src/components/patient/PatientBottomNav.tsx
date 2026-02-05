@@ -6,16 +6,24 @@ import { usePathname } from "next/navigation";
 import { Home, Calendar, MessageSquare, User, Sparkles } from "lucide-react";
 import FaceSimulationModal from "@/components/face-style/FaceSimulationModal";
 
-export default function PatientBottomNav() {
+import { isSimulationEnabled } from "@/lib/data/department-ui";
+
+interface PatientBottomNavProps {
+    dept?: string;
+}
+
+export default function PatientBottomNav({ dept }: PatientBottomNavProps) {
     const pathname = usePathname();
     const [isFaceModalOpen, setIsFaceModalOpen] = useState(false);
+    const basePath = dept ? `/${dept}/patient` : "/patient";
+    const showSimulation = dept ? isSimulationEnabled(dept) : true; // Default to true for legacy /patient
 
     const navItems = [
-        { href: "/patient", icon: Home, label: "홈", exact: true },
-        { href: "/patient/appointments", icon: Calendar, label: "예약" },
-        { href: null, icon: Sparkles, label: "시뮬레이션", isModal: true },
-        { href: "/patient/chat", icon: MessageSquare, label: "상담", badge: true },
-        { href: "/patient/profile", icon: User, label: "마이" },
+        { href: basePath, icon: Home, label: "홈", exact: true },
+        { href: `${basePath}/appointments`, icon: Calendar, label: "예약" },
+        ...(showSimulation ? [{ href: null, icon: Sparkles, label: "시뮬레이션", isModal: true }] : []),
+        { href: `${basePath}/chat`, icon: MessageSquare, label: "상담", badge: true },
+        { href: `${basePath}/profile`, icon: User, label: "마이" },
     ];
 
     const isActive = (href: string | null, exact?: boolean) => {
