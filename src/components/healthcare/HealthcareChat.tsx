@@ -294,7 +294,7 @@ export default function HealthcareChat({
                             fullWidth
                             color="sage-green"
                             size="md"
-                            onClick={() => router.push('/patient/login')}
+                            onClick={() => router.push(`/login?dept=${serviceType}`)}
                         >
                             {modalContent.cta}
                         </Button>
@@ -303,7 +303,7 @@ export default function HealthcareChat({
                             variant="light"
                             color="sage-green"
                             size="md"
-                            onClick={() => router.push('/patient/signup')}
+                            onClick={() => router.push(`/login?dept=${serviceType}&signup=true`)}
                         >
                             회원가입하기
                         </Button>

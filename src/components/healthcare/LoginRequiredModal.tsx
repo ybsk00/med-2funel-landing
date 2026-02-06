@@ -7,12 +7,14 @@ interface LoginRequiredModalProps {
     isOpen: boolean;
     onClose: () => void;
     returnUrl?: string;
+    dept?: string;
 }
 
 export default function LoginRequiredModal({
     isOpen,
     onClose,
     returnUrl = "/medical/patient-dashboard",
+    dept,
 }: LoginRequiredModalProps) {
     const router = useRouter();
 
@@ -21,7 +23,8 @@ export default function LoginRequiredModal({
     const handleLogin = () => {
         // 로그인 페이지로 이동하면서 returnUrl 저장
         sessionStorage.setItem("loginReturnUrl", returnUrl);
-        router.push("/login");
+        const loginPath = dept ? `/login?dept=${dept}` : "/login";
+        router.push(loginPath);
     };
 
     return (

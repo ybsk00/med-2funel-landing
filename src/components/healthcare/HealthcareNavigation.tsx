@@ -41,7 +41,7 @@ export default function HealthcareNavigation({ config }: HealthcareNavigationPro
 
                 <div className="flex items-center gap-3">
                     <Link
-                        href="/login"
+                        href={`/login?dept=${config.hospital.department}`}
                         className={`px-6 py-2.5 text-sm font-bold rounded-full transition-all duration-300 hover:shadow-lg active:scale-95 ${isDark ? 'text-white border border-white/15 hover:bg-white/10' : 'text-white'}`}
                         style={{
                             backgroundColor: isDark ? 'transparent' : colors.primary,

@@ -21,9 +21,10 @@ import {
 interface ConditionReportProps {
     result: SummaryResult;
     onRetry: () => void;
+    dept?: string;
 }
 
-export default function ConditionReport({ result, onRetry }: ConditionReportProps) {
+export default function ConditionReport({ result, onRetry, dept }: ConditionReportProps) {
     // Determine color based on score
     const getScoreColor = (score: number) => {
         if (score >= 90) return "green";
@@ -162,7 +163,7 @@ export default function ConditionReport({ result, onRetry }: ConditionReportProp
                 <Stack gap="md" pt="md">
                     <Button
                         component={Link}
-                        href="/login"
+                        href={dept ? `/login?dept=${dept}` : "/login"}
                         size="xl"
                         color="sage-green"
                         fullWidth

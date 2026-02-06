@@ -358,7 +358,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         </span>
                     </Link>
                     <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-                        <Link href="/login" className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
+                        <Link href={`/login?dept=${config.dept}`} className="px-6 py-2 bg-skin-primary text-white text-sm font-medium rounded-full hover:bg-skin-accent hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                             로그인
                         </Link>
                     </div>
@@ -580,7 +580,7 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                         />
                         <div className="flex flex-col gap-3">
                             <Link
-                                href="/login"
+                                href={`/login?dept=${config.dept}`}
                                 onClick={() => track('login_cta_click')}
                                 className="w-full py-3.5 bg-skin-primary text-white rounded-xl font-bold hover:bg-skin-accent transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 text-center"
                             >

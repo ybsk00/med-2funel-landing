@@ -21,6 +21,7 @@ const PremiumBackground = dynamic(() => import("@/components/ui/backgrounds/Prem
 import HealthcareHero from "@/components/healthcare/HealthcareHero";
 import HealthcareNavigation from "@/components/healthcare/HealthcareNavigation";
 import ChatInterface from "@/components/chat/ChatInterface";
+import LoginRequiredModal from "@/components/healthcare/LoginRequiredModal";
 
 const PlasticSurgerySimulation = dynamic(() => import("@/components/departments/plastic-surgery/PlasticSurgerySimulation"), { ssr: false });
 const ContourRing3D = dynamic(() => import("@/components/departments/plastic-surgery/ContourRing3D"), { ssr: false });
@@ -90,6 +91,7 @@ export default function HealthcareLanding() {
 
     const [isPhotoSlideOverOpen, setIsPhotoSlideOverOpen] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const isThemeDark = isColorDark(theme.healthcare.colors.background);
     const isPrimaryBright = theme.healthcare.colors.primary ? !isColorDark(theme.healthcare.colors.primary) : false;
@@ -142,6 +144,13 @@ export default function HealthcareLanding() {
                 <PhotoSlideOver
                     isOpen={isPhotoSlideOverOpen}
                     onClose={() => setIsPhotoSlideOverOpen(false)}
+                    department={v1Config.id}
+                />
+
+                <LoginRequiredModal
+                    isOpen={isLoginModalOpen}
+                    onClose={() => setIsLoginModalOpen(false)}
+                    dept={v1Config.id}
                 />
 
                 {/* ═══════════ SESSION 2: 유명한 병원 찾기 (고정/필수) ═══════════ */}
