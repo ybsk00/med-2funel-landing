@@ -8,7 +8,7 @@ export default async function AdminLayout({
     params,
 }: {
     children: React.ReactNode;
-    params: { dept: string };
+    params: Promise<{ dept: string }>;
 }) {
     const { dept } = await params;
     // Admin은 해당 과의 config 사용
