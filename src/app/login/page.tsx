@@ -44,7 +44,8 @@ export default function LoginPage() {
 
                 // 세션 업데이트를 위해 잠시 대기 후 이동
                 setTimeout(() => {
-                    window.location.href = "/admin";
+                    const adminRedirectPath = dept ? `/${dept}/admin` : "/admin";
+                    window.location.href = adminRedirectPath;
                 }, 500);
                 return;
             }
@@ -74,7 +75,8 @@ export default function LoginPage() {
 
                 // admin@admin.com은 무조건 /admin으로 (중복 체크지만 안전장치)
                 if (user?.email?.toLowerCase() === "admin@admin.com") {
-                    router.push("/admin");
+                    const adminRedirectPath = dept ? `/${dept}/admin` : "/admin";
+                    router.push(adminRedirectPath);
                     return;
                 }
 
@@ -87,7 +89,8 @@ export default function LoginPage() {
 
                 // admin/doctor/staff 역할이면 /admin으로, 아니면 /medical/dashboard로
                 if (staffUser?.role === 'admin' || staffUser?.role === 'doctor' || staffUser?.role === 'staff') {
-                    router.push("/admin");
+                    const adminRedirectPath = dept ? `/${dept}/admin` : "/admin";
+                    router.push(adminRedirectPath);
                 } else {
                     const redirectPath = dept ? `/${dept}/medical/patient-dashboard` : "/medical/patient-dashboard";
                     router.push(redirectPath);
