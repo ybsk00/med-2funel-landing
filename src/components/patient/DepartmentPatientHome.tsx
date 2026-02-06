@@ -20,7 +20,7 @@ export default function DepartmentPatientHome({
     patientName,
     upcomingAppointment
 }: DepartmentPatientHomeProps) {
-    const showSimulation = isSimulationEnabled(dept);
+    const showSimulation = false; // Forced false as per user request to hide simulation in all departments
     const basePath = `/${dept}/patient`;
 
     return (

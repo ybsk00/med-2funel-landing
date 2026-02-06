@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json()
-        const { scheduled_at, notes, doctor_name } = body
+        const { scheduled_at, notes, doctor_name, dept } = body
 
         if (!scheduled_at) {
             return NextResponse.json({ error: '예약 날짜/시간이 필요합니다.' }, { status: 400 })
@@ -93,10 +93,11 @@ export async function POST(request: NextRequest) {
                 if (patientByEmail) {
                     existingPatient = patientByEmail
 
-                    // 기존 환자에 user_id 또는 naver_user_id 연결
+                    // 기존 환자에 user_id 또는 naver_user_id 연결 및 학과 업데이트
                     const updateData: Record<string, unknown> = {}
                     if (userId) updateData.user_id = userId
                     if (naverUserId) updateData.naver_user_id = naverUserId
+                    if (dept) updateData.department = dept
 
                     if (Object.keys(updateData).length > 0) {
                         await supabase
@@ -125,7 +126,8 @@ export async function POST(request: NextRequest) {
                         time: timeStr,
                         type: '신규 환자',
                         complaint: notes || `${HOSPITAL_CONFIG.name} 진료 예약`,
-                        status: 'pending'
+                        status: 'pending',
+                        department: dept || null // Save department
                     })
                     .select('id')
                     .single()
@@ -144,6 +146,7 @@ export async function POST(request: NextRequest) {
             notes: notes || `${HOSPITAL_CONFIG.name} 진료`,
             status: 'scheduled',
             doctor_name: doctor_name || null,  // 의사 이름 저장
+            department: dept || null // Save department to appointments too just in case
         }
 
         // user_id가 있으면 추가 (Supabase Auth 사용자)

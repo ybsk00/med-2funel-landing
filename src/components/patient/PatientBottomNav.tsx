@@ -16,7 +16,7 @@ export default function PatientBottomNav({ dept }: PatientBottomNavProps) {
     const pathname = usePathname();
     const [isFaceModalOpen, setIsFaceModalOpen] = useState(false);
     const basePath = dept ? `/${dept}/patient` : "/patient";
-    const showSimulation = dept ? isSimulationEnabled(dept) : true; // Default to true for legacy /patient
+    const showSimulation = false; // Forced false as per user request to hide simulation in all departments
 
     const navItems = [
         { href: basePath, icon: Home, label: "홈", exact: true },
