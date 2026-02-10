@@ -1,6 +1,6 @@
 import { HospitalConfig } from './hospital';
 
-export const DEPARTMENT_IDS = ['dermatology', 'internal', 'urology', 'dentistry', 'plastic', 'orthopedics', 'korean-medicine', 'neurosurgery', 'obgyn', 'oncology', 'pediatrics'] as const;
+export const DEPARTMENT_IDS = ['dermatology', 'internal-medicine', 'urology', 'dentistry', 'plastic-surgery', 'orthopedics', 'korean-medicine', 'neurosurgery', 'obgyn', 'oncology', 'pediatrics'] as const;
 export type DepartmentId = typeof DEPARTMENT_IDS[number];
 
 export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
@@ -48,8 +48,8 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
             closedDays: [0]
         }
     },
-    internal: {
-        id: 'internal',
+    'internal-medicine': {
+        id: 'internal-medicine',
         dept: '내과',
         name: "서울내과",
         marketingName: "서울365내과",
@@ -176,8 +176,8 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
             closedDays: [0, 6]
         }
     },
-    plastic: {
-        id: 'plastic',
+    'plastic-surgery': {
+        id: 'plastic-surgery',
         dept: '성형외과',
         name: "더라인성형외과",
         marketingName: "더라인성형외과",
