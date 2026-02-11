@@ -35,55 +35,8 @@ type ChatInterfaceProps = {
 };
 
 // 모듈 아이콘/컬러 매핑 (확장)
-const MODULE_CONFIG: Record<string, { icon: any; color: string }> = {
-    // 피부과
-    'glow-booster': { icon: Sparkles, color: 'pink' },
-    'makeup-killer': { icon: Droplet, color: 'rose' },
-    'barrier-reset': { icon: Shield, color: 'teal' },
-    'lifting-check': { icon: ArrowUpRight, color: 'purple' },
-    'skin-concierge': { icon: Heart, color: 'fuchsia' },
+// Module config removed - utilizing single department consultation mode
 
-    // 성형외과
-    'face-ratio': { icon: Camera, color: 'rose' },
-    'trend-check': { icon: Sparkles, color: 'gold' },
-    'virtual-plastic': { icon: User, color: 'indigo' },
-
-    // 한의원
-    'body-type': { icon: User, color: 'stone' },
-    'detox': { icon: Droplet, color: 'amber' },
-
-    // 치과
-    'smile-design': { icon: Heart, color: 'cyan' },
-    'whitening-check': { icon: Sparkles, color: 'blue' },
-
-    // 정형외과
-    'posture-check': { icon: ArrowUpRight, color: 'blue' },
-    'spine-reset': { icon: Sparkles, color: 'orange' },
-
-    // 비뇨기과
-    'vitality-check': { icon: Sparkles, color: 'yellow' },
-    'private-counsel': { icon: Shield, color: 'indigo' },
-
-    // 소아과
-    'growth-check': { icon: ArrowUp, color: 'yellow' },
-    'fever-guide': { icon: Heart, color: 'red' },
-
-    // 산부인과
-    'cycle-check': { icon: Calendar, color: 'pink' },
-    'pregnancy-guide': { icon: Heart, color: 'rose' },
-
-    // 내과
-    'fatigue-reset': { icon: Droplet, color: 'blue' },
-    'digestive-check': { icon: Sparkles, color: 'green' },
-
-    // 암요양
-    'immunity-up': { icon: Shield, color: 'amber' },
-    'nutrition-plan': { icon: Heart, color: 'orange' },
-
-    // 신경외과
-    'headache-check': { icon: Sparkles, color: 'indigo' },
-    'spine-balance': { icon: ArrowUpRight, color: 'violet' }
-};
 
 export default function ChatInterface(props: ChatInterfaceProps) {
     const config = useHospital();
@@ -427,26 +380,11 @@ export default function ChatInterface(props: ChatInterfaceProps) {
                                 </div>
                             </div>
                             {/* Module Tabs */}
-                            <div className="flex overflow-x-auto gap-2 pb-2 -mx-4 px-4 scrollbar-hide">
-                                {VALID_TOPICS.map((t) => {
-                                    const modConfig = MODULE_CONFIG[t] || MODULE_CONFIG['glow-booster'];
-                                    const IconComponent = modConfig.icon;
-                                    const isActive = topic === t;
-
-                                    return (
-                                        <Link
-                                            key={t}
-                                            href={`/healthcare/chat?topic=${t}`}
-                                            className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all ${isActive
-                                                ? `bg-skin-primary text-white shadow-lg`
-                                                : isThemeDark ? 'bg-white/10 text-skin-subtext hover:bg-white/20' : 'bg-white text-stone-500 border border-stone-200 hover:bg-stone-50'
-                                                }`}
-                                        >
-                                            <IconComponent size={16} />
-                                            <span className="text-sm font-medium whitespace-nowrap">{TOPIC_LABELS[t]}</span>
-                                        </Link>
-                                    );
-                                })}
+                            {/* Module Tabs Removed for Unified Experience */}
+                            <div className="pb-2 -mx-4 px-4">
+                                <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${isThemeDark ? 'bg-skin-surface border border-white/10 text-skin-text' : 'bg-white border border-stone-200 text-stone-600'}`}>
+                                    🩺 {config.dept} 전문 상담
+                                </span>
                             </div>
                         </div>
                     )
