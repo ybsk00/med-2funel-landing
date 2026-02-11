@@ -89,7 +89,11 @@ export default function ChatInterface(props: ChatInterfaceProps) {
     const config = useHospital();
     const searchParams = useSearchParams();
     const rawTopic = props.topic || searchParams.get("topic"); // Use prop if available
-    const topic = sanitizeTopic(rawTopic);
+
+    // Fix: Use department-specific default topic instead of global default (which is dermatology specific)
+    const topic = (rawTopic && VALID_TOPICS.includes(rawTopic as Topic))
+        ? (rawTopic as Topic)
+        : ((config.defaultTopic as Topic) || DEFAULT_TOPIC);
     const { track } = useMarketingTracker();
 
     // 잘못된 topic이면 리다이렉트

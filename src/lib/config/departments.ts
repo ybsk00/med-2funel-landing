@@ -16,6 +16,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-516-0514",
         businessNumber: "317-14-00846",
         naverSearchKeyword: "에버피부과",
+        defaultTopic: "glow-booster",
         personas: {
             healthcare: {
                 name: "에밀리",
@@ -60,6 +61,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-123-4568",
         businessNumber: "123-45-67890",
         naverSearchKeyword: "서울내과",
+        defaultTopic: "fatigue-reset",
         personas: {
             healthcare: {
                 name: "조은비",
@@ -104,6 +106,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-987-6544",
         businessNumber: "987-65-43210",
         naverSearchKeyword: "강남비뇨기과",
+        defaultTopic: "vitality-check",
         personas: {
             healthcare: {
                 name: "제임스",
@@ -146,6 +149,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-555-5556",
         businessNumber: "555-55-55555",
         naverSearchKeyword: "서울미소치과",
+        defaultTopic: "smile-design",
         personas: {
             healthcare: {
                 name: "미소쌤",
@@ -188,6 +192,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-543-2101",
         businessNumber: "211-11-11111",
         naverSearchKeyword: "더라인성형외과",
+        defaultTopic: "face-ratio",
         personas: {
             healthcare: {
                 name: "제니",
@@ -230,6 +235,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-485-7576",
         businessNumber: "485-75-75757",
         naverSearchKeyword: "튼튼정형외과",
+        defaultTopic: "posture-check",
         personas: {
             healthcare: {
                 name: "김운동",
@@ -274,6 +280,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-567-8901",
         businessNumber: "678-90-12345",
         naverSearchKeyword: "에버한의원",
+        defaultTopic: "body-type",
         personas: {
             healthcare: {
                 name: "한결",
@@ -316,6 +323,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-345-6780",
         businessNumber: "345-67-89012",
         naverSearchKeyword: "강남신경외과",
+        defaultTopic: "headache-check",
         personas: {
             healthcare: {
                 name: "브레인",
@@ -360,6 +368,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-400-5001",
         businessNumber: "400-50-00500",
         naverSearchKeyword: "미즈사랑산부인과",
+        defaultTopic: "cycle-check",
         personas: {
             healthcare: {
                 name: "로즈",
@@ -404,6 +413,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-760-0115",
         businessNumber: "760-01-14000",
         naverSearchKeyword: "희망암센터",
+        defaultTopic: "immunity-up",
         personas: {
             healthcare: {
                 name: "천사",
@@ -448,6 +458,7 @@ export const DEPARTMENT_CONFIGS: Record<DepartmentId, HospitalConfig> = {
         fax: "02-930-7001",
         businessNumber: "930-70-00700",
         naverSearchKeyword: "아이튼튼소아과",
+        defaultTopic: "growth-check",
         personas: {
             healthcare: {
                 name: "토끼쌤",

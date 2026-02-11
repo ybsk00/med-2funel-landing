@@ -33,6 +33,7 @@ export interface HospitalConfig {
     naverSearchKeyword: string;
     id?: string; // Department ID
     dept?: string; // Department Name (Label)
+    defaultTopic?: string; // NEW: Default Chat Topic for this department
 
     personas: {
         healthcare: PersonaConfig;
