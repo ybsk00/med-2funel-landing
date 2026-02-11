@@ -91,26 +91,16 @@ export default function PatientsPage() {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState(true);
     const supabase = createClient();
-
-    // 검색 및 필터 상태
     const [searchQuery, setSearchQuery] = useState('');
     const [debouncedSearch] = useDebouncedValue(searchQuery, 300);
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
-
-    // 페이지네이션 상태
     const [currentPage, setCurrentPage] = useState(1);
-
-    // 환자 등록 모달
     const [addModalOpened, { open: openAddModal, close: closeAddModal }] = useDisclosure(false);
     const [addLoading, setAddLoading] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-
-    // 환자 상세보기 모달
     const [detailModalOpened, { open: openDetailModal, close: closeDetailModal }] = useDisclosure(false);
     const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-
-    // 환자 등록 폼 데이터
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -118,14 +108,11 @@ export default function PatientsPage() {
         gender: null as string | null,
         lifecycleStage: 'new' as string | null,
     });
-
-    // 메세지 규칙 설정
     const [messageRules, setMessageRules] = useState<MessageRule[]>(DEFAULT_MESSAGE_RULES);
 
     useEffect(() => {
         fetchPatients();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [dept]);
 
     // 검색/필터 변경 시 첫 페이지로 이동
     useEffect(() => {

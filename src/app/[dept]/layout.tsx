@@ -1,5 +1,5 @@
 
-import { getDepartmentConfig } from "@/lib/config/factory";
+import { DEPARTMENT_CONFIGS } from "@/lib/config/departments";
 import { HospitalProvider } from "@/components/common/HospitalProvider";
 import { DEPARTMENTS } from "@/lib/constants/departments";
 
@@ -18,7 +18,7 @@ export default async function DepartmentLayout({
     params: Promise<{ dept: string }>;
 }) {
     const { dept } = await params;
-    const config = await getDepartmentConfig(dept);
+    const config = DEPARTMENT_CONFIGS[dept as keyof typeof DEPARTMENT_CONFIGS];
 
     return (
         <HospitalProvider initialConfig={config}>

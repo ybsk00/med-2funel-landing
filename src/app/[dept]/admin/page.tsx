@@ -155,7 +155,7 @@ export default function AdminDashboard() {
                 newPatients: patientData.filter(p => p.type === '초진').length
             });
         }
-    }, [activeFilter, currentPage, customDateFrom, customDateTo, dateFilter, supabase]);
+    }, [activeFilter, currentPage, customDateFrom, customDateTo, dateFilter, supabase, dept]);
 
     useEffect(() => {
         fetchPatients();

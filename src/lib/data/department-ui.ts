@@ -9,10 +9,10 @@ export type DepartmentHeroMedia = {
 
 const HERO_MEDIA: Record<DepartmentId, DepartmentHeroMedia> = {
     dermatology: { type: "video", src: "/히어로세션/피부과.mp4" },
-    internal: { type: "video", src: "/히어로세션/내과.mp4" },
+    "internal-medicine": { type: "video", src: "/히어로세션/내과.mp4" },
     urology: { type: "video", src: "/히어로세션/비뇨기과.mp4" },
     dentistry: { type: "video", src: "/히어로세션/치과.mp4", poster: "/히어로세션/dentistry_hero.jpg" },
-    plastic: { type: "video", src: "/히어로세션/성형외과.mp4" },
+    "plastic-surgery": { type: "video", src: "/히어로세션/성형외과.mp4" },
     orthopedics: { type: "video", src: "/히어로세션/정형외과.mp4" },
     "korean-medicine": { type: "video", src: "/히어로세션/한방병원.mp4" },
     neurosurgery: { type: "video", src: "/히어로세션/신경외과.mp4" },
@@ -23,10 +23,10 @@ const HERO_MEDIA: Record<DepartmentId, DepartmentHeroMedia> = {
 
 const CHAT_TITLES: Record<DepartmentId, { title: string; subtitle: string }> = {
     dermatology: { title: "피부과 AI 시술상담", subtitle: "피부 고민과 시술 계획을 정리합니다" },
-    internal: { title: "내과 AI 전문상담", subtitle: "증상 및 생활패턴 기반으로 진료를 돕습니다" },
+    "internal-medicine": { title: "내과 AI 전문상담", subtitle: "증상 및 생활패턴 기반으로 진료를 돕습니다" },
     urology: { title: "비뇨의학과 AI 상담", subtitle: "프라이버시를 고려한 맞춤 상담" },
     dentistry: { title: "치과 AI 상담", subtitle: "치아·잇몸 관련 증상을 정리합니다" },
-    plastic: { title: "성형외과 AI 상담", subtitle: "수술·시술 방향을 정리합니다" },
+    "plastic-surgery": { title: "성형외과 AI 상담", subtitle: "수술·시술 방향을 정리합니다" },
     orthopedics: { title: "정형외과 AI 통증상담", subtitle: "관절·척추 통증 기록을 돕습니다" },
     "korean-medicine": { title: "한방병원 AI 상담", subtitle: "체질·증상 기반 상담을 돕습니다" },
     neurosurgery: { title: "신경외과 AI 상담", subtitle: "두통·신경 증상을 정리합니다" },
@@ -37,10 +37,10 @@ const CHAT_TITLES: Record<DepartmentId, { title: string; subtitle: string }> = {
 
 const MEDICAL_INTRO: Record<DepartmentId, string> = {
     dermatology: "피부 고민과 미용 시술 중심의 상담을 제공합니다.",
-    internal: "내과 진료와 만성질환 관리 상담을 제공합니다.",
+    "internal-medicine": "내과 진료와 만성질환 관리 상담을 제공합니다.",
     urology: "비뇨의학과 진료 상담을 제공합니다.",
     dentistry: "치아·잇몸 치료 및 심미 상담을 제공합니다.",
-    plastic: "성형 수술·시술 상담을 제공합니다.",
+    "plastic-surgery": "성형 수술·시술 상담을 제공합니다.",
     orthopedics: "관절·척추 통증 및 운동계 상담을 제공합니다.",
     "korean-medicine": "한방 진료(침·뜸·한약) 상담을 제공합니다.",
     neurosurgery: "두통·신경·척추 관련 상담을 제공합니다.",
@@ -51,10 +51,10 @@ const MEDICAL_INTRO: Record<DepartmentId, string> = {
 
 const SIMULATION_ENABLED: Record<DepartmentId, boolean> = {
     dermatology: true,
-    internal: false,
+    "internal-medicine": false,
     urology: false,
     dentistry: false,
-    plastic: true,
+    "plastic-surgery": true,
     orthopedics: false,
     "korean-medicine": false,
     neurosurgery: false,

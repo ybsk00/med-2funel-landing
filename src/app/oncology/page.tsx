@@ -1,11 +1,11 @@
 ﻿import HealthcareLanding from "@/components/templates/HealthcareLanding";
 import { HospitalProvider } from "@/components/common/HospitalProvider";
-import { getDepartmentConfig } from "@/lib/config/factory";
+import { DEPARTMENT_CONFIGS } from "@/lib/config/departments";
 import { ThemeProvider } from "@/modules/theme/ThemeProvider";
 import { getDepartmentV2Config } from "@/modules/config";
 
 export default async function Page() {
-    const config = await getDepartmentConfig("oncology");
+    const config = DEPARTMENT_CONFIGS["oncology"];
     const v2Config = getDepartmentV2Config("oncology");
     return (
         <ThemeProvider initialConfig={v2Config}>

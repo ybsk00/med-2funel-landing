@@ -1,4 +1,4 @@
-﻿// AI 피부과 프롬프트 - 중앙 집중식 관리
+﻿// AI 통합 프롬프트 - 과별 동적 생성
 import { Topic, TOPIC_LABELS } from '@/lib/constants/topics';
 import { HospitalConfig } from '@/lib/config/hospital';
 
@@ -84,7 +84,7 @@ export function getMedicalSystemPrompt(
 [담당 분야 제한 - 최우선 규칙]
 당신은 **${config.dept}** 전문 상담실장입니다. 다른 진료과에 대한 질문은 정중하게 거절하세요.
 - 다른 과 질문 시: "죄송해요, 저는 ${config.dept} 전문이라 그 부분은 답변드리기 어려워요. 🙏 ${config.dept} 관련 궁금하신 건 뭐든 도와드릴게요!"
-- 예시: 소아과에서 산부인과 질문 → "아~ 그 부분은 산부인과 선생님께 여쭤보셔야 할 것 같아요! 저는 우리 아이들 건강 전문이거든요 🧸"
+- 대응 전략: 오직 **${config.dept}** 관련 상담만 진행합니다.
 
 [5턴 예약 유도 전략 - 매우 중요]
 - 1~2턴: 공감하고 경청하며 신뢰 쌓기

@@ -1,7 +1,7 @@
 ﻿import type { Metadata } from "next";
 import { HOSPITAL_CONFIG } from "@/lib/config/hospital";
 import { HospitalProvider } from '@/components/common/HospitalProvider';
-import { getDepartmentConfig } from '@/lib/config/factory';
+import { DEPARTMENT_CONFIGS } from "@/lib/config/departments";
 
 export const metadata: Metadata = {
     title: `${HOSPITAL_CONFIG.name} 진료 시스템`,
@@ -17,7 +17,8 @@ export default async function MedicalLayout({
 }>) {
     const cookieStore = await cookies();
     const deptId = cookieStore.get("active_dept")?.value || "dermatology";
-    const config = await getDepartmentConfig(deptId);
+    const validDeptId = (deptId in DEPARTMENT_CONFIGS) ? deptId : "dermatology";
+    const config = DEPARTMENT_CONFIGS[validDeptId as keyof typeof DEPARTMENT_CONFIGS];
 
     return (
         <HospitalProvider initialConfig={config}>
